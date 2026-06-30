@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amber Avenue — Комплексная Стратегия</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Design Tokens (Amber Avenue) ── */
+    :root {
+      --primary:        #1B3C6E;
+      --primary-dark:   #122a52;
+      --primary-mid:    #2a5298;
+      --accent:         #F5A623;
+      --accent-hover:   #e0911a;
+      --accent-light:   #FFF8EC;
+      --navy-light:     #EEF3FB;
+      --navy-mid:       #dce8f8;
+      --text:           #1A1A2E;
+      --text-sec:       #4B5563;
+      --muted:          #9CA3AF;
+      --border:         #E5E7EB;
+      --border-light:   #F3F4F6;
+      --surface:        #FFFFFF;
+      --bg:             #F0F3F8;
+      --success:        #10B981;
+      --info:           #3B82F6;
+      --danger:         #EF4444;
+      --purple:         #7C3AED;
+
+      --shadow-sm:  0 2px 8px rgba(0,0,0,0.07);
+      --shadow-md:  0 4px 16px rgba(0,0,0,0.09);
+      --shadow-lg:  0 8px 32px rgba(27,60,110,0.12);
+      --shadow-card:0 2px 12px rgba(27,60,110,0.08);
+      --radius-md:  10px;
+      --radius-lg:  14px;
+      --radius-xl:  18px;
+      --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 13px;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+
+    /* ── NAV ── */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--primary);
+      box-shadow: 0 2px 16px rgba(27,60,110,0.25);
+    }
+    .header-inner {
+      max-width: 1160px; margin: 0 auto;
+      padding: 0 24px; height: 60px;
+      display: flex; align-items: center; gap: 24px;
+      flex-wrap: wrap;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: var(--accent); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 800; color: var(--primary);
+    }
+    .logo-text { font-size: 15px; font-weight: 700; color: #fff; }
+    .logo-sub  { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 400; }
+    .nav-links {
+      display: flex; gap: 8px; margin-left: auto; align-items: center;
+    }
+    .nav-item {
+      position: relative;
+    }
+    .nav-btn {
+      font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75);
+      padding: 8px 12px; border-radius: 8px;
+      transition: var(--transition); display: flex; align-items: center; gap: 4px;
+      cursor: pointer; user-select: none;
+    }
+    .nav-btn::after {
+      content: '▾'; font-size: 10px; opacity: 0.7; transition: transform var(--transition);
+    }
+    .nav-item:hover .nav-btn {
+      color: #fff; background: rgba(255,255,255,0.1);
+    }
+    .nav-item:hover .nav-btn::after {
+      transform: rotate(180deg);
+    }
+    .dropdown-menu {
+      position: absolute; top: 100%; right: 0;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
+      padding: 6px; display: flex; flex-direction: column; gap: 2px;
+      opacity: 0; visibility: hidden; transform: translateY(8px);
+      transition: var(--transition); min-width: 190px;
+    }
+    .nav-item:hover .dropdown-menu {
+      opacity: 1; visibility: visible; transform: translateY(4px);
+    }
+    .dropdown-menu a {
+      font-size: 12px; font-weight: 500; color: var(--text-sec);
+      padding: 8px 12px; border-radius: 6px; transition: var(--transition);
+      display: block; text-align: left; white-space: nowrap;
+    }
+    .dropdown-menu a:hover {
+      color: var(--primary); background: var(--navy-light);
+    }
+    @media(max-width: 680px) {
+      .header-inner { height: auto; padding: 12px 24px; flex-direction: column; gap: 10px; align-items: center; }
+      .nav-links { margin-left: 0; justify-content: center; width: 100%; }
+      .dropdown-menu { right: auto; left: 50%; transform: translateX(-50%) translateY(8px); }
+      .nav-item:hover .dropdown-menu { transform: translateX(-50%) translateY(4px); }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      background: linear-gradient(135deg, #0f2440 0%, #1B3C6E 45%, #2a5298 75%, #1a3560 100%);
+      background-size: 300% 300%;
+      animation: heroGrad 14s ease infinite;
+      padding: 72px 24px 64px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -100px; right: -80px;
+      width: 450px; height: 450px;
+      background: radial-gradient(circle, rgba(245,166,35,0.14) 0%, transparent 65%);
+      border-radius: 50%; pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -80px; left: -60px;
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 65%);
+      border-radius: 50%; pointer-events: none;
+    }
+    @keyframes heroGrad {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(245,166,35,0.15);
+      border: 1px solid rgba(245,166,35,0.35);
+      border-radius: 20px;
+      padding: 6px 16px; margin-bottom: 24px;
+      font-size: 11px; font-weight: 700;
+      color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .hero-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 50px);
+      font-weight: 800; color: #fff;
+      line-height: 1.12; letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+    .hero h1 em { color: var(--accent); font-style: normal; }
+    .hero-sub {
+      font-size: 15px; color: rgba(255,255,255,0.65);
+      max-width: 620px; margin: 0 auto 40px; line-height: 1.65;
+    }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 0;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      max-width: 760px; margin: 0 auto;
+      overflow: hidden;
+    }
+    .hero-stat {
+      flex: 1; padding: 20px 16px; text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero-stat:last-child { border-right: none; }
+    .hero-stat-val {
+      font-size: 24px; font-weight: 800; color: var(--accent);
+      line-height: 1; margin-bottom: 4px;
+    }
+    .hero-stat-label {
+      font-size: 11px; color: rgba(255,255,255,0.5);
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      max-width: 1160px; margin: 0 auto; padding: 64px 24px;
+    }
+    .section-tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--primary); background: var(--navy-light);
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: clamp(20px, 3vw, 28px); font-weight: 800;
+      color: var(--text); line-height: 1.25; margin-bottom: 6px;
+    }
+    .section-sub {
+      font-size: 14px; color: var(--text-sec); line-height: 1.6;
+      max-width: 680px; margin-bottom: 36px;
+    }
+    .divider { height: 1px; background: var(--border); margin: 0 24px; }
+    
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity:0; transform:translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.in { opacity:1; transform:none; }
+
+    /* ── ROADMAP TIMELINE ── */
+    .timeline { position: relative; }
+    .timeline-line {
+      position: absolute; left: 24px; top: 8px; bottom: 8px; width: 2px;
+      background: linear-gradient(to bottom, var(--accent) 0%, var(--navy-mid) 100%);
+    }
+    .phase { margin-left: 60px; margin-bottom: 40px; position: relative; }
+    .phase-dot {
+      position: absolute; left: -44px; top: 4px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--accent); border: 3px solid #fff;
+      box-shadow: 0 0 0 3px rgba(245,166,35,0.2), var(--shadow-sm);
+    }
+    .phase-header {
+      display: flex; align-items: center; gap: 10px;
+      flex-wrap: wrap; margin-bottom: 12px;
+    }
+    .phase-chip {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--primary); background: var(--navy-light);
+      padding: 3px 10px; border-radius: 8px;
+    }
+    .phase-name { font-size: 18px; font-weight: 800; color: var(--text); }
+    .phase-period { font-size: 12px; color: var(--muted); background: var(--border-light); padding: 3px 10px; border-radius: 20px; }
+    .phase-desc { font-size: 13px; color: var(--text-sec); line-height: 1.6; margin-bottom: 16px; max-width: 680px; }
+    .task-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+    .task-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 16px 18px;
+      box-shadow: var(--shadow-card);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .task-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .task-tag {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      padding: 2px 8px; border-radius: 6px; margin-bottom: 8px;
+    }
+    .tag-product { background: #EFF6FF; color: #1D4ED8; }
+    .tag-content { background: #ECFDF5; color: #065F46; }
+    .tag-biz     { background: var(--accent-light); color: #92400E; }
+    .tag-legal   { background: #FEF2F2; color: #991B1B; }
+    .tag-growth  { background: #F5F3FF; color: #5B21B6; }
+    .tag-tech    { background: #F0FDFA; color: #115E59; }
+    .task-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 5px; line-height: 1.4; }
+    .task-desc { font-size: 12px; color: var(--text-sec); line-height: 1.55; }
+
+    /* ── TEAM ── */
+    .team-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    @media(max-width: 992px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(max-width: 768px) { .team-grid { grid-template-columns: 1fr; } }
+    .team-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-card);
+      display: flex; flex-direction: column;
+    }
+    .team-card-tag {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--accent); background: var(--accent-light); padding: 3px 10px; border-radius: 8px;
+      display: inline-block; margin-bottom: 8px; align-self: flex-start;
+    }
+    .team-card-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+    .team-card-period { font-size: 11px; color: var(--muted); margin-bottom: 18px; }
+    .role-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border-light); }
+    .role-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .role-ico { width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .role-text-container { flex: 1; min-width: 0; }
+    .role-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; line-height: 1.3; }
+    .role-desc { font-size: 11.5px; color: var(--text-sec); line-height: 1.4; word-wrap: break-word; }
+
+    /* ── MONETIZATION (from roadmap) ── */
+    .mono-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+    .mono-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 22px 18px; box-shadow: var(--shadow-card); transition: box-shadow var(--transition), transform var(--transition); position: relative; overflow: hidden; }
+    .mono-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+    .mono-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .mc-0::before { background: var(--muted); }
+    .mc-1::before { background: var(--success); }
+    .mc-2::before { background: var(--info); }
+    .mc-3::before { background: var(--accent); }
+    .mc-4::before { background: var(--purple); }
+    .mc-5::before { background: var(--danger); }
+    .mono-level { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; }
+    .mono-title { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 5px; }
+    .mono-price { font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 14px; }
+    .mono-features { font-size: 12px; color: var(--text-sec); line-height: 1.85; }
+    .mono-features li { display: flex; gap: 6px; }
+    .mono-features li::before { content: '→'; color: var(--primary); font-weight: 700; flex-shrink: 0; }
+
+    /* ── DEV STRATEGY (from roadmap) ── */
+    .strategy-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+    @media(max-width:640px){ .strategy-row { grid-template-columns: 1fr; } }
+    .strat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-card); }
+    .strat-card.do-card { border-left: 4px solid var(--success); }
+    .strat-card.dont-card { border-left: 4px solid var(--danger); }
+    .strat-title { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 14px; display:flex; align-items:center; gap:8px; }
+    .strat-list { font-size: 13px; color: var(--text-sec); line-height: 1.9; }
+    .strat-list li { display:flex; gap:8px; }
+    .strat-list.do li::before { content:'✓'; color: var(--success); font-weight:800; flex-shrink:0; }
+    .strat-list.dont li::before { content:'✗'; color: var(--danger); font-weight:800; flex-shrink:0; }
+    .strat-list.bullet { line-height: 1.6; }
+    .strat-list.bullet li { display: block; position: relative; padding-left: 18px; margin-bottom: 12px; }
+    .strat-list.bullet li::before { content:'◆'; color: var(--accent); font-size:8px; position: absolute; left: 0; top: 5px; }
+
+    /* ── OBJECTIONS (from roadmap) ── */
+    .obj-list { display:flex; flex-direction:column; gap:10px; margin-bottom: 32px;}
+    .obj-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 0; box-shadow: var(--shadow-card); overflow: hidden; }
+    .obj-inner { display:grid; grid-template-columns:1fr 1fr; }
+    @media(max-width:640px){ .obj-inner { grid-template-columns:1fr; } }
+    .obj-q { padding: 18px 20px; background: var(--bg); border-right: 1px solid var(--border); font-size: 13px; color: var(--text-sec); line-height: 1.6; }
+    .obj-q strong { display:block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--danger); margin-bottom:6px; }
+    .obj-a { padding: 18px 20px; font-size: 13px; color: var(--text-sec); line-height: 1.6; }
+    .obj-a strong { display:block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--success); margin-bottom:6px; }
+
+    /* ── LEGAL BLOCK (from roadmap) ── */
+    .legal-card { background: linear-gradient(135deg, #0f2440 0%, #1B3C6E 60%, #2a5298 100%); border-radius: var(--radius-xl); padding: 36px; color: #fff; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; box-shadow: var(--shadow-lg); }
+    @media(max-width:640px){ .legal-card { grid-template-columns:1fr; } }
+    .legal-head { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+    .legal-sub  { font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 20px; }
+    .legal-list { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.6; }
+    .legal-list li { display: block; position: relative; padding-left: 18px; margin-bottom: 10px; }
+    .legal-list li::before { content:'◆'; color:var(--accent); font-size:8px; position: absolute; left: 0; top: 4px; }
+    .legal-badge { display:inline-flex; align-items:center; gap:6px; background: rgba(245,166,35,0.15); border:1px solid rgba(245,166,35,0.3); border-radius:20px; padding:5px 14px; margin-bottom:14px; font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.07em; }
+
+    /* ── STRATEGY GRID ── */
+    .strategy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 16px; }
+    @media(max-width: 992px) { .strategy-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(max-width: 768px) { .strategy-grid { grid-template-columns: 1fr; } }
+    .strat-card.funnel-card { border-top: 4px solid var(--info); }
+    .strat-card.tail-card { border-top: 4px solid var(--accent); }
+    .strat-card.budget-card { border-top: 4px solid var(--success); }
+    .strat-card.seo-card { border-top: 4px solid var(--success); }
+
+    /* ── SOURCE TAGS (from roadmap) ── */
+    .src-legend { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:32px; }
+    .src-tag { display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; border:1px solid var(--border); background:var(--surface); font-size:12px; color:var(--text-sec); box-shadow:var(--shadow-card); }
+    .src-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+    /* ── REVENUE CHART (from roadmap) ── */
+    .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-card); }
+    .chart-head { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .chart-sub  { font-size: 13px; color: var(--text-sec); margin-bottom: 28px; }
+    .bars { display:flex; align-items:flex-end; gap:6px; height: 180px; }
+    .bar-group { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; height:100%; justify-content:flex-end; }
+    .bar-wrap { width:100%; display:flex; align-items:flex-end; justify-content:center; height:150px; }
+    .bar { width: 60%; min-height: 4px; border-radius: 6px 6px 0 0; background: linear-gradient(to top, var(--primary-dark), var(--primary-mid)); position: relative; cursor: default; transition: opacity 0.2s; }
+    .bar:hover { opacity: 0.85; }
+    .bar:hover::after { content: attr(data-val); position: absolute; top: -32px; left:50%; transform:translateX(-50%); background: var(--primary); color:#fff; font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px; white-space: nowrap; font-family: 'Inter', sans-serif; }
+    .bar.accent-bar { background: linear-gradient(to top, var(--accent-hover), var(--accent)); }
+    .bar-label { font-size: 10px; color: var(--muted); text-align:center; }
+
+    /* ── KPI GRID (from roadmap) ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px,1fr)); gap: 12px; margin-bottom: 32px; }
+    .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-card); text-align: center; }
+    .kpi-period { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--primary); background: var(--navy-light); padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
+    .kpi-val { font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 3px; }
+    .kpi-val.amber { color: var(--accent); }
+    .kpi-val.green { color: var(--success); }
+    .kpi-val.red   { color: var(--danger); }
+    .kpi-label { font-size: 12px; color: var(--text-sec); }
+    .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-light); }
+
+    /* ── PLACEMENT MAP (from revenue-model) ── */
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+    .leg-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-sec);background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 12px;box-shadow:var(--shadow-sm)}
+    .leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+    .placement-map{display:grid;grid-template-columns:200px 1fr 190px;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:24px;box-shadow:var(--shadow-card);margin-bottom:40px}
+    @media(max-width:900px){.placement-map{grid-template-columns:1fr}}
+    .map-col{display:flex;flex-direction:column;gap:8px}
+    .map-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;padding-left:2px}
+    .ad-slot{border-radius:10px;padding:10px 14px;font-size:11.5px;font-weight:600;display:flex;align-items:flex-start;gap:8px;cursor:default}
+    .ad-slot .sico{font-size:16px;flex-shrink:0;line-height:1.4}
+    .ad-slot .sname{font-weight:700;font-size:12px;margin-bottom:2px;color:var(--text)}
+    .ad-slot .sprice{font-size:11px;color:var(--accent);font-weight:700}
+    .ad-slot .sdesc{font-size:11px;color:var(--text-sec);margin-top:2px;line-height:1.4}
+    .s-dir   {background:rgba(245,166,35,.1);border:1.5px solid rgba(245,166,35,.35)}
+    .s-home  {background:rgba(27,60,110,.06);border:1.5px solid rgba(27,60,110,.18)}
+    .s-side  {background:rgba(59,130,246,.07);border:1.5px solid rgba(59,130,246,.25)}
+    .s-sect  {background:rgba(16,185,129,.07);border:1.5px solid rgba(16,185,129,.25)}
+    .s-card  {background:rgba(124,58,237,.07);border:1.5px solid rgba(124,58,237,.22)}
+    .s-native{background:rgba(239,68,68,.06);border:1.5px solid rgba(239,68,68,.2)}
+
+    /* ── SECTIONS TABLE (from revenue-model) ── */
+    .section-map{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:28px;box-shadow:var(--shadow-card);margin-bottom:40px}
+    .sec-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border-light)}
+    .sec-tab{font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;background:var(--bg);border:1px solid var(--border);color:var(--text-sec);white-space:nowrap}
+    .sec-tab.on{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.3);color:#065F46}
+    .sec-tab.off{background:var(--border-light);color:var(--muted);opacity:.65}
+    .sec-rows{display:flex;flex-direction:column;gap:8px}
+    .sec-row{display:grid;grid-template-columns:140px 1fr auto auto;align-items:center;gap:12px;padding:11px 16px;background:var(--bg);border-radius:10px;border:1px solid var(--border-light)}
+    @media(max-width:700px){.sec-row{grid-template-columns:1fr 1fr}}
+    .sec-row .rname{font-size:12.5px;font-weight:700;color:var(--text)}
+    .sec-row .rwho{font-size:12px;color:var(--text-sec)}
+    .sec-row .rmod{font-size:11px;color:var(--muted);background:var(--border-light);padding:2px 8px;border-radius:6px;white-space:nowrap}
+    .sec-row .rprice{font-size:13px;font-weight:800;color:var(--accent);text-align:right;white-space:nowrap}
+    .sec-row.dim{opacity:.45}
+
+    /* ── GENERAL TABLE (from revenue-model) ── */
+    .tcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:28px;box-shadow:var(--shadow-card);margin-bottom:40px;overflow-x:auto}
+    table{width:100%;border-collapse:collapse;min-width: 600px;}
+    th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;padding:8px 14px;border-bottom:2px solid var(--border);background:var(--bg)}
+    th.r,td.r{text-align:right}
+    td{font-size:13px;color:var(--text-sec);padding:10px 14px;border-bottom:1px solid var(--border-light)}
+    td.lbl{font-weight:700;color:var(--text)}
+    td.g{color:var(--success);font-weight:700}
+    td.b{color:var(--primary);font-weight:700}
+    td.m{color:var(--muted);font-weight:600}
+    tr.grp td{background:rgba(27,60,110,.03);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:6px 14px;border-bottom:none;font-weight:700}
+    tr.tot td{background:var(--navy-light);font-weight:800;font-size:14px;border-top:2px solid var(--primary)}
+    tr.tot td.lbl{color:var(--primary)}
+    tr.tot td.g{font-size:15px}
+    tr.tot td.b{font-size:15px}
+
+    /* ── SUMMARY GRID (from revenue-model) ── */
+    .sum-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px;margin-bottom:36px}
+    .sum-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-card);text-align:center}
+    .sum-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--primary);background:var(--navy-light);padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:10px}
+    .sum-val{font-size:25px;font-weight:800;color:var(--primary);margin-bottom:3px;line-height:1}
+    .sum-val.a{color:var(--accent)}
+    .sum-val.g{color:var(--success)}
+    .sum-sub{font-size:11px;color:var(--muted)}
+
+    /* ── FOUNDERS / TAX / FINANCE (New) ── */
+    .founders-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+    @media(max-width: 768px) { .founders-grid { grid-template-columns: 1fr; } }
+    .founder-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-card); position: relative; }
+    .founder-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 4px 4px 0 0; }
+    .f-max::before { background: var(--accent); }
+    .f-volodya::before { background: var(--info); }
+    .f-ivan::before { background: var(--success); }
+    .founder-share { position: absolute; top: 20px; right: 20px; font-size: 14px; font-weight: 800; color: var(--muted); background: var(--bg); padding: 4px 10px; border-radius: 6px; }
+    .founder-name { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .founder-role { font-size: 12px; color: var(--text-sec); margin-bottom: 20px; }
+    .founder-metric { margin-bottom: 12px; }
+    .founder-metric-lbl { font-size: 10px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+    .founder-metric-val { font-size: 20px; font-weight: 800; color: var(--primary); }
+
+    .tax-toggle-bar { display: flex; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 24px; box-shadow: var(--shadow-card); flex-wrap: wrap; gap: 12px; }
+    .toggle-title { font-size: 14px; font-weight: 700; color: var(--text); }
+    .toggle-btns { display: flex; gap: 6px; }
+    .toggle-btn { font-size: 12px; font-weight: 600; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text-sec); cursor: pointer; transition: var(--transition); }
+    .toggle-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    
+    .tax-detail-card { background: linear-gradient(135deg, #0f2440 0%, #1B3C6E 60%, #2a5298 100%); border-radius: var(--radius-xl); padding: 32px; color: #fff; margin-bottom: 32px; box-shadow: var(--shadow-lg); display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media(max-width: 768px) { .tax-detail-card { grid-template-columns: 1fr; } }
+    .tax-desc-block h3 { font-size: 16px; font-weight: 800; color: var(--accent); margin-bottom: 8px; }
+    .tax-desc-block p { font-size: 12.5px; color: rgba(255,255,255,0.75); line-height: 1.7; margin-bottom: 14px; }
+    .tax-list li { display: flex; gap: 6px; font-size: 12px; margin-bottom: 6px; color: rgba(255,255,255,0.85); }
+    .tax-list li::before { content: '✓'; color: var(--accent); font-weight: 800; }
+    
+    .disclaimer{background:linear-gradient(135deg,#0f2440 0%,#1B3C6E 60%,#2a5298 100%);border-radius:var(--radius-xl);padding:32px 36px;color:#fff;box-shadow:var(--shadow-md);margin-bottom:40px}
+    .disclaimer h3{font-size:16px;font-weight:800;margin-bottom:8px}
+    .disclaimer p{font-size:13px;color:rgba(255,255,255,.7);line-height:1.75;max-width:820px}
+    .disclaimer strong{color:var(--accent)}
+
+    footer { background: var(--primary); padding: 32px 24px; text-align: center; color: rgba(255,255,255,0.5); }
+    footer strong { color: var(--accent); }
+    footer p + p { margin-top: 6px; font-size: 12px; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">A</div>
+      <div>
+        <div class="logo-text">Amber Avenue</div>
+        <div class="logo-sub">Комплексная стратегия & Финмодель</div>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <div class="nav-item">
+        <span class="nav-btn">Развитие</span>
+        <div class="dropdown-menu">
+          <a href="#summary">📊 Резюме проекта (Summary)</a>
+          <a href="#roadmap">🗺️ Дорожная карта</a>
+          <a href="#team">👥 Команда</a>
+          <a href="#devs">🤝 Переговоры</a>
+          <a href="#legal">⚖️ Защита данных</a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <span class="nav-btn">Монетизация</span>
+        <div class="dropdown-menu">
+          <a href="#monetization-levels">📊 Уровни монетизации</a>
+          <a href="#placements">🗺️ Карта размещений</a>
+          <a href="#sections">🧱 Контекст в разделах</a>
+          <a href="#table">💸 Таблица цен</a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <span class="nav-btn">Финмодель</span>
+        <div class="dropdown-menu">
+          <a href="#scenarios">🔮 Сценарии доходности</a>
+          <a href="#revenue">📈 План по выручке</a>
+          <a href="#finances">🧮 Калькулятор и налоги</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span class="hero-dot"></span> Стратегия запуска · Версия 2.0 (Объединённая)</div>
+  <h1>От идеи до<br/><em>устойчивой прибыли</em></h1>
+  <p class="hero-sub">Единый операционный план запуска платформы прозрачности жилья. Полные финансовые расчёты с учётом рекламных мест, подписок, CPA-модели, налогов РФ и долей учредителей.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-val">18</div>
+      <div class="hero-stat-label">Месяцев</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">22+</div>
+      <div class="hero-stat-label">Рекл. формата</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">220M ₽</div>
+      <div class="hero-stat-label">Рекл. потенциал/мес</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">13</div>
+      <div class="hero-stat-label">Блоков Индекса</div>
+    </div>
+  </div>
+</section>
+
+<!-- EXECUTIVE SUMMARY -->
+<div class="section reveal" id="summary">
+  <p class="section-tag">Executive Summary</p>
+  <h2 class="section-title">Аналитическое резюме проекта Amber Avenue</h2>
+  <p class="section-sub">Краткое описание ключевых драйверов, синергии блоков и масштаба развития платформы в Калининградской области</p>
+
+  <div class="strategy-grid" style="grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px;">
+    <!-- Column 1: Core Concept & Innovation -->
+    <div class="strat-card" style="border-left: 4px solid var(--primary); background: var(--bg-card);">
+      <div class="legal-badge" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3); color: var(--primary); margin-bottom: 12px;">🌟 Концепция и УТП</div>
+      <div class="strat-title" style="font-size: 16px; margin-bottom: 12px; font-weight: 700;">Революция доверия на рынке недвижимости</div>
+      <ul class="strat-list bullet">
+        <li><strong>Продукт:</strong> Независимый аналитический портал новостроек, оценивающий каждый ЖК по <strong>13 блокам Amber Index</strong> (от цен и планировок до документов и инфраструктуры).</li>
+        <li><strong>Драйвер роста (Бейджи доверия):</strong> Застройщики бесплатно получают кликабельный бейдж с рейтингом для своего сайта. Это дает им +0.25 к индексу, а платформе — <strong>пожизненный бесплатный SEO-буст (Backlink Loop)</strong> и целевой реферальный трафик.</li>
+        <li><strong>Омнипрезентность:</strong> Интеграция баннерной сетки и «проявленность» застройщиков на портале повышают узнаваемость их брендов даже без прямой рекламы, снижая общий CAC.</li>
+      </ul>
+    </div>
+
+    <!-- Column 2: Financial Horizons & Growth -->
+    <div class="strat-card" style="border-left: 4px solid var(--accent); background: var(--bg-card);">
+      <div class="legal-badge" style="background: rgba(245, 166, 35, 0.1); border-color: rgba(245, 166, 35, 0.3); color: var(--accent); margin-bottom: 12px;">📈 Перспективы и Финмодель</div>
+      <div class="strat-title" style="font-size: 16px; margin-bottom: 12px; font-weight: 700;">10x Масштабирование выручки и ОЭЗ Калининград</div>
+      <ul class="strat-list bullet">
+        <li><strong>Масштаб трафика:</strong> Переход от 10 000 до 100 000+ посетителей в сутки. Рост трафика увеличивает рекламные тарифы на платформе <strong>в 10 раз</strong> за 12–18 месяцев.</li>
+        <li><strong>Рекламная емкость:</strong> Охват 300 застройщиков и 3000 ЖК дает 22+ рекламных формата с предельным потенциалом **до 220 110 000 ₽/мес**.</li>
+        <li><strong>Экономика фаундеров (Год 1):</strong> Старт с 600k ₽ в месяц 1 с выходом на 10.8M ₽ в месяц 12. Чистая прибыль учредителей (Макс 40%, Володя 30%, Иван 30%) составит до <strong>40.0M ₽</strong> за 1-й год.</li>
+        <li><strong>Экономика фаундеров (Год 2):</strong> Выручка <strong>573M ₽</strong> (при консервативном заполнении слотов). Прибыль учредителей (после налогов) достигает до <strong>461.4M ₽</strong> за счет использования ИТ-льготы ОЭЗ (УСН 1%).</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ==========================================
+     РАЗДЕЛЫ ИЗ ROADMAP.HTML
+     ========================================== -->
+
+<!-- ROADMAP -->
+<div class="section reveal" id="roadmap">
+  <p class="section-tag">Дорожная карта</p>
+  <h2 class="section-title">Roadmap запуска Amber Avenue</h2>
+  <p class="section-sub">Пять фаз от нулевого кода до регионального стандарта прозрачности рынка жилья</p>
+
+  <div class="timeline">
+    <div class="timeline-line"></div>
+
+    <!-- PHASE 0 -->
+    <div class="phase reveal">
+      <div class="phase-dot"></div>
+      <div class="phase-header">
+        <span class="phase-chip">Фаза 0</span>
+        <span class="phase-name">Фундамент</span>
+        <span class="phase-period">Месяцы 1–2</span>
+      </div>
+      <p class="phase-desc">Юридическая основа, MVP сайта, наполнение базы данных всех ЖК Калининграда из открытых источников. Продажи рекламы и привлечение первых партнеров запускаются с первого месяца (цель: 300 000+ ₽ дохода со старта).</p>
+      <div class="task-grid">
+        <div class="task-card">
+          <span class="task-tag tag-legal">Юридика</span>
+          <div class="task-title">Регистрация ООО / ИП</div>
+          <div class="task-desc">Шаблон соглашения с застройщиком, дисклеймеры. Ст. 152 ГК РФ — базовый ориентир юридической защиты.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-product">Продукт</span>
+          <div class="task-title">MVP сайта: карточки ЖК + индекс</div>
+          <div class="task-desc">Карточки объектов, фильтры, карта, Amber Index, страница методологии, страница для застройщиков.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-content">Контент</span>
+          <div class="task-title">30–40 карточек ЖК Калининграда</div>
+          <div class="task-desc">Из открытых источников: наш.дом.рф, сайты застройщиков, 2ГИС, карты, проектные декларации. Предварительный Amber Index по каждому.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-product">Продукт</span>
+          <div class="task-title">Форма для застройщиков (80+ полей)</div>
+          <div class="task-desc">Личный кабинет для загрузки данных по всем 13 блокам методологии. Автопересчёт индекса после заполнения.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-content">Контент</span>
+          <div class="task-title">Telegram-канал «Рынок жилья Калининграда»</div>
+          <div class="task-desc">Первые 10 постов: разбор методологии, карты ЖК, обзоры локаций. Цель: 300+ подписчиков к концу месяца.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-legal">Юридика</span>
+          <div class="task-title">Публичная методология на сайте</div>
+          <div class="task-desc">Полный текст методологии Amber Index в открытом доступе — сигнал доверия рынку и PR-инструмент.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 1 -->
+    <div class="phase reveal">
+      <div class="phase-dot"></div>
+      <div class="phase-header">
+        <span class="phase-chip">Фаза 1</span>
+        <span class="phase-name">Первые переговоры</span>
+        <span class="phase-period">Месяцы 2–4</span>
+      </div>
+      <p class="phase-desc">Холодный обход 15–20 застройщиков с готовой карточкой их ЖК. Подписание первых соглашений, внедрение бейджей рейтинга на сайтах партнеров. Масштабирование продаж рекламы.</p>
+      <div class="task-grid">
+        <div class="task-card">
+          <span class="task-tag tag-biz">Бизнес</span>
+          <div class="task-title">Первый обход 15 застройщиков</div>
+          <div class="task-desc">Приходить с готовым PDF-карточкой их ЖК. Показывать предварительный индекс и пустые блоки. Скрипт встречи — 20 минут.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-legal">Юридика</span>
+          <div class="task-title">Соглашение о достоверности данных</div>
+          <div class="task-desc">Застройщик подписывает: несёт ответственность за данные, обязуется уведомлять об изменениях, Amber указывает источник.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-biz">Бизнес</span>
+          <div class="task-title">Запуск верифицированных профилей</div>
+          <div class="task-desc">Уровень 1: 5 000–15 000 ₽/мес. Бейдж «Данные застройщика», расширенная карточка, пересчёт индекса. Цель: 5 первых клиентов.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-content">Контент</span>
+          <div class="task-title">«Топ-10 ЖК Калининграда по Amber Index»</div>
+          <div class="task-desc">Первая вирусная публикация + пост в Telegram. Застройщики сами начинают спрашивать о своём месте в рейтинге.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-growth">SEO</span>
+          <div class="task-title">Семантика по ЖК Калининграда</div>
+          <div class="task-desc">Карточки оптимизируются под запросы «[ЖК] Калининград», «отзывы», «купить квартиру». Органический трафик с первых недель.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-product">Продукт</span>
+          <div class="task-title">Карта Янтарного индекса</div>
+          <div class="task-desc">Интерактивная карта Калининграда с ЖК и цветовой маркировкой по индексу. Первые публикации в местных СМИ.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase reveal">
+      <div class="phase-dot"></div>
+      <div class="phase-header">
+        <span class="phase-chip">Фаза 2</span>
+        <span class="phase-name">Монетизация и трафик</span>
+        <span class="phase-period">Месяцы 4–8</span>
+      </div>
+      <p class="phase-desc">Запуск расширенных витрин, начало лидогенерации, партнёрства с банками. Трафик: 5 000–15 000 уников/мес. Команда: 6–7 человек.</p>
+      <div class="task-grid">
+        <div class="task-card">
+          <span class="task-tag tag-biz">Бизнес</span>
+          <div class="task-title">Расширенные витрины (Уровень 2)</div>
+          <div class="task-desc">40 000–80 000 ₽/мес: галерея, баннер на главной, приоритет в выдаче, статистика кликов. Цель: 10 клиентов.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-biz">Бизнес</span>
+          <div class="task-title">CPA-лидогенерация</div>
+          <div class="task-desc">Форма «Узнать о квартирах» на карточках. 5 000–8 000 ₽ за квалифицированный лид. Запуск при 10 000+ уников/день.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-biz">Бизнес</span>
+          <div class="task-title">Переговоры с банками (ипотека)</div>
+          <div class="task-desc">Аффилиатная программа: баннеры ипотечных предложений на карточках ЖК. Оплата за оформленную ипотеку.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-tech">Тех</span>
+          <div class="task-title">Личный кабинет застройщика v2</div>
+          <div class="task-desc">Статистика просмотров, кликов, лидов. История обновлений индекса. Уведомления при появлении отзывов.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-product">Продукт</span>
+          <div class="task-title">«Сравнение ЖК» — вирусный инструмент</div>
+          <div class="task-desc">Страница сравнения 2–3 ЖК по 13 блокам. Покупатели делятся ссылкой. Застройщики следят за конкурентами.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-growth">Рост</span>
+          <div class="task-title">Экспансия: пригород и море</div>
+          <div class="task-desc">Карточки объектов Балтийска, Зеленоградска, Светлогорска. Отдельная сегментация по методологии Amber.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="phase reveal">
+      <div class="phase-dot"></div>
+      <div class="phase-header">
+        <span class="phase-chip">Фаза 3</span>
+        <span class="phase-name">Аналитика и выезды</span>
+        <span class="phase-period">Месяцы 8–14</span>
+      </div>
+      <p class="phase-desc">Запуск аналитических продуктов, первые выездные проверки, подписки для риелторов. Выход на стабильную ежемесячную прибыль.</p>
+      <div class="task-grid">
+        <div class="task-card">
+          <span class="task-tag tag-biz">Бизнес</span>
+          <div class="task-title">Аналитические отчёты (Уровень 4)</div>
+          <div class="task-desc">80 000–120 000 ₽/квартал: «Как ваш ЖК смотрится на фоне рынка». Динамика индекса, анализ 13 блоков vs конкуренты.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-product">Продукт</span>
+          <div class="task-title">Выездные проверки Amber (Уровень 5)</div>
+          <div class="task-desc">120 000–200 000 ₽: визит на объект, фиксация параметров, подробный отчёт, статус «Amber Index с выездом».</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-biz">Бизнес</span>
+          <div class="task-title">Подписка для риелторов</div>
+          <div class="task-desc">8 000–12 000 ₽/мес: полная аналитика рынка, детальные расчёты индексов, инструменты сравнения для консультаций.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-growth">PR</span>
+          <div class="task-title">Медиа и PR-стратегия</div>
+          <div class="task-desc">Статьи в «Клопс», «Новый Калининград», РБК. Amber Index становится стандартом прозрачности рынка.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-tech">Тех</span>
+          <div class="task-title">Автоматизация сбора данных</div>
+          <div class="task-desc">Парсинг наш.дом.рф, автообновление статусов, мониторинг отзывов с Яндекс Карт / 2ГИС / Google Maps.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-legal">Юридика</span>
+          <div class="task-title">Штатный юрист или ретейнер</div>
+          <div class="task-desc">Аудит формулировок в карточках. Защита от исков по ст. 152 ГК РФ. Работа с претензиями застройщиков.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 4 -->
+    <div class="phase reveal">
+      <div class="phase-dot"></div>
+      <div class="phase-header">
+        <span class="phase-chip">Фаза 4</span>
+        <span class="phase-name">Региональная экспансия</span>
+        <span class="phase-period">Месяцы 14–18+</span>
+      </div>
+      <p class="phase-desc">Amber Avenue — стандарт прозрачности рынка Калининградской области. Выход за пределы региона. Технологическое масштабирование.</p>
+      <div class="task-grid">
+        <div class="task-card">
+          <span class="task-tag tag-tech">API</span>
+          <div class="task-title">Виджет Amber Index для сайтов</div>
+          <div class="task-desc">Масштабирование программы кликабельных бейджей доверия. API-виджеты для динамического вывода оценки на сайтах партнеров, усиливающие ссылочную массу и приводящие реферальный трафик.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-growth">Рост</span>
+          <div class="task-title">Выход в другие регионы</div>
+          <div class="task-desc">Тиражирование модели: Краснодар, Санкт-Петербург, другие активные рынки. Франчайзинг или прямой запуск.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-product">AI</span>
+          <div class="task-title">AI-помощник для покупателя</div>
+          <div class="task-desc">«Помоги мне выбрать ЖК» — персонализированный подбор по сценарию: семья, инвестиции, аренда, море.</div>
+        </div>
+        <div class="task-card">
+          <span class="task-tag tag-biz">Премия</span>
+          <div class="task-title">Amber Award — ежегодная премия</div>
+          <div class="task-desc">«Лучший ЖК Калининграда по Amber Index» — публичная номинация. Застройщики сами заинтересованы в высоком индексе.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+</div><!-- /section roadmap -->
+
+<div class="divider"></div>
+
+<!-- TEAM -->
+<div class="section reveal" id="team">
+  <p class="section-tag">Структура команды</p>
+  <h2 class="section-title">Команда по фазам роста</h2>
+  <p class="section-sub">От ядра из 4 человек до полноценной платформенной команды за 18 месяцев</p>
+  <div class="team-grid">
+
+    <div class="team-card">
+      <div class="team-card-tag">Фаза 0–1</div>
+      <div class="team-card-title">Ядро</div>
+      <div class="team-card-period">Месяцы 1–4 · 3–4 человека</div>
+      <div class="role-row">
+        <div class="role-ico" style="background:#FFF8EC">👑</div>
+        <div class="role-text-container"><div class="role-name">Основатель / CEO</div><div class="role-desc">Стратегия, первые продажи, юридические вопросы, партнёрства, представление платформы рынку</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-ico" style="background:#ECFDF5">📊</div>
+        <div class="role-text-container"><div class="role-name">Аналитик-контентщик</div><div class="role-desc">Карточки ЖК, расчёт индексов, методология, SEO-тексты, обновление данных</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-ico" style="background:#EFF6FF">💻</div>
+        <div class="role-text-container"><div class="role-name">Разработчик (фронт+бэк)</div><div class="role-desc">MVP сайта, CMS, форма застройщика, карта, сравнение ЖК</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-ico" style="background:#F5F3FF">🤝</div>
+        <div class="role-text-container"><div class="role-name">DevRel / B2B-менеджер</div><div class="role-desc">Переговоры с застройщиками, подписание соглашений, продажи профилей</div></div>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-card-tag">Фаза 2</div>
+      <div class="team-card-title">Рост</div>
+      <div class="team-card-period">Месяцы 5–9 · 6–7 человек</div>
+      <div class="role-row">
+        <div class="role-ico" style="background:#FFF8EC">👑</div>
+        <div class="role-text-container"><div class="role-name">CEO</div><div class="role-desc">Стратегия, инвесторы, медиа, крупные партнёрства с банками и агентствами</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-ico" style="background:#ECFDF5">📊</div>
+        <div class="role-text-container"><div class="role-name">Head of Content + Analytics</div><div class="role-desc">Руководит контентом + аналитик №2 (пригород, область, морские ЖК)</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-ico" style="background:#EFF6FF">💻</div>
+        <div class="role-text-container"><div class="role-name">CTO / Lead Developer</div><div class="role-desc">Архитектура, автоматизация, API, личные кабинеты, парсинг данных</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-ico" style="background:#F5F3FF">🤝</div>
+        <div class="role-text-container"><div class="role-name">DevRel + Sales Manager</div><div class="role-desc">DevRel: работа с застройщиками / Sales: монетизация витрин и CPA</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-ico" style="background:#FEF2F2">📣</div>
+        <div class="role-text-container"><div class="role-name">SMM / Marketing</div><div class="role-desc">Трафик, SEO, Telegram, PR, партнёрские материалы</div></div>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-card-tag">Фаза 3–4</div>
+      <div class="team-card-title">Масштаб</div>
+      <div class="team-card-period">Месяцы 10–18+ · 10+ человек</div>
+      <div class="role-row">
+        <div class="role-ico" style="background:#FEF2F2">⚖️</div>
+        <div class="role-text-container"><div class="role-name">Юрист</div><div class="role-desc">Штатный или ретейнер. Аудит формулировок, претензии, договоры с застройщиками</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-ico" style="background:#F0FDFA">🏗️</div>
+        <div class="role-text-container"><div class="role-name">Выездной эксперт</div><div class="role-desc">Визиты на объекты, фиксация параметров, проверка расхождений с данными</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-ico" style="background:#FFF8EC">🏢</div>
+        <div class="role-text-container"><div class="role-name">Менеджер по агентствам</div><div class="role-desc">Подписки для риелторов, партнёрства с агентствами недвижимости</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-ico" style="background:#EFF6FF">📈</div>
+        <div class="role-text-container"><div class="role-name">Data Engineer</div><div class="role-desc">Автоматизация сбора данных, парсинг наш.дом.рф, мониторинг отзывов</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- MONETIZATION LEVELS -->
+<div class="section reveal" id="monetization-levels">
+  <p class="section-tag">Монетизация</p>
+  <h2 class="section-title">Монетизационная лестница</h2>
+  <p class="section-sub">Пять уровней дохода — от бесплатного базового размещения до выездной экспертизы</p>
+  <div class="mono-grid">
+    <div class="mono-card mc-0">
+      <div class="mono-level">Уровень 0</div>
+      <div class="mono-title">Базовая карточка</div>
+      <div class="mono-price">Бесплатно</div>
+      <ul class="mono-features">
+        <li>Карточка из открытых данных</li>
+        <li>Предварительный Amber Index</li>
+        <li>Адрес, статус, цены</li>
+        <li>Базовые документы</li>
+      </ul>
+    </div>
+    <div class="mono-card mc-1">
+      <div class="mono-level">Уровень 1</div>
+      <div class="mono-title">Верифицированный профиль</div>
+      <div class="mono-price">5 000 – 80 000 ₽/мес</div>
+      <div class="mono-sub" style="font-size:10.5px; color:var(--muted); margin-bottom:12px; text-align:center;">Индексируется от трафика</div>
+      <ul class="mono-features">
+        <li>Бейдж «Данные застройщика»</li>
+        <li>Расширенная форма 80+ полей</li>
+        <li>Пересчёт Amber Index</li>
+        <li>Официальный контакт/сайт</li>
+      </ul>
+    </div>
+    <div class="mono-card mc-2">
+      <div class="mono-level">Уровень 2</div>
+      <div class="mono-title">Расширенная витрина</div>
+      <div class="mono-price">20 000 – 200 000 ₽/мес</div>
+      <div class="mono-sub" style="font-size:10.5px; color:var(--muted); margin-bottom:12px; text-align:center;">Индексируется от трафика</div>
+      <ul class="mono-features">
+        <li>Фото / видеогалерея</li>
+        <li>Баннер на главной странице</li>
+        <li>Кнопка «Получить прайс»</li>
+        <li>Приоритет в выдаче сайта</li>
+        <li>Статистика просмотров</li>
+      </ul>
+    </div>
+    <div class="mono-card mc-3">
+      <div class="mono-level">Уровень 3</div>
+      <div class="mono-title">Лидогенерация (CPA)</div>
+      <div class="mono-price">3 000 – 15 000 ₽ за лид</div>
+      <div class="mono-sub" style="font-size:10.5px; color:var(--muted); margin-bottom:12px; text-align:center;">В зависимости от ценности лида</div>
+      <ul class="mono-features">
+        <li>Форма «Узнать о квартирах»</li>
+        <li>Квалифицированный лид</li>
+        <li>Имя, телефон, интерес</li>
+        <li>Старт при 5 000+ уников</li>
+      </ul>
+    </div>
+    <div class="mono-card mc-4">
+      <div class="mono-level">Уровень 4</div>
+      <div class="mono-title">Аналитика</div>
+      <div class="mono-price">30 000 – 150 000 ₽/кв.</div>
+      <div class="mono-sub" style="font-size:10.5px; color:var(--muted); margin-bottom:12px; text-align:center;">Для маркетинга застройщика</div>
+      <ul class="mono-features">
+        <li>«ЖК vs рынок» — отчёт</li>
+        <li>Анализ по 13 блокам</li>
+        <li>Динамика индекса конкурентов</li>
+        <li>Для маркетинга застройщика</li>
+      </ul>
+    </div>
+    <div class="mono-card mc-5">
+      <div class="mono-level">Уровень 5</div>
+      <div class="mono-title">Выездная проверка</div>
+      <div class="mono-price">50 000 – 250 000 ₽</div>
+      <div class="mono-sub" style="font-size:10.5px; color:var(--muted); margin-bottom:12px; text-align:center;">Разово за полный аудит</div>
+      <ul class="mono-features">
+        <li>Визит Amber на объект</li>
+        <li>Статус «Выезд Amber»</li>
+        <li>Подробный отчёт</li>
+        <li>Обновление карточки</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- DYNAMIC TARIFFS & EARLY BIRD -->
+  <div class="tcard" style="margin-top: 32px; border-color: rgba(27,60,110,0.15);">
+    <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 20px; margin-bottom: 24px;">
+      <div style="flex: 1; min-width: 280px;">
+        <h3 style="font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">📈 Динамика тарифов от трафика</h3>
+        <p style="font-size: 12.5px; color: var(--text-sec); line-height: 1.5;">По мере роста популярности и посещаемости платформы тарифная сетка автоматически индексируется. Стоимость привязана к объему ежедневной целевой аудитории.</p>
+      </div>
+      <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 16px; max-width: 460px; flex: 1.2; min-width: 280px;">
+        <strong style="color: var(--success); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 6px;">🔥 Выгода раннего входа (Early Bird) — экономия до 10 раз</strong>
+        <span style="font-size: 12px; color: var(--text-sec); line-height: 1.5; display: block;">Застройщики и рекламодатели, заключившие контракт в первые 3 месяца, <strong>фиксируют стартовые тарифы на 12 месяцев вперед</strong>. По мере роста трафика стоимость размещения для новых участников <strong>увеличится до 10 раз</strong> (например, Уровень 2 вырастет с 20 000 ₽ до 200 000 ₽/мес). Ранние партнеры сохранят базовый тариф на весь год — это ключевой аргумент для закрытия годовых контрактов на старте.</span>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Посещаемость (в день)</th>
+          <th>Примерный охват в месяц</th>
+          <th>Уровень 1 (Профиль)</th>
+          <th>Уровень 2 (Витрина)</th>
+          <th>Уровень 3 (CPA-лид)</th>
+          <th>Баннеры (Брендинг)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="lbl">До 10 000 уников</td>
+          <td>До 300 000 визитов</td>
+          <td class="b">5 000 – 15 000 ₽/мес</td>
+          <td class="g">20 000 – 40 000 ₽/мес</td>
+          <td>3 000 – 5 000 ₽/лид</td>
+          <td>от 10 000 ₽/мес</td>
+        </tr>
+        <tr>
+          <td class="lbl">10 000 – 30 000 уников</td>
+          <td>300k – 900k визитов</td>
+          <td class="b">15 000 – 30 000 ₽/мес</td>
+          <td class="g">40 000 – 80 000 ₽/мес</td>
+          <td>5 000 – 8 000 ₽/лид</td>
+          <td>от 30 000 ₽/мес</td>
+        </tr>
+        <tr>
+          <td class="lbl">30 000 – 50 000 уников</td>
+          <td>900k – 1.5M визитов</td>
+          <td class="b">30 000 – 50 000 ₽/мес</td>
+          <td class="g">80 000 – 120 000 ₽/мес</td>
+          <td>8 000 – 12 000 ₽/лид</td>
+          <td>от 60 000 ₽/мес</td>
+        </tr>
+        <tr>
+          <td class="lbl">50 000 – 100 000+ уников</td>
+          <td>1.5M – 3M+ визитов</td>
+          <td class="b">50 000 – 80 000 ₽/мес</td>
+          <td class="g">120 000 – 200 000 ₽/мес</td>
+          <td>12 000 – 15 000 ₽/лид</td>
+          <td>от 100 000 ₽/мес</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- DEVELOPER STRATEGY -->
+<div class="section reveal" id="devs">
+  <p class="section-tag">Работа с застройщиками</p>
+  <h2 class="section-title">Стратегия первых переговоров</h2>
+  <p class="section-sub">Как выстроить отношения так, чтобы застройщик стал партнёром, а не противником</p>
+
+  <div class="strategy-row">
+    <div class="strat-card do-card">
+      <div class="strat-title">✅ Что говорить застройщику</div>
+      <ul class="strat-list do">
+        <li>«Мы витрина, которую вы наполняете сами»</li>
+        <li>«Больше данных = выше индекс — это в ваших руках»</li>
+        <li>«Карточка ЖК уже есть — покажем, что не раскрыто»</li>
+        <li>«Реклама и индекс — полностью разделены»</li>
+        <li>«Вы несёте ответственность за свои данные»</li>
+        <li>«Покупатель увидит источник каждого факта»</li>
+        <li>«Вы можете прислать уточнения — мы обновим»</li>
+        <li>«Мы фиксируем факты, не судим лично вас»</li>
+        <li>«Разместите бейдж нашего рейтинга в футере вашего сайта — это даст +0.25 к индексу за открытость»</li>
+      </ul>
+    </div>
+    <div class="strat-card dont-card">
+      <div class="strat-title">❌ Что нельзя говорить и писать</div>
+      <ul class="strat-list dont">
+        <li>«Мы оцениваем надёжность застройщика»</li>
+        <li>«Цена завышена» / «Документы мутные»</li>
+        <li>«Застройщик нарушает сроки» без источника</li>
+        <li>«Плохой ЖК» / «Покупать опасно»</li>
+        <li>«Застройщик наврал / обманул»</li>
+        <li>«Сэкономили на материалах»</li>
+        <li>«Объект проблемный»</li>
+        <li>Любые инвестиционные рекомендации</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="section-tag" style="margin-bottom:12px">Работа с возражениями</p>
+  <div class="obj-list">
+    <div class="obj-card">
+      <div class="obj-inner">
+        <div class="obj-q"><strong>Возражение</strong>«Вы будете нас публично критиковать и выставлять в плохом свете»</div>
+        <div class="obj-a"><strong>Ответ Amber</strong>«Мы пишем только факты: есть документ — написали, нет — "не раскрыто". Никаких субъективных оценок. Вы вправе прислать актуальные данные — обновим карточку в течение 5 дней.»</div>
+      </div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-inner">
+        <div class="obj-q"><strong>Возражение</strong>«Кто вам дал право нас оценивать? Вы не эксперты»</div>
+        <div class="obj-a"><strong>Ответ Amber</strong>«Мы оцениваем степень раскрытия информации, а не качество строительства. Это то же самое, что делает наш.дом.рф — только в читаемом виде. Методология полностью публична.»</div>
+      </div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-inner">
+        <div class="obj-q"><strong>Возражение</strong>«Я не хочу, чтобы конкуренты видели мои характеристики»</div>
+        <div class="obj-a"><strong>Ответ Amber</strong>«Покупатели всё равно сравнивают ЖК — только хаотично, через разные источники. Если вы раскроете данные, вы будете выглядеть сильнее конкурента, который молчит.»</div>
+      </div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-inner">
+        <div class="obj-q"><strong>Возражение</strong>«У нас низкий индекс — это несправедливо, мы хорошо строим»</div>
+        <div class="obj-a"><strong>Ответ Amber</strong>«Давайте разберём по блокам — что именно снижает оценку. Скорее всего, данных по этим параметрам нет в открытых источниках. Заполните форму — мы пересчитаем индекс.»</div>
+      </div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-inner">
+        <div class="obj-q"><strong>Возражение</strong>«Вы зарабатываете на нас, а что мы получаем взамен?»</div>
+        <div class="obj-a"><strong>Ответ Amber</strong>«Вы получаете горячий трафик покупателей, которые уже глубоко изучили ваш объект и готовы к покупке. Это качественнее любого холодного баннера. Плюс к этому — постоянное имиджевое присутствие вашего бренда (эффект лидерства и омнипрезентности на главной региональной витрине недвижимости) и эффективный инструмент управления репутацией через открытость.»</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRUST BADGES & REFERRAL LOOP -->
+  <!-- TRUST BADGES & REFERRAL LOOP -->
+  <p class="section-tag" style="margin-top:40px; margin-bottom:12px">Виджеты Доверия (Badge & Backlink Program)</p>
+  <div class="strat-card seo-card" style="margin-top:16px;">
+    <div class="legal-badge" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: var(--success); margin-bottom: 12px;">◆ Реферальное SEO-кольцо (SEO-Loop)</div>
+    <div class="strat-title" style="font-size: 16px; margin-bottom: 8px;">Кликабельные бейджи на сайтах застройщиков</div>
+    <p style="color: var(--text-sec); font-size: 13px; line-height: 1.5; margin-bottom: 16px;">Внедрение с первого месяца как инструмент бесплатного лид-трафика и буста поисковой оптимизации:</p>
+    <ul class="strat-list bullet">
+      <li><strong>Суть предложения:</strong> Застройщикам предлагается установить фирменный кликабельный бейдж-рейтинг («Проверен на Amber Avenue · Рейтинг: 4.85») в подвал (footer) своего официального сайта или в раздел раскрытия документов.</li>
+      <li><strong>Прямая мотивация:</strong> Наличие установленного активного бейджа на официальном домене застройщика дает фиксированный бонус к рейтингу (+0.25 балла к Amber Index в блоке «Открытость и Интеграция»).</li>
+      <li><strong>Доверие клиентов:</strong> Демонстрация высокой открытости повышает доверие покупателей прямо на посадочной странице застройщика.</li>
+      <li><strong>Реферальный трафик:</strong> Кликая на бейдж, потенциальный покупатель переходит на развернутую карточку ЖК на Amber Avenue, где он вовлекается в сравнение, видит сторонние сервисы (банки, юристов) и дает CPA-лиды.</li>
+      <li><strong>SEO-Буст (Backlink Loop):</strong> Поисковые ссылки с авторитетных сайтов застройщиков формируют качественный ссылочный профиль нашей платформы без затрат на покупку крауд-ссылок. Это ключевой драйвер для достижения цели в <strong>70% органического трафика (SEO)</strong> к 12-му месяцу.</li>
+    </ul>
+  </div>
+
+  <!-- TRAFFIC FUNNEL & LONG TAIL STRATEGY -->
+  <p class="section-tag" style="margin-top:40px; margin-bottom:12px">Математика воронки & Длинный хвост (300 застройщиков)</p>
+  <div class="strategy-grid">
+    <!-- Column 1: Funnel Math -->
+    <div class="strat-card funnel-card">
+      <div class="legal-badge" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3); color: var(--primary); margin-bottom: 12px;">📊 Математика воронки (Выгода застройщика)</div>
+      <div class="strat-title" style="font-size: 15px; margin-bottom: 12px;">Как окупаются 20 000 – 200 000 ₽/мес (Уровень 2)</div>
+      <ul class="strat-list bullet">
+        <li><strong>Средний чек квартиры:</strong> 7 000 000 ₽. Чистая маржа застройщика: 10–15% (~700 000+ ₽).</li>
+        <li><strong>Целевой CAC (стоимость сделки):</strong> Застройщики готовы платить до 100 000 ₽ за 1 продажу с рекламы.</li>
+        <li><strong>Наш KPI эффективности:</strong> 5 горячих лидов → 1 продажа (конверсия из лида в сделку 20% благодаря высокой прогретости аудитории).</li>
+        <li><strong>Себестоимость лида для нас:</strong> Смешанный CPC (стоимость клика) для нас составляет ~8.5 ₽ (30% платный трафик по инфо-запросам за 25–30 ₽ + 70% бесплатный SEO-трафик и бейджи). При конверсии в лид 1% себестоимость 1 горячего лида для нас составляет <strong>~850 ₽</strong>. Мы продаем его за <strong>3 000 – 15 000 ₽</strong> в зависимости от объема трафика.</li>
+        <li><strong>Переход на сайт застройщика (клик):</strong> Смешанная стоимость одного перехода с нашей витрины на сайт застройщика обходится нам в <strong>~57 ₽</strong> (при CTR переходов 15% от общего трафика).</li>
+        <li><strong>Требуемый трафик на 1 ЖК:</strong> 500 целевых посетителей в месяц на карточку конкретного ЖК для генерации 5 лидов.</li>
+        <li><strong>Брендинг & Имиджевый эффект (Омнипрезентность):</strong> Помимо прямых конверсий, баннеры и спецразмещения на платформе обеспечивают эффект постоянного присутствия бренда застройщика в информационном поле Калининграда. Это укрепляет имидж надежного лидера рынка в глазах покупателей и агентов, прогревая аудиторию и снижая CAC (стоимость привлечения) на других площадках застройщика.</li>
+      </ul>
+    </div>
+
+    <!-- Column 2: Long Tail Strategy -->
+    <div class="strat-card tail-card">
+      <div class="legal-badge" style="background: rgba(245, 166, 35, 0.1); border-color: rgba(245, 166, 35, 0.3); color: var(--accent); margin-bottom: 12px;">🦊 Стратегия «Длинного хвоста»</div>
+      <div class="strat-title" style="font-size: 15px; margin-bottom: 12px;">Что делать с остальными 290 застройщиками?</div>
+      <ul class="strat-list bullet">
+        <li><strong>1. CPA-модель (оплата за лид) для малых ЖК:</strong> Застройщики с низким трафиком не платят фиксированную подписку. Они платят только за результат: <strong>3 000 – 15 000 ₽ за лид</strong>. Это снимает финансовые риски.</li>
+        <li><strong>2. Продажа «Пути исправления» (Репутационный B2B):</strong> Застройщикам с низким рейтингом продается не трафик, а ЛК (от 10 000 до 100 000 ₽/мес в зависимости от трафика) для <strong>управления репутацией</strong>. Возможность загрузить документы и показать открытость.</li>
+        <li><strong>3. Умная ротация и рекомендации:</strong> На страницах топовых ЖК показываются блоки: <em>«Альтернативные ЖК рядом в аналогичном бюджете»</em>. Это перенаправляет часть трафика лидеров на длинный хвост.</li>
+        <li><strong>4. Нишевые фильтры:</strong> Покупатели ищут жилье по 100+ параметрам. Застройщик с низким общим рейтингом все равно получает целевые лиды, если его ЖК идеально подходит под фильтр пользователя.</li>
+      </ul>
+    </div>
+
+    <!-- Column 3: Marketing Budget Justification -->
+    <div class="strat-card budget-card">
+      <div class="legal-badge" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: var(--success); margin-bottom: 12px;">📢 Обоснование маркетинг-бюджета</div>
+      <div class="strat-title" style="font-size: 15px; margin-bottom: 12px;">Куда идут деньги (100k → 1.08M ₽)</div>
+      <ul class="strat-list bullet">
+        <li><strong>Месяц 1 (100 000 ₽):</strong>
+          <div style="margin-top: 4px; padding-left: 10px; border-left: 2px solid var(--border-light); font-size: 12px; color: var(--text-sec);">
+            • <em>Директ (PPC):</em> 60 000 ₽ (~2000 кликов на отзывы/инфо-запросы для первых 20+ лидов).<br/>
+            • <em>B2B Маркетинг:</em> 20 000 ₽ (печать презентационных китов для застройщиков).<br/>
+            • <em>PR-посев:</em> 20 000 ₽ (анонсы в местных Telegram-каналах и пабликах).
+          </div>
+        </li>
+        <li><strong>Месяц 12 (1 080 000 ₽):</strong>
+          <div style="margin-top: 4px; padding-left: 10px; border-left: 2px solid var(--border-light); font-size: 12px; color: var(--text-sec);">
+            • <em>Трафик (PPC/Target):</em> 400 000 ₽ (~14 000 коммерческих переходов. С учетом SEO дает 38 500 визитов/мес).<br/>
+            • <em>PR и Медийность:</em> 380 000 ₽ (размещение бренд-баннеров и щитов возле строящихся ЖК для давления на застройщиков, статьи в топ-СМИ Калининграда).<br/>
+            • <em>Контент и SMM:</em> 200 000 ₽ (видеообзоры ЖК с дронов, YouTube, ведение каналов).<br/>
+            • <em>SEO и ссылки:</em> 100 000 ₽.
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="divider"></div>
+
+<!-- LEGAL SOURCES -->
+<div class="section reveal" id="legal">
+  <p class="section-tag">Юридическая защита</p>
+  <h2 class="section-title">Как не брать чужую ответственность</h2>
+  <p class="section-sub" style="margin-bottom:20px">Маркировка источника каждого факта в карточке ЖК</p>
+
+  <div class="src-legend">
+    <div class="src-tag"><div class="src-dot" style="background:#3B82F6"></div>Открытые источники — наш.дом.рф, карты, сайт застройщика</div>
+    <div class="src-tag"><div class="src-dot" style="background:#10B981"></div>Данные застройщика — форма Amber, подписано соглашение</div>
+    <div class="src-tag"><div class="src-dot" style="background:#F5A623"></div>Технические материалы — документы, предоставленные застройщиком</div>
+    <div class="src-tag"><div class="src-dot" style="background:#EF4444"></div>Выезд Amber — зафиксировано при визите на объект</div>
+  </div>
+
+  <div class="legal-card">
+    <div>
+      <div class="legal-badge">◆ Соглашение с застройщиком</div>
+      <div class="legal-head">Ключевой документ</div>
+      <div class="legal-sub">Подписывается до публикации любых данных застройщика</div>
+      <ul class="legal-list">
+        <li>Данные актуальны на дату предоставления</li>
+        <li>Застройщик несёт ответственность за достоверность</li>
+        <li>Обязуется уведомлять об изменениях в течение 30 дней</li>
+        <li>Amber указывает источник: «по информации застройщика»</li>
+        <li>Amber не несёт ответственности за данные застройщика</li>
+        <li>Amber не гарантирует конкретный уровень Amber Index</li>
+      </ul>
+    </div>
+    <div>
+      <div class="legal-badge">◆ Механизм расхождений</div>
+      <div class="legal-head">Без конфликтов</div>
+      <div class="legal-sub">Если выявлено расхождение между заявленным и фактическим</div>
+      <ul class="legal-list">
+        <li>Письменный запрос застройщику с описанием факта</li>
+        <li>14 рабочих дней на ответ и предоставление данных</li>
+        <li>При молчании: «При проверке выявлено расхождение. Застройщик уведомлён»</li>
+        <li>При ответе: карточка обновляется с указанием даты</li>
+        <li>Никогда: «Застройщик наврал» — только нейтральный факт</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ==========================================
+     РАЗДЕЛЫ ИЗ REVENUE-MODEL.HTML
+     ========================================== -->
+
+<!-- PLACEMENT MAP -->
+<div class="section reveal" id="placements">
+  <p class="section-tag">Карта размещений</p>
+  <h2 class="section-title">Все рекламные места на платформе</h2>
+  <p class="section-sub">Цветовая маркировка по типу формата — от главных баннеров до нативных блоков в блоге</p>
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#F5A623"></div>Главный баннер направления — 90 000 ₽</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#1B3C6E"></div>Микро-баннер главной страницы</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#3B82F6"></div>Сайдбар / боковой баннер</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#10B981"></div>Контекст внутри секции ЖК</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#7C3AED"></div>Контекст в превью карточки</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#EF4444"></div>Нативная реклама / блог</div>
+  </div>
+
+  <div class="placement-map">
+    <!-- LEFT col: navigation -->
+    <div class="map-col">
+      <div class="map-label">Левая колонка</div>
+      <div class="ad-slot s-home">
+        <span class="sico">📋</span>
+        <div><div class="sname">Навигация</div><div class="sdesc">Все новостройки · У моря · Комфорт · Бизнес · Премиум</div></div>
+      </div>
+      <div class="ad-slot s-native">
+        <span class="sico">🔖</span>
+        <div><div class="sname">«Визитная карточка» партнёра</div><div class="sprice">2 000–20 000 ₽/мес</div><div class="sdesc">Нативный брендированный блок под меню</div></div>
+      </div>
+    </div>
+
+    <!-- CENTER: main content -->
+    <div class="map-col">
+      <div class="map-label">Центральная колонка</div>
+
+      <div class="ad-slot s-dir" style="padding:14px 18px">
+        <span class="sico">⭐</span>
+        <div style="flex:1">
+          <div class="sname">ГЛАВНЫЙ БАННЕР НАПРАВЛЕНИЯ (×5 разделов)</div>
+          <div class="sprice" style="font-size:13px">10 000–100 000 ₽/мес × 5 = до 500 000 ₽/мес</div>
+          <div class="sdesc">Калининград · Пригород · У моря · Область · Апартаменты — эксклюзивный топ-баннер каждого раздела</div>
+        </div>
+      </div>
+
+      <div class="ad-slot s-dir">
+        <span class="sico">🖼️</span>
+        <div><div class="sname">«ЖК Недели» — Hero Featured Card</div><div class="sprice">15 000–150 000 ₽/мес</div><div class="sdesc">Крупная featured-карточка вверху каталога. 1 место на каждый каталог.</div></div>
+      </div>
+
+      <div style="background:var(--bg);border:1px dashed var(--border);border-radius:10px;padding:12px 14px">
+        <div class="map-label">Сетка карточек ЖК в каталоге</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+          <div class="ad-slot s-card" style="padding:9px 11px"><span class="sico" style="font-size:13px">🏢</span><div><div class="sname" style="font-size:11px">ЖК-карточка</div><div class="sdesc">Органика</div></div></div>
+          <div class="ad-slot s-card" style="padding:9px 11px;border-style:dashed"><span class="sico" style="font-size:13px">💳</span><div><div class="sname" style="font-size:11px">Контекст в карточке</div><div class="sprice">2 000–20 000 ₽</div><div class="sdesc">«Ипотека от 4.5%» в превью</div></div></div>
+          <div class="ad-slot s-card" style="padding:9px 11px"><span class="sico" style="font-size:13px">🏢</span><div><div class="sname" style="font-size:11px">ЖК-карточка</div><div class="sdesc">Органика</div></div></div>
+          <div class="ad-slot s-card" style="padding:9px 11px"><span class="sico" style="font-size:13px">🏢</span><div><div class="sname" style="font-size:11px">ЖК-карточка</div><div class="sdesc">Органика</div></div></div>
+        </div>
+      </div>
+
+      <div class="ad-slot s-sect">
+        <span class="sico">📏</span>
+        <div><div class="sname">Горизонтальный баннер после каждой 4-й карточки ЖК</div><div class="sprice">5 000–50 000 ₽/мес за слот</div><div class="sdesc">Показывается при бесконечном скролле в каталоге. База 3000 ЖК дает до 750 рекламных мест в ротации для застройщиков и банков.</div></div>
+      </div>
+
+      <div class="ad-slot s-native">
+        <span class="sico">✍️</span>
+        <div><div class="sname">Нативная статья / Спонсорский материал в блоге</div><div class="sprice">5 000–50 000 ₽/статья · 4 статьи/мес</div><div class="sdesc">Маркируется «Реклама». Банки, агентства, застройщики, сервисы</div></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: sidebar -->
+    <div class="map-col">
+      <div class="map-label">Правая колонка (главная)</div>
+      <div class="ad-slot s-home" style="padding:10px 12px"><div><div class="sname" style="font-size:11px">🏷️ РЕКЛАМА · Микро-баннер #1</div><div class="sprice">5 000–50 000 ₽/мес</div></div></div>
+      <div class="ad-slot s-home" style="padding:10px 12px"><div><div class="sname" style="font-size:11px">⭐ ПРЕМИУМ · Микро-баннеры #2–5</div><div class="sprice">5 000–50 000 ₽/мес</div></div></div>
+      <div class="ad-slot s-side" style="padding:10px 12px"><div><div class="sname" style="font-size:11px">Банк / ипотечный брокер</div><div class="sprice">5 000–50 000 ₽/мес</div><div class="sdesc">Сайдбар каталога</div></div></div>
+    </div>
+  </div>
+
+  <!-- Sidebar ЖК -->
+  <div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border-light)">
+    <div class="map-label" style="margin-bottom:10px">Боковой баннер на каждой странице ЖК (сайдбар)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="ad-slot s-side" style="padding:12px 14px;align-items:flex-start">
+        <span class="sico">⭐</span>
+        <div><div class="sname">«Спецпредложение» — застройщик выкупает свой сайдбар</div><div class="sprice">5 000–50 000 ₽/мес за ЖК</div><div class="sdesc">До 3000 ЖК × 50 000 = до 150 000 000 ₽/мес теоретически. Реально при 10% выкупа — 15 000 000 ₽/мес.</div></div>
+      </div>
+      <div class="ad-slot s-side" style="padding:12px 14px;align-items:flex-start">
+        <span class="sico">🏦</span>
+        <div><div class="sname">Банк / брокер — платформенный сайдбар (все ЖК сразу)</div><div class="sprice">20 000–200 000 ₽/мес</div><div class="sdesc">Один рекламодатель выкупает правый сайдбар на всех страницах ЖК. Альтернатива поштучной продаже.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- FULL TABLE -->
+<div class="section reveal" id="table">
+  <p class="section-tag">Полная таблица цен</p>
+  <h2 class="section-title">Все рекламные места с ценами и потенциалом (Масштабированная модель)</h2>
+  <p class="section-sub">База: 300 застройщиков × 10 ЖК = 3000 ЖК. Потенциал — при 100% заполнении всех рекламных мест.</p>
+
+  <div class="tcard">
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width:240px">Рекламное место</th>
+          <th>Рекламодатель</th>
+          <th class="r" style="min-width:80px">Мест</th>
+          <th class="r" style="min-width:130px">Цена ед., ₽/мес</th>
+          <th class="r" style="min-width:140px">Макс. потенциал</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr class="grp"><td colspan="5">A — ГЛАВНЫЕ БАННЕРЫ ПО 5 НАПРАВЛЕНИЯМ (БРЕНД-ЭФФЕКТ)</td></tr>
+        <tr><td class="lbl">⭐ Баннер «Калининград»</td><td>Застройщик, банк, агентство</td><td class="r">1</td><td class="r">10 000 – 100 000</td><td class="r g">100 000 ₽</td></tr>
+        <tr><td class="lbl">⭐ Баннер «У моря»</td><td>Застройщик, турсервис, банк</td><td class="r">1</td><td class="r">10 000 – 100 000</td><td class="r g">100 000 ₽</td></tr>
+        <tr><td class="lbl">⭐ Баннер «Пригород»</td><td>Застройщик, авто, инфраструктура</td><td class="r">1</td><td class="r">10 000 – 100 000</td><td class="r g">100 000 ₽</td></tr>
+        <tr><td class="lbl">⭐ Баннер «Область»</td><td>Застройщик, банк</td><td class="r">1</td><td class="r">10 000 – 100 000</td><td class="r g">100 000 ₽</td></tr>
+        <tr><td class="lbl">⭐ Баннер «Апартаменты»</td><td>Застройщик, инвест. сервисы</td><td class="r">1</td><td class="r">10 000 – 100 000</td><td class="r g">100 000 ₽</td></tr>
+
+        <tr class="grp"><td colspan="5">B — ГЛАВНАЯ СТРАНИЦА: МИКРО-БАННЕРЫ СПРАВА + HERO</td></tr>
+        <tr><td class="lbl">🏷️ Микро-баннеры #1–5 (правая колонка)</td><td>Застройщики — продвижение ЖК</td><td class="r">5</td><td class="r">5 000 – 50 000</td><td class="r g">250 000 ₽</td></tr>
+        <tr><td class="lbl">🖼️ Hero «ЖК Недели» (главная)</td><td>Топ-застройщик, премиум ЖК</td><td class="r">1</td><td class="r">15 000 – 150 000</td><td class="r g">150 000 ₽</td></tr>
+
+        <tr class="grp"><td colspan="5">C — КАТАЛОГ ЖК: КОНТЕКСТ В КАРТОЧКАХ И ЛЕНТЕ</td></tr>
+        <tr><td class="lbl">💳 Контекст в превью-карточке («Ипотека от X%»)</td><td>Банки, ипотечные брокеры</td><td class="r">15 карточек</td><td class="r">2 000 – 20 000</td><td class="r g">300 000 ₽</td></tr>
+        <tr><td class="lbl">📏 Лента: Горизонтальный баннер (после каждого 4-го ЖК)</td><td>Застройщики, банки, агентства</td><td class="r">750 (1 на 4 ЖК)</td><td class="r">5 000 – 50 000</td><td class="r g">37 500 000 ₽</td></tr>
+        <tr><td class="lbl">📌 Сайдбар рядом с каталогом</td><td>Банк, страховая, агентство</td><td class="r">5</td><td class="r">5 000 – 50 000</td><td class="r g">250 000 ₽</td></tr>
+
+        <tr class="grp"><td colspan="5">D — САЙДБАР НА СТРАНИЦАХ ЖК (боковой баннер)</td></tr>
+        <tr><td class="lbl">⭐ Сайдбар ЖК «Спецпредложение» (застройщик)</td><td>Сам застройщик выкупает свою страницу</td><td class="r">до 3000 ЖК</td><td class="r">5 000 – 50 000</td><td class="r g">150 000 000 ₽</td></tr>
+        <tr><td class="lbl">🏦 Платформенный сайдбар (банк — все ЖК)</td><td>Банк / брокер — вся платформа</td><td class="r">1 пакет</td><td class="r">20 000 – 200 000</td><td class="r g">200 000 ₽</td></tr>
+
+        <tr class="grp"><td colspan="5">E — РАЗДЕЛЫ КАРТОЧКИ ЖК: КОНТЕКСТНАЯ РЕКЛАМА</td></tr>
+        <tr><td class="lbl">💰 Раздел «Цены» — банк-партнёр</td><td>Банк (Альфа, Сбер, ВТБ) — эксклюзив</td><td class="r">1 (все ЖК)</td><td class="r">15 000 – 150 000</td><td class="r b">150 000 ₽</td></tr>
+        <tr><td class="lbl">🏦 Раздел «Ипотека» — брокер / виджет</td><td>Ипотечный брокер</td><td class="r">1 (все ЖК)</td><td class="r">10 000 – 100 000</td><td class="r b">100 000 ₽</td></tr>
+        <tr><td class="lbl">📍 Раздел «Локация» — геоконтекст</td><td>Агентства, такси, каршеринг</td><td class="r">1 (все ЖК)</td><td class="r">5 000 – 50 000</td><td class="r b">50 000 ₽</td></tr>
+        <tr><td class="lbl">🏫 Раздел «Инфраструктура» — сервисы рядом</td><td>Магазины, школы, медцентры</td><td class="r">1 (все ЖК)</td><td class="r">3 000 – 30 000</td><td class="r b">30 000 ₽</td></tr>
+        <tr><td class="lbl">🏗️ Раздел «Характеристики» — бренд-спонсор</td><td>OTIS, Bosch, Rehau, Veka</td><td class="r">1 (все ЖК)</td><td class="r">5 000 – 50 000</td><td class="r b">50 000 ₽</td></tr>
+        <tr><td class="lbl">📄 Раздел «Документы» — юр. услуги</td><td>Юридические агентства, страховые</td><td class="r">1 (все ЖК)</td><td class="r">5 000 – 50 000</td><td class="r b">50 000 ₽</td></tr>
+        <tr><td class="lbl">👨‍👩‍👧 Раздел «Кому подходит» — сервисы</td><td>Переезд, мебель, financial-сервисы</td><td class="r">1 (все ЖК)</td><td class="r">3 000 – 30 000</td><td class="r b">30 000 ₽</td></tr>
+
+        <tr class="grp"><td colspan="5">F — БЛОГ И НАТИВНЫЕ МАТЕРИАЛЫ</td></tr>
+        <tr><td class="lbl">✍️ Нативная спонсорская статья</td><td>Банки, агентства, застройщики</td><td class="r">4 шт./мес</td><td class="r">5 000 – 50 000/шт.</td><td class="r g">200 000 ₽</td></tr>
+        <tr><td class="lbl">📰 Контекстный баннер внутри статьи</td><td>Тематические рекламодатели</td><td class="r">3 места</td><td class="r">2 000 – 20 000</td><td class="r g">60 000 ₽</td></tr>
+        <tr><td class="lbl">🔖 Нативный блок «Визитная карточка»</td><td>Местные бизнесы, партнёры</td><td class="r">2 места</td><td class="r">2 000 – 20 000</td><td class="r g">40 000 ₽</td></tr>
+
+        <tr class="grp"><td colspan="5">G — B2B УСЛУГИ И СТРАНИЦЫ ЗАСТРОЙЩИКОВ</td></tr>
+        <tr><td class="lbl">🏢 Платный профиль застройщика (страница застройщиков)</td><td>Застройщики (премиум функции, лиды, прямые ссылки)</td><td class="r">до 300</td><td class="r">10 000 – 100 000</td><td class="r g">30 000 000 ₽</td></tr>
+
+        <tr class="tot">
+          <td class="lbl">🏆 ИТОГО: максимальный рекламный потенциал</td>
+          <td colspan="2" style="color:var(--muted);font-size:12px;font-weight:400">100% заполняемость всех мест</td>
+          <td class="r" style="color:var(--muted);font-weight:400;font-size:12px">1000+ мест</td>
+          <td class="r g" style="font-size:16px">220 110 000 ₽/мес</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTIONS -->
+<div class="section reveal" id="sections">
+  <p class="section-tag">Страница ЖК · 9 разделов</p>
+  <h2 class="section-title">Контекстная реклама в разделах карточки ЖК</h2>
+  <p class="section-sub">7 из 9 разделов монетизируются. Разделы «Застройщик» и «Плюсы/минусы» — нейтральная зона, реклама запрещена.</p>
+
+  <div class="section-map">
+    <div class="sec-tabs">
+      <span class="sec-tab on">💰 Цены</span>
+      <span class="sec-tab on">🏦 Ипотека</span>
+      <span class="sec-tab on">📍 Локация</span>
+      <span class="sec-tab on">🏫 Инфраструктура</span>
+      <span class="sec-tab on">🏗️ Характеристики</span>
+      <span class="sec-tab on">📄 Документы</span>
+      <span class="sec-tab off">🏢 Застройщик ✗</span>
+      <span class="sec-tab off">⚖️ Плюсы/минусы ✗</span>
+      <span class="sec-tab on">👨‍👩‍👧 Кому подходит</span>
+    </div>
+
+    <div class="sec-rows">
+      <div class="sec-row">
+        <div class="rname">💰 Цены</div>
+        <div class="rwho">Банк-партнёр — блок ипотечного предложения прямо в разделе цен. «Ипотека от 4.5% в Альфа-Банке, решение за 2 минуты, оформить»</div>
+        <div class="rmod">Эксклюзив · все ЖК</div>
+        <div class="rprice">15 000 – 150 000 ₽</div>
+      </div>
+      <div class="sec-row">
+        <div class="rname">🏦 Ипотека</div>
+        <div class="rwho">Ипотечный брокер / сравнение банков. Виджет расчёта ежемесячного платежа с кнопкой перехода к партнёру.</div>
+        <div class="rmod">Эксклюзив / CPA</div>
+        <div class="rprice">10 000 – 100 000 ₽</div>
+      </div>
+      <div class="sec-row">
+        <div class="rname">📍 Локация</div>
+        <div class="rwho">Риелторские агентства, такси, каршеринг, реклама объектов поблизости. Геоконтекст по адресу ЖК.</div>
+        <div class="rmod">Ротация</div>
+        <div class="rprice">5 000 – 50 000 ₽</div>
+      </div>
+      <div class="sec-row">
+        <div class="rname">🏫 Инфраструктура</div>
+        <div class="rwho">Сети магазинов, частные школы и садики, медцентры, фитнес-клубы. Реклама конкретных объектов рядом с ЖК.</div>
+        <div class="rmod">Ротация</div>
+        <div class="rprice">3 000 – 30 000 ₽</div>
+      </div>
+      <div class="sec-row">
+        <div class="rname">🏗️ Характеристики</div>
+        <div class="rwho">Бренды: лифты (OTIS, KONE), окна (Rehau, Veka), котлы (Bosch, Buderus). Нативный спонсорский блок «от бренда».</div>
+        <div class="rmod">Спонсор раздела</div>
+        <div class="rprice">5 000 – 50 000 ₽</div>
+      </div>
+      <div class="sec-row">
+        <div class="rname">📄 Документы</div>
+        <div class="rwho">Юридические агентства, страховые компании, нотариусы. «Проверьте юридическую чистоту перед сделкой».</div>
+        <div class="rmod">Эксклюзив</div>
+        <div class="rprice">5 000 – 50 000 ₽</div>
+      </div>
+      <div class="sec-row dim">
+        <div class="rname">🏢 Застройщик</div>
+        <div class="rwho">Нейтральная зона — реклама запрещена. Объективность раздела критична для доверия к индексу.</div>
+        <div class="rmod">Без рекламы</div>
+        <div class="rprice" style="color:var(--muted)">—</div>
+      </div>
+      <div class="sec-row dim">
+        <div class="rname">⚖️ Плюсы/минусы</div>
+        <div class="rwho">Нейтральная зона — реклама здесь разрушит доверие пользователей к объективности оценки.</div>
+        <div class="rmod">Без рекламы</div>
+        <div class="rprice" style="color:var(--muted)">—</div>
+      </div>
+      <div class="sec-row">
+        <div class="rname">👨‍👩‍👧 Кому подходит</div>
+        <div class="rwho">Финансовые планировщики, управляющие компании, сервисы переезда, мебельные магазины, ремонтные бригады.</div>
+        <div class="rmod">Ротация</div>
+        <div class="rprice">3 000 – 30 000 ₽</div>
+      </div>
+    </div>
+
+    <!-- Sidebar ЖК -->
+    <div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border-light)">
+      <div class="map-label" style="margin-bottom:10px">Боковой баннер на каждой странице ЖК (сайдбар)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="ad-slot s-side" style="padding:12px 14px;align-items:flex-start">
+          <span class="sico">⭐</span>
+          <div><div class="sname">«Спецпредложение» — застройщик выкупает свой сайдбар</div><div class="sprice">15 000–25 000 ₽/мес за ЖК</div><div class="sdesc">До 3000 ЖК × 20 000 = до 60 000 000 ₽/мес теоретически. Реально при 10% выкупа — 6 000 000 ₽/мес.</div></div>
+        </div>
+        <div class="ad-slot s-side" style="padding:12px 14px;align-items:flex-start">
+          <span class="sico">🏦</span>
+          <div><div class="sname">Банк / брокер — платформенный сайдбар (все ЖК сразу)</div><div class="sprice">60 000–90 000 ₽/мес</div><div class="sdesc">Один рекламодатель выкупает правый сайдбар на всех страницах ЖК. Альтернатива поштучной продаже.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SCENARIOS -->
+<div class="section reveal" id="scenarios">
+  <p class="section-tag">Сценарии доходности</p>
+  <h2 class="section-title">Три сценария — только рекламная модель</h2>
+  <p class="section-sub">Без учёта подписок застройщиков (Level 1–5) и CPA-лидогенерации — это идёт сверху.</p>
+
+  <div class="tcard">
+    <table>
+      <thead>
+        <tr>
+          <th>Группа размещений</th>
+          <th class="r">Макс. потенциал</th>
+          <th class="r">😐 Год 1, реалист. (40%)</th>
+          <th class="r">📈 Год 2, реалист. (65%)</th>
+          <th class="r">🚀 Оптимист. (85%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="lbl">A. Главные баннеры (5 × 90 000 ₽)</td><td class="r">450 000</td><td class="r b">180 000</td><td class="r b">293 000</td><td class="r g">383 000</td></tr>
+        <tr><td class="lbl">B. Микро-баннеры главной + Hero</td><td class="r">260 000</td><td class="r b">104 000</td><td class="r b">169 000</td><td class="r g">221 000</td></tr>
+        <tr><td class="lbl">C. Каталог: контекст + баннеры в ленте</td><td class="r">15 275 000</td><td class="r b">6 110 000</td><td class="r b">9 928 000</td><td class="r g">12 983 000</td></tr>
+        <tr><td class="lbl">D. Сайдбар на страницах ЖК</td><td class="r">6 090 000</td><td class="r b">2 436 000</td><td class="r b">3 958 000</td><td class="r g">5 176 000</td></tr>
+        <tr><td class="lbl">E. Контекст в разделах карточки</td><td class="r">205 000</td><td class="r b">82 000</td><td class="r b">133 000</td><td class="r g">174 000</td></tr>
+        <tr><td class="lbl">F. Блог и нативные материалы</td><td class="r">235 000</td><td class="r b">94 000</td><td class="r b">153 000</td><td class="r g">200 000</td></tr>
+        <tr><td class="lbl">G. B2B Профили застройщиков (300 × 10 000 ₽)</td><td class="r">3 000 000</td><td class="r b">1 200 000</td><td class="r b">1 950 000</td><td class="r g">2 550 000</td></tr>
+        <tr class="tot">
+          <td class="lbl">💰 ИТОГО рекламный доход / мес</td>
+          <td class="r g">27 765 000 ₽</td>
+          <td class="r b" style="font-size:15px">11 106 000 ₽</td>
+          <td class="r b" style="font-size:15px">18 047 000 ₽</td>
+          <td class="r g" style="font-size:15px">23 600 000 ₽</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="section-tag" style="margin-top:40px">Совокупная модель</p>
+  <h2 class="section-title">Реклама + все источники дохода</h2>
+  <p class="section-sub">Полная картина монетизации платформы при совместной работе всех инструментов (согласована с помесячным планом выручки)</p>
+
+  <div class="tcard">
+    <table>
+      <thead>
+        <tr>
+          <th>Источник дохода</th>
+          <th class="r">Год 1, Мес 6</th>
+          <th class="r">Год 1, Мес 12</th>
+          <th class="r">Год 2 реалист.</th>
+          <th class="r">Год 2 оптимист.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="lbl">Рекламная модель (A–G)</td><td class="r">2 100 000</td><td class="r">6 500 000</td><td class="r b">10 000 000</td><td class="r g">13 500 000</td></tr>
+        <tr><td class="lbl">Подписки застройщиков (Level 1–5)</td><td class="r">1 000 000</td><td class="r">3 000 000</td><td class="r b">4 500 000</td><td class="r g">6 000 000</td></tr>
+        <tr><td class="lbl">CPA-лидогенерация</td><td class="r">300 000</td><td class="r">1 000 000</td><td class="r b">1 500 000</td><td class="r g">2 000 000</td></tr>
+        <tr><td class="lbl">Аналитика + выездные проверки</td><td class="r">70 000</td><td class="r">200 000</td><td class="r b">350 000</td><td class="r g">350 000</td></tr>
+        <tr><td class="lbl">Подписки риелторов / агентств</td><td class="r">30 000</td><td class="r">100 000</td><td class="r b">150 000</td><td class="r g">150 000</td></tr>
+        <tr class="tot">
+          <td class="lbl">🏆 ИТОГО все источники / мес</td>
+          <td class="r b">3 500 000 ₽</td>
+          <td class="r b" style="font-size:15px">10 800 000 ₽</td>
+          <td class="r b" style="font-size:16px">16 500 000 ₽</td>
+          <td class="r g" style="font-size:16px">22 000 000 ₽</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- REVENUE CHART (UPDATED TO HIGH REVENUE) -->
+<div class="section reveal" id="revenue">
+  <p class="section-tag">Финансовая визуализация</p>
+  <h2 class="section-title">Прогноз выручки по месяцам (Высокий старт)</h2>
+  <p class="section-sub">Совокупный прогноз для рынка Калининграда со старта рекламных кампаний</p>
+  <div class="chart-card">
+    <div class="chart-head">Ежемесячная выручка Amber Avenue</div>
+    <div class="chart-sub">Первые 12 месяцев · Агрессивная стратегия продаж с первого месяца</div>
+    <div class="bars">
+      <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:5.5%" data-val="600 000 ₽"></div></div><div class="bar-label">М1</div></div>
+      <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:8.3%" data-val="900 000 ₽"></div></div><div class="bar-label">М2</div></div>
+      <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:13%" data-val="1 400 000 ₽"></div></div><div class="bar-label">М3</div></div>
+      <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:18.5%" data-val="2 000 000 ₽"></div></div><div class="bar-label">М4</div></div>
+      <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:25%" data-val="2 700 000 ₽"></div></div><div class="bar-label">М5</div></div>
+      <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:32.4%" data-val="3 500 000 ₽"></div></div><div class="bar-label">М6</div></div>
+      <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:40.7%" data-val="4 400 000 ₽"></div></div><div class="bar-label">М7</div></div>
+      <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:50%" data-val="5 400 000 ₽"></div></div><div class="bar-label">М8</div></div>
+      <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:60.1%" data-val="6 500 000 ₽"></div></div><div class="bar-label">М9</div></div>
+      <div class="bar-group"><div class="bar-wrap"><div class="bar" style="height:72.2%" data-val="7 800 000 ₽"></div></div><div class="bar-label">М10</div></div>
+      <div class="bar-group"><div class="bar-wrap"><div class="bar accent-bar" style="height:85.1%" data-val="9 200 000 ₽"></div></div><div class="bar-label">М11</div></div>
+      <div class="bar-group"><div class="bar-wrap"><div class="bar accent-bar" style="height:100%" data-val="10 800 000 ₽"></div></div><div class="bar-label">М12</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- KPIs -->
+<div class="section reveal" id="kpis">
+  <p class="section-tag">Целевые показатели</p>
+  <h2 class="section-title">KPI по фазам роста & Трафик</h2>
+  <p class="section-sub">Измеримые результаты на каждом этапе запуска с фокусом на органический SEO рост (Цель: 70% SEO-трафика к 12-му месяцу)</p>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-period">Месяц 2</div>
+      <div class="kpi-val">MVP</div>
+      <div class="kpi-label">Запуск сайта</div>
+      <div class="kpi-sub">30+ карточек ЖК · Старт SEO-индексации</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-period">Месяц 3</div>
+      <div class="kpi-val green">5</div>
+      <div class="kpi-label">Соглашений с ЖК</div>
+      <div class="kpi-sub">Размещение первых бейджей застройщиков</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-period">Месяц 4</div>
+      <div class="kpi-val">2 000</div>
+      <div class="kpi-label">Посетителей (30% SEO)</div>
+      <div class="kpi-sub">Растет ссылочная масса с сайтов ЖК</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-period">Месяц 6</div>
+      <div class="kpi-val amber">10 000</div>
+      <div class="kpi-label">Посетителей (50% SEO)</div>
+      <div class="kpi-sub">Выручка 3.5M ₽ · Снижение CAC</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-period">Месяц 9</div>
+      <div class="kpi-val">20 000</div>
+      <div class="kpi-label">Посетителей (60% SEO)</div>
+      <div class="kpi-sub">Выручка 6.5M ₽ · Активный CPA</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-period">Месяц 12</div>
+      <div class="kpi-val amber">35 000</div>
+      <div class="kpi-label">Посетителей (70% SEO)</div>
+      <div class="kpi-sub">Выручка 10.8M ₽ · Органика лидирует</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-period">Год 2</div>
+      <div class="kpi-val green">60 000+</div>
+      <div class="kpi-label">Посетителей (80% SEO)</div>
+      <div class="kpi-sub">Выручка 16.5M+ ₽ · Федеральный стандарт</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-period">Красная линия</div>
+      <div class="kpi-val red">0</div>
+      <div class="kpi-label">Купленных рейтингов</div>
+      <div class="kpi-sub">Реклама ≠ Amber Index · Навсегда</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION FINANCES & TAXES (From Comprehensive strategy) -->
+<div class="section reveal" id="finances">
+  <p class="section-tag">Финмодель и Налоги</p>
+  <h2 class="section-title">Финансовая модель & Доли учредителей</h2>
+  <p class="section-sub">Расчёт чистой прибыли с учетом агрессивного старта (реклама работает с 1-го месяца), выделенного маркетингового бюджета на продвижение с первого дня, органического роста SEO (целевой показатель к 12 мес — 70% SEO-трафика), вычета всех OPEX, налогов УСН и НДФЛ 13%.</p>
+
+  <div class="founders-grid">
+    <div class="founder-card f-max">
+      <div class="founder-share">40%</div>
+      <div class="founder-name">Макс</div>
+      <div class="founder-role">CEO / Продажи / B2B</div>
+      <div class="founder-metric">
+        <div class="founder-metric-lbl">1-й год (Стандарт / Льгота 1%)</div>
+        <div class="founder-metric-val" id="max-y1-val" style="font-size:13.5px">- ₽ / - ₽</div>
+      </div>
+      <div class="founder-metric">
+        <div class="founder-metric-lbl">2-й год (Стандарт / Льгота 1%)</div>
+        <div class="founder-metric-val" id="max-y2-val" style="color:var(--success); font-size:13.5px">- ₽ / - ₽</div>
+      </div>
+    </div>
+    <div class="founder-card f-volodya">
+      <div class="founder-share">30%</div>
+      <div class="founder-name">Володя</div>
+      <div class="founder-role">Юрист / Контент / Индекс</div>
+      <div class="founder-metric">
+        <div class="founder-metric-lbl">1-й год (Стандарт / Льгота 1%)</div>
+        <div class="founder-metric-val" id="volodya-y1-val" style="font-size:13.5px">- ₽ / - ₽</div>
+      </div>
+      <div class="founder-metric">
+        <div class="founder-metric-lbl">2-й год (Стандарт / Льгота 1%)</div>
+        <div class="founder-metric-val" id="volodya-y2-val" style="color:var(--success); font-size:13.5px">- ₽ / - ₽</div>
+      </div>
+    </div>
+    <div class="founder-card f-ivan">
+      <div class="founder-share">30%</div>
+      <div class="founder-name">Иван</div>
+      <div class="founder-role">IT-Архитектор / Платформа</div>
+      <div class="founder-metric">
+        <div class="founder-metric-lbl">1-й год (Стандарт / Льгота 1%)</div>
+        <div class="founder-metric-val" id="ivan-y1-val" style="font-size:13.5px">- ₽ / - ₽</div>
+      </div>
+      <div class="founder-metric">
+        <div class="founder-metric-lbl">2-й год (Стандарт / Льгота 1%)</div>
+        <div class="founder-metric-val" id="ivan-y2-val" style="color:var(--success); font-size:13.5px">- ₽ / - ₽</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tax-detail-card">
+    <div class="tax-desc-block">
+      <h3>Организационно-правовая форма и Маркетинг</h3>
+      <p>Для партнёрства Макс (40%), Володя (30%), Иван (30%) регистрируется ООО. С первого месяца закладывается активный рекламный бюджет (от 100 000 до 1 080 000 ₽/мес в 1-й год и до 3 400 000 ₽/мес во 2-й год) для взрывного роста популярности и трафика.</p>
+      <p>По мере роста платформы и развёртывания программы "Бейджи доверия" на сайтах застройщиков растет органическая ссылочная масса, что позволяет выйти на целевые показатели посещаемости.</p>
+    </div>
+    <div class="tax-desc-block">
+      <h3>Налоговые режимы:</h3>
+      <ul class="tax-list">
+        <li><strong>Стандартная УСН (6%):</strong> Налог платится с валовой выручки.</li>
+        <li><strong>Льгота ОЭЗ Калининград (УСН 1%):</strong> По закону КО №162 IT-проекты получают сниженную ставку 1% на УСН «Доходы».</li>
+        <li><strong>НДФЛ на дивиденды (13%):</strong> Удерживается со всех выплат учредителям.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tax-toggle-bar">
+    <div class="toggle-title">Расчет таблицы (переключатель налогов):</div>
+    <div class="toggle-btns">
+      <div class="toggle-btn active" id="btn-std" onclick="setTaxSystem('std')">Стандарт РФ (УСН 6%)</div>
+      <div class="toggle-btn" id="btn-opt" onclick="setTaxSystem('opt')">ОЭЗ Калининград (УСН 1%)</div>
+    </div>
+  </div>
+
+  <div class="tax-toggle-bar" style="margin-top: 12px; margin-bottom: 20px;">
+    <div class="toggle-title">Период планирования (выручка и расходы):</div>
+    <div class="toggle-btns">
+      <div class="toggle-btn active" id="btn-y1" onclick="setYear(1)">1-й год (Масштабирование)</div>
+      <div class="toggle-btn" id="btn-y2" onclick="setYear(2)">2-й год (Пиковый потенциал)</div>
+    </div>
+  </div>
+
+  <div class="tcard">
+    <h3 style="margin-bottom:14px; font-weight:800; font-size:15px; color:var(--primary)" id="table-title">Помесячный финансовый план (1-й год)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Месяц</th>
+          <th class="r">Выручка</th>
+          <th class="r">Маркетинг (Реклама)</th>
+          <th class="r">ФОТ и Тех OPEX</th>
+          <th class="r">Всего OPEX</th>
+          <th class="r">УСН Налог</th>
+          <th class="r">Прибыль ООО</th>
+          <th class="r">НДФЛ (13%)</th>
+          <th class="r">Чистая к выводу</th>
+          <th class="r">Макс (40%)</th>
+          <th class="r">Володя (30%)</th>
+          <th class="r">Иван (30%)</th>
+        </tr>
+      </thead>
+      <tbody id="finance-table-body">
+        <!-- JS Render -->
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="disclaimer">
+    <h3>⚠️ Красная линия: Реклама не влияет на Amber Index</h3>
+    <p>
+      Важнейший принцип, защищающий бизнес-модель. Ни один рекламный пакет не способен изменить значение Amber Index. Алгоритм полностью независим. Все рекламные блоки имеют чёткую пометку «Реклама», а разделы «Застройщик» и «Плюсы/минусы» всегда остаются зоной без баннеров. Это обеспечивает доверие пользователей и, как следствие, постоянный поток рекламодателей.
+    </p>
+  </div>
+</div>
+
+<footer>
+  <p>Разработано для <strong>Amber Avenue</strong> · Калининград · 2026</p>
+  <p>Конфиденциальный документ для внутреннего использования учредителями: Макс (40%), Володя (30%), Иван (30%).</p>
+</footer>
+
+<script>
+  // Intersection Observer for scroll animations
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target)}});
+  },{threshold:.06});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // Finance Engine (Federal Expansion & B2B Profile Model)
+  const shares = { max: 0.40, volodya: 0.30, ivan: 0.30 };
+  
+  // Year 1 arrays
+  const revenuesY1 = [600000, 900000, 1400000, 2000000, 2700000, 3500000, 4400000, 5400000, 6500000, 7800000, 9200000, 10800000];
+  const marketingSpendY1 = [100000, 150000, 220000, 300000, 380000, 480000, 580000, 680000, 780000, 880000, 980000, 1080000];
+  const techOpexY1 = [60000, 70000, 85000, 100000, 120000, 150000, 180000, 200000, 220000, 250000, 270000, 300000];
+
+  // Year 2 arrays
+  const revenuesY2 = [13000000, 16000000, 20000000, 25000000, 31000000, 38000000, 46000000, 55000000, 65000000, 76000000, 88000000, 100000000];
+  const marketingSpendY2 = [1200000, 1400000, 1600000, 1800000, 2000000, 2200000, 2400000, 2600000, 2800000, 3000000, 3200000, 3400000];
+  const techOpexY2 = [350000, 400000, 450000, 500000, 600000, 700000, 800000, 900000, 1000000, 1100000, 1200000, 1300000];
+
+  let currentYear = 1;
+  let currentTaxRate = 0.06;
+
+  function formatPrice(val) { return Math.round(val).toLocaleString('ru-RU') + ' ₽'; }
+
+  function renderTable() {
+    const tbody = document.getElementById('finance-table-body');
+    tbody.innerHTML = '';
+    
+    const revs = currentYear === 1 ? revenuesY1 : revenuesY2;
+    const mspends = currentYear === 1 ? marketingSpendY1 : marketingSpendY2;
+    const topex = currentYear === 1 ? techOpexY1 : techOpexY2;
+    
+    let totalRev = 0, totalMark = 0, totalTech = 0, totalOpex = 0, totalTax = 0, totalNetCorp = 0, totalNdfl = 0, totalClean = 0;
+    
+    for (let i = 0; i < 12; i++) {
+      const rev = revs[i];
+      const msp = mspends[i];
+      const tOp = topex[i];
+      const totalOp = msp + tOp;
+      const tax = rev * currentTaxRate;
+      const netCorp = Math.max(0, rev - totalOp - tax);
+      const ndfl = netCorp * 0.13;
+      const clean = netCorp - ndfl;
+      
+      const pMax = clean * shares.max;
+      const pVolodya = clean * shares.volodya;
+      const pIvan = clean * shares.ivan;
+
+      totalRev += rev; 
+      totalMark += msp;
+      totalTech += tOp;
+      totalOpex += totalOp; 
+      totalTax += tax; 
+      totalNetCorp += netCorp; 
+      totalNdfl += ndfl; 
+      totalClean += clean;
+
+      const monthNum = currentYear === 1 ? i+1 : 12+i+1;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="lbl">Месяц ${monthNum}</td>
+        <td class="r" style="font-weight:700">${formatPrice(rev)}</td>
+        <td class="r" style="color:var(--text-sec)">${formatPrice(msp)}</td>
+        <td class="r" style="color:var(--text-sec)">${formatPrice(tOp)}</td>
+        <td class="r" style="font-weight:600">${formatPrice(totalOp)}</td>
+        <td class="r" style="color:var(--danger)">${formatPrice(tax)}</td>
+        <td class="r">${formatPrice(netCorp)}</td>
+        <td class="r" style="color:var(--danger)">${formatPrice(ndfl)}</td>
+        <td class="r g">${formatPrice(clean)}</td>
+        <td class="r b">${formatPrice(pMax)}</td>
+        <td class="r b">${formatPrice(pVolodya)}</td>
+        <td class="r b">${formatPrice(pIvan)}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    // Totals Row
+    const trTot = document.createElement('tr');
+    trTot.className = 'tot';
+    trTot.innerHTML = `
+      <td class="lbl">ИТОГО (Год ${currentYear})</td>
+      <td class="r">${formatPrice(totalRev)}</td>
+      <td class="r">${formatPrice(totalMark)}</td>
+      <td class="r">${formatPrice(totalTech)}</td>
+      <td class="r">${formatPrice(totalOpex)}</td>
+      <td class="r" style="color:var(--danger)">${formatPrice(totalTax)}</td>
+      <td class="r">${formatPrice(totalNetCorp)}</td>
+      <td class="r" style="color:var(--danger)">${formatPrice(totalNdfl)}</td>
+      <td class="r g" style="font-size:15px">${formatPrice(totalClean)}</td>
+      <td class="r b" style="font-size:15px">${formatPrice(totalClean * shares.max)}</td>
+      <td class="r b" style="font-size:15px">${formatPrice(totalClean * shares.volodya)}</td>
+      <td class="r b" style="font-size:15px">${formatPrice(totalClean * shares.ivan)}</td>
+    `;
+    tbody.appendChild(trTot);
+  }
+
+  // Pre-calculate to populate cards (we need both Std and Opt totals for Y1 and Y2)
+  function getTotals(revs, mspends, topex, taxRate) {
+    let cleanTotal = 0;
+    for (let i = 0; i < 12; i++) {
+      const totalOp = mspends[i] + topex[i];
+      const net = Math.max(0, revs[i] - totalOp - (revs[i] * taxRate));
+      cleanTotal += (net - (net * 0.13));
+    }
+    return cleanTotal;
+  }
+
+  function updateMetrics() {
+    const y1Std = getTotals(revenuesY1, marketingSpendY1, techOpexY1, 0.06);
+    const y1Opt = getTotals(revenuesY1, marketingSpendY1, techOpexY1, 0.01);
+    
+    const y2Std = getTotals(revenuesY2, marketingSpendY2, techOpexY2, 0.06);
+    const y2Opt = getTotals(revenuesY2, marketingSpendY2, techOpexY2, 0.01);
+
+    document.getElementById('max-y1-val').innerText = formatPrice(y1Std * shares.max) + ' / ' + formatPrice(y1Opt * shares.max);
+    document.getElementById('max-y2-val').innerText = formatPrice(y2Std * shares.max) + ' / ' + formatPrice(y2Opt * shares.max);
+    
+    document.getElementById('volodya-y1-val').innerText = formatPrice(y1Std * shares.volodya) + ' / ' + formatPrice(y1Opt * shares.volodya);
+    document.getElementById('volodya-y2-val').innerText = formatPrice(y2Std * shares.volodya) + ' / ' + formatPrice(y2Opt * shares.volodya);
+    
+    document.getElementById('ivan-y1-val').innerText = formatPrice(y1Std * shares.ivan) + ' / ' + formatPrice(y1Opt * shares.ivan);
+    document.getElementById('ivan-y2-val').innerText = formatPrice(y2Std * shares.ivan) + ' / ' + formatPrice(y2Opt * shares.ivan);
+  }
+
+  function setTaxSystem(sys) {
+    const btnStd = document.getElementById('btn-std');
+    const btnOpt = document.getElementById('btn-opt');
+    if (sys === 'std') {
+      btnStd.classList.add('active'); btnOpt.classList.remove('active');
+      currentTaxRate = 0.06;
+    } else {
+      btnStd.classList.remove('active'); btnOpt.classList.add('active');
+      currentTaxRate = 0.01;
+    }
+    renderTable();
+  }
+
+  function setYear(year) {
+    const btnY1 = document.getElementById('btn-y1');
+    const btnY2 = document.getElementById('btn-y2');
+    const tblTitle = document.getElementById('table-title');
+    currentYear = year;
+    if (year === 1) {
+      btnY1.classList.add('active'); btnY2.classList.remove('active');
+      tblTitle.innerText = 'Помесячный финансовый план (1-й год)';
+    } else {
+      btnY1.classList.remove('active'); btnY2.classList.add('active');
+      tblTitle.innerText = 'Помесячный финансовый план (2-й год)';
+    }
+    renderTable();
+  }
+
+  // Init
+  updateMetrics();
+  renderTable();
+</script>
+
+</body>
+</html>
