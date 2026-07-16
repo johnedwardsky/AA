@@ -333,8 +333,16 @@
 
     @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
 
+    /* ── Global overflow lock ── */
+    html, body {
+      overflow-x: hidden;
+      max-width: 100%;
+    }
+
     /* ── Mobile Responsiveness Overrides ── */
     @media (max-width: 600px) {
+      .pg { padding: 24px 12px 80px; }
+
       .hero {
         padding: 32px 16px 28px;
         border-radius: 12px;
@@ -364,14 +372,42 @@
       .sh p {
         font-size: 12px;
       }
-      /* Scale browser mockup down beautifully */
+
+      /* Grids — collapse to single column */
+      .cat-grid,
+      .journey-grid,
+      .stat-grid,
+      .fmt-grid,
+      .ex-grid,
+      .pkg-grid,
+      .gets-list,
+      .chain-flow {
+        grid-template-columns: 1fr !important;
+      }
+
+      /* Sandbox layout — stack vertically */
+      .sandbox-wrap {
+        grid-template-columns: 1fr !important;
+      }
+
+      /* Browser mockup — clamp width */
       .browser {
         max-height: 480px;
+        width: 100%;
+        overflow: hidden;
       }
       .browser-body {
         padding: 8px;
         gap: 8px;
+        overflow-x: hidden;
       }
+
+      /* Kill any element wider than viewport */
+      .browser-body * {
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
       .m-hdr {
         flex-direction: column;
         align-items: flex-start;
@@ -391,14 +427,51 @@
       .card-image-col {
         height: 120px !important;
       }
+
+      /* Chain wrap — prevent inner overflow */
+      .chain-wrap {
+        overflow-x: hidden;
+        padding: 20px 14px;
+      }
+      .chain-flow {
+        gap: 8px;
+      }
+
+      /* Tables — allow horizontal scroll within wrapper but not page */
+      .tbl-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
+      }
+      .tbl {
+        min-width: 460px;
+      }
+
+      /* Marking grid */
+      .marking-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      /* Final CTA */
       .final-cta {
         padding: 28px 16px;
       }
       .final-cta h2 {
         font-size: 18px;
       }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      /* xnav — wrap neatly */
+      .xnav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
     }
   </style>
+
 </head>
 <body>
 
