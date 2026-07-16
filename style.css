@@ -1541,7 +1541,14 @@ ul { list-style: none; }
   z-index: 1100;
   display: none;
   align-items: center; justify-content: center;
-  padding: 16px;
+  padding: 20px 16px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+@media (max-height: 600px), (max-width: 480px) {
+  .modal-overlay {
+    align-items: flex-start;
+  }
 }
 .modal-overlay.open { display: flex; }
 .modal-overlay.open .modal-card {
