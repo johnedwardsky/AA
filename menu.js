@@ -596,6 +596,14 @@
       backdrop-filter: blur(8px);
       display: flex; align-items: center; justify-content: center;
       opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+      box-sizing: border-box;
+      padding: 16px 12px;
+    }
+    @media (max-height: 650px) {
+      .cm-overlay {
+        align-items: flex-start;
+        overflow-y: auto;
+      }
     }
     .cm-overlay.open { opacity: 1; pointer-events: all; }
     
@@ -605,6 +613,14 @@
       background: #FFFFFF; overflow: hidden; display: flex; flex-direction: column;
       transform: translateY(20px) scale(0.96); opacity: 0;
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+      max-height: 90vh;
+      max-height: 90dvh;
+    }
+    @media (max-width: 480px) {
+      .cm-card {
+        max-height: calc(100dvh - 32px);
+        border-radius: 16px;
+      }
     }
     .cm-overlay.open .cm-card { transform: translateY(0) scale(1); opacity: 1; }
     
@@ -625,7 +641,18 @@
     }
     .cm-close:hover { background: rgba(255,255,255,0.25); transform: rotate(90deg); }
     
-    .cm-body { padding: 24px 28px; margin: 0; box-sizing: border-box; }
+    .cm-body {
+      padding: 24px 28px; margin: 0; box-sizing: border-box;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      flex: 1;
+      min-height: 0;
+    }
+    @media (max-width: 480px) {
+      .cm-body {
+        padding: 16px 20px 20px;
+      }
+    }
     
     .cm-label {
       font-size: 11px; font-weight: 700; text-transform: uppercase;
