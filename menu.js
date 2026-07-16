@@ -1426,7 +1426,7 @@
       // 2. Trigger Yandex Cloud Webhook if configured
       try {
         const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
-        const webhookUrl = config.webhookUrl || '';
+        const webhookUrl = config.webhookUrl !== undefined ? config.webhookUrl : 'https://functions.yandexcloud.net/b1g095m5l7b0t3s9oskp';
         if (webhookUrl && webhookUrl.startsWith('http')) {
           fetch(webhookUrl, {
             method: 'POST',

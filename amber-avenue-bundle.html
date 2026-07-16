@@ -60940,7 +60940,7 @@ function showToast(msg) {
       // 2. Trigger Yandex Cloud Webhook if configured
       try {
         const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
-        const webhookUrl = config.webhookUrl || '';
+        const webhookUrl = config.webhookUrl !== undefined ? config.webhookUrl : 'https://functions.yandexcloud.net/b1g095m5l7b0t3s9oskp';
         if (webhookUrl && webhookUrl.startsWith('http')) {
           fetch(webhookUrl, {
             method: 'POST',
@@ -68610,7 +68610,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.loadYandexConfig = function() {
       try {
         const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
-        document.getElementById('config-webhook-url').value = config.webhookUrl || '';
+        document.getElementById('config-webhook-url').value = config.webhookUrl !== undefined ? config.webhookUrl : 'https://functions.yandexcloud.net/b1g095m5l7b0t3s9oskp';
       } catch (e) {
         console.error('Error loading Yandex configuration:', e);
       }
@@ -68619,7 +68619,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.fetchLeadsFromYandexCloud = function() {
       try {
         const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
-        const webhookUrl = config.webhookUrl || '';
+        const webhookUrl = config.webhookUrl !== undefined ? config.webhookUrl : 'https://functions.yandexcloud.net/b1g095m5l7b0t3s9oskp';
         if (webhookUrl && webhookUrl.startsWith('http')) {
           fetch(webhookUrl)
             .then(res => {
