@@ -2928,15 +2928,15 @@ ul { list-style: none; }
 .drawer-overlay.open { opacity: 1; pointer-events: auto; }
 
 .mobile-drawer {
-  position: fixed; top: 0; right: 0;
+  position: fixed; top: 0; right: 0; bottom: 0;
   width: 300px; max-width: 85vw;
-  height: 100%; z-index: 300;
+  z-index: 300;
   background: var(--color-surface);
   box-shadow: -8px 0 30px rgba(0,0,0,0.2);
   display: flex; flex-direction: column;
   transform: translateX(100%);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow-y: auto;
+  overflow: hidden;
 }
 .mobile-drawer.open { transform: translateX(0); }
 
@@ -2995,6 +2995,11 @@ ul { list-style: none; }
   padding: 16px 20px;
   border-top: 1px solid var(--color-border);
   flex-shrink: 0;
+}
+@media (max-width: 768px) {
+  .drawer-footer {
+    padding: 16px 20px calc(28px + env(safe-area-inset-bottom));
+  }
 }
 .drawer-cta {
   width: 100%; padding: 12px;
