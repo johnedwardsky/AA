@@ -1118,6 +1118,25 @@
         flipInner.classList.remove('shake-card');
       }, 500);
     }
+
+    // Yandex Forms Check
+    document.addEventListener('DOMContentLoaded', () => {
+      const subUrl = typeof window.getYandexFormUrl === 'function' ? window.getYandexFormUrl('subscribe') : '';
+      if (subUrl) {
+        const form = document.getElementById('subscribe-form');
+        if (form) {
+          form.outerHTML = `<iframe src="${subUrl}" width="100%" height="150" frameborder="0" style="border:none;background:transparent;overflow:hidden;width:100%;margin-top:10px;"></iframe>`;
+        }
+      }
+
+      const contactUrl = typeof window.getYandexFormUrl === 'function' ? window.getYandexFormUrl('contact') : '';
+      if (contactUrl) {
+        const form = document.getElementById('contact-form');
+        if (form) {
+          form.outerHTML = `<iframe src="${contactUrl}" width="100%" height="450" frameborder="0" style="border:none;background:transparent;width:100%;"></iframe>`;
+        }
+      }
+    });
   </script>
 </body>
 </html>

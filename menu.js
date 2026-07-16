@@ -1030,6 +1030,7 @@
           
           <p class="cm-footnote">Ваши данные под надежной защитой согласно 152-ФЗ. Мы свяжемся с вами в течение 5 минут. Никакого спама.</p>
         </form>
+        <div id="cm-yandex-container" style="display:none; flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:10px 0 0 0;"></div>
       </div>
     </div>
   `;
@@ -1418,6 +1419,17 @@
       }
     };
 
+    // Get Yandex Form config helper
+    window.getYandexFormUrl = function(formKey) {
+      try {
+        const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
+        const url = config[formKey] || '';
+        return url.startsWith('https://forms.yandex.ru') ? url : '';
+      } catch(e) {
+        return '';
+      }
+    };
+
     // Setup Consultation Modal logic
     const cmOverlay = document.getElementById('cm-overlay');
     const cmClose = document.getElementById('cm-close');
@@ -1432,6 +1444,26 @@
       }
       document.body.style.overflow = 'hidden';
       
+      const yandexUrl = window.getYandexFormUrl('consult');
+      const cmFormEl = document.getElementById('cm-form');
+      const cmYandexEl = document.getElementById('cm-yandex-container');
+
+      if (yandexUrl) {
+        if (cmFormEl) cmFormEl.style.display = 'none';
+        if (cmYandexEl) {
+          cmYandexEl.style.display = 'block';
+          const prefill = yandexUrl + (yandexUrl.includes('?') ? '&' : '?') + 'topic=' + encodeURIComponent(topicText || '');
+          cmYandexEl.innerHTML = `<iframe src="${prefill}" width="100%" height="450" frameborder="0" style="border:none;background:transparent;width:100%;display:block;margin:0;padding:0;"></iframe>`;
+        }
+        return;
+      } else {
+        if (cmFormEl) cmFormEl.style.display = 'block';
+        if (cmYandexEl) {
+          cmYandexEl.style.display = 'none';
+          cmYandexEl.innerHTML = '';
+        }
+      }
+
       const nameInput = document.getElementById('cm-name');
       if (nameInput) setTimeout(() => nameInput.focus(), 100);
 
@@ -1459,6 +1491,12 @@
       if (cmForm) cmForm.reset();
       document.querySelectorAll('.cm-msgr-chip').forEach(chip => chip.classList.remove('active'));
       document.querySelectorAll('.cm-topic-btn').forEach(btn => btn.classList.remove('active'));
+      
+      const cmYandexEl = document.getElementById('cm-yandex-container');
+      if (cmYandexEl) {
+        cmYandexEl.innerHTML = '';
+        cmYandexEl.style.display = 'none';
+      }
     };
 
     if (cmClose) {
