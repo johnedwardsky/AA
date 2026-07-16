@@ -560,6 +560,7 @@
         <li class="admin-nav-item active" data-section="properties">📋 <span>Жилые комплексы</span></li>
         <li class="admin-nav-item" data-section="developers">🏗 <span>Застройщики</span></li>
         <li class="admin-nav-item" data-section="submissions">📥 <span>Заявки застройщиков</span></li>
+        <li class="admin-nav-item" data-section="amber-leads">📥 <span>Лиды (Amber Leads)</span></li>
         <li class="admin-nav-item" data-section="blog">📰 <span>Статьи блога</span></li>
         <li class="admin-nav-item" data-section="experts">👩‍💼 <span>Эксперты</span></li>
         <li class="admin-nav-item" data-section="banners">🖼 <span>Баннеры и Слайды</span></li>
@@ -895,6 +896,53 @@
         </div>
       </div>
 
+      <!-- ═══ SECTION: Amber Leads ═══ -->
+      <div class="admin-section" id="section-amber-leads">
+        <div class="admin-title-row">
+          <h1 class="admin-title">📥 Лиды и Заявки (Amber Leads) <span id="amber-leads-total-count">(0)</span></h1>
+          <div style="display: flex; gap: var(--space-sm);">
+            <button class="btn-admin-secondary" onclick="exportLeadsToExcel()">📥 Скачать AA.xls</button>
+            <button class="btn-admin-secondary" onclick="showLeadsSpreadsheet()">💚 Яндекс.Таблица</button>
+            <button class="btn-admin-secondary" onclick="clearAllAmberLeads()">🗑 Очистить все</button>
+          </div>
+        </div>
+
+        <div class="instruction-box" style="margin-bottom: 24px;">
+          <h3>Лид-система Amber Leads</h3>
+          <p>Здесь собираются все обращения от посетителей сайта. Вы можете просматривать их по категориям, использовать поиск и выгружать в формате Excel (AA.xls), либо открыть встроенный симулятор Яндекс.Таблиц с отдельными вкладками под каждую форму.</p>
+        </div>
+
+        <!-- Yandex Forms-like Tab Selector -->
+        <div style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--clr-border); padding-bottom: 12px; flex-wrap: wrap;">
+          <button class="btn-admin-secondary active" id="btn-lead-all" onclick="setLeadFilter('all')" style="border-radius: 30px; padding: 6px 16px;">Все лиды <span id="cnt-lead-all">(0)</span></button>
+          <button class="btn-admin-secondary" id="btn-lead-sub" onclick="setLeadFilter('Подписка на Email (Главная)')" style="border-radius: 30px; padding: 6px 16px;">Email подписки <span id="cnt-lead-sub">(0)</span></button>
+          <button class="btn-admin-secondary" id="btn-lead-contact" onclick="setLeadFilter('Обратная связь (Главная)')" style="border-radius: 30px; padding: 6px 16px;">Обратная связь <span id="cnt-lead-contact">(0)</span></button>
+          <button class="btn-admin-secondary" id="btn-lead-availability" onclick="setLeadFilter('Узнать наличие (Карточка ЖК)')" style="border-radius: 30px; padding: 6px 16px;">Узнать наличие <span id="cnt-lead-availability">(0)</span></button>
+          <button class="btn-admin-secondary" id="btn-lead-consult" onclick="setLeadFilter('Задать вопрос эксперту (Меню)')" style="border-radius: 30px; padding: 6px 16px;">Вопросы эксперту <span id="cnt-lead-consult">(0)</span></button>
+        </div>
+
+        <div style="margin-bottom: 16px; display: flex; gap: 8px;">
+          <input type="text" id="lead-search" placeholder="Поиск по имени, телефону, email..." oninput="renderAmberLeadsTable()" style="flex: 1; padding: 8px 12px; border: 1px solid var(--clr-border); border-radius: 6px; background: var(--clr-bg); color: var(--clr-text); outline: none;">
+        </div>
+
+        <div class="table-container">
+          <table class="admin-table" id="table-amber-leads">
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Источник лида</th>
+                <th>Имя клиента</th>
+                <th>Телефон</th>
+                <th>Email</th>
+                <th>Содержимое / Детали</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody><!-- Dynamic --></tbody>
+          </table>
+        </div>
+      </div>
+
     </main>
   </div>
 
@@ -1003,6 +1051,7 @@
         if (item.dataset.section === 'stats') renderStatsDashboard();
         if (item.dataset.section === 'monetization') updateSimulation();
         if (item.dataset.section === 'submissions') renderSubmissionsTable();
+        if (item.dataset.section === 'amber-leads') renderAmberLeadsTable();
       });
     });
 
@@ -1965,11 +2014,336 @@
       document.getElementById('submission-modal').classList.remove('active');
     };
 
+    // ── Amber Leads Table & Spreadsheet Logic ──
+    let currentLeadFilter = 'all';
+
+    window.setLeadFilter = function(filterVal) {
+      currentLeadFilter = filterVal;
+      document.querySelectorAll('#section-amber-leads .btn-admin-secondary').forEach(btn => {
+        if (btn.id === 'btn-lead-all' && filterVal === 'all') btn.classList.add('active');
+        else if (btn.id === 'btn-lead-sub' && filterVal === 'Подписка на Email (Главная)') btn.classList.add('active');
+        else if (btn.id === 'btn-lead-contact' && filterVal === 'Обратная связь (Главная)') btn.classList.add('active');
+        else if (btn.id === 'btn-lead-availability' && filterVal === 'Узнать наличие (Карточка ЖК)') btn.classList.add('active');
+        else if (btn.id === 'btn-lead-consult' && filterVal === 'Задать вопрос эксперту (Меню)') btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+      renderAmberLeadsTable();
+    };
+
+    window.renderAmberLeadsTable = function() {
+      const tbody = document.querySelector('#table-amber-leads tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
+      
+      // Update counters
+      document.getElementById('amber-leads-total-count').textContent = `(${leads.length})`;
+      document.getElementById('cnt-lead-all').textContent = `(${leads.length})`;
+      document.getElementById('cnt-lead-sub').textContent = `(${leads.filter(l => l.source === 'Подписка на Email (Главная)').length})`;
+      document.getElementById('cnt-lead-contact').textContent = `(${leads.filter(l => l.source === 'Обратная связь (Главная)').length})`;
+      document.getElementById('cnt-lead-availability').textContent = `(${leads.filter(l => l.source === 'Узнать наличие (Карточка ЖК)').length})`;
+      document.getElementById('cnt-lead-consult').textContent = `(${leads.filter(l => l.source === 'Задать вопрос эксперту (Меню)').length})`;
+
+      // Search & filter
+      const searchVal = document.getElementById('lead-search').value.toLowerCase().trim();
+      let filtered = leads;
+      
+      if (currentLeadFilter !== 'all') {
+        filtered = filtered.filter(l => l.source === currentLeadFilter);
+      }
+      
+      if (searchVal) {
+        filtered = filtered.filter(l => 
+          (l.name && l.name.toLowerCase().includes(searchVal)) ||
+          (l.phone && l.phone.toLowerCase().includes(searchVal)) ||
+          (l.email && l.email.toLowerCase().includes(searchVal)) ||
+          (l.details && l.details.toLowerCase().includes(searchVal))
+        );
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--clr-text-dim);padding:24px 0;">Лидов пока нет. Заполните форму на сайте, чтобы они появились здесь.</td></tr>';
+        return;
+      }
+
+      filtered.forEach(lead => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${lead.date}</strong></td>
+          <td><span class="badge ${getLeadBadgeClass(lead.source)}">${lead.source}</span></td>
+          <td>${lead.name || '—'}</td>
+          <td>${lead.phone || '—'}</td>
+          <td>${lead.email || '—'}</td>
+          <td style="font-size:0.8rem;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${lead.details || ''}">${lead.details || '—'}</td>
+          <td>
+            <button class="btn-action btn-delete" onclick="deleteAmberLead('${lead.id}')">✕ Удалить</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    };
+
+    function getLeadBadgeClass(source) {
+      if (source.includes('Email')) return 'badge-partner';
+      if (source.includes('связь')) return 'badge-success';
+      if (source.includes('наличие')) return 'badge-danger';
+      return 'badge-regular';
+    }
+
+    window.deleteAmberLead = function(id) {
+      if (confirm('Вы уверены, что хотите удалить этот лид?')) {
+        let leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
+        leads = leads.filter(l => l.id !== id);
+        localStorage.setItem('amber_leads', JSON.stringify(leads));
+        renderAmberLeadsTable();
+      }
+    };
+
+    window.clearAllAmberLeads = function() {
+      if (confirm('Вы уверены, что хотите удалить ВСЕ лиды?')) {
+        localStorage.removeItem('amber_leads');
+        renderAmberLeadsTable();
+      }
+    };
+
+    // Yandex Spreadsheet Simulator for Client Leads
+    let currentLeadsSheetTab = 'all';
+
+    window.showLeadsSpreadsheet = function() {
+      const modal = document.getElementById('leads-spreadsheet-modal');
+      if (modal) {
+        modal.classList.add('active');
+        switchSpreadsheetTab('all');
+      }
+    };
+
+    window.closeLeadsSpreadsheetModal = function() {
+      document.getElementById('leads-spreadsheet-modal').classList.remove('active');
+    };
+
+    window.switchSpreadsheetTab = function(tabName) {
+      currentLeadsSheetTab = tabName;
+      
+      // Update tab active state
+      document.querySelectorAll('.sheet-tab').forEach(btn => {
+        if (btn.id === `sheet-tab-${tabName}`) {
+          btn.style.background = '#fff';
+          btn.style.fontWeight = 'bold';
+          btn.style.borderBottom = '2px solid #1B3C6E';
+        } else {
+          btn.style.background = '#f3f4f6';
+          btn.style.fontWeight = 'normal';
+          btn.style.borderBottom = '1px solid #cbd5e1';
+        }
+      });
+
+      const rowsBody = document.getElementById('leads-sheet-rows');
+      if (!rowsBody) return;
+      rowsBody.innerHTML = '';
+
+      const leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
+      
+      // Filter by tab source name
+      let filtered = leads;
+      if (tabName === 'sub') {
+        filtered = leads.filter(l => l.source === 'Подписка на Email (Главная)');
+      } else if (tabName === 'contact') {
+        filtered = leads.filter(l => l.source === 'Обратная связь (Главная)');
+      } else if (tabName === 'availability') {
+        filtered = leads.filter(l => l.source === 'Узнать наличие (Карточка ЖК)');
+      } else if (tabName === 'consult') {
+        filtered = leads.filter(l => l.source === 'Задать вопрос эксперту (Меню)');
+      }
+
+      function addGridRow(rowNum, cells, isHeader = false) {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid #e5e7eb';
+        
+        let html = `<td style="padding: 6px; border-right: 1px solid #d1d5db; background: #e5e7eb; color: #4b5563; font-weight: bold; text-align: center; width: 40px;">${rowNum}</td>`;
+        for (let i = 0; i < 6; i++) {
+          const val = cells[i] !== undefined ? cells[i] : '';
+          const bg = isHeader ? '#f3f4f6' : '#fff';
+          const fontW = isHeader ? 'bold' : 'normal';
+          html += `<td style="padding: 8px 6px; border-right: 1px solid #d1d5db; color: #111827; background: ${bg}; font-weight: ${fontW}; font-size: 11px;">${val}</td>`;
+        }
+        tr.innerHTML = html;
+        rowsBody.appendChild(tr);
+      }
+
+      // Row 1: Headers
+      addGridRow(1, ['Дата поступления', 'Источник лида', 'Имя клиента', 'Телефон', 'Email', 'Детали / Запрос'], true);
+
+      // Row 2+: Values
+      let rIdx = 2;
+      if (filtered.length === 0) {
+        addGridRow(rIdx, ['Нет данных', '—', '—', '—', '—', '—']);
+      } else {
+        filtered.forEach(lead => {
+          addGridRow(rIdx++, [
+            lead.date,
+            lead.source,
+            lead.name || '—',
+            lead.phone || '—',
+            lead.email || '—',
+            lead.details || '—'
+          ]);
+        });
+      }
+    };
+
+    // Excel Export (SpreadsheetML XML format)
+    window.exportLeadsToExcel = function() {
+      const leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
+      if (leads.length === 0) {
+        alert('Нет лидов для экспорта.');
+        return;
+      }
+
+      const categories = [
+        { name: "Все лиды", filter: () => true },
+        { name: "Email подписки", filter: l => l.source === 'Подписка на Email (Главная)' },
+        { name: "Обратная связь", filter: l => l.source === 'Обратная связь (Главная)' },
+        { name: "Узнать наличие", filter: l => l.source === 'Узнать наличие (Карточка ЖК)' },
+        { name: "Вопросы эксперту", filter: l => l.source === 'Задать вопрос эксперту (Меню)' }
+      ];
+
+      let xml = '<?xml version="1.0" encoding="utf-8"?>\r\n';
+      xml += '<?mso-application progid="Excel.Sheet"?>\r\n';
+      xml += '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"\r\n';
+      xml += ' xmlns:o="urn:schemas-microsoft-com:office:office"\r\n';
+      xml += ' xmlns:x="urn:schemas-microsoft-com:office:excel"\r\n';
+      xml += ' xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"\r\n';
+      xml += ' xmlns:html="http://www.w3.org/TR/REC-html40">\r\n';
+      
+      // Styles
+      xml += ' <Styles>\r\n';
+      xml += '  <Style ss:ID="Header">\r\n';
+      xml += '   <Font ss:Bold="1" ss:Color="#FFFFFF"/>\r\n';
+      xml += '   <Interior ss:Color="#1B3C6E" ss:Pattern="Solid"/>\r\n';
+      xml += '  </Style>\r\n';
+      xml += ' </Styles>\r\n';
+
+      categories.forEach(cat => {
+        const catLeads = leads.filter(cat.filter);
+        xml += ` <Worksheet ss:Name="${cat.name}">\r\n`;
+        xml += '  <Table>\r\n';
+        
+        // Header Row
+        xml += '   <Row>\r\n';
+        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Дата поступления</Data></Cell>\r\n';
+        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Источник лида</Data></Cell>\r\n';
+        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Имя клиента</Data></Cell>\r\n';
+        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Телефон</Data></Cell>\r\n';
+        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Email</Data></Cell>\r\n';
+        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Детали / Запрос</Data></Cell>\r\n';
+        xml += '   </Row>\r\n';
+
+        if (catLeads.length === 0) {
+          xml += '   <Row>\r\n';
+          xml += '    <Cell><Data ss:Type="String">Нет данных</Data></Cell>\r\n';
+          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
+          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
+          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
+          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
+          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
+          xml += '   </Row>\r\n';
+        } else {
+          catLeads.forEach(l => {
+            xml += '   <Row>\r\n';
+            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.date)}</Data></Cell>\r\n`;
+            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.source)}</Data></Cell>\r\n`;
+            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.name || '—')}</Data></Cell>\r\n`;
+            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.phone || '—')}</Data></Cell>\r\n`;
+            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.email || '—')}</Data></Cell>\r\n`;
+            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.details || '—')}</Data></Cell>\r\n`;
+            xml += '   </Row>\r\n';
+          });
+        }
+
+        xml += '  </Table>\r\n';
+        xml += ' </Worksheet>\r\n';
+      });
+
+      xml += '</Workbook>\r\n';
+
+      function escapeXml(unsafe) {
+        return unsafe.replace(/[<>&'"]/g, function (c) {
+          switch (c) {
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '&': return '&amp;';
+            case '\'': return '&apos;';
+            case '"': return '&quot;';
+          }
+        });
+      }
+
+      const blob = new Blob([xml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", "AA.xls");
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
     // Initialize the properties view on loading the script
     document.addEventListener('DOMContentLoaded', () => {
       renderPropertiesTable();
+      renderAmberLeadsTable();
     });
   </script>
+
+  <!-- ── Yandex Spreadsheet Simulator Modal for Client Leads ── -->
+  <div class="admin-modal" id="leads-spreadsheet-modal">
+    <div class="admin-modal-content" style="max-width: 950px; width: 95%;">
+      <div class="admin-modal-header" style="background: #1B3C6E; color: #fff; border-bottom: none;">
+        <h2 style="color: #fff; display: flex; align-items: center; gap: 8px; margin: 0;">💚 Яндекс.Таблицы — Amber Leads</h2>
+        <button class="modal-close" onclick="closeLeadsSpreadsheetModal()" style="color: #fff;">✕</button>
+      </div>
+      <div class="admin-modal-body" style="background: #f3f4f6; padding: 20px; overflow-x: auto;">
+        <div style="font-size: 12px; font-weight: 700; color: #374151; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Файл: <code style="background:#e5e7eb; padding:2px 6px; border-radius:4px;">AA.xlsx</code></span>
+          <span style="color:#1B3C6E; font-weight: bold;">● Синхронизировано в реальном времени</span>
+        </div>
+        
+        <!-- Yandex Spreadsheet Grid -->
+        <div style="border: 1px solid #d1d5db; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+          <table style="width: 100%; border-collapse: collapse; font-family: monospace; font-size: 11px; text-align: left; min-width: 800px;">
+            <thead>
+              <tr style="background: #f9fafb; border-bottom: 1.5px solid #d1d5db; text-align: center;">
+                <th style="width: 40px; padding: 6px; border-right: 1px solid #d1d5db; background: #e5e7eb; color: #4b5563;"></th>
+                <th style="padding: 6px; border-right: 1px solid #d1d5db; color: #4b5563; background: #f3f4f6;">A</th>
+                <th style="padding: 6px; border-right: 1px solid #d1d5db; color: #4b5563; background: #f3f4f6;">B</th>
+                <th style="padding: 6px; border-right: 1px solid #d1d5db; color: #4b5563; background: #f3f4f6;">C</th>
+                <th style="padding: 6px; border-right: 1px solid #d1d5db; color: #4b5563; background: #f3f4f6;">D</th>
+                <th style="padding: 6px; border-right: 1px solid #d1d5db; color: #4b5563; background: #f3f4f6;">E</th>
+                <th style="padding: 6px; border-right: 1px solid #d1d5db; color: #4b5563; background: #f3f4f6;">F</th>
+              </tr>
+            </thead>
+            <tbody id="leads-sheet-rows">
+              <!-- Dynamic -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Excel Sheets Tabs at the Bottom -->
+        <div style="display: flex; background: #e5e7eb; border: 1px solid #d1d5db; border-top: none; padding: 4px 8px; gap: 4px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+          <button class="sheet-tab" id="sheet-tab-all" onclick="switchSpreadsheetTab('all')" style="padding: 4px 10px; font-size: 11px; border: 1px solid #cbd5e1; cursor: pointer; border-radius: 3px;">📊 Все лиды</button>
+          <button class="sheet-tab" id="sheet-tab-sub" onclick="switchSpreadsheetTab('sub')" style="padding: 4px 10px; font-size: 11px; border: 1px solid #cbd5e1; cursor: pointer; border-radius: 3px;">📧 Email подписки</button>
+          <button class="sheet-tab" id="sheet-tab-contact" onclick="switchSpreadsheetTab('contact')" style="padding: 4px 10px; font-size: 11px; border: 1px solid #cbd5e1; cursor: pointer; border-radius: 3px;">☎ Обратная связь</button>
+          <button class="sheet-tab" id="sheet-tab-availability" onclick="switchSpreadsheetTab('availability')" style="padding: 4px 10px; font-size: 11px; border: 1px solid #cbd5e1; cursor: pointer; border-radius: 3px;">🏠 Узнать наличие</button>
+          <button class="sheet-tab" id="sheet-tab-consult" onclick="switchSpreadsheetTab('consult')" style="padding: 4px 10px; font-size: 11px; border: 1px solid #cbd5e1; cursor: pointer; border-radius: 3px;">💬 Вопросы эксперту</button>
+        </div>
+      </div>
+      <div class="admin-modal-footer" style="padding: var(--space-lg); border-top: 1px solid var(--clr-border);">
+        <button class="btn-admin" onclick="closeLeadsSpreadsheetModal()">Закрыть таблицу</button>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>

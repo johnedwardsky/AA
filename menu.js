@@ -1397,6 +1397,27 @@
       mbUseTg.classList.toggle('exp'); mbUseCt.classList.toggle('exp');
     });
 
+    // Global Lead Capture Helper
+    window.saveAmberLead = function(lead) {
+      try {
+        const leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
+        const newLead = {
+          id: 'L-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+          date: new Date().toLocaleString('ru-RU'),
+          source: lead.source || 'Неизвестно',
+          name: lead.name || '',
+          phone: lead.phone || '',
+          email: lead.email || '',
+          details: lead.details || ''
+        };
+        leads.unshift(newLead);
+        localStorage.setItem('amber_leads', JSON.stringify(leads));
+        console.log('Amber Lead captured successfully:', newLead);
+      } catch (err) {
+        console.error('Error saving Amber Lead:', err);
+      }
+    };
+
     // Setup Consultation Modal logic
     const cmOverlay = document.getElementById('cm-overlay');
     const cmClose = document.getElementById('cm-close');
@@ -1526,12 +1547,12 @@
           msgrs.push(cb.closest('.cm-msgr-chip').textContent.trim());
         });
         
-        console.log('Consultation request submitted:', {
+        window.saveAmberLead({
+          source: 'Задать вопрос эксперту (Меню)',
           name: nameVal,
           phone: phoneVal,
           email: emailVal,
-          messengers: msgrs,
-          request: requestVal
+          details: `Мессенджеры: ${msgrs.join(', ') || 'нет'}. Вопрос: ${requestVal || 'нет'}`
         });
         
         window.closeConsultModal();

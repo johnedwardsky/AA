@@ -990,6 +990,13 @@
       const email = document.getElementById('sub-email').value.trim();
       if (!email) return;
 
+      if (typeof window.saveAmberLead === 'function') {
+        window.saveAmberLead({
+          source: 'Подписка на Email (Главная)',
+          email: email
+        });
+      }
+
       // Show success message
       document.getElementById('sub-success-msg').style.display = 'block';
       document.getElementById('sub-email').value = '';
@@ -1031,6 +1038,16 @@
       const email   = document.getElementById('cf-email').value.trim();
       const privacy = document.getElementById('cf-privacy-check').checked;
       if (!name || !phone || !email || !privacy) return;
+
+      if (typeof window.saveAmberLead === 'function') {
+        window.saveAmberLead({
+          source: 'Обратная связь (Главная)',
+          name: name,
+          phone: phone,
+          email: email,
+          details: 'Заявка на обратный звонок (связаться с нами)'
+        });
+      }
 
       backContact.style.transition = 'opacity 0.2s ease';
       backContact.style.opacity = '0';

@@ -5960,10 +5960,20 @@ function submitAvailability(name) {
   const nameVal = document.getElementById('modal-name').value.trim();
   const phone = document.getElementById('modal-phone').value.trim();
   const email = document.getElementById('modal-email').value.trim();
-  const city = document.getElementById('modal-city').value;
+  const city = document.getElementById('modal-city').value || 'Не указан';
 
   if (!nameVal) { document.getElementById('modal-name').focus(); return; }
   if (!phone) { document.getElementById('modal-phone').focus(); return; }
+
+  if (typeof window.saveAmberLead === 'function') {
+    window.saveAmberLead({
+      source: 'Узнать наличие (Карточка ЖК)',
+      name: nameVal,
+      phone: phone,
+      email: email,
+      details: `Объект: ${name}. Регион: ${city}`
+    });
+  }
 
   closeModal();
   showToast('Заявка на «' + name + '» отправлена! Свяжемся с вами в ближайшее время.');
