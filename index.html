@@ -15,22 +15,26 @@
 
     body.login-body {
       width: 100vw;
-      height: 100vh;
+      min-height: 100vh;
       min-height: -webkit-fill-available;
       background: url('kaliningrad_welcome_bg.jpg') no-repeat center center;
       background-size: cover;
+      background-attachment: fixed;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       position: relative;
+      padding: 40px 0;
+      box-sizing: border-box;
     }
 
     body.login-body::before {
       content: '';
-      position: absolute;
+      position: fixed;
       inset: 0;
       background: linear-gradient(
         180deg,
