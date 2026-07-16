@@ -6399,6 +6399,8 @@ document.addEventListener('DOMContentLoaded', function() {
   window.handleDeveloperLogout = function() {
     localStorage.removeItem('auth_developer_id');
     localStorage.removeItem('auth_developer_name');
+    localStorage.removeItem('auth_user_role');
+    localStorage.removeItem('auth_user_name');
     window.location.href = 'index.html';
   };
 

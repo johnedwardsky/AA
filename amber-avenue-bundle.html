@@ -61496,6 +61496,8 @@ window.AmberAnalytics = { trackEvent, getAnalytics, clearAnalytics };
       if (code.length !== 6) return;
 
       if (code === '777777') {
+        localStorage.removeItem('auth_user_role');
+        localStorage.removeItem('auth_user_name');
         localStorage.setItem('auth_developer_id', 'admin');
         localStorage.setItem('auth_developer_name', 'Администратор CMS');
         window.location.href = 'admin.html';
@@ -61505,6 +61507,8 @@ window.AmberAnalytics = { trackEvent, getAnalytics, clearAnalytics };
       if (window.AMBER_DATA && window.AMBER_DATA.developers) {
         const dev = window.AMBER_DATA.developers.find(d => d.code === code);
         if (dev) {
+          localStorage.removeItem('auth_user_role');
+          localStorage.removeItem('auth_user_name');
           localStorage.setItem('auth_developer_id', dev.id);
           localStorage.setItem('auth_developer_name', dev.name);
           window.location.href = 'zhk.html';
@@ -61513,8 +61517,19 @@ window.AmberAnalytics = { trackEvent, getAnalytics, clearAnalytics };
       }
 
       if (code === '123456') {
+        localStorage.removeItem('auth_user_role');
+        localStorage.removeItem('auth_user_name');
         localStorage.setItem('auth_developer_id', 'demo');
         localStorage.setItem('auth_developer_name', 'Тестовый застройщик');
+        window.location.href = 'zhk.html';
+        return;
+      }
+
+      if (code === '111111' || code === '000000') {
+        localStorage.removeItem('auth_developer_id');
+        localStorage.removeItem('auth_developer_name');
+        localStorage.setItem('auth_user_role', 'user');
+        localStorage.setItem('auth_user_name', 'Пользователь');
         window.location.href = 'zhk.html';
         return;
       }
@@ -65253,6 +65268,8 @@ document.addEventListener('DOMContentLoaded', function() {
   window.handleDeveloperLogout = function() {
     localStorage.removeItem('auth_developer_id');
     localStorage.removeItem('auth_developer_name');
+    localStorage.removeItem('auth_user_role');
+    localStorage.removeItem('auth_user_name');
     window.location.href = 'index.html';
   };
 
