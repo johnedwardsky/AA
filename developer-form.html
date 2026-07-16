@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Amber Avenue — Кабинет застройщика. Редактирование профиля компании и жилых комплексов.">
+  <meta name="theme-color" content="#1B3C6E">
+  <title>Кабинет застройщика — Amber Avenue</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    /* ── Developer Form Page Styles ─────────────────────────── */
+    .dev-form-page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+    }
+
+    .dev-form-hero {
+      text-align: center;
+      padding: 40px 20px 36px;
+      margin-bottom: 28px;
+      background: linear-gradient(135deg, var(--color-primary), #2A5BA8);
+      border-radius: 16px;
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(27,60,110,0.15);
+    }
+    .dev-form-hero h1 {
+      font-size: 26px; font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .dev-form-hero p {
+      font-size: 14px; opacity: 0.9;
+      max-width: 500px; margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* Active Developer Picker Card */
+    .dev-picker-card {
+      background: #fff;
+      border: 1.5px solid var(--color-primary-light);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 4px 16px rgba(27,60,110,0.04);
+    }
+    .dev-picker-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .dev-picker-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+    .dev-picker-sub {
+      font-size: 12px;
+      color: var(--color-muted);
+    }
+    .dev-picker-select {
+      min-width: 250px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--color-border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text);
+      background: var(--color-bg);
+      outline: none;
+      cursor: pointer;
+    }
+    .dev-picker-select:focus {
+      border-color: var(--color-primary);
+    }
+
+    .form-section {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.02);
+      overflow: hidden;
+    }
+
+    .form-section-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--color-border-light);
+      background: rgba(27,60,110,0.01);
+    }
+    .form-section-icon {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .form-section-title {
+      font-size: 16px; font-weight: 800;
+      color: var(--color-primary);
+    }
+    .form-section-subtitle {
+      font-size: 11px; color: var(--color-muted);
+      margin-top: 1px;
+    }
+
+    .form-section-body {
+      padding: 20px;
+    }
+
+    .form-row {
+      display: flex; gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-row:last-child { margin-bottom: 0; }
+    .form-col { flex: 1; min-width: 0; }
+    .form-col-2 { flex: 2; min-width: 0; }
+
+    .form-label {
+      display: block; font-size: 11px; font-weight: 700;
+      color: var(--color-text-secondary);
+      margin-bottom: 6px; letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .form-label .required {
+      color: #EF4444; margin-left: 2px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%; padding: 10px 12px;
+      border: 1.5px solid var(--color-border);
+      border-radius: 10px;
+      font-size: 13px; font-family: inherit;
+      color: var(--color-text);
+      background: var(--color-bg);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: var(--color-muted); }
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 12%, transparent);
+    }
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+      cursor: pointer;
+    }
+    .form-textarea {
+      resize: vertical; min-height: 80px;
+      line-height: 1.5;
+    }
+
+    .form-hint {
+      font-size: 10px; color: var(--color-muted);
+      margin-top: 4px; line-height: 1.4;
+    }
+
+    /* Accordion Styles for JK List */
+    .accordion-item {
+      border: 1.5px solid var(--color-border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .accordion-item:hover {
+      box-shadow: 0 4px 16px rgba(27,60,110,0.04);
+    }
+    .accordion-item.active {
+      border-color: var(--color-primary-light);
+      box-shadow: 0 4px 20px rgba(27,60,110,0.06);
+    }
+    .accordion-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: var(--color-bg);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s;
+    }
+    .accordion-header:hover {
+      background: rgba(27,60,110,0.02);
+    }
+    .accordion-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .accordion-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .accordion-chevron {
+      font-size: 11px;
+      color: var(--color-muted);
+      transition: transform 0.2s ease;
+    }
+    .accordion-item.active .accordion-chevron {
+      transform: rotate(180deg);
+    }
+    .accordion-body {
+      padding: 20px;
+      border-top: 1px solid var(--color-border-light);
+      background: #fff;
+    }
+
+    /* Action Buttons */
+    .btn-delete-jk {
+      background: #FEE2E2;
+      color: #EF4444;
+      border: 1px solid #FCA5A5;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-delete-jk:hover {
+      background: #FCA5A5;
+      color: #B91C1C;
+    }
+    .btn-add-jk {
+      width: 100%;
+      padding: 14px;
+      background: #fff;
+      color: var(--color-primary);
+      border: 2px dashed var(--color-primary-light);
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s, border-color 0.2s;
+      margin-top: 8px;
+    }
+    .btn-add-jk:hover {
+      background: color-mix(in srgb, var(--color-primary) 4%, transparent);
+      border-color: var(--color-primary);
+    }
+
+    /* Price row repeatable block */
+    .price-row-group { margin-bottom: 12px; }
+    .price-row-item {
+      display: flex; gap: 8px; align-items: center;
+      margin-bottom: 8px;
+    }
+    .price-row-item .form-col { flex: 1; }
+    .btn-add-row {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 6px 12px; border-radius: 8px;
+      font-size: 11px; font-weight: 700;
+      color: var(--color-primary);
+      background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+      border: 1px dashed color-mix(in srgb, var(--color-primary) 30%, transparent);
+      cursor: pointer;
+      transition: background 0.2s ease;
+      font-family: inherit;
+    }
+    .btn-add-row:hover {
+      background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+    }
+    .btn-remove-row {
+      width: 28px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      border: none; background: none;
+      color: var(--color-muted); font-size: 16px;
+      cursor: pointer; flex-shrink: 0;
+      border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-remove-row:hover { background: #FEE2E2; color: #EF4444; }
+
+    /* Checkbox Grid */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .infra-option-container {
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+    .infra-option-container:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .infra-option-container.active {
+      border-color: var(--color-primary-light);
+      background: rgba(27,60,110,0.01);
+    }
+    .checkbox-item {
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer;
+      font-size: 13px; font-weight: 700; color: var(--color-text);
+      user-select: none;
+    }
+    .checkbox-item input[type="checkbox"] {
+      accent-color: var(--color-primary);
+      width: 16px; height: 16px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .infra-detail-input-wrap {
+      margin-top: 6px;
+      animation: slideDownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes slideDownFade {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Webhook Settings Card */
+    .webhook-card {
+      background: rgba(255,193,7,0.03);
+      border: 1.5px solid rgba(255,193,7,0.3);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .webhook-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .webhook-icon {
+      font-size: 20px;
+    }
+    .webhook-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #925400;
+    }
+    .webhook-desc {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    /* Submit Section */
+    .form-submit-section {
+      text-align: center;
+      padding: 32px 20px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 14px;
+    }
+    .form-submit-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 44px;
+      background: var(--color-primary);
+      color: #fff; border: none; border-radius: 12px;
+      font-size: 15px; font-weight: 700;
+      font-family: inherit; cursor: pointer;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(27,60,110,0.3);
+    }
+    .form-submit-btn:hover {
+      background: var(--color-primary-dark);
+      box-shadow: 0 6px 24px rgba(27,60,110,0.4);
+    }
+    .form-submit-btn:active { transform: scale(0.98); }
+    .form-submit-note {
+      font-size: 11px; color: var(--color-muted);
+      margin-top: 12px; line-height: 1.5;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      transform: scale(0.95);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-overlay.open .modal-card {
+      transform: scale(1);
+    }
+
+    @media (max-width: 768px) {
+      .dev-picker-card { flex-direction: column; align-items: stretch; }
+      .dev-picker-select { min-width: 0; }
+      .form-row { flex-direction: column; gap: 12px; }
+      .checkbox-grid { grid-template-columns: 1fr; }
+      .accordion-header { flex-wrap: wrap; gap: 8px; }
+      .price-row-item { flex-direction: column; align-items: stretch; gap: 8px; }
+      .price-row-item .btn-remove-row { align-self: flex-end; width: 100%; height: 32px; margin-top: -4px; }
+      .form-submit-btn { width: 100%; justify-content: center; }
+    }
+  </style>
+
+  <script src="data.js"></script>
+  <script src="properties-data.js"></script>
+  <script src="menu.js"></script>
+</head>
+<body>
+
+  <!-- ══ SITE HEADER ════════════════════════════════════════ -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="Amber Avenue — на главную">
+        <img src="AA.svg" class="logo-icon" alt="Amber Avenue">
+        <div class="logo-text">
+          <span class="logo-name">Amber Avenue</span>
+          <span class="logo-tagline">Недвижимость Калининграда</span>
+        </div>
+      </a>
+      <div class="header-actions">
+        <a href="index.html" class="btn-header btn-header-ghost" style="text-decoration:none">← Каталог</a>
+        <a href="index.html#developers" class="btn-header btn-header-accent" style="text-decoration:none">Застройщики</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══ FORM CONTENT ════════════════════════════════════════ -->
+  <main class="dev-form-page">
+
+    <div class="dev-form-hero">
+      <h1>Кабинет застройщика</h1>
+      <p>Отредактируйте данные вашей компании и характеристики ваших жилых комплексов. Все изменения автоматически выгружаются в вашу Яндекс.Таблицу.</p>
+    </div>
+
+    <!-- Active Developer Picker -->
+    <div class="dev-picker-card">
+      <div class="dev-picker-info">
+        <div class="dev-picker-title">Выберите вашу компанию</div>
+        <div class="dev-picker-sub">Для загрузки текущего профиля и всех ЖК из базы</div>
+      </div>
+      <select class="dev-picker-select" id="select-active-dev" onchange="loadDeveloper(parseInt(this.value, 10))">
+        <!-- Dynamic Options -->
+      </select>
+    </div>
+
+    <form id="developer-form" autocomplete="off">
+
+      <!-- 1. Профиль застройщика -->
+      <div class="form-section">
+        <div class="form-section-header">
+          <div class="form-section-icon" style="background:#E0F7FA">🏗</div>
+          <div>
+            <div class="form-section-title">Информация о компании</div>
+            <div class="form-section-subtitle">Основные контактные и юридические данные компании</div>
+          </div>
+        </div>
+        <div class="form-section-body">
+          <div class="form-row">
+            <div class="form-col-2">
+              <label class="form-label" for="dev-name">Название бренда застройщика <span class="required">*</span></label>
+              <input class="form-input" type="text" id="dev-name" required>
+            </div>
+            <div class="form-col">
+              <label class="form-label" for="dev-experience">Лет на рынке</label>
+              <input class="form-input" type="number" id="dev-experience" placeholder="10">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-col">
+              <label class="form-label" for="dev-fullname">Полное юридическое наименование</label>
+              <input class="form-input" type="text" id="dev-fullname" placeholder="ООО «Специализированный Застройщик ...»">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-col">
+              <label class="form-label" for="dev-phone">Телефон отдела продаж <span class="required">*</span></label>
+              <input class="form-input" type="text" id="dev-phone" required>
+            </div>
+            <div class="form-col">
+              <label class="form-label" for="dev-contact-email">Email для уведомлений <span class="required">*</span></label>
+              <input class="form-input" type="email" id="dev-contact-email" required placeholder="sales@company.ru">
+              <div class="form-hint">Сюда придет копия подтверждения</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-col">
+              <label class="form-label" for="dev-website">Официальный сайт</label>
+              <input class="form-input" type="url" id="dev-website" placeholder="https://company.ru">
+            </div>
+            <div class="form-col">
+              <label class="form-label" for="dev-projects-done">Сданных проектов ЖК</label>
+              <input class="form-input" type="number" id="dev-projects-done">
+            </div>
+            <div class="form-col">
+              <label class="form-label" for="dev-projects-active">Строящихся проектов ЖК</label>
+              <input class="form-input" type="number" id="dev-projects-active">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-col">
+              <label class="form-label" for="dev-address">Адрес офиса</label>
+              <input class="form-input" type="text" id="dev-address" placeholder="Калининград, ул. Проф. Баранова, 34">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-col">
+              <label class="form-label" for="dev-desc">Описание компании (для страницы застройщиков)</label>
+              <textarea class="form-textarea" id="dev-desc" rows="3" placeholder="Краткая информация о девелопере..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Сводка ЖК застройщика -->
+      <div class="form-section">
+        <div class="form-section-header">
+          <div class="form-section-icon" style="background:#E8F5E9">🏢</div>
+          <div>
+            <div class="form-section-title">Жилые комплексы (ЖК) компании</div>
+            <div class="form-section-subtitle">Добавляйте, удаляйте или редактируйте карточки новостроек</div>
+          </div>
+        </div>
+        <div class="form-section-body" style="padding: 16px 20px 20px;">
+          <!-- Properties accordion container -->
+          <div id="properties-accordion-container">
+            <!-- Dynamic accordion elements -->
+          </div>
+
+          <!-- Add new property button -->
+          <button type="button" class="btn-add-jk" onclick="addNewProperty()">
+            ➕ Добавить новый жилой комплекс (ЖК)
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. Настройки интеграции -->
+      <div class="webhook-card">
+        <div class="webhook-header">
+          <span class="webhook-icon">📊</span>
+          <span class="webhook-title">Интеграция с Яндекс.Таблицей</span>
+        </div>
+        <p class="webhook-desc">
+          Данная форма автоматически выгружает измененные поля в отдельную вкладку вашей Яндекс.Таблицы. Если у вас настроен скрипт синхронизации (Make.com, Integromat или Yandex App), укажите его адрес (Webhook URL) ниже:
+        </p>
+        <div class="form-row">
+          <div class="form-col">
+            <label class="form-label" for="webhook-url">Яндекс.Таблица Webhook URL</label>
+            <input class="form-input" type="url" id="webhook-url" value="https://functions.yandexcloud.net/d4e7bf89ab12cd34efgh/yandex-sheets-sync" style="background:#FFFDF6; border-color: rgba(255,193,7,0.5);">
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Block -->
+      <div class="form-submit-section">
+        <button type="submit" class="form-submit-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Сохранить и отправить на проверку
+        </button>
+        <p class="form-submit-note">После сохранения копия данных будет отправлена в вашу Яндекс.Таблицу и на проверку редактору.<br>Письмо с подтверждением придет на указанный Email.</p>
+      </div>
+
+    </form>
+  </main>
+
+      <footer class="site-footer" role="contentinfo">
+    <div class="footer-trust-bar">
+      <div class="footer-inner">
+        <div class="trust-items">
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">✓</div>
+            <div class="trust-text">
+              <p class="trust-title">Проверяем каждый объект</p>
+              <p class="trust-sub">Ручная верификация</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">⚖</div>
+            <div class="trust-text">
+              <p class="trust-title">Независимый рейтинг</p>
+              <p class="trust-sub">Без предвзятости</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">★</div>
+            <div class="trust-text">
+              <p class="trust-title">Честные отзывы</p>
+              <p class="trust-sub">Без купленных рецензий</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">🔒</div>
+            <div class="trust-text">
+              <p class="trust-title">Без скрытых комиссий</p>
+              <p class="trust-sub">Бесплатно для покупателей</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Footer -->
+    <div class="footer-main">
+      <div class="footer-inner">
+        <div class="footer-grid">
+
+          <!-- Brand -->
+          <div class="footer-col footer-brand-col">
+            <a href="index.html" class="footer-logo">
+              <img src="AA.svg" class="logo-icon" alt="Янтарный проспект">
+              <div>
+                <div class="footer-logo-name">Янтарный проспект</div>
+                <div class="footer-logo-tagline">Amber avenue</div>
+              </div>
+            </a>
+            <div class="footer-socials">
+              <a href="#" class="social-link" aria-label="Telegram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+              <a href="#" class="social-link" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></a>
+              <a href="#" class="social-link" aria-label="VK"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.391 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4.03 8.57 4.03 8.096c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.372 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.27-1.422 2.168-3.608 2.168-3.608.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z"/></svg></a>
+              <a href="#" class="social-link" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+            </div>
+          </div>
+
+          <!-- Каталог -->
+          <div class="footer-col">
+            <h3 class="footer-col-title">Каталог</h3>
+            <ul class="footer-links">
+              <li><a href="zhk.html">Все новостройки</a></li>
+              <li><a href="zhk-umory.html">ЖК у моря</a></li>
+              <li><a href="zhk-kaliningrad.html">ЖК Калининграда</a></li>
+              <li><a href="zhk-prigorod.html">ЖК Пригород</a></li>
+              <li><a href="zhk-oblast.html">ЖК Область</a></li>
+            </ul>
+          </div>
+
+          <!-- Компания -->
+          <div class="footer-col">
+            <h3 class="footer-col-title">Компания</h3>
+            <ul class="footer-links">
+              <li><a href="index.html">Главная</a></li>
+              <li><a href="developers.html">Застройщики</a></li>
+              <li><a href="about.html">О сервисе</a></li>
+              <li><a href="methodology.html">Методология рейтинга</a></li>
+              <li><a href="b2b-promo.html">Для застройщиков</a></li>
+              <li><a href="partners-promo.html">Для рекламодателей</a></li>
+            </ul>
+          </div>
+
+          <!-- Контакты -->
+          <div class="footer-col">
+            <h3 class="footer-col-title">Контакты</h3>
+            <ul class="footer-contacts">
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.36 11.37a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <div><a href="tel:+74012123456" class="contact-phone">+7 (4012) 12-34-56</a><span class="contact-hours">Пн–Пт: 9:00–20:00</span></div>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <a href="mailto:info@amberavenue.ru">info@amberavenue.ru</a>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>г. Калининград, Ленинский пр., 83</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-inner">
+        <div class="footer-bottom-inner">
+          <p class="footer-copyright">© 2026 Amber Avenue</p>
+          <div class="footer-legal">
+            <a href="#">Конфиденциальность</a>
+            <span class="legal-dot">·</span>
+            <a href="#">Пользовательское соглашение</a>
+            <span class="legal-dot">·</span>
+            <a href="#">Cookies</a>
+            <span class="legal-dot">·</span>
+            <span class="footer-disclaimer">Информация на сайте не является публичной офертой. Цены и условия могут отличаться.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>\n\n<!-- Success Modal Overlay -->
+  <div class="modal-overlay" id="success-modal">
+    <div class="modal-card" style="max-width: 480px; width: 90%; text-align: center; padding: 36px 24px; box-sizing: border-box;">
+      <div style="font-size: 52px; margin-bottom: 16px;">✉️</div>
+      <h3 style="font-size: 20px; font-weight: 800; color: var(--color-primary); margin: 0 0 12px 0;">Форма успешно отправлена!</h3>
+      <p style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; margin: 0 0 24px 0;">
+        Все изменения зафиксированы и выгружены в Яндекс.Таблицу застройщика. На вашу электронную почту отправлено письмо с подтверждением отправки.
+      </p>
+      <button class="btn btn-primary" onclick="closeSuccessModal()" style="width: 100%; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-family: inherit; font-size: 13px; cursor: pointer; color: #fff; background: var(--color-primary);">Хорошо</button>
+    </div>
+  </div>
+
+  <script>
+    'use strict';
+
+    // Global databases
+    var PROPERTIES = window.PROPERTIES || (window.AMBER_DATA ? window.AMBER_DATA.properties : []);
+
+    // Developer Rich Profiles list
+    var RICH_DEVELOPER_NAMES = {
+      1: "КалининградСтройИнвест",
+      2: "ФЖСС КО",
+      3: "Расцвет",
+      4: "К8",
+      5: "Макрострой",
+      6: "Модуль-Стройград",
+      7: "Мегаполис",
+      8: "Балтийский Дом",
+      9: "Кранц-Парк / West Dream",
+      10: "Ойкумена / Eurostroiinvest",
+      11: "КПД-Калининград",
+      12: "Инвент",
+      13: "ГК «МПК»",
+      14: "Балтийский парус",
+      15: "ГК «КСК»",
+      16: "Строительный трест",
+      17: "Стройинвестиция",
+      18: "Сибирская строительная компания (ССК)",
+      19: "Рекстрой",
+      20: "Setl Group",
+      21: "ГК «Русская Европа»",
+      22: "Багратион",
+      23: "Лидер-Строй",
+      24: "Ю-Строй",
+      25: "Иском",
+      26: "Регионстроительство",
+      27: "Ласкино",
+      28: "Балткоттедж",
+      29: "Домарт",
+      30: "Балтия инвест",
+      31: "Зеленоградсксельстрой",
+      32: "Автотор-Пром",
+      33: "Новострой-Плюс",
+      34: "Зеленый город",
+      35: "Отрада",
+      36: "Раушен-Арт",
+      37: "Акфен",
+      38: "Спецремстройтрест",
+      39: "КСТ",
+      40: "Мидгард",
+      41: "Альбатрос",
+      42: "Виктория",
+      43: "Премьер-групп",
+            44: "Ривьера",
+      45: "ГК «КОРТРОС»",
+      46: "ГК «Лидер Групп»",
+      47: "СК «Меркурий»",
+      48: "СЗ «Астория»",
+      49: "ГК «ТВН»",
+      50: "ГК «Дом-Инвест»",
+      51: "ООО СЗ «Эллипс»",
+      52: "ООО СЗ «ЖК на Новой»",
+      53: "ООО СЗ «МП Строй»",
+      54: "ООО СЗ «КД Стройсервис»"
+    };
+
+    function getMatchedDevId(devStr) {
+    if (!devStr) return null;
+    const s = devStr.toLowerCase().replace(/[^a-zа-я0-9]/g, '');
+    
+    if (s.includes('к8') || s.includes('k8')) return 4;
+    if (s.includes('кси') || s.includes('калининградстройинвест')) return 1;
+    if (s.includes('фжсс') || s.includes('фонджилищного') || s.includes('фонджсс')) return 2;
+    if (s.includes('расцвет')) return 3;
+    if (s.includes('макрострой')) return 5;
+    if (s.includes('модульстройград')) return 6;
+    if (s.includes('мегаполис')) return 7;
+    if (s.includes('бдн') || s.includes('балтийскийдом')) return 8;
+    if (s.includes('кранцпарк') || s.includes('westdream') || s.includes('вестдрим')) return 9;
+    if (s.includes('ойкумена') || s.includes('евростройинвест')) return 10;
+    if (s.includes('кпд')) return 11;
+    if (s.includes('инвент')) return 12;
+    if (s.includes('мпк')) return 13;
+    if (s.includes('балтпарус') || s.includes('балтийскийпарус')) return 14;
+    if (s.includes('кск')) return 15;
+    if (s.includes('строиттрест') || s.includes('строительныйтрест')) return 16;
+    if (s.includes('стройинвестиция')) return 17;
+    
+    // Put 'kst'/'кст' and 'русскаяевропа' before 'сск' and 'рекстрой'
+    // 'рекстрой' contains 'кст' (реКСТрой), so check for 'рекстрой' when using 'кст'
+    if (s.includes('kst') || (s.includes('кст') && !s.includes('рекстрой'))) return 39;
+    if (s.includes('русскаяевропа') || s.includes('авангардинвест')) return 21;
+    if (s.includes('сск') || s.includes('сибирская')) return 18;
+    if (s.includes('рекстрой')) return 19;
+    if (s.includes('setl') || s.includes('сетл')) return 20;
+    
+    // Custom checks for Specstroy & Bagration
+    if (s.includes('багратион') || (s.includes('спецстрой') && !s.includes('спецремстройтрест')) || s.includes('билдингинвест')) return 22;
+    
+    if (s.includes('лидерстрой') || s.includes('центрфорвард')) return 23;
+    if (s.includes('юстрой')) return 24;
+    if (s.includes('иском')) return 25;
+    if (s.includes('регионстроительство')) return 26;
+    if (s.includes('ласкино')) return 27;
+    if (s.includes('балткоттедж') || s.includes('балтиккоттедж')) return 28;
+    if (s.includes('домарт')) return 29;
+    if (s.includes('балтияинвест')) return 30;
+    if (s.includes('зеленоградсксельстрой')) return 31;
+    if (s.includes('автотор')) return 32;
+    if (s.includes('новостройплюс')) return 33;
+    if (s.includes('зеленыйгород')) return 34;
+    if (s.includes('отрада')) return 35;
+    if (s.includes('раушен')) return 36;
+    if (s.includes('акфен')) return 37;
+    if (s.includes('спецремстройтрест')) return 38;
+    if (s.includes('мидгард')) return 40;
+    if (s.includes('альбатрос')) return 41;
+    if (s.includes('виктория')) return 42;
+    if (s.includes('премьер')) return 43;
+    if (s.includes('ривьера')) return 44;
+    
+    // New developer mappings
+    if (s.includes('корторос') || s.includes('кортрос') || s.includes('kortros')) return 45;
+    if (s.includes('лидергрупп') || s.includes('lidergrupp') || s.includes('смоленское')) return 46;
+    if (s.includes('меркури') || s.includes('merkur')) return 47;
+    if (s.includes('астори') || s.includes('astor')) return 48;
+    if (s.includes('твн') || s.includes('tvn')) return 49;
+    if (s.includes('доминвест') || s.includes('dominvest')) return 50;
+    if (s.includes('эллипс') || s.includes('ellips')) return 51;
+    if (s.includes('нановой') || s.includes('nanovoi') || s.includes('гармония')) return 52;
+    if (s.includes('мпстрой') || s.includes('mpstroy') || s.includes('челноков')) return 53;
+    if (s.includes('кдстрой') || s.includes('kdstroi') || s.includes('стройсервис')) return 54;
+    
+    return null;
+    }
+
+    function getCleanDeveloperName(devStr) {
+      if (!devStr) return 'Застройщик уточняется';
+      const matchedId = getMatchedDevId(devStr);
+      if (matchedId && RICH_DEVELOPER_NAMES[matchedId]) {
+        return RICH_DEVELOPER_NAMES[matchedId];
+      }
+      let cleanDev = devStr.trim().replace(/\.+$/, '');
+      return cleanDev || 'Застройщик уточняется';
+    }
+
+    // Page state
+    let currentDev = null;
+    let localProperties = [];
+
+    // Initialize dropdown on load
+    window.initDeveloperForm = function() {
+      const devSelect = document.getElementById('select-active-dev');
+      if (!devSelect) return;
+
+      devSelect.innerHTML = '';
+      const baseDevs = window.AMBER_DATA ? window.AMBER_DATA.developers : [];
+      
+      baseDevs.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.id;
+        opt.textContent = d.name;
+        devSelect.appendChild(opt);
+      });
+
+      // B2B session control
+      const authDeveloperId = localStorage.getItem('auth_developer_id');
+      const authDeveloperName = localStorage.getItem('auth_developer_name');
+      const pickerCard = document.querySelector('.dev-picker-card');
+
+      if (!authDeveloperId) {
+        // Not authorized, redirect to login page
+        if (typeof navigateToPage === 'function') {
+          location.hash = '#index';
+        } else {
+          window.location.href = 'index.html';
+        }
+        return;
+      }
+
+      if (authDeveloperId === 'admin') {
+        // Admin has full picker visibility
+        if (pickerCard) pickerCard.style.display = 'flex';
+        
+        // Parse parameters from query URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const devId = urlParams.get('devId') || urlParams.get('id');
+        if (devId) {
+          devSelect.value = devId;
+          loadDeveloper(parseInt(devId, 10));
+        } else {
+          if (baseDevs.length > 0) {
+            devSelect.value = baseDevs[0].id;
+            loadDeveloper(baseDevs[0].id);
+          }
+        }
+      } else {
+        // Regular developer or demo account
+        if (pickerCard) pickerCard.style.display = 'none'; // Hide company picker
+        
+        let devIdToLoad = parseInt(authDeveloperId, 10);
+        if (authDeveloperId === 'demo') {
+          devIdToLoad = 3; // Map demo developer to GC "Rasvet" (id=3)
+        }
+        
+        devSelect.value = devIdToLoad;
+        loadDeveloper(devIdToLoad);
+      }
+    };
+
+    // Load active developer data
+    window.loadDeveloper = function(id) {
+      const baseDevs = window.AMBER_DATA ? window.AMBER_DATA.developers : [];
+      const dev = baseDevs.find(d => d.id === id);
+      if (!dev) return;
+
+      currentDev = JSON.parse(JSON.stringify(dev));
+      
+      const devNameClean = getCleanDeveloperName(currentDev.name).toLowerCase();
+      const matchedProps = PROPERTIES.filter(p => {
+        const cleanPDev = getCleanDeveloperName(p.developer).toLowerCase();
+        if (cleanPDev === devNameClean) return true;
+        if (p.developer && currentDev.name) {
+          const pDevNorm = p.developer.toLowerCase().replace(/[^a-zа-я0-9]/g, '');
+          const devNorm = currentDev.name.toLowerCase().replace(/[^a-zа-я0-9]/g, '');
+          if (pDevNorm.includes(devNorm) || devNorm.includes(pDevNorm)) return true;
+        }
+        return false;
+      });
+
+      // Ensure all loaded properties have their developer property matching the brand name!
+      localProperties = matchedProps.map(p => {
+        p.developer = currentDev.name;
+        return p;
+      });
+
+      // Fill inputs
+      document.getElementById('dev-name').value = currentDev.name || '';
+      document.getElementById('dev-fullname').value = currentDev.fullName || '';
+      document.getElementById('dev-experience').value = currentDev.years || '';
+      document.getElementById('dev-phone').value = (currentDev.phone || '').replace(/\\/g, '');
+      document.getElementById('dev-contact-email').value = currentDev.email || 'info@' + (currentDev.website || 'dev.ru');
+      document.getElementById('dev-website').value = currentDev.website || '';
+      document.getElementById('dev-projects-done').value = currentDev.projectsDone || '';
+      document.getElementById('dev-projects-active').value = currentDev.projectsActive || '';
+      document.getElementById('dev-address').value = currentDev.address || '';
+      document.getElementById('dev-desc').value = currentDev.description || '';
+
+      renderProperties();
+    };
+
+    // Render accordions list
+    function renderProperties() {
+      const container = document.getElementById('properties-accordion-container');
+      if (!container) return;
+
+      if (localProperties.length === 0) {
+        container.innerHTML = '<div style="font-size:12px;color:var(--color-muted);text-align:center;padding:24px 0">Нет зарегистрированных ЖК для этого застройщика. Нажмите кнопку ниже, чтобы добавить первый ЖК.</div>';
+        return;
+      }
+
+      container.innerHTML = localProperties.map((p, idx) => `
+        <div class="accordion-item" id="accordion-item-${idx}">
+          <div class="accordion-header" onclick="toggleAccordion(${idx})">
+            <span class="accordion-title" id="accordion-title-${idx}">🏢 ${p.name || 'Новый жилой комплекс'}</span>
+            <div class="accordion-actions">
+              <button type="button" class="btn-delete-jk" onclick="deleteProperty(${idx}, event)">🗑 Удалить</button>
+              <span class="accordion-chevron">▼</span>
+            </div>
+          </div>
+          <div class="accordion-body" id="accordion-body-${idx}" style="display: none;">
+            
+            <div class="form-row">
+              <div class="form-col-2">
+                <label class="form-label">Название ЖК *</label>
+                <input class="form-input" type="text" value="${p.name || ''}" oninput="updatePropField(${idx}, 'name', this.value); document.getElementById('accordion-title-${idx}').textContent = '🏢 ' + this.value" required>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Район / Город *</label>
+                <select class="form-select" onchange="updatePropField(${idx}, 'location', this.value)" required>
+                  <option value="" disabled>Выбрать</option>
+                  ${['Калининград', 'Зеленоградск', 'Светлогорск', 'Пионерский', 'Гурьевск', 'Балтийск', 'Светлый', 'Черняховск', 'Другой'].map(loc => `
+                    <option value="${loc}" ${p.location === loc ? 'selected' : ''}>${loc}</option>
+                  `).join('')}
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-col-2">
+                <label class="form-label">Полный адрес объекта *</label>
+                <input class="form-input" type="text" value="${p.address || ''}" oninput="updatePropField(${idx}, 'address', this.value)" required>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Срок сдачи *</label>
+                <input class="form-input" type="text" value="${p.delivery || ''}" oninput="updatePropField(${idx}, 'delivery', this.value)" required placeholder="4 кв. 2026">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Мин. время до моря (например, "10 мин пешком")</label>
+                <input class="form-input" type="text" value="${p.walkToSea || ''}" oninput="updatePropField(${idx}, 'walkToSea', this.value)" placeholder="10 мин пешком">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Мин. цена квартиры *</label>
+                <input class="form-input" type="text" value="${p.priceFrom || ''}" oninput="updatePropField(${idx}, 'priceFrom', this.value)" required placeholder="от 4.8 млн ₽">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Ценовой диапазон</label>
+                <input class="form-input" type="text" value="${p.priceRange || ''}" oninput="updatePropField(${idx}, 'priceRange', this.value)" placeholder="от 4.8 до 12.6 млн ₽">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Описание ЖК (до 200 символов) *</label>
+                <textarea class="form-textarea" maxlength="200" oninput="updatePropField(${idx}, 'description', this.value)" required placeholder="Краткое описание проекта для каталога...">${p.description || ''}</textarea>
+              </div>
+            </div>
+
+            <!-- Chars -->
+            <div style="font-weight: 800; font-size: 11px; text-transform: uppercase; color: var(--color-primary); margin: 20px 0 8px; border-bottom: 1.5px solid var(--color-border-light); padding-bottom: 4px;">📐 Характеристики новостройки</div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Класс жилья</label>
+                <select class="form-select" onchange="updatePropChar(${idx}, 'class', this.value)">
+                  ${['комфорт', 'бизнес', 'премиум', 'элит', 'стандарт'].map(cls => `
+                    <option value="${cls}" ${(p.chars && p.chars.class === cls) ? 'selected' : ''}>${cls}</option>
+                  `).join('')}
+                </select>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Тип дома</label>
+                <input class="form-input" type="text" value="${(p.chars && p.chars.type) || ''}" oninput="updatePropChar(${idx}, 'type', this.value)" placeholder="монолит-каркас">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Этажность</label>
+                <input class="form-input" type="text" value="${(p.chars && p.chars.floors) || ''}" oninput="updatePropChar(${idx}, 'floors', this.value)" placeholder="5–9 этажей">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Кол-во корпусов</label>
+                <input class="form-input" type="text" value="${(p.chars && p.chars.corpus) || ''}" oninput="updatePropChar(${idx}, 'corpus', this.value)" placeholder="4 корпуса">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Количество квартир</label>
+                <input class="form-input" type="number" value="${(p.chars && p.chars.apartments) || ''}" oninput="updatePropChar(${idx}, 'apartments', this.value)" placeholder="586">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Высота потолков</label>
+                <input class="form-input" type="text" value="${(p.chars && p.chars.ceiling) || ''}" oninput="updatePropChar(${idx}, 'ceiling', this.value)" placeholder="2.7 м">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Диапазон площадей</label>
+                <input class="form-input" type="text" value="${(p.chars && p.chars.apArea) || ''}" oninput="updatePropChar(${idx}, 'apArea', this.value)" placeholder="24–95 м²">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Площадь кухни</label>
+                <input class="form-input" type="text" value="${(p.chars && p.chars.kitArea) || ''}" oninput="updatePropChar(${idx}, 'kitArea', this.value)" placeholder="от 8 м²">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Стены</label>
+                <input class="form-input" type="text" value="${(p.chars && p.chars.walls) || ''}" oninput="updatePropChar(${idx}, 'walls', this.value)" placeholder="кер. кирпич">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Отделка</label>
+                <input class="form-input" type="text" value="${(p.chars && p.chars.finishing) || ''}" oninput="updatePropChar(${idx}, 'finishing', this.value)" placeholder="чистовая, черновая...">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Тип отопления</label>
+                <select class="form-select" onchange="updatePropChar(${idx}, 'heating', this.value)">
+                  ${['автономное', 'центральное', 'газовое', 'индивидуальное'].map(h => `
+                    <option value="${h}" ${(p.chars && p.chars.heating === h) ? 'selected' : ''}>${h}</option>
+                  `).join('')}
+                </select>
+              </div>
+            </div>
+
+            <!-- Infrastructure Checkboxes -->
+            <div style="font-weight: 800; font-size: 11px; text-transform: uppercase; color: var(--color-primary); margin: 20px 0 8px; border-bottom: 1.5px solid var(--color-border-light); padding-bottom: 4px;">🏪 Инфраструктура в пешей доступности</div>
+            <div class="checkbox-grid">
+              ${[
+                { key: 'sea', label: '🏖 Море / пляж' },
+                { key: 'shops', label: '🏪 Магазины' },
+                { key: 'schools', label: '🏫 Школы' },
+                { key: 'kindergartens', label: '👶 Детские сады' },
+                { key: 'hospital', label: '🏥 Поликлиника' },
+                { key: 'transport', label: '🚌 Остановка транспорта' },
+                { key: 'gym', label: '💪 Фитнес / спорт' },
+                { key: 'park', label: '🌳 Парк / сквер' },
+                { key: 'restaurants', label: '🍽 Рестораны / кафе' }
+              ].map(item => {
+                const checked = p.tags && p.tags.some(t => t.toLowerCase().includes(item.label.split(' ')[1].toLowerCase()));
+                const detailVal = getInfraDetailValue(p, item.key);
+                return `
+                  <div class="infra-option-container ${checked ? 'active' : ''}" id="infra-container-${idx}-${item.key}">
+                    <label class="checkbox-item">
+                      <input type="checkbox" onchange="toggleInfraField(${idx}, '${item.key}', this.checked)" ${checked ? 'checked' : ''}>
+                      <span>${item.label}</span>
+                    </label>
+                    <div class="infra-detail-input-wrap" id="infra-detail-wrap-${idx}-${item.key}" style="display: ${checked ? 'block' : 'none'};">
+                      <input class="form-input" style="font-size:12px; padding:6px 10px; margin-top:6px;" type="text" value="${detailVal.replace(/"/g, '&quot;')}" oninput="updatePropInfraDetail(${idx}, '${item.key}', this.value)" placeholder="Укажите объекты и расстояние...">
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- Flat Prices Repeatable rows -->
+            <div style="font-weight: 800; font-size: 11px; text-transform: uppercase; color: var(--color-primary); margin: 20px 0 8px; border-bottom: 1.5px solid var(--color-border-light); padding-bottom: 4px;">💸 Цены по типам квартир</div>
+            <div class="price-row-group" id="price-rows-${idx}">
+              ${(p.prices || []).map((pr, prIdx) => `
+                <div class="price-row-item">
+                  <div class="form-col">
+                    <select class="form-select" onchange="updatePriceField(${idx}, ${prIdx}, 'type', this.value)">
+                      ${['Студии', '1-комнатные', '2-комнатные', '3-комнатные', '4+ комнатные', 'Пентхаусы', 'Таунхаусы'].map(t => `
+                        <option value="${t}" ${pr.type === t ? 'selected' : ''}>${t}</option>
+                      `).join('')}
+                    </select>
+                  </div>
+                  <div class="form-col">
+                    <input class="form-input" type="text" value="${pr.from || ''}" oninput="updatePriceField(${idx}, ${prIdx}, 'from', this.value)" placeholder="от 4.8 млн ₽">
+                  </div>
+                  <div class="form-col">
+                    <input class="form-input" type="text" value="${pr.area || ''}" oninput="updatePriceField(${idx}, ${prIdx}, 'area', this.value)" placeholder="24–33 м²">
+                  </div>
+                  <button type="button" class="btn-remove-row" onclick="removePriceRow(${idx}, ${prIdx})" title="Удалить">✕</button>
+                </div>
+              `).join('')}
+            </div>
+            <button type="button" class="btn-add-row" onclick="addPriceRow(${idx})">+ Добавить тип квартиры</button>
+
+            <!-- Благоустройство -->
+            <div style="font-weight:800;font-size:11px;text-transform:uppercase;color:var(--color-primary);margin:20px 0 8px;border-bottom:1.5px solid var(--color-border-light);padding-bottom:4px;">🌿 Благоустройство и территория</div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Двор без машин</label>
+                <select class="form-select" onchange="updatePropYard(${idx}, 'carFree', this.value)">
+                  <option value="" ${!(p.yard && p.yard.carFree) ? 'selected' : ''}>Уточняется</option>
+                  <option value="Да, двор без машин" ${(p.yard && p.yard.carFree === 'Да, двор без машин') ? 'selected' : ''}>Да</option>
+                  <option value="Нет" ${(p.yard && p.yard.carFree === 'Нет') ? 'selected' : ''}>Нет</option>
+                </select>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Детская площадка</label>
+                <input class="form-input" type="text" value="${(p.yard && p.yard.playground) || ''}" oninput="updatePropYard(${idx}, 'playground', this.value)" placeholder="Авторская, тематическая...">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Спортивная зона</label>
+                <input class="form-input" type="text" value="${(p.yard && p.yard.sportZone) || ''}" oninput="updatePropYard(${idx}, 'sportZone', this.value)" placeholder="Турники, workout-зона...">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Паркинг</label>
+                <input class="form-input" type="text" value="${(p.yard && p.yard.parking) || ''}" oninput="updatePropYard(${idx}, 'parking', this.value)" placeholder="Подземный, наземный...">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Количество машиномест</label>
+                <input class="form-input" type="text" value="${(p.yard && p.yard.parkingSpots) || ''}" oninput="updatePropYard(${idx}, 'parkingSpots', this.value)" placeholder="120 мест">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Велопарковка</label>
+                <input class="form-input" type="text" value="${(p.yard && p.yard.bikeParking) || ''}" oninput="updatePropYard(${idx}, 'bikeParking', this.value)" placeholder="Крытая, 30 мест">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col-2">
+                <label class="form-label">Озеленение / ландшафт</label>
+                <input class="form-input" type="text" value="${(p.yard && p.yard.greenery) || ''}" oninput="updatePropYard(${idx}, 'greenery', this.value)" placeholder="Авторский ландшафтный дизайн, деревья, клумбы...">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Прогулочные зоны</label>
+                <input class="form-input" type="text" value="${(p.yard && p.yard.walkZones) || ''}" oninput="updatePropYard(${idx}, 'walkZones', this.value)" placeholder="Аллеи, дорожки...">
+              </div>
+            </div>
+
+            <!-- Инженерия -->
+            <div style="font-weight:800;font-size:11px;text-transform:uppercase;color:var(--color-primary);margin:20px 0 8px;border-bottom:1.5px solid var(--color-border-light);padding-bottom:4px;">⚙️ Инженерия</div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Горячая вода</label>
+                <input class="form-input" type="text" value="${(p.engineering && p.engineering.hotWater) || ''}" oninput="updatePropEngineering(${idx}, 'hotWater', this.value)" placeholder="Центральная / бойлер">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Газ / тип плиты</label>
+                <input class="form-input" type="text" value="${(p.engineering && p.engineering.gas) || ''}" oninput="updatePropEngineering(${idx}, 'gas', this.value)" placeholder="Электрическая плита">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Вентиляция</label>
+                <input class="form-input" type="text" value="${(p.engineering && p.engineering.ventilation) || ''}" oninput="updatePropEngineering(${idx}, 'ventilation', this.value)" placeholder="Принудительная с рекуперацией">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Кондиционирование</label>
+                <input class="form-input" type="text" value="${(p.engineering && p.engineering.airConditioning) || ''}" oninput="updatePropEngineering(${idx}, 'airConditioning', this.value)" placeholder="Подготовка под кондиционер">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Счётчики</label>
+                <input class="form-input" type="text" value="${(p.engineering && p.engineering.meters) || ''}" oninput="updatePropEngineering(${idx}, 'meters', this.value)" placeholder="Индивидуальные на тепло, воду, свет">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Электрика кВт на кв.</label>
+                <input class="form-input" type="text" value="${(p.engineering && p.engineering.electricPower) || ''}" oninput="updatePropEngineering(${idx}, 'electricPower', this.value)" placeholder="7 кВт">
+              </div>
+            </div>
+
+            <!-- Комфорт и окна -->
+            <div style="font-weight:800;font-size:11px;text-transform:uppercase;color:var(--color-primary);margin:20px 0 8px;border-bottom:1.5px solid var(--color-border-light);padding-bottom:4px;">🪟 Комфорт и окна</div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Тип окон</label>
+                <input class="form-input" type="text" value="${(p.comfort && p.comfort.windowType) || ''}" oninput="updatePropComfort(${idx}, 'windowType', this.value)" placeholder="Тёплые стеклопакеты REHAU">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Панорамные окна</label>
+                <select class="form-select" onchange="updatePropComfort(${idx}, 'panoramic', this.value)">
+                  <option value="">Уточняется</option>
+                  <option value="Да, панорамное остекление" ${(p.comfort && p.comfort.panoramic === 'Да, панорамное остекление') ? 'selected' : ''}>Да</option>
+                  <option value="Нет" ${(p.comfort && p.comfort.panoramic === 'Нет') ? 'selected' : ''}>Нет</option>
+                </select>
+              </div>
+              <div class="form-col">
+                <label class="form-label">Виды из окон</label>
+                <input class="form-input" type="text" value="${(p.comfort && p.comfort.views) || ''}" oninput="updatePropComfort(${idx}, 'views', this.value)" placeholder="Море, парк, двор...">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Шумоизоляция</label>
+                <input class="form-input" type="text" value="${(p.comfort && p.comfort.soundproofing) || ''}" oninput="updatePropComfort(${idx}, 'soundproofing', this.value)" placeholder="Усиленная межквартирная">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Воздушный шум Rw (дБ)</label>
+                <input class="form-input" type="number" value="${(p.comfort && p.comfort.soundRw) || ''}" oninput="updatePropComfort(${idx}, 'soundRw', this.value)" placeholder="52">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Ударный шум Ln,w (дБ)</label>
+                <input class="form-input" type="number" value="${(p.comfort && p.comfort.soundLn) || ''}" oninput="updatePropComfort(${idx}, 'soundLn', this.value)" placeholder="55">
+              </div>
+            </div>
+
+            <!-- Безопасность -->
+            <div style="font-weight:800;font-size:11px;text-transform:uppercase;color:var(--color-primary);margin:20px 0 8px;border-bottom:1.5px solid var(--color-border-light);padding-bottom:4px;">🔒 Безопасность</div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Лифты (описание)</label>
+                <input class="form-input" type="text" value="${(p.security && p.security.lifts) || ''}" oninput="updatePropSecurity(${idx}, 'lifts', this.value)" placeholder="2 лифта на секцию">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Марка лифтов</label>
+                <input class="form-input" type="text" value="${(p.security && p.security.liftBrand) || ''}" oninput="updatePropSecurity(${idx}, 'liftBrand', this.value)" placeholder="OTIS, Schindler...">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Видеонаблюдение</label>
+                <input class="form-input" type="text" value="${(p.security && p.security.cctv) || ''}" oninput="updatePropSecurity(${idx}, 'cctv', this.value)" placeholder="Круглосуточное, 12 камер...">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Охрана / консьерж</label>
+                <input class="form-input" type="text" value="${(p.security && p.security.guard) || ''}" oninput="updatePropSecurity(${idx}, 'guard', this.value)" placeholder="Охрана 24/7 / консьерж">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Контроль доступа</label>
+                <input class="form-input" type="text" value="${(p.security && p.security.accessControl) || ''}" oninput="updatePropSecurity(${idx}, 'accessControl', this.value)" placeholder="Смарт-домофон, карты доступа">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Колясочные / кладовые</label>
+                <input class="form-input" type="text" value="${(p.security && p.security.strollerRoom) || ''}" oninput="updatePropSecurity(${idx}, 'strollerRoom', this.value)" placeholder="Есть в каждой секции">
+              </div>
+            </div>
+
+            <!-- Управление / УК -->
+            <div style="font-weight:800;font-size:11px;text-transform:uppercase;color:var(--color-primary);margin:20px 0 8px;border-bottom:1.5px solid var(--color-border-light);padding-bottom:4px;">🏢 Управление / УК</div>
+            <div class="form-row">
+              <div class="form-col-2">
+                <label class="form-label">Управляющая компания</label>
+                <input class="form-input" type="text" value="${(p.management && p.management.company) || ''}" oninput="updatePropManagement(${idx}, 'company', this.value)" placeholder="Название УК">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Ком. платежи (ориентир)</label>
+                <input class="form-input" type="text" value="${(p.management && p.management.utilities) || ''}" oninput="updatePropManagement(${idx}, 'utilities', this.value)" placeholder="~6 000 ₽/мес для 50 м²">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Интернет-провайдеры</label>
+                <input class="form-input" type="text" value="${(p.management && p.management.internetProviders) || ''}" oninput="updatePropManagement(${idx}, 'internetProviders', this.value)" placeholder="Ростелеком, ТТК...">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Коммерция на 1-м этаже</label>
+                <input class="form-input" type="text" value="${(p.management && p.management.groundFloorCommerce) || ''}" oninput="updatePropManagement(${idx}, 'groundFloorCommerce', this.value)" placeholder="Магазины, аптека, кафе">
+              </div>
+            </div>
+
+            <!-- Гарантии -->
+            <div style="font-weight:800;font-size:11px;text-transform:uppercase;color:var(--color-primary);margin:20px 0 8px;border-bottom:1.5px solid var(--color-border-light);padding-bottom:4px;">🛡️ Гарантийные обязательства</div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Гарантия на конструктив</label>
+                <input class="form-input" type="text" value="${(p.warranty && p.warranty.structural) || ''}" oninput="updatePropWarranty(${idx}, 'structural', this.value)" placeholder="5 лет с момента передачи">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Гарантия на инженерию</label>
+                <input class="form-input" type="text" value="${(p.warranty && p.warranty.engineering) || ''}" oninput="updatePropWarranty(${idx}, 'engineering', this.value)" placeholder="3 года с момента передачи">
+              </div>
+              <div class="form-col">
+                <label class="form-label">Гарантия на отделку</label>
+                <input class="form-input" type="text" value="${(p.warranty && p.warranty.finishing) || ''}" oninput="updatePropWarranty(${idx}, 'finishing', this.value)" placeholder="1 год">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-col">
+                <label class="form-label">Контакт по гарантии</label>
+                <input class="form-input" type="text" value="${(p.warranty && p.warranty.contact) || ''}" oninput="updatePropWarranty(${idx}, 'contact', this.value)" placeholder="+7 (4012) 000-000">
+              </div>
+            </div>
+
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Toggle accordion slide
+    window.toggleAccordion = function(idx) {
+      const body = document.getElementById(`accordion-body-${idx}`);
+      const item = document.getElementById(`accordion-item-${idx}`);
+      if (!body || !item) return;
+
+      const isOpen = item.classList.contains('active');
+      
+      // Close all first
+      document.querySelectorAll('.accordion-item').forEach(el => {
+        el.classList.remove('active');
+        const b = el.querySelector('.accordion-body');
+        if (b) b.style.display = 'none';
+      });
+
+      if (!isOpen) {
+        item.classList.add('active');
+        body.style.display = 'block';
+      }
+    };
+
+    // Update bindings
+    window.updatePropField = function(idx, field, value) {
+      if (localProperties[idx]) {
+        localProperties[idx][field] = value;
+      }
+    };
+
+    window.updatePropChar = function(idx, field, value) {
+      if (localProperties[idx]) {
+        if (!localProperties[idx].chars) localProperties[idx].chars = {};
+        localProperties[idx].chars[field] = value;
+      }
+    };
+
+    window.updatePropInfra = function(idx, type, checked) {
+      if (localProperties[idx]) {
+        if (!localProperties[idx].tags) localProperties[idx].tags = [];
+        const labelMap = {
+          sea: 'у моря',
+          shops: 'магазины',
+          schools: 'семейная ипотека',
+          kindergartens: 'детская инфраструктура',
+          hospital: 'поликлиника',
+          transport: 'транспорт',
+          gym: 'спорт',
+          park: 'парк',
+          restaurants: 'кафе'
+        };
+        const label = labelMap[type];
+        if (checked) {
+          if (!localProperties[idx].tags.includes(label)) {
+            localProperties[idx].tags.push(label);
+          }
+        } else {
+          localProperties[idx].tags = localProperties[idx].tags.filter(t => t !== label);
+        }
+      }
+    };
+
+    window.getInfraDetailValue = function(p, key) {
+      if (key === 'sea') return p.walkToSea || '';
+      if (key === 'transport') return p.transportText || '';
+      if (!p.infraDetails) return '';
+      const map = {
+        shops: 'shops',
+        schools: 'schools',
+        kindergartens: 'kindergartens',
+        hospital: 'clinics',
+        gym: 'sport',
+        park: 'parks',
+        restaurants: 'restaurants'
+      };
+      return p.infraDetails[map[key]] || '';
+    };
+
+    window.updatePropInfraDetail = function(idx, key, value) {
+      if (!localProperties[idx]) return;
+      const p = localProperties[idx];
+      
+      if (key === 'sea') {
+        p.walkToSea = value;
+      } else if (key === 'transport') {
+        p.transportText = value;
+      } else {
+        if (!p.infraDetails) p.infraDetails = {};
+        const map = {
+          shops: 'shops',
+          schools: 'schools',
+          kindergartens: 'kindergartens',
+          hospital: 'clinics',
+          gym: 'sport',
+          park: 'parks',
+          restaurants: 'restaurants'
+        };
+        p.infraDetails[map[key]] = value;
+      }
+    };
+
+    window.toggleInfraField = function(idx, key, checked) {
+      if (!localProperties[idx]) return;
+      const p = localProperties[idx];
+      
+      const wrap = document.getElementById(`infra-detail-wrap-${idx}-${key}`);
+      const container = document.getElementById(`infra-container-${idx}-${key}`);
+      if (wrap) {
+        wrap.style.display = checked ? 'block' : 'none';
+      }
+      if (container) {
+        if (checked) container.classList.add('active');
+        else container.classList.remove('active');
+      }
+
+      const labelMap = {
+        sea: 'у моря',
+        shops: 'магазины',
+        schools: 'семейная ипотека',
+        kindergartens: 'детская инфраструктура',
+        hospital: 'поликлиника',
+        transport: 'транспорт',
+        gym: 'спорт',
+        park: 'парк',
+        restaurants: 'кафе'
+      };
+      const label = labelMap[key];
+      if (!p.tags) p.tags = [];
+      
+      if (checked) {
+        if (!p.tags.includes(label)) p.tags.push(label);
+        
+        // Auto pre-fill default values if empty
+        const currentVal = getInfraDetailValue(p, key);
+        if (!currentVal) {
+          let defaultVal = '';
+          if (key === 'sea') defaultVal = '10 мин пешком';
+          else if (key === 'transport') defaultVal = 'Остановка транспорта · 200 м';
+          else {
+            const defaults = {
+              shops: 'Супермаркеты · в шаговой доступности',
+              schools: 'Школа · в районе',
+              kindergartens: 'Детский сад · рядом',
+              hospital: 'Поликлиника · в районе',
+              gym: 'Спортивный клуб · рядом',
+              park: 'Сквер для прогулок · рядом',
+              restaurants: 'Кафе и рестораны · рядом'
+            };
+            defaultVal = defaults[key] || '';
+          }
+          updatePropInfraDetail(idx, key, defaultVal);
+          if (wrap) {
+            const input = wrap.querySelector('input');
+            if (input) input.value = defaultVal;
+          }
+        }
+      } else {
+        p.tags = p.tags.filter(t => t !== label);
+      }
+    };
+
+    window.updatePriceField = function(idx, prIdx, field, value) {
+      if (localProperties[idx] && localProperties[idx].prices && localProperties[idx].prices[prIdx]) {
+        localProperties[idx].prices[prIdx][field] = value;
+      }
+    };
+
+    window.updatePropArrayField = function(idx, field, value) {
+      if (localProperties[idx]) {
+        localProperties[idx][field] = value.split('\n').map(v => v.trim()).filter(Boolean);
+      }
+    };
+
+    // repeatable price rows
+    window.addPriceRow = function(idx) {
+      if (localProperties[idx]) {
+        if (!localProperties[idx].prices) localProperties[idx].prices = [];
+        localProperties[idx].prices.push({ type: '1-комнатные', from: 'от 5.0 млн ₽', area: '32–45 м²' });
+        renderProperties();
+        toggleAccordion(idx);
+      }
+    };
+
+    window.removePriceRow = function(idx, prIdx) {
+      if (localProperties[idx] && localProperties[idx].prices) {
+        localProperties[idx].prices.splice(prIdx, 1);
+        renderProperties();
+        toggleAccordion(idx);
+      }
+    };
+
+    // Delete property
+    window.deleteProperty = function(idx, event) {
+      if (event) {
+        event.stopPropagation();
+      }
+      if (confirm('Вы уверены, что хотите удалить этот ЖК из базы данных?')) {
+        localProperties.splice(idx, 1);
+        renderProperties();
+      }
+    };
+
+    // Add blank property
+    window.addNewProperty = function() {
+      const newJk = {
+        id: Date.now(),
+        name: 'Новый ЖК',
+        developer: currentDev ? currentDev.name : '',
+        location: 'Калининград',
+        address: '',
+        distance: '',
+        priceFrom: '',
+        priceRange: '',
+        delivery: '',
+        description: '',
+        rating: 4.0,
+        reviews: 0,
+        tags: ['комфорт-класс'],
+        prices: [
+          { type: 'Студии', from: '', area: '' }
+        ],
+        chars: {
+          class: 'комфорт',
+          type: 'монолит',
+          floors: '',
+          corpus: '',
+          apartments: '',
+          ceiling: '',
+          apArea: '',
+          kitArea: '',
+          walls: '',
+          heating: 'автономное'
+        }
+      };
+      localProperties.push(newJk);
+      renderProperties();
+      // Open the newly created property form (last item)
+      toggleAccordion(localProperties.length - 1);
+    };
+
+    // Modal helpers
+    window.closeSuccessModal = function() {
+      document.getElementById('success-modal').classList.remove('open');
+    };
+
+    // Form submission
+    document.getElementById('developer-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      if (!currentDev) return;
+
+      const activeDevName = document.getElementById('dev-name').value;
+      localProperties.forEach(p => {
+        p.developer = activeDevName;
+      });
+
+      const submission = {
+        id: Date.now(),
+        timestamp: new Date().toLocaleString('ru-RU'),
+        devId: currentDev.id,
+        devName: activeDevName,
+        fullName: document.getElementById('dev-fullname').value,
+        phone: document.getElementById('dev-phone').value,
+        email: document.getElementById('dev-contact-email').value,
+        website: document.getElementById('dev-website').value,
+        years: document.getElementById('dev-experience').value,
+        projectsDone: document.getElementById('dev-projects-done').value,
+        projectsActive: document.getElementById('dev-projects-active').value,
+        address: document.getElementById('dev-address').value,
+        description: document.getElementById('dev-desc').value,
+        properties: localProperties,
+        webhookUrl: document.getElementById('webhook-url').value
+      };
+
+      // Save submission locally
+      let submissions = JSON.parse(localStorage.getItem('dev_submissions') || '[]');
+      submissions.push(submission);
+      localStorage.setItem('dev_submissions', JSON.stringify(submissions));
+
+      // Trigger Webhook POST request
+      const url = submission.webhookUrl;
+      if (url && url.startsWith('http')) {
+        fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(submission)
+        }).catch(err => console.log('Mock Webhook sent, catch ignored:', err));
+      }
+
+      // Display premium success popup
+      document.getElementById('success-modal').classList.add('open');
+    });
+
+    // New field updaters for 6 new sections
+    window.updatePropYard = function(idx, field, value) {
+      if (!localProperties[idx]) return;
+      if (!localProperties[idx].yard) localProperties[idx].yard = {};
+      localProperties[idx].yard[field] = value;
+    };
+    window.updatePropEngineering = function(idx, field, value) {
+      if (!localProperties[idx]) return;
+      if (!localProperties[idx].engineering) localProperties[idx].engineering = {};
+      localProperties[idx].engineering[field] = value;
+    };
+    window.updatePropComfort = function(idx, field, value) {
+      if (!localProperties[idx]) return;
+      if (!localProperties[idx].comfort) localProperties[idx].comfort = {};
+      localProperties[idx].comfort[field] = value;
+    };
+    window.updatePropSecurity = function(idx, field, value) {
+      if (!localProperties[idx]) return;
+      if (!localProperties[idx].security) localProperties[idx].security = {};
+      localProperties[idx].security[field] = value;
+    };
+    window.updatePropManagement = function(idx, field, value) {
+      if (!localProperties[idx]) return;
+      if (!localProperties[idx].management) localProperties[idx].management = {};
+      localProperties[idx].management[field] = value;
+    };
+    window.updatePropWarranty = function(idx, field, value) {
+      if (!localProperties[idx]) return;
+      if (!localProperties[idx].warranty) localProperties[idx].warranty = {};
+      localProperties[idx].warranty[field] = value;
+    };
+
+    // Extend addNewProperty with new sections
+    const _origAddNewProperty = window.addNewProperty;
+    window.addNewProperty = function() {
+      _origAddNewProperty();
+      const idx = localProperties.length - 1;
+      localProperties[idx].yard = {};
+      localProperties[idx].engineering = {};
+      localProperties[idx].comfort = {};
+      localProperties[idx].security = {};
+      localProperties[idx].management = {};
+      localProperties[idx].warranty = {};
+    };
+
+    // Initial load
+    document.addEventListener('DOMContentLoaded', function() {
+      initDeveloperForm();
+    });
+  </script>
+</body>
+</html>

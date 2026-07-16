@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Панель администратора — Amber Avenue</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="vanlax.css" />
+  <link rel="icon" href="logo.png" type="image/png" />
+  <style>
+    /* ── Base Admin Layout ── */
+    body {
+      background: var(--clr-bg);
+      color: var(--clr-text);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    .admin-sidebar {
+      width: 250px;
+      background: var(--clr-surface);
+      border-right: 1px solid var(--clr-border);
+      padding: var(--space-lg) 0;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .admin-sidebar-header {
+      padding: 0 var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+    .admin-sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--clr-amber);
+    }
+    .admin-sidebar-sub {
+      font-size: 0.75rem;
+      color: var(--clr-text-dim);
+      margin-top: 4px;
+    }
+    .admin-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex-grow: 1;
+    }
+    .admin-nav-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: 0.75rem var(--space-lg);
+      font-size: 0.875rem;
+      color: var(--clr-text-muted);
+      cursor: pointer;
+      transition: all var(--duration-fast);
+      border-left: 3px solid transparent;
+    }
+    .admin-nav-item:hover {
+      color: var(--clr-text);
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .admin-nav-item.active {
+      color: var(--clr-amber);
+      background: var(--clr-amber-dim);
+      border-left-color: var(--clr-amber);
+      font-weight: 600;
+    }
+    .admin-main {
+      flex: 1;
+      padding: var(--space-xl) var(--space-2xl);
+      overflow-y: auto;
+    }
+    .admin-section {
+      display: none;
+    }
+    .admin-section.active {
+      display: block;
+    }
+    .admin-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-xl);
+    }
+    .admin-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+    .admin-title span {
+      color: var(--clr-amber);
+    }
+
+    /* ── Tables & Lists ── */
+    .table-container {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: var(--space-xl);
+      box-shadow: var(--shadow-card);
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .admin-table th {
+      padding: 1rem;
+      background: rgba(255,255,255,0.01);
+      border-bottom: 1px solid var(--clr-border-mid);
+      color: var(--clr-text-dim);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+    }
+    .admin-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--clr-border);
+      color: var(--clr-text-muted);
+      vertical-align: middle;
+    }
+    .admin-table tr:last-child td {
+      border-bottom: none;
+    }
+    .admin-table tr:hover td {
+      background: rgba(255,255,255,0.01);
+    }
+    
+    /* ── Badges & Buttons ── */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .badge-partner { background: var(--clr-amber-dim); color: var(--clr-amber); }
+    .badge-regular { background: rgba(255,255,255,0.05); color: var(--clr-text-muted); }
+    .badge-success { background: var(--clr-green-dim); color: var(--clr-green); }
+    .badge-danger { background: var(--clr-red-dim); color: var(--clr-red); }
+
+    .btn-admin {
+      background: var(--clr-amber);
+      color: #000;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-admin:hover {
+      background: var(--clr-amber-light);
+      transform: translateY(-1px);
+    }
+    .btn-admin-secondary {
+      background: rgba(255,255,255,0.04);
+      color: var(--clr-text);
+      border: 1px solid var(--clr-border-mid);
+      padding: 0.5rem 1rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-admin-secondary:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--clr-text-muted);
+    }
+    .btn-action {
+      padding: 0.3rem 0.6rem;
+      font-size: 0.75rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 1px solid transparent;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-edit {
+      background: var(--clr-sea-dim);
+      color: var(--clr-sea);
+      border-color: rgba(59, 139, 186, 0.2);
+    }
+    .btn-edit:hover {
+      background: rgba(59, 139, 186, 0.3);
+    }
+    .btn-delete {
+      background: var(--clr-red-dim);
+      color: var(--clr-red);
+      border-color: rgba(224, 92, 106, 0.2);
+      margin-left: 6px;
+    }
+    .btn-delete:hover {
+      background: rgba(224, 92, 106, 0.3);
+    }
+
+    /* ── Floating Saving Banner ── */
+    .save-bar {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      left: 274px;
+      background: rgba(15, 22, 40, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--clr-amber);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.5rem;
+      box-shadow: var(--shadow-modal);
+      z-index: 1000;
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @media (max-width: 768px) {
+      .save-bar { left: 84px; }
+    }
+    .save-bar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .save-bar-text {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--clr-text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .save-bar-desc {
+      font-size: 0.75rem;
+      color: var(--clr-text-dim);
+      margin-top: 2px;
+    }
+
+    /* ── Modal Dialog ── */
+    .admin-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .admin-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .admin-modal-content {
+      background: var(--clr-surface);
+      border: 1px solid var(--clr-border-mid);
+      border-radius: var(--radius-xl);
+      width: 90%;
+      max-width: 650px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-modal);
+      transform: scale(0.95);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .admin-modal.active .admin-modal-content {
+      transform: scale(1);
+    }
+    .admin-modal-header {
+      padding: var(--space-lg);
+      border-bottom: 1px solid var(--clr-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .admin-modal-header h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--clr-amber);
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--clr-text-muted);
+      font-size: 1.75rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--clr-text); }
+    .admin-modal-body {
+      padding: var(--space-lg);
+      overflow-y: auto;
+      flex-grow: 1;
+    }
+    .admin-modal-footer {
+      padding: var(--space-lg);
+      border-top: 1px solid var(--clr-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--space-sm);
+    }
+
+    /* ── Form Controls inside Modal ── */
+    .admin-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+    }
+    .admin-field-full {
+      grid-column: span 2;
+    }
+    .admin-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-bottom: var(--space-md);
+    }
+    .admin-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--clr-text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .admin-input, .admin-textarea, .admin-select {
+      padding: 0.65rem 0.9rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--clr-border-mid);
+      background: rgba(255,255,255,0.03);
+      color: var(--clr-text);
+      font-size: 0.875rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .admin-input:focus, .admin-textarea:focus, .admin-select:focus {
+      outline: none;
+      border-color: var(--clr-amber);
+      background: rgba(255,255,255,0.05);
+    }
+    .admin-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .admin-checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-top: 1.25rem;
+    }
+    .admin-checkbox {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--clr-amber);
+      cursor: pointer;
+    }
+    .field-hint {
+      font-size: 0.7rem;
+      color: var(--clr-text-dim);
+      margin-top: 2px;
+    }
+
+    /* ── Statistics UI ── */
+    .stats-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+    .stats-summary-card {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      text-align: center;
+      box-shadow: var(--shadow-card);
+    }
+    .stats-summary-val {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--clr-amber);
+      margin-bottom: 4px;
+    }
+    .stats-summary-lbl {
+      font-size: 0.75rem;
+      color: var(--clr-text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Monetization Calculator UI ── */
+    .monetization-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: var(--space-xl);
+    }
+    @media (max-width: 900px) {
+      .monetization-grid { grid-template-columns: 1fr; }
+    }
+    .monetization-card {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      box-shadow: var(--shadow-card);
+    }
+    .monetization-subtitle {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--clr-amber);
+      margin-top: 0;
+      margin-bottom: var(--space-md);
+      border-bottom: 1px solid var(--clr-border);
+      padding-bottom: 10px;
+    }
+    .calc-sliders {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .slider-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8125rem;
+      font-weight: 600;
+    }
+    .slider-lbl { color: var(--clr-text-muted); }
+    .slider-val { color: var(--clr-amber); font-weight: 700; }
+    .slider-control {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--clr-border-mid);
+      outline: none;
+      accent-color: var(--clr-amber);
+      cursor: pointer;
+    }
+    
+    .results-box {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .results-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      color: var(--clr-text-muted);
+      border-bottom: 1px dashed var(--clr-border);
+      padding-bottom: 8px;
+    }
+    .results-row span:last-child {
+      font-weight: 700;
+      color: var(--clr-text);
+    }
+    .total-revenue-box {
+      background: var(--clr-amber-dim);
+      border: 1px solid var(--clr-amber-glow);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      text-align: center;
+      margin-top: var(--space-lg);
+    }
+    .total-revenue-lbl {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--clr-text-muted);
+      margin-bottom: 6px;
+    }
+    .total-revenue-val {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--clr-amber);
+      text-shadow: 0 0 15px rgba(232, 168, 56, 0.2);
+    }
+
+    /* ── Instruction Box ── */
+    .instruction-box {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px dashed var(--clr-border-mid);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+    .instruction-box h3 {
+      margin-top: 0;
+      color: var(--clr-amber);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .instruction-box p {
+      font-size: 0.8125rem;
+      color: var(--clr-text-dim);
+      line-height: 1.5;
+      margin: 0 0 var(--space-sm) 0;
+    }
+    .instruction-box ol {
+      margin: 0;
+      padding-left: var(--space-lg);
+      font-size: 0.8125rem;
+      color: var(--clr-text-dim);
+      line-height: 1.5;
+    }
+    .instruction-box li {
+      margin-bottom: var(--space-xs);
+    }
+  </style>
+
+  <script src="data.js"></script>
+  <script src="properties-data.js"></script>
+  <script src="menu.js"></script>
+</head>
+<body>
+
+  <div class="admin-layout">
+    <!-- ── Sidebar Navigation ── -->
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <div class="admin-sidebar-logo">🏺 Amber Avenue</div>
+        <div class="admin-sidebar-sub">Панель администратора</div>
+      </div>
+      
+      <ul class="admin-nav" id="admin-nav">
+        <li class="admin-nav-item active" data-section="properties">📋 <span>Жилые комплексы</span></li>
+        <li class="admin-nav-item" data-section="developers">🏗 <span>Застройщики</span></li>
+        <li class="admin-nav-item" data-section="submissions">📥 <span>Заявки застройщиков</span></li>
+        <li class="admin-nav-item" data-section="blog">📰 <span>Статьи блога</span></li>
+        <li class="admin-nav-item" data-section="experts">👩‍💼 <span>Эксперты</span></li>
+        <li class="admin-nav-item" data-section="banners">🖼 <span>Баннеры и Слайды</span></li>
+        <li class="admin-nav-item" data-section="stats">📊 <span>Статистика баннеров</span></li>
+        <li class="admin-nav-item" data-section="monetization">💰 <span>Монетизация</span></li>
+      </ul>
+      
+      <div style="padding: 0 var(--space-lg); font-size: 0.7rem; color: var(--clr-text-dim);">
+        Версия CMS: 2.1<br>
+        © 2026 Amber Avenue
+      </div>
+    </aside>
+
+    <!-- ── Main Content Area ── -->
+    <main class="admin-main">
+
+      <!-- ═══ SECTION: Properties (ЖК) ═══ -->
+      <div class="admin-section active" id="section-properties">
+        <div class="admin-title-row">
+          <h1 class="admin-title">📋 Жилые комплексы <span>(${window.AMBER_DATA ? window.AMBER_DATA.properties.length : 0})</span></h1>
+          <button class="btn-admin" onclick="openAddModal('properties')">+ Добавить ЖК</button>
+        </div>
+        <div class="table-container">
+          <table class="admin-table" id="table-properties">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Застройщик</th>
+                <th>Город</th>
+                <th>Цена от</th>
+                <th>Класс</th>
+                <th>Статус</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody><!-- Dynamic --></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ SECTION: Developers ═══ -->
+      <div class="admin-section" id="section-developers">
+        <div class="admin-title-row">
+          <h1 class="admin-title">🏗 Застройщики <span>(${window.AMBER_DATA ? window.AMBER_DATA.developers.length : 0})</span></h1>
+          <button class="btn-admin" onclick="openAddModal('developers')">+ Добавить застройщика</button>
+        </div>
+        <div class="table-container">
+          <table class="admin-table" id="table-developers">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Лого</th>
+                <th>Название</th>
+                <th>Город</th>
+                <th>Опыт (лет)</th>
+                <th>Проекты сдано/активно</th>
+                <th>Проверен</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody><!-- Dynamic --></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ SECTION: Blog ═══ -->
+      <div class="admin-section" id="section-blog">
+        <div class="admin-title-row">
+          <h1 class="admin-title">📰 Статьи блога <span>(${window.AMBER_DATA ? window.AMBER_DATA.blog.length : 0})</span></h1>
+          <button class="btn-admin" onclick="openAddModal('blog')">+ Добавить статью</button>
+        </div>
+        <div class="table-container">
+          <table class="admin-table" id="table-blog">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Заголовок</th>
+                <th>Тег</th>
+                <th>Дата</th>
+                <th>Автор</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody><!-- Dynamic --></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ SECTION: Experts ═══ -->
+      <div class="admin-section" id="section-experts">
+        <div class="admin-title-row">
+          <h1 class="admin-title">👩‍💼 Эксперты <span>(${window.AMBER_DATA ? window.AMBER_DATA.experts.length : 0})</span></h1>
+          <button class="btn-admin" onclick="openAddModal('experts')">+ Добавить эксперта</button>
+        </div>
+        <div class="table-container">
+          <table class="admin-table" id="table-experts">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Аватар</th>
+                <th>Имя эксперта</th>
+                <th>Специализация</th>
+                <th>Опыт</th>
+                <th>Сделки</th>
+                <th>Рейтинг</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody><!-- Dynamic --></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ SECTION: Banners & Slides ═══ -->
+      <div class="admin-section" id="section-banners">
+        <div class="admin-title-row">
+          <h1 class="admin-title">🖼 Баннеры и Слайды</h1>
+        </div>
+        
+        <h2 style="font-size:1.1rem; font-weight:700; color:var(--clr-amber); margin-bottom:12px; margin-top:20px;">Каталожные промо-баннеры</h2>
+        <div class="table-container">
+          <table class="admin-table" id="table-banners">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Иконка</th>
+                <th>Заголовок</th>
+                <th>Текст CTA</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody><!-- Dynamic --></tbody>
+          </table>
+        </div>
+
+        <div class="admin-title-row" style="margin-top: 30px;">
+          <h2 style="font-size:1.1rem; font-weight:700; color:var(--clr-amber); margin: 0;">Слайды главного Hero-баннера</h2>
+          <button class="btn-admin" onclick="openAddModal('heroSlides')">+ Добавить слайд</button>
+        </div>
+        <div class="table-container" style="margin-top: 12px;">
+          <table class="admin-table" id="table-heroslides">
+            <thead>
+              <tr>
+                <th>Индекс</th>
+                <th>Изображение</th>
+                <th>Метка</th>
+                <th>Заголовок</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody><!-- Dynamic --></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ SECTION: Stats ═══ -->
+      <div class="admin-section" id="section-stats">
+        <h1 class="admin-title">📊 Статистика промо-баннеров</h1>
+        
+        <div class="stats-summary-grid">
+          <div class="stats-summary-card">
+            <div class="stats-summary-val" id="total-banner-views">0</div>
+            <div class="stats-summary-lbl">Всего показов</div>
+          </div>
+          <div class="stats-summary-card">
+            <div class="stats-summary-val" id="total-banner-clicks">0</div>
+            <div class="stats-summary-lbl">Всего кликов</div>
+          </div>
+          <div class="stats-summary-card">
+            <div class="stats-summary-val" id="avg-banner-ctr">0.0%</div>
+            <div class="stats-summary-lbl">Средний CTR</div>
+          </div>
+          <div class="stats-summary-card">
+            <div class="stats-summary-val" id="total-banner-revenue">0 ₽</div>
+            <div class="stats-summary-lbl">Доход (эквивалент)</div>
+          </div>
+        </div>
+
+        <h2 style="font-size:1.1rem; font-weight:700; color:var(--clr-amber); margin-bottom:12px;">Детальная аналитика рекламных блоков</h2>
+        <div class="table-container">
+          <table class="admin-table" id="table-stats">
+            <thead>
+              <tr>
+                <th>Тип</th>
+                <th>Заголовок / Рекламодатель</th>
+                <th>Показы</th>
+                <th>Клики</th>
+                <th>CTR</th>
+                <th>Эквивалент дохода</th>
+              </tr>
+            </thead>
+            <tbody><!-- Dynamic --></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ SECTION: Monetization Simulator ═══ -->
+      <div class="admin-section" id="section-monetization">
+        <h1 class="admin-title">💰 Монетизация платформы</h1>
+        
+        <div class="instruction-box">
+          <h3>Варианты получения дохода для Amber Avenue</h3>
+          <p><strong>1. Лидогенерация (Pay Per Lead):</strong> Сбор и продажа горячих заявок (формы подбора, обратные звонки) банкам или застройщикам. Средняя цена: 2 500 ₽ за подтвержденную заявку.</p>
+          <p><strong>2. Приоритетное размещение:</strong> Пакетное продвижение застройщиков (статус «Официальный партнёр», ЖК недели, первые 5 мест в выдаче). Рекомендуемая цена: 15 000 ₽ / месяц за один проект.</p>
+          <p><strong>3. Спонсорские баннеры (CPC модель):</strong> Коммерческая реклама в каталоге, блоге и на картах. Средняя стоимость клика: 150 ₽.</p>
+          <p><strong>4. Реклама локальной инфраструктуры:</strong> Платное закрепление коммерческих объектов (школы, клиники, спа) на картах инфраструктуры конкретных ЖК. 5 000 ₽ / месяц.</p>
+        </div>
+
+        <div class="monetization-grid">
+          <!-- Sliders -->
+          <div class="monetization-card">
+            <h2 class="monetization-subtitle">Симулятор прогноза доходов</h2>
+            <div class="calc-sliders">
+              <!-- Slider 1 -->
+              <div class="slider-item">
+                <div class="slider-header">
+                  <span class="slider-lbl">Трафик на сайте (уникальных посетителей в день)</span>
+                  <span class="slider-val" id="val-traffic">2 000</span>
+                </div>
+                <input class="slider-control" type="range" id="slide-traffic" min="500" max="10000" step="500" value="2000" oninput="updateSimulation()">
+              </div>
+              <!-- Slider 2 -->
+              <div class="slider-item">
+                <div class="slider-header">
+                  <span class="slider-lbl">CTR рекламных баннеров (%)</span>
+                  <span class="slider-val" id="val-ctr">1.5%</span>
+                </div>
+                <input class="slider-control" type="range" id="slide-ctr" min="0.5" max="5.0" step="0.1" value="1.5" oninput="updateSimulation()">
+              </div>
+              <!-- Slider 3 -->
+              <div class="slider-item">
+                <div class="slider-header">
+                  <span class="slider-lbl">Стоимость клика на баннер (CPC, ₽)</span>
+                  <span class="slider-val" id="val-cpc">150 ₽</span>
+                </div>
+                <input class="slider-control" type="range" id="slide-cpc" min="50" max="300" step="10" value="150" oninput="updateSimulation()">
+              </div>
+              <!-- Slider 4 -->
+              <div class="slider-item">
+                <div class="slider-header">
+                  <span class="slider-lbl">Заявок на подбор квартир в месяц</span>
+                  <span class="slider-val" id="val-leads">50</span>
+                </div>
+                <input class="slider-control" type="range" id="slide-leads" min="5" max="300" step="5" value="50" oninput="updateSimulation()">
+              </div>
+              <!-- Slider 5 -->
+              <div class="slider-item">
+                <div class="slider-header">
+                  <span class="slider-lbl">Стоимость одной заявки (Lead Cost, ₽)</span>
+                  <span class="slider-val" id="val-leadprice">2 500 ₽</span>
+                </div>
+                <input class="slider-control" type="range" id="slide-leadprice" min="1000" max="5000" step="100" value="2500" oninput="updateSimulation()">
+              </div>
+              <!-- Slider 6 -->
+              <div class="slider-item">
+                <div class="slider-header">
+                  <span class="slider-lbl">ЖК на приоритетном размещении</span>
+                  <span class="slider-val" id="val-sponsored">3</span>
+                </div>
+                <input class="slider-control" type="range" id="slide-sponsored" min="0" max="8" step="1" value="3" oninput="updateSimulation()">
+              </div>
+              <!-- Slider 7 -->
+              <div class="slider-item">
+                <div class="slider-header">
+                  <span class="slider-lbl">Платные метки инфраструктуры</span>
+                  <span class="slider-val" id="val-infra">5</span>
+                </div>
+                <input class="slider-control" type="range" id="slide-infra" min="0" max="15" step="1" value="5" oninput="updateSimulation()">
+              </div>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div class="monetization-card" style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <h2 class="monetization-subtitle">Оценка выручки (в месяц)</h2>
+              <div class="results-box">
+                <div class="results-row">
+                  <span>Доход от кликов по баннерам (CPC):</span>
+                  <span id="res-banners">0 ₽</span>
+                </div>
+                <div class="results-row">
+                  <span>Доход от лидогенерации (CPL):</span>
+                  <span id="res-leads">0 ₽</span>
+                </div>
+                <div class="results-row">
+                  <span>Приоритетное размещение застройщиков:</span>
+                  <span id="res-sponsored">0 ₽</span>
+                </div>
+                <div class="results-row">
+                  <span>Спонсорство инфраструктуры ЖК:</span>
+                  <span id="res-infra">0 ₽</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="total-revenue-box">
+              <div class="total-revenue-lbl">Общий ежемесячный доход</div>
+              <div class="total-revenue-val" id="total-sim-revenue">0 ₽</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SECTION: Submissions ═══ -->
+      <div class="admin-section" id="section-submissions">
+        <div class="admin-title-row">
+          <h1 class="admin-title">📥 Заявки от застройщиков <span id="submissions-count">(0)</span></h1>
+          <button class="btn-admin-secondary" onclick="clearAllSubmissions()">🗑 Очистить все</button>
+        </div>
+        
+        <div class="instruction-box">
+          <h3>Логирование заявок (Симуляция выгрузки в Yandex.Spreadsheets)</h3>
+          <p>Каждая отправка формы застройщика записывает новую строку в лог. Ниже приведена таблица поступивших заявок. Кликните на любую строку, чтобы открыть симулятор Яндекс.Таблицы и увидеть, как эти данные структурируются по ячейкам.</p>
+        </div>
+
+        <div class="table-container">
+          <table class="admin-table" id="table-submissions">
+            <thead>
+              <tr>
+                <th>Дата отправки</th>
+                <th>Застройщик</th>
+                <th>Email для связи</th>
+                <th>Телефон</th>
+                <th>Изменено ЖК</th>
+                <th>Адрес Webhook</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody><!-- Dynamic --></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ── Yandex Spreadsheet Simulator Modal ── -->
+  <div class="admin-modal" id="submission-modal">
+    <div class="admin-modal-content" style="max-width: 850px; width: 95%;">
+      <div class="admin-modal-header" style="background: #10B981; color: #fff; border-bottom: none;">
+        <h2 style="color: #fff; display: flex; align-items: center; gap: 8px; margin: 0;">💚 Симулятор Яндекс.Таблицы</h2>
+        <button class="modal-close" onclick="closeSubmissionModal()" style="color: #fff;">×</button>
+      </div>
+      <div class="admin-modal-body" style="background: #f3f4f6; padding: 20px; overflow-x: auto;">
+        <div style="font-size: 12px; font-weight: 700; color: #374151; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Файл: <code style="background:#e5e7eb; padding:2px 6px; border-radius:4px;" id="sheet-filename">yandex-sheet-dev.xlsx</code></span>
+          <span style="color:#10B981;">● Синхронизировано по API</span>
+        </div>
+        
+        <!-- Excel Grid -->
+        <div style="border: 1px solid #d1d5db; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+          <table style="width: 100%; border-collapse: collapse; font-family: monospace; font-size: 11px; text-align: left; min-width: 750px;">
+            <thead>
+              <tr style="background: #f9fafb; border-bottom: 1.5px solid #d1d5db; text-align: center;">
+                <th style="width: 40px; padding: 6px; border-right: 1px solid #d1d5db; background: #e5e7eb; color: #4b5563;"></th>
+                <th style="padding: 6px; border-right: 1px solid #d1d5db; color: #4b5563; background: #f3f4f6;">A</th>
+                <th style="padding: 6px; border-right: 1px solid #d1d5db; color: #4b5563; background: #f3f4f6;">B</th>
+                <th style="padding: 6px; border-right: 1px solid #d1d5db; color: #4b5563; background: #f3f4f6;">C</th>
+                <th style="padding: 6px; border-right: 1px solid #d1d5db; color: #4b5563; background: #f3f4f6;">D</th>
+                <th style="padding: 6px; border-right: 1px solid #d1d5db; color: #4b5563; background: #f3f4f6;">E</th>
+                <th style="padding: 6px; border-right: 1px solid #d1d5db; color: #4b5563; background: #f3f4f6;">F</th>
+                <th style="padding: 6px; color: #4b5563; background: #f3f4f6;">G</th>
+              </tr>
+            </thead>
+            <tbody id="sheet-rows-body">
+              <!-- Dynamic -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Raw JSON Preview -->
+        <div style="margin-top: 16px;">
+          <details style="background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px;">
+            <summary style="font-size: 12px; font-weight: 700; cursor: pointer; color: var(--clr-amber); outline: none;">Посмотреть полный JSON вебхука</summary>
+            <pre style="font-size: 11px; margin-top: 10px; background: #1e293b; color: #38bdf8; padding: 12px; border-radius: 6px; overflow: auto; max-height: 250px; text-align: left;" id="sheet-raw-json"></pre>
+          </details>
+        </div>
+      </div>
+      <div class="admin-modal-footer" style="padding: var(--space-lg); border-top: 1px solid var(--clr-border);">
+        <button class="btn-admin" onclick="closeSubmissionModal()">Закрыть симулятор</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Dynamic Save Bar ── -->
+  <div class="save-bar" id="save-bar" style="display: none;">
+    <div class="save-bar-inner">
+      <div>
+        <div class="save-bar-text">⚠️ База данных Amber Avenue изменена в памяти!</div>
+        <div class="save-bar-desc">Для сохранения изменений перезапишите data.js на диске, а затем обновите SPA-бандл.</div>
+      </div>
+      <button class="btn-admin" onclick="saveDatabase()">💾 Сохранить изменения</button>
+    </div>
+  </div>
+
+  <!-- ── Generic Edit/Add Modal ── -->
+  <div class="admin-modal" id="admin-modal">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h2 id="modal-title">Редактировать элемент</h2>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="admin-modal-body" id="modal-body">
+        <!-- Fields generated dynamically by Javascript -->
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn-admin-secondary" onclick="closeModal()">Отмена</button>
+        <button class="btn-admin" id="btn-modal-save" onclick="saveModalData()">💾 Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Centralized Scripts & CMS Logic ── -->
+  <script src="data.js"></script>
+  <script src="properties-data.js"></script>
+  <script>
+    'use strict';
+
+    // Track state of unsaved modifications
+    let hasUnsavedChanges = false;
+    let currentEditingCollection = '';
+    let currentEditingId = null;
+
+    // Sidebar navigation
+    document.querySelectorAll('.admin-nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.admin-nav-item').forEach(i => i.classList.remove('active'));
+        document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+        item.classList.add('active');
+        const sectionId = 'section-' + item.dataset.section;
+        document.getElementById(sectionId)?.classList.add('active');
+
+        // Initial loading logic when tab clicked
+        if (item.dataset.section === 'properties') renderPropertiesTable();
+        if (item.dataset.section === 'developers') renderDevelopersTable();
+        if (item.dataset.section === 'blog') renderBlogTable();
+        if (item.dataset.section === 'experts') renderExpertsTable();
+        if (item.dataset.section === 'banners') { renderBannersTable(); renderHeroSlidesTable(); }
+        if (item.dataset.section === 'stats') renderStatsDashboard();
+        if (item.dataset.section === 'monetization') updateSimulation();
+        if (item.dataset.section === 'submissions') renderSubmissionsTable();
+      });
+    });
+
+    // Toast alerts helper
+    function showAdminToast(msg) {
+      const t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#131d35;border:1px solid #e8a838;border-radius:999px;padding:0.75rem 1.5rem;font-size:0.875rem;color:#edf2f7;box-shadow:var(--shadow-modal);z-index:9999;transition: opacity 0.3s;';
+      document.body.appendChild(t);
+      setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 2500);
+    }
+
+    // Trigger save bar visibility
+    function triggerUnsavedChanges() {
+      hasUnsavedChanges = true;
+      document.getElementById('save-bar').style.display = 'block';
+    }
+
+    // Modal helpers
+    function closeModal() {
+      document.getElementById('admin-modal').classList.remove('active');
+    }
+    
+    // ── Table Renders ──
+
+    // 1. Properties (ЖК)
+    function renderPropertiesTable() {
+      const tbody = document.querySelector('#table-properties tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      const list = window.AMBER_DATA ? window.AMBER_DATA.properties : [];
+      list.forEach(p => {
+        const tr = document.createElement('tr');
+        const badgeClass = p.partner ? 'badge-partner' : 'badge-regular';
+        const badgeText = p.partner ? 'Партнёр' : 'Обычный';
+        tr.innerHTML = `
+          <td><strong>#${p.id}</strong></td>
+          <td>${p.name}</td>
+          <td>${p.developer}</td>
+          <td>${p.location}</td>
+          <td>${p.priceFrom}</td>
+          <td>${p.class}</td>
+          <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+          <td>
+            <button class="btn-action btn-edit" onclick="openEditModal('properties', ${p.id})">Редактировать</button>
+            <button class="btn-action btn-delete" onclick="deleteItem('properties', ${p.id})">Удалить</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 2. Developers
+    function renderDevelopersTable() {
+      const tbody = document.querySelector('#table-developers tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      const list = window.AMBER_DATA ? window.AMBER_DATA.developers : [];
+      list.forEach(d => {
+        const tr = document.createElement('tr');
+        const badgeClass = d.verified ? 'badge-success' : 'badge-regular';
+        const badgeText = d.verified ? 'Да' : 'Нет';
+        tr.innerHTML = `
+          <td><strong>#${d.id}</strong></td>
+          <td><div style="width:28px;height:28px;background:${d.color || '#1A3C6E'};border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;">${d.letter}</div></td>
+          <td>${d.name}</td>
+          <td>${d.city}</td>
+          <td>${d.years}</td>
+          <td>${d.projectsDone} / ${d.projectsActive}</td>
+          <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+          <td>
+            <button class="btn-action btn-edit" onclick="openEditModal('developers', ${d.id})">Редактировать</button>
+            <button class="btn-action btn-delete" onclick="deleteItem('developers', ${d.id})">Удалить</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 3. Blog
+    function renderBlogTable() {
+      const tbody = document.querySelector('#table-blog tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      const list = window.AMBER_DATA ? window.AMBER_DATA.blog : [];
+      list.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>#${item.id}</strong></td>
+          <td>${item.title}</td>
+          <td>${item.tag}</td>
+          <td>${item.date}</td>
+          <td>${item.author}</td>
+          <td>
+            <button class="btn-action btn-edit" onclick="openEditModal('blog', ${item.id})">Редактировать</button>
+            <button class="btn-action btn-delete" onclick="deleteItem('blog', ${item.id})">Удалить</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 4. Experts
+    function renderExpertsTable() {
+      const tbody = document.querySelector('#table-experts tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      const list = window.AMBER_DATA ? window.AMBER_DATA.experts : [];
+      list.forEach(exp => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${exp.id}</strong></td>
+          <td><span style="font-size:1.2rem;">${exp.avatar}</span></td>
+          <td>${exp.name}</td>
+          <td>${exp.role}</td>
+          <td>${exp.experience}</td>
+          <td>${exp.deals}</td>
+          <td>★ ${exp.rating}</td>
+          <td>
+            <button class="btn-action btn-edit" onclick="openEditModal('experts', '${exp.id}')">Редактировать</button>
+            <button class="btn-action btn-delete" onclick="deleteItem('experts', '${exp.id}')">Удалить</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 5. Banners
+    function renderBannersTable() {
+      const tbody = document.querySelector('#table-banners tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      const list = window.AMBER_DATA ? window.AMBER_DATA.banners : [];
+      list.forEach(b => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>#${b.id}</strong></td>
+          <td><span style="font-size:1.2rem;">${b.icon}</span></td>
+          <td>${b.headline}</td>
+          <td>${b.cta}</td>
+          <td>
+            <button class="btn-action btn-edit" onclick="openEditModal('banners', ${b.id})">Редактировать</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 6. HeroSlides
+    function renderHeroSlidesTable() {
+      const tbody = document.querySelector('#table-heroslides tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      const list = window.AMBER_DATA ? window.AMBER_DATA.heroSlides : [];
+      list.forEach((slide, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>#${idx + 1}</strong></td>
+          <td><code>${slide.image}</code></td>
+          <td>${slide.label}</td>
+          <td>${slide.title}</td>
+          <td>
+            <button class="btn-action btn-edit" onclick="openEditModal('heroSlides', ${idx})">Редактировать</button>
+            <button class="btn-action btn-delete" onclick="deleteItem('heroSlides', ${idx})">Удалить</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ── CRUD CRUD Operations ──
+
+    // Delete item
+    function deleteItem(collection, id) {
+      if (!confirm('Вы действительно хотите удалить этот элемент?')) return;
+      
+      const list = window.AMBER_DATA[collection];
+      if (collection === 'heroSlides') {
+        // Hero slides are matched by array index
+        list.splice(id, 1);
+      } else {
+        // Match by id
+        const idx = list.findIndex(item => item.id == id);
+        if (idx !== -1) {
+          list.splice(idx, 1);
+        }
+      }
+      
+      triggerUnsavedChanges();
+      showAdminToast('🗑 Элемент удалён');
+
+      // Refresh current active list view
+      if (collection === 'properties') renderPropertiesTable();
+      if (collection === 'developers') renderDevelopersTable();
+      if (collection === 'blog') renderBlogTable();
+      if (collection === 'experts') renderExpertsTable();
+      if (collection === 'heroSlides') renderHeroSlidesTable();
+    }
+
+    // Open Modal for Addition
+    function openAddModal(collection) {
+      currentEditingCollection = collection;
+      currentEditingId = null; // Adding mode
+      
+      document.getElementById('modal-title').textContent = `Добавить новый элемент`;
+      generateModalFields(collection, null);
+      document.getElementById('admin-modal').classList.add('active');
+    }
+
+    // Open Modal for Edit
+    function openEditModal(collection, id) {
+      currentEditingCollection = collection;
+      currentEditingId = id; // Editing mode
+      
+      document.getElementById('modal-title').textContent = `Редактировать элемент`;
+      
+      let item = null;
+      if (collection === 'heroSlides') {
+        item = window.AMBER_DATA.heroSlides[id];
+      } else {
+        item = window.AMBER_DATA[collection].find(x => x.id == id);
+      }
+      
+      generateModalFields(collection, item);
+      document.getElementById('admin-modal').classList.add('active');
+    }
+
+    // Generate Form Fields dynamically inside Modal
+    function generateModalFields(collection, item) {
+      const container = document.getElementById('modal-body');
+      container.innerHTML = '';
+
+      if (collection === 'properties') {
+        const devsOptions = (window.AMBER_DATA ? window.AMBER_DATA.developers : []).map(d => 
+          `<option value="${d.name}" ${item && item.developer === d.name ? 'selected' : ''}>${d.name}</option>`
+        ).join('');
+
+        const defaultPrices = [
+          { type: 'Студии', from: 'от 4.5 млн ₽', area: '24–33 м²' },
+          { type: '1-комнатные', from: 'от 6.0 млн ₽', area: '32–45 м²' },
+          { type: '2-комнатные', from: 'от 8.0 млн ₽', area: '52–68 м²' }
+        ];
+
+        const defaultChars = {
+          class: 'комфорт', floors: '5–9 этажей', corpus: '2 корпуса', apartments: '240',
+          ceiling: '2.7 м', apArea: '24–80 м²', finishing: 'чистовая', heating: 'автономное'
+        };
+
+        container.innerHTML = `
+          <div class="admin-form-grid">
+            <div class="admin-field">
+              <label class="admin-label">Название ЖК</label>
+              <input class="admin-input" id="prop-name" type="text" value="${item ? item.name : ''}" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Застройщик</label>
+              <select class="admin-select" id="prop-developer">${devsOptions}</select>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Локация (Город)</label>
+              <input class="admin-input" id="prop-location" type="text" value="${item ? item.location : ''}" placeholder="Зеленоградск" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Расстояние до моря / центра</label>
+              <input class="admin-input" id="prop-distance" type="text" value="${item ? item.distance : ''}" placeholder="10 мин до моря пешком">
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Адрес</label>
+              <input class="admin-input" id="prop-address" type="text" value="${item ? item.address : ''}" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Цена от</label>
+              <input class="admin-input" id="prop-priceFrom" type="text" value="${item ? item.priceFrom : ''}" placeholder="4.5 млн ₽" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Диапазон цен</label>
+              <input class="admin-input" id="prop-priceRange" type="text" value="${item ? item.priceRange : ''}" placeholder="от 4.5 до 12.0 млн ₽">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Срок сдачи</label>
+              <input class="admin-input" id="prop-delivery" type="text" value="${item ? item.delivery : ''}" placeholder="4 кв. 2026" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Класс ЖК</label>
+              <select class="admin-select" id="prop-class">
+                <option value="комфорт-класс" ${item && item.class === 'комфорт-класс' ? 'selected' : ''}>комфорт-класс</option>
+                <option value="бизнес-класс" ${item && item.class === 'бизнес-класс' ? 'selected' : ''}>бизнес-класс</option>
+                <option value="премиум" ${item && item.class === 'премиум' ? 'selected' : ''}>премиум</option>
+                <option value="стандарт-класс" ${item && item.class === 'стандарт-класс' ? 'selected' : ''}>стандарт-класс</option>
+              </select>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Рейтинг (0 - 5)</label>
+              <input class="admin-input" id="prop-rating" type="number" step="0.1" min="0" max="5" value="${item ? item.rating : '4.5'}">
+            </div>
+            <div class="admin-field">
+              <div class="admin-checkbox-row">
+                <input class="admin-checkbox" id="prop-partner" type="checkbox" ${item && item.partner ? 'checked' : ''}>
+                <label class="admin-label" style="cursor:pointer;" for="prop-partner">Официальный партнёр</label>
+              </div>
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Изображение (Ссылка или имя файла)</label>
+              <input class="admin-input" id="prop-imgSrc" type="text" value="${item ? item.imgSrc : 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80'}">
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Теги (Через запятую)</label>
+              <input class="admin-input" id="prop-tags" type="text" value="${item ? item.tags.join(', ') : 'комфорт-класс, семейная ипотека'}" placeholder="тег 1, тег 2">
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Описание ЖК</label>
+              <textarea class="admin-textarea" id="prop-description">${item ? item.description : ''}</textarea>
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Планировки и Цены (JSON массив)</label>
+              <textarea class="admin-textarea" id="prop-prices" style="font-family:monospace; font-size:0.75rem;">${item ? JSON.stringify(item.prices, null, 2) : JSON.stringify(defaultPrices, null, 2)}</textarea>
+              <div class="field-hint">Массив с типами квартир, ценами и площадями.</div>
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Характеристики (JSON объект)</label>
+              <textarea class="admin-textarea" id="prop-chars" style="font-family:monospace; font-size:0.75rem;">${item ? JSON.stringify(item.chars, null, 2) : JSON.stringify(defaultChars, null, 2)}</textarea>
+              <div class="field-hint">Объект с подробными характеристиками ЖК.</div>
+            </div>
+          </div>
+        `;
+      } 
+      
+      else if (collection === 'developers') {
+        const defaultPromo = { type: 'panel', badge: '🔥 Акция', discount: '−10%', title: 'Скидка на квартиры', text: 'Действует до конца месяца' };
+
+        container.innerHTML = `
+          <div class="admin-form-grid">
+            <div class="admin-field">
+              <label class="admin-label">Название застройщика</label>
+              <input class="admin-input" id="dev-name" type="text" value="${item ? item.name : ''}" placeholder="ГК «МПК»" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Полное наименование</label>
+              <input class="admin-input" id="dev-fullName" type="text" value="${item ? item.fullName : ''}" placeholder="Группа компаний «МПК»">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Буква-логотип (1 символ)</label>
+              <input class="admin-input" id="dev-letter" type="text" maxlength="1" value="${item ? item.letter : ''}" placeholder="М" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Цвет логотипа (HEX)</label>
+              <input class="admin-input" id="dev-color" type="color" value="${item ? item.color : '#1B3C6E'}">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Опыт работы (лет)</label>
+              <input class="admin-input" id="dev-years" type="number" value="${item ? item.years : '5'}">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Рейтинг (0 - 5)</label>
+              <input class="admin-input" id="dev-rating" type="number" step="0.1" min="0" max="5" value="${item ? item.rating : '4.0'}">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Сдано проектов</label>
+              <input class="admin-input" id="dev-projectsDone" type="number" value="${item ? item.projectsDone : '3'}">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Строится проектов</label>
+              <input class="admin-input" id="dev-projectsActive" type="number" value="${item ? item.projectsActive : '1'}">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Всего квартир сдали</label>
+              <input class="admin-input" id="dev-totalApts" type="text" value="${item ? item.totalApts : '500+'}" placeholder="500+">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Сдано кв. метров</label>
+              <input class="admin-input" id="dev-totalSqm" type="text" value="${item ? item.totalSqm : '35 тыс. м²'}" placeholder="35 тыс. м²">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Главный офис (город)</label>
+              <input class="admin-input" id="dev-city" type="text" value="${item ? item.city : 'Калининград'}" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Телефон</label>
+              <input class="admin-input" id="dev-phone" type="tel" value="${item ? item.phone : ''}">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Сайт компании</label>
+              <input class="admin-input" id="dev-website" type="text" value="${item ? item.website : ''}" placeholder="mpk.ru">
+            </div>
+            <div class="admin-field">
+              <div class="admin-checkbox-row">
+                <input class="admin-checkbox" id="dev-verified" type="checkbox" ${item && item.verified ? 'checked' : ''}>
+                <label class="admin-label" style="cursor:pointer;" for="dev-verified">Проверенный застройщик</label>
+              </div>
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Адрес офиса</label>
+              <input class="admin-input" id="dev-address" type="text" value="${item ? item.address : ''}">
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Теги (Через запятую)</label>
+              <input class="admin-input" id="dev-tags" type="text" value="${item ? item.tags.join(', ') : 'комфорт, у моря'}" placeholder="тег 1, тег 2">
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Описание застройщика</label>
+              <textarea class="admin-textarea" id="dev-description">${item ? item.description : ''}</textarea>
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Спецпредложение / Акция (Опционально, JSON объект)</label>
+              <textarea class="admin-textarea" id="dev-promo" style="font-family:monospace; font-size:0.75rem;">${item && item.promo ? JSON.stringify(item.promo, null, 2) : ''}</textarea>
+              <div class="field-hint">Оставьте пустым, если акций нет. Либо вставьте объект вроде: ${JSON.stringify(defaultPromo)}</div>
+            </div>
+          </div>
+        `;
+      } 
+      
+      else if (collection === 'blog') {
+        container.innerHTML = `
+          <div class="admin-form-grid">
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Заголовок статьи</label>
+              <input class="admin-input" id="blog-title" type="text" value="${item ? item.title : ''}" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Тег (например, 🌿 Аналитика)</label>
+              <input class="admin-input" id="blog-tag" type="text" value="${item ? item.tag : '🌿 Аналитика'}" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Автор статьи</label>
+              <input class="admin-input" id="blog-author" type="text" value="${item ? item.author : 'Администратор'}" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Дата публикации</label>
+              <input class="admin-input" id="blog-date" type="text" value="${item ? item.date : new Date().toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'}) + ' г.'}" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Изображение (Имя файла)</label>
+              <input class="admin-input" id="blog-imgSrc" type="text" value="${item ? item.imgSrc : 'kaliningrad-garden.png'}" required>
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Краткое описание (превью)</label>
+              <textarea class="admin-textarea" id="blog-excerpt" required>${item ? item.excerpt : ''}</textarea>
+            </div>
+          </div>
+        `;
+      } 
+      
+      else if (collection === 'experts') {
+        container.innerHTML = `
+          <div class="admin-form-grid">
+            <div class="admin-field">
+              <label class="admin-label">Уникальный ID эксперта (латиницей)</label>
+              <input class="admin-input" id="exp-id" type="text" value="${item ? item.id : ''}" placeholder="expert-ivanov" ${item ? 'disabled' : ''} required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Имя эксперта</label>
+              <input class="admin-input" id="exp-name" type="text" value="${item ? item.name : ''}" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Эмодзи-аватар</label>
+              <input class="admin-input" id="exp-avatar" type="text" value="${item ? item.avatar : '👩‍💼'}" placeholder="👩‍💼" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Роль / Специализация</label>
+              <input class="admin-input" id="exp-role" type="text" value="${item ? item.role : ''}" placeholder="Ведущий аналитик" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Опыт работы</label>
+              <input class="admin-input" id="exp-experience" type="text" value="${item ? item.experience : '5 лет опыта'}" placeholder="5 лет опыта" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Количество сделок</label>
+              <input class="admin-input" id="exp-deals" type="text" value="${item ? item.deals : '100+ сделок'}" placeholder="100+ сделок" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Рейтинг (0 - 5)</label>
+              <input class="admin-input" id="exp-rating" type="text" value="${item ? item.rating : '4.9'}" placeholder="4.9" required>
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Биография и описание опыта</label>
+              <textarea class="admin-textarea" id="exp-bio" required>${item ? item.bio : ''}</textarea>
+            </div>
+          </div>
+        `;
+      } 
+      
+      else if (collection === 'banners') {
+        container.innerHTML = `
+          <div class="admin-form-grid">
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Заголовок баннера</label>
+              <input class="admin-input" id="ban-headline" type="text" value="${item ? item.headline : ''}" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Иконка (эмодзи)</label>
+              <input class="admin-input" id="ban-icon" type="text" value="${item ? item.icon : '🏠'}" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Текст кнопки CTA</label>
+              <input class="admin-input" id="ban-cta" type="text" value="${item ? item.cta : 'Подробнее'}" required>
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Подзаголовок / Описание</label>
+              <textarea class="admin-textarea" id="ban-sub" required>${item ? item.sub : ''}</textarea>
+            </div>
+          </div>
+        `;
+      } 
+      
+      else if (collection === 'heroSlides') {
+        container.innerHTML = `
+          <div class="admin-form-grid">
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Заголовок слайда</label>
+              <input class="admin-input" id="slide-title" type="text" value="${item ? item.title : ''}" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Надпись-метка (Реклама / Партнерский)</label>
+              <input class="admin-input" id="slide-label" type="text" value="${item ? item.label : 'Реклама'}" required>
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Изображение (Имя файла)</label>
+              <input class="admin-input" id="slide-image" type="text" value="${item ? item.image : 'zhk-hero.png'}" required>
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Ссылка перехода</label>
+              <input class="admin-input" id="slide-link" type="text" value="${item ? item.link : '#zhk'}" required>
+            </div>
+            <div class="admin-field-full admin-field">
+              <label class="admin-label">Описание слайда</label>
+              <textarea class="admin-textarea" id="slide-desc" required>${item ? item.desc : ''}</textarea>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Save Modal Data back to local memory array
+    function saveModalData() {
+      const col = currentEditingCollection;
+      const id = currentEditingId;
+      const isAdding = (id === null);
+
+      try {
+        if (col === 'properties') {
+          const name = document.getElementById('prop-name').value;
+          const developer = document.getElementById('prop-developer').value;
+          const location = document.getElementById('prop-location').value;
+          const distance = document.getElementById('prop-distance').value;
+          const address = document.getElementById('prop-address').value;
+          const priceFrom = document.getElementById('prop-priceFrom').value;
+          const priceRange = document.getElementById('prop-priceRange').value;
+          const delivery = document.getElementById('prop-delivery').value;
+          const className = document.getElementById('prop-class').value;
+          const rating = parseFloat(document.getElementById('prop-rating').value) || 4.5;
+          const partner = document.getElementById('prop-partner').checked;
+          const imgSrc = document.getElementById('prop-imgSrc').value;
+          const tagsStr = document.getElementById('prop-tags').value;
+          const description = document.getElementById('prop-description').value;
+
+          // Parse JSON lists safely
+          const prices = JSON.parse(document.getElementById('prop-prices').value);
+          const chars = JSON.parse(document.getElementById('prop-chars').value);
+          const tags = tagsStr.split(',').map(t => t.trim()).filter(Boolean);
+
+          const newItem = {
+            id: isAdding ? (window.AMBER_DATA.properties.reduce((max, p) => p.id > max ? p.id : max, 0) + 1) : id,
+            name, partner, developer, location, distance, address, rating, reviews: isAdding ? 0 : window.AMBER_DATA.properties.find(x=>x.id==id).reviews,
+            priceFrom, pricePerSqm: isAdding ? '120-200 тыс. ₽/м²' : window.AMBER_DATA.properties.find(x=>x.id==id).pricePerSqm, priceRange, delivery, class: className,
+            tags, description, photos: isAdding ? 10 : window.AMBER_DATA.properties.find(x=>x.id==id).photos, imgSrc, 
+            thumbs: isAdding ? [imgSrc] : window.AMBER_DATA.properties.find(x=>x.id==id).thumbs, prices, chars
+          };
+
+          if (isAdding) {
+            window.AMBER_DATA.properties.push(newItem);
+          } else {
+            const idx = window.AMBER_DATA.properties.findIndex(x => x.id == id);
+            window.AMBER_DATA.properties[idx] = newItem;
+          }
+          renderPropertiesTable();
+        } 
+        
+        else if (col === 'developers') {
+          const name = document.getElementById('dev-name').value;
+          const fullName = document.getElementById('dev-fullName').value;
+          const letter = document.getElementById('dev-letter').value;
+          const color = document.getElementById('dev-color').value;
+          const years = parseInt(document.getElementById('dev-years').value) || 5;
+          const rating = parseFloat(document.getElementById('dev-rating').value) || 4.0;
+          const projectsDone = parseInt(document.getElementById('dev-projectsDone').value) || 0;
+          const projectsActive = parseInt(document.getElementById('dev-projectsActive').value) || 0;
+          const totalApts = document.getElementById('dev-totalApts').value;
+          const totalSqm = document.getElementById('dev-totalSqm').value;
+          const city = document.getElementById('dev-city').value;
+          const address = document.getElementById('dev-address').value;
+          const phone = document.getElementById('dev-phone').value;
+          const website = document.getElementById('dev-website').value;
+          const verified = document.getElementById('dev-verified').checked;
+          const description = document.getElementById('dev-description').value;
+          const tagsStr = document.getElementById('dev-tags').value;
+          const tags = tagsStr.split(',').map(t => t.trim()).filter(Boolean);
+
+          let promo = null;
+          const promoRaw = document.getElementById('dev-promo').value.trim();
+          if (promoRaw) {
+            promo = JSON.parse(promoRaw);
+          }
+
+          const newItem = {
+            id: isAdding ? (window.AMBER_DATA.developers.reduce((max, d) => d.id > max ? d.id : max, 0) + 1) : id,
+            name, fullName, letter, verified, rating, reviews: isAdding ? 0 : window.AMBER_DATA.developers.find(x=>x.id==id).reviews,
+            years, projectsDone, projectsActive, totalApts, totalSqm, city, address, phone, website, description, tags, color,
+            projects: isAdding ? [] : window.AMBER_DATA.developers.find(x=>x.id==id).projects
+          };
+          if (promo) newItem.promo = promo;
+
+          if (isAdding) {
+            window.AMBER_DATA.developers.push(newItem);
+          } else {
+            const idx = window.AMBER_DATA.developers.findIndex(x => x.id == id);
+            window.AMBER_DATA.developers[idx] = newItem;
+          }
+          renderDevelopersTable();
+        } 
+        
+        else if (col === 'blog') {
+          const title = document.getElementById('blog-title').value;
+          const tag = document.getElementById('blog-tag').value;
+          const author = document.getElementById('blog-author').value;
+          const date = document.getElementById('blog-date').value;
+          const imgSrc = document.getElementById('blog-imgSrc').value;
+          const excerpt = document.getElementById('blog-excerpt').value;
+
+          const newItem = {
+            id: isAdding ? (window.AMBER_DATA.blog.reduce((max, b) => b.id > max ? b.id : max, 0) + 1) : id,
+            title, tag, tagBg: '#EFF6FF', tagColor: '#1E40AF', excerpt, imgSrc, date, viewsCount: isAdding ? '0' : window.AMBER_DATA.blog.find(x=>x.id==id).viewsCount, author
+          };
+
+          if (isAdding) {
+            window.AMBER_DATA.blog.push(newItem);
+          } else {
+            const idx = window.AMBER_DATA.blog.findIndex(x => x.id == id);
+            window.AMBER_DATA.blog[idx] = newItem;
+          }
+          renderBlogTable();
+        } 
+        
+        else if (col === 'experts') {
+          const expId = document.getElementById('exp-id').value.trim();
+          const name = document.getElementById('exp-name').value;
+          const avatar = document.getElementById('exp-avatar').value;
+          const role = document.getElementById('exp-role').value;
+          const experience = document.getElementById('exp-experience').value;
+          const deals = document.getElementById('exp-deals').value;
+          const rating = document.getElementById('exp-rating').value;
+          const bio = document.getElementById('exp-bio').value;
+
+          const newItem = { id: isAdding ? expId : id, name, avatar, role, experience, deals, rating, bio };
+
+          if (isAdding) {
+            window.AMBER_DATA.experts.push(newItem);
+          } else {
+            const idx = window.AMBER_DATA.experts.findIndex(x => x.id == id);
+            window.AMBER_DATA.experts[idx] = newItem;
+          }
+          renderExpertsTable();
+        } 
+        
+        else if (col === 'banners') {
+          const headline = document.getElementById('ban-headline').value;
+          const icon = document.getElementById('ban-icon').value;
+          const cta = document.getElementById('ban-cta').value;
+          const sub = document.getElementById('ban-sub').value;
+
+          const newItem = {
+            id, icon, headline, sub, cta,
+            stats: window.AMBER_DATA.banners.find(x => x.id == id).stats,
+            views: window.AMBER_DATA.banners.find(x => x.id == id).views,
+            clicks: window.AMBER_DATA.banners.find(x => x.id == id).clicks
+          };
+
+          const idx = window.AMBER_DATA.banners.findIndex(x => x.id == id);
+          window.AMBER_DATA.banners[idx] = newItem;
+          renderBannersTable();
+        } 
+        
+        else if (col === 'heroSlides') {
+          const title = document.getElementById('slide-title').value;
+          const label = document.getElementById('slide-label').value;
+          const image = document.getElementById('slide-image').value;
+          const link = document.getElementById('slide-link').value;
+          const desc = document.getElementById('slide-desc').value;
+
+          const newItem = {
+            image, label, title, desc, link,
+            views: isAdding ? 0 : window.AMBER_DATA.heroSlides[id].views,
+            clicks: isAdding ? 0 : window.AMBER_DATA.heroSlides[id].clicks
+          };
+
+          if (isAdding) {
+            window.AMBER_DATA.heroSlides.push(newItem);
+          } else {
+            window.AMBER_DATA.heroSlides[id] = newItem;
+          }
+          renderHeroSlidesTable();
+        }
+
+        closeModal();
+        triggerUnsavedChanges();
+        showAdminToast(isAdding ? '✅ Элемент успешно добавлен!' : '✅ Изменения сохранены в памяти');
+
+      } catch (err) {
+        alert('Ошибка валидации данных. Проверьте правильность JSON структуры.\nДетали: ' + err.message);
+      }
+    }
+
+    // ── File Save Handler ──
+    async function saveDatabase() {
+      try {
+        // Create full JS file contents
+        const jsCode = `'use strict';\n\n// Central database for Amber Avenue\nconst AMBER_DATA = ${JSON.stringify(window.AMBER_DATA, null, 2)};\n\n// Export dynamically to window for both SPA bundle and static files\nif (typeof window !== 'undefined') {\n  window.AMBER_DATA = AMBER_DATA;\n}\nif (typeof module !== 'undefined' && module.exports) {\n  module.exports = AMBER_DATA;\n}\n`;
+
+        // Chrome/Edge/Safari FS Access API
+        if (window.showSaveFilePicker) {
+          const options = {
+            suggestedName: 'data.js',
+            types: [{
+              description: 'JavaScript File',
+              accept: { 'text/javascript': ['.js'] },
+            }],
+          };
+          const handle = await window.showSaveFilePicker(options);
+          const writable = await handle.createWritable();
+          await writable.write(jsCode);
+          await writable.close();
+
+          hasUnsavedChanges = false;
+          document.getElementById('save-bar').style.display = 'none';
+          showAdminToast('💾 База данных data.js успешно обновлена на диске!');
+        } else {
+          // Standard download fallback
+          const blob = new Blob([jsCode], { type: 'text/javascript' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'data.js';
+          a.click();
+          URL.revokeObjectURL(url);
+
+          hasUnsavedChanges = false;
+          document.getElementById('save-bar').style.display = 'none';
+          showAdminToast('📥 Файл data.js скачан! Пожалуйста, перетащите его в корень проекта.');
+        }
+      } catch (err) {
+        console.error(err);
+        showAdminToast('❌ Ошибка записи файла: ' + err.message);
+      }
+    }
+
+    // ── Render Statistics Dashboard ──
+    function renderStatsDashboard() {
+      const db = window.AMBER_DATA || { banners: [], heroSlides: [] };
+      const tbody = document.querySelector('#table-stats tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      let totalViews = 0;
+      let totalClicks = 0;
+
+      // Group 1: Catalog Banners
+      db.banners.forEach(b => {
+        const views = b.views || 0;
+        const clicks = b.clicks || 0;
+        totalViews += views;
+        totalClicks += clicks;
+        const ctr = views > 0 ? ((clicks / views) * 100).toFixed(1) + '%' : '0.0%';
+        const revenue = (clicks * 150).toLocaleString('ru-RU') + ' ₽';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="badge badge-partner">В каталоге</span></td>
+          <td><strong>${b.headline}</strong></td>
+          <td>${views}</td>
+          <td>${clicks}</td>
+          <td>${ctr}</td>
+          <td><strong style="color:var(--clr-green);">${revenue}</strong></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Group 2: Hero Slides
+      db.heroSlides.forEach(slide => {
+        const views = slide.views || 0;
+        const clicks = slide.clicks || 0;
+        totalViews += views;
+        totalClicks += clicks;
+        const ctr = views > 0 ? ((clicks / views) * 100).toFixed(1) + '%' : '0.0%';
+        const revenue = (clicks * 150).toLocaleString('ru-RU') + ' ₽';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="badge badge-success">Hero Слайд</span></td>
+          <td><strong>${slide.title}</strong> <span style="font-size:0.7rem;color:var(--clr-text-dim);">(${slide.label})</span></td>
+          <td>${views}</td>
+          <td>${clicks}</td>
+          <td>${ctr}</td>
+          <td><strong style="color:var(--clr-green);">${revenue}</strong></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Update summary cards
+      document.getElementById('total-banner-views').textContent = totalViews.toLocaleString('ru-RU');
+      document.getElementById('total-banner-clicks').textContent = totalClicks.toLocaleString('ru-RU');
+      const avgCtr = totalViews > 0 ? ((totalClicks / totalViews) * 100).toFixed(1) + '%' : '0.0%';
+      document.getElementById('avg-banner-ctr').textContent = avgCtr;
+      document.getElementById('total-banner-revenue').textContent = (totalClicks * 150).toLocaleString('ru-RU') + ' ₽';
+    }
+
+    // ── Monetization Simulation Calculator ──
+    function updateSimulation() {
+      const traffic = parseInt(document.getElementById('slide-traffic').value);
+      const ctr = parseFloat(document.getElementById('slide-ctr').value);
+      const cpc = parseInt(document.getElementById('slide-cpc').value);
+      const leads = parseInt(document.getElementById('slide-leads').value);
+      const leadPrice = parseInt(document.getElementById('slide-leadprice').value);
+      const sponsored = parseInt(document.getElementById('slide-sponsored').value);
+      const infra = parseInt(document.getElementById('slide-infra').value);
+
+      // Set slider labels
+      document.getElementById('val-traffic').textContent = traffic.toLocaleString('ru-RU');
+      document.getElementById('val-ctr').textContent = ctr.toFixed(1) + '%';
+      document.getElementById('val-cpc').textContent = cpc + ' ₽';
+      document.getElementById('val-leads').textContent = leads;
+      document.getElementById('val-leadprice').textContent = leadPrice.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('val-sponsored').textContent = sponsored;
+      document.getElementById('val-infra').textContent = infra;
+
+      // Calculate revenue streams
+      const bannerClicks = Math.round(traffic * 30 * (ctr / 100));
+      const bannerRevenue = bannerClicks * cpc;
+      const leadRevenue = leads * leadPrice;
+      const sponsoredRevenue = sponsored * 15000;
+      const infraRevenue = infra * 5000;
+      const totalRevenue = bannerRevenue + leadRevenue + sponsoredRevenue + infraRevenue;
+
+      // Render details
+      document.getElementById('res-banners').textContent = bannerRevenue.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('res-leads').textContent = leadRevenue.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('res-sponsored').textContent = sponsoredRevenue.toLocaleString('ru-RU') + ' ₽';
+      document.getElementById('res-infra').textContent = infraRevenue.toLocaleString('ru-RU') + ' ₽';
+      
+      // Total sum
+      document.getElementById('total-sim-revenue').textContent = totalRevenue.toLocaleString('ru-RU') + ' ₽';
+    }
+
+    // ── Submissions Table Renderers & Yandex Spreadsheet Simulation ──
+    window.renderSubmissionsTable = function() {
+      const tbody = document.querySelector('#table-submissions tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const submissions = JSON.parse(localStorage.getItem('dev_submissions') || '[]');
+      document.getElementById('submissions-count').textContent = `(${submissions.length})`;
+
+      if (submissions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--clr-text-dim);padding:24px 0;">Заявок пока нет. Заполните форму в кабинете застройщика, чтобы они появились здесь.</td></tr>';
+        return;
+      }
+
+      submissions.forEach(sub => {
+        const tr = document.createElement('tr');
+        const count = sub.properties ? sub.properties.length : 0;
+        tr.innerHTML = `
+          <td><strong>${sub.timestamp}</strong></td>
+          <td>${sub.devName}</td>
+          <td>${sub.email}</td>
+          <td>${sub.phone}</td>
+          <td><span class="badge badge-partner">${count} ЖК</span></td>
+          <td><code style="font-size:0.75rem;color:var(--clr-amber);">${sub.webhookUrl ? sub.webhookUrl.substring(0, 32) + '...' : 'нет'}</code></td>
+          <td>
+            <button class="btn-action btn-edit" onclick="showSubmissionSpreadsheet(${sub.id})">📊 Посмотреть в таблице</button>
+            <button class="btn-action btn-delete" onclick="deleteSubmission(${sub.id})">✕ Удалить</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    };
+
+    window.deleteSubmission = function(id) {
+      if (confirm('Вы уверены, что хотите удалить эту заявку?')) {
+        let submissions = JSON.parse(localStorage.getItem('dev_submissions') || '[]');
+        submissions = submissions.filter(s => s.id !== id);
+        localStorage.setItem('dev_submissions', JSON.stringify(submissions));
+        renderSubmissionsTable();
+      }
+    };
+
+    window.clearAllSubmissions = function() {
+      if (confirm('Вы уверены, что хотите полностью очистить историю заявок застройщиков?')) {
+        localStorage.removeItem('dev_submissions');
+        renderSubmissionsTable();
+      }
+    };
+
+    window.showSubmissionSpreadsheet = function(id) {
+      const submissions = JSON.parse(localStorage.getItem('dev_submissions') || '[]');
+      const sub = submissions.find(s => s.id === id);
+      if (!sub) return;
+
+      document.getElementById('sheet-filename').textContent = `yandex-sheet-dev-${sub.devId || 'new'}.xlsx`;
+      document.getElementById('sheet-raw-json').textContent = JSON.stringify(sub, null, 2);
+
+      const rowsBody = document.getElementById('sheet-rows-body');
+      if (!rowsBody) return;
+      rowsBody.innerHTML = '';
+
+      function addGridRow(rowNum, cells) {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid #e5e7eb';
+        
+        let html = `<td style="padding: 6px; border-right: 1px solid #d1d5db; background: #e5e7eb; color: #4b5563; font-weight: bold; text-align: center; width: 40px;">${rowNum}</td>`;
+        for (let i = 0; i < 7; i++) {
+          const val = cells[i] !== undefined ? cells[i] : '';
+          const isHeader = (rowNum === 1 || rowNum === 4);
+          html += `<td style="padding: 8px 6px; border-right: 1px solid #d1d5db; color: #111827; background: ${isHeader ? '#f3f4f6' : '#fff'}; font-weight: ${isHeader ? 'bold' : 'normal'}; font-size: 11px;">${val}</td>`;
+        }
+        tr.innerHTML = html;
+        rowsBody.appendChild(tr);
+      }
+
+      // Row 1: Headers for developer profile
+      addGridRow(1, ['Название компании', 'Юр. лицо', 'Email', 'Телефон', 'Сайт', 'Стаж (лет)', 'Адрес']);
+      // Row 2: Values for developer
+      addGridRow(2, [sub.devName, sub.fullName, sub.email, sub.phone, sub.website, sub.years, sub.address]);
+      
+      // Row 3: Separator
+      addGridRow(3, ['[СПИСОК ЖИЛЫХ КОМПЛЕКСОВ]', '---', '---', '---', '---', '---', '---']);
+      
+      // Row 4: Headers for properties
+      addGridRow(4, ['Название ЖК', 'Город / Район', 'Адрес ЖК', 'Срок сдачи', 'Мин. цена', 'До моря', 'Цены']);
+      
+      // Row 5+: Properties values
+      let rIdx = 5;
+      if (sub.properties && sub.properties.length > 0) {
+        sub.properties.forEach(p => {
+          addGridRow(rIdx++, [
+            p.name,
+            p.location,
+            p.address,
+            p.delivery,
+            p.priceFrom,
+            p.walkToSea || 'н/д',
+            p.prices ? p.prices.map(pr => `${pr.type} (${pr.from})`).join(', ') : 'нет'
+          ]);
+        });
+      } else {
+        addGridRow(rIdx++, ['Связанных ЖК не обнаружено', '', '', '', '', '', '']);
+      }
+
+      document.getElementById('submission-modal').classList.add('active');
+    };
+
+    window.closeSubmissionModal = function() {
+      document.getElementById('submission-modal').classList.remove('active');
+    };
+
+    // Initialize the properties view on loading the script
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPropertiesTable();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>О проекте — Amber Avenue</title>
+  <meta name="description" content="Amber Avenue — независимый портал о недвижимости в Калининградской области. Проверенная информация, рейтинги и экосистема сервисов." />
+  <link rel="stylesheet" href="style.css" />
+  <script src="data.js"></script>
+  <script src="properties-data.js"></script>
+  <script src="menu.js"></script>
+  <link rel="icon" href="logo.png" type="image/png" />
+  <style>
+    /* ── Local Styles for About Page (Matching Reference exactly) ── */
+    :root {
+      --color-primary: #1B3C6E;
+      --color-primary-dark: #122a52;
+      --color-accent: #F5A623;
+      --color-text-secondary: #4B5563;
+      --color-border: #E5E7EB;
+      --radius-lg: 14px;
+      --radius-xl: 20px;
+    }
+
+    body {
+      background-color: #ffffff;
+    }
+
+    .about-main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* ── SECTION 1: HERO ── */
+    .hero-section {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 50px;
+      align-items: center;
+      margin-bottom: 60px;
+    }
+
+    @media (max-width: 968px) {
+      .hero-section {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-tag-gold {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .hero-title {
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--color-primary);
+      line-height: 1.15;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .orange-divider-line {
+      width: 60px;
+      height: 4px;
+      background: var(--color-accent);
+      margin-bottom: 24px;
+      border-radius: 2px;
+    }
+
+    .hero-text {
+      font-size: 14.5px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .hero-text p {
+      margin-bottom: 16px;
+    }
+    .hero-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .btn-hero-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: var(--color-primary);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 8px;
+      text-decoration: none;
+      width: fit-content;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 4px 12px rgba(27,60,110,0.15);
+    }
+
+    .btn-hero-more:hover {
+      background-color: var(--color-primary-dark);
+      transform: translateY(-1px);
+    }
+
+    /* Hero Right with Image & Glass Badge */
+    .hero-right-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .hero-image-container {
+      position: relative;
+      width: 90%;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 12px 36px rgba(27,60,110,0.12);
+      aspect-ratio: 1 / 1;
+    }
+
+    .hero-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1;
+    }
+
+    .hero-slide.active {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    /* Glass Card overlay */
+    .glass-badge-overlay {
+      position: absolute;
+      top: 30px;
+      left: -10px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 10px 25px rgba(27, 60, 110, 0.12);
+      max-width: 280px;
+      z-index: 5;
+    }
+
+    .glass-badge-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #FFF8EC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-accent);
+      flex-shrink: 0;
+    }
+
+    .glass-badge-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .glass-badge-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 2px;
+    }
+
+    .glass-badge-desc {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      line-height: 1.3;
+    }
+
+    /* Vertical slider dots */
+    .vertical-slider-indicator {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-left: 20px;
+      align-items: center;
+    }
+
+    .indicator-line {
+      width: 1px;
+      height: 120px;
+      background: #E5E7EB;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .indicator-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #CBD5E1;
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .indicator-dot.active {
+      background: var(--color-accent);
+      box-shadow: 0 0 0 4px rgba(245, 166, 35, 0.2);
+    }
+
+    .indicator-dot::after {
+      content: attr(data-num);
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--color-muted);
+    }
+    .indicator-dot.active::after {
+      color: var(--color-primary);
+    }
+
+    /* ── SECTION 2: THREE PILLARS ── */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 80px;
+    }
+
+    @media (max-width: 768px) {
+      .pillars-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pillar-card {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(27, 60, 110, 0.04);
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pillar-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(27, 60, 110, 0.07);
+    }
+
+    .pillar-icon-container {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #EEF3FB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .pillar-info {
+      flex: 1;
+    }
+
+    .pillar-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+    }
+
+    .pillar-desc {
+      font-size: 12.5px;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ── SECTION 3: LIFECYCLE ── */
+    .lifecycle-section {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 60px;
+      align-items: start;
+      margin-bottom: 80px;
+      padding-top: 20px;
+    }
+
+    @media (max-width: 968px) {
+      .lifecycle-section {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+
+    .lifecycle-left {
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 90px;
+    }
+
+    .lifecycle-title {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--color-primary);
+      line-height: 1.2;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .lifecycle-intro {
+      font-size: 14.5px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .lifecycle-illustration-box {
+      width: 100%;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--color-border);
+      aspect-ratio: 16 / 13;
+    }
+
+    .lifecycle-illustration-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Steps grid */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 580px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: #F9FAFB;
+      border: 1px solid #F3F4F6;
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .step-card:hover {
+      background-color: #ffffff;
+      border-color: rgba(27, 60, 110, 0.15);
+      box-shadow: 0 4px 16px rgba(27, 60, 110, 0.03);
+    }
+
+    .step-num-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .step-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 6px;
+      z-index: 2;
+    }
+
+    .step-desc {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      line-height: 1.45;
+      z-index: 2;
+    }
+
+    .step-icon-watermark {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      color: #E5E7EB;
+      opacity: 0.7;
+      pointer-events: none;
+      transition: color 0.2s ease;
+    }
+
+    .step-card:hover .step-icon-watermark {
+      color: rgba(245, 166, 35, 0.35);
+    }
+
+    /* ── SECTION 4: B2B ── */
+    .b2b-section-wrapper {
+      background: var(--color-primary-dark);
+      border-radius: var(--radius-xl);
+      padding: 60px 50px;
+      color: #ffffff;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (max-width: 968px) {
+      .b2b-section-wrapper {
+        grid-template-columns: 1fr;
+        padding: 40px 30px;
+        gap: 30px;
+      }
+    }
+
+    /* Decorative graphic */
+    .b2b-graphic-container {
+      position: relative;
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .b2b-graphic-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .b2b-left {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    .b2b-title {
+      font-size: 34px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .b2b-divider-line {
+      width: 60px;
+      height: 4px;
+      background: var(--color-accent);
+      margin-bottom: 30px;
+      border-radius: 2px;
+    }
+
+    .btn-b2b-partner {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: #ffffff;
+      color: var(--color-primary-dark);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 8px;
+      text-decoration: none;
+      width: fit-content;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      margin-top: 20px;
+    }
+
+    .btn-b2b-partner:hover {
+      background-color: #F9FAFB;
+      transform: translateY(-1px);
+    }
+
+    .b2b-right-content {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.65;
+    }
+
+    .b2b-right-content p {
+      margin-bottom: 20px;
+    }
+
+    .b2b-right-content p:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header is injected by menu.js -->
+
+  <main class="about-main-container">
+    
+    <!-- ── SECTION 1: HERO ── -->
+    <section class="hero-section">
+      <div class="hero-left">
+        <span class="section-tag-gold">О платформе</span>
+        <h1 class="hero-title">Что такое<br>Amber Avenue</h1>
+        <div class="orange-divider-line"></div>
+        <div class="hero-text">
+          <p>
+            <strong>Amber Avenue</strong> — это специализированный аналитический и информационный навигатор, созданный для того, чтобы помочь покупателям квартир делать осознанный, безопасный и взвешенный выбор недвижимости в Калининграде и Калининградской области.
+          </p>
+          <p>
+            Мы агрегируем разрозненную информацию со всего рынка, перепроверяем её и переводим сложный язык проектных деклараций, юридических документов и технических параметров на простой язык преимуществ и рисков. Мы помогаем сравнивать новостройки, оценивать надежность строительных компаний и выбирать оптимальные локации.
+          </p>
+        </div>
+        <a href="#lifecycle" class="btn-hero-more">
+          Узнать больше 
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+      <div class="hero-right-wrapper">
+        <!-- Glass badge overlay -->
+        <div class="glass-badge-overlay">
+          <div class="glass-badge-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 11 2 2 4-4"/></svg>
+          </div>
+          <div class="glass-badge-text">
+            <span class="glass-badge-title">Надёжность</span>
+            <span class="glass-badge-desc">в каждом решении</span>
+            <span style="font-size: 9px; color: var(--color-muted); margin-top: 3px; line-height: 1.2;">Только проверенные данные и объективная аналитика</span>
+          </div>
+        </div>
+        <!-- Slides container -->
+        <div class="hero-image-container" id="hero-slideshow">
+          <img src="AA/about_slide1.jpg" class="hero-slide active" alt="Рыбная деревня Калининград">
+          <img src="AA/about_slide2.jpg" class="hero-slide" alt="Интерьер Amber Avenue">
+          <img src="AA/about_slide3.png" class="hero-slide" alt="Апартаменты у моря">
+        </div>
+        <!-- Vertical dots -->
+        <div class="vertical-slider-indicator">
+          <div class="indicator-line">
+            <div class="indicator-dot active" data-num="01"></div>
+            <div class="indicator-dot" data-num="02"></div>
+            <div class="indicator-dot" data-num="03"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 2: THREE PILLARS ── -->
+    <section class="pillars-grid">
+      <!-- Pillar 1 -->
+      <div class="pillar-card">
+        <div class="pillar-icon-container">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1M18 8H6M12 2v20M21 16v1a2 2 0 0 1-2 2h-3M3 12h6M15 12h6"/></svg>
+        </div>
+        <div class="pillar-info">
+          <h3 class="pillar-title">Честные факты</h3>
+          <p class="pillar-desc">Вся фактическая информация о ЖК, застройщиках и сроках сдачи полностью открыта и бесплатна. Реклама и партнерство никак не влияют на расчет рейтинга Amber Index.</p>
+        </div>
+      </div>
+      <!-- Pillar 2 -->
+      <div class="pillar-card">
+        <div class="pillar-icon-container">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        </div>
+        <div class="pillar-info">
+          <h3 class="pillar-title">Объективный алгоритм</h3>
+          <p class="pillar-desc">Оценки формируются математическим алгоритмом на основе проверяемых сведений (разрешения, судебные иски, долги, финансовые показатели, материалы стен и др.).</p>
+        </div>
+      </div>
+      <!-- Pillar 3 -->
+      <div class="pillar-card">
+        <div class="pillar-icon-container">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="pillar-info">
+          <h3 class="pillar-title">Вся экосистема</h3>
+          <p class="pillar-desc">Мы помогаем пользователю не только выбрать квартиру, но и сопровождаем его на всех последующих этапах — от ипотеки и приемки до ремонта и переезда.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 3: LIFECYCLE ── -->
+    <section class="lifecycle-section" id="lifecycle">
+      <div class="lifecycle-left">
+        <span class="section-tag-gold">Как мы работаем</span>
+        <h2 class="lifecycle-title">Весь путь<br>покупателя</h2>
+        <div class="orange-divider-line"></div>
+        <p class="lifecycle-intro">
+          Покупка недвижимости — это длинная цепочка решений, каждое из которых требует надежной информации. Наша платформа выстраивает единый, независимый и бесшовный маршрут для будущего новосела:
+        </p>
+        <div class="lifecycle-illustration-box">
+          <img src="AA/about_lifecycle.png" alt="3D макет здания с графиками">
+        </div>
+      </div>
+      <div class="steps-grid">
+        
+        <!-- Step 1 -->
+        <div class="step-card">
+          <div class="step-num-badge">01</div>
+          <h3 class="step-name">Изучение рынка и районов</h3>
+          <p class="step-desc">Помогаем сориентироваться в географии региона: побережье у моря, исторический центр Калининграда, тихий пригород или область.</p>
+          <div class="step-icon-watermark">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+          <div class="step-num-badge">02</div>
+          <h3 class="step-name">Сравнение новостроек</h3>
+          <p class="step-desc">Оцениваем каждый ЖК по 10 направлениям комфорта и выводим независимый итоговый индекс Amber Index.</p>
+          <div class="step-icon-watermark">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="16"/><line x1="15" y1="22" x2="15" y2="16"/><line x1="9" y1="16" x2="15" y2="16"/><path d="M8 6h.01M16 6h.01M8 10h.01M16 10h.01M12 6h.01M12 10h.01"/></svg>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+          <div class="step-num-badge">03</div>
+          <h3 class="step-name">Расчет ипотеки</h3>
+          <p class="step-desc">Показываем актуальные ипотечные программы ведущих банков, помогаем рассчитать ежемесячный платеж и подать заявку.</p>
+          <div class="step-icon-watermark">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card">
+          <div class="step-num-badge">04</div>
+          <h3 class="step-name">Юридический аудит</h3>
+          <p class="step-desc">Проводим автоматическую проверку застройщиков по базам ЕФРСБ, арбитражных судов, ФССП и ФНС РФ для исключения рисков долгостроя.</p>
+          <div class="step-icon-watermark">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 11 2 2 4-4"/></svg>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step-card">
+          <div class="step-num-badge">05</div>
+          <h3 class="step-name">Приемка и дефектовка</h3>
+          <p class="step-desc">Помогаем найти квалифицированных специалистов для технической приемки квартиры у застройщика при сдаче дома.</p>
+          <div class="step-icon-watermark">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="m9 12 2 2 4-4M3 8h18"/></svg>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="step-card">
+          <div class="step-num-badge">06</div>
+          <h3 class="step-name">Обустройство и переезд</h3>
+          <p class="step-desc">Помогаем спланировать ремонт, разработать дизайн-проект, заказать мебель и кухни, а также организовать переезд и хранение вещей.</p>
+          <div class="step-icon-watermark">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── SECTION 4: B2B ── -->
+    <section class="b2b-section-wrapper">
+      <div class="b2b-left">
+        <div>
+          <span class="section-tag-gold">Партнерам</span>
+          <h2 class="b2b-title">Для партнеров<br>и бизнеса</h2>
+          <div class="b2b-divider-line"></div>
+        </div>
+        
+        <!-- B2B Building Image -->
+        <div class="b2b-graphic-container">
+          <img src="AA/about_b2b.png" alt="Бизнес-центр Янтарный проспект">
+        </div>
+      </div>
+      
+      <div class="b2b-right">
+        <div class="b2b-right-content">
+          <p>
+            Amber Avenue объединяет покупателей недвижимости и надежные компании Калининградской области. Наша платформа собирает исключительно целевую аудиторию — людей, которые прямо сейчас выбирают квартиру или готовятся к сделке.
+          </p>
+          <p>
+            Мы предоставляем банкам, ипотечным брокерам, юристам, страховым компаниям, дизайнерам, ремонтным бригадам, мебельным брендам и клининговым службам возможность интегрироваться в путь пользователя именно в тот момент, когда его интерес к услуге является максимальным.
+          </p>
+          <p>
+            Благодаря прозрачной рекламной модели, маркировке и строгому разделению рекламы и редакционных оценок, мы сохраняем максимальный уровень доверия аудитории, что гарантирует высокую эффективность партнерства.
+          </p>
+        </div>
+        
+        <a href="partners-promo.html" class="btn-b2b-partner">
+          Стать партнером
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+      <footer class="site-footer" role="contentinfo">
+    <div class="footer-trust-bar">
+      <div class="footer-inner">
+        <div class="trust-items">
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">✓</div>
+            <div class="trust-text">
+              <p class="trust-title">Проверяем каждый объект</p>
+              <p class="trust-sub">Ручная верификация</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">⚖</div>
+            <div class="trust-text">
+              <p class="trust-title">Независимый рейтинг</p>
+              <p class="trust-sub">Без предвзятости</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">★</div>
+            <div class="trust-text">
+              <p class="trust-title">Честные отзывы</p>
+              <p class="trust-sub">Без купленных рецензий</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">🔒</div>
+            <div class="trust-text">
+              <p class="trust-title">Без скрытых комиссий</p>
+              <p class="trust-sub">Бесплатно для покупателей</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Footer -->
+    <div class="footer-main">
+      <div class="footer-inner">
+        <div class="footer-grid">
+
+          <!-- Brand -->
+          <div class="footer-col footer-brand-col">
+            <a href="index.html" class="footer-logo">
+              <img src="AA.svg" class="logo-icon" alt="Янтарный проспект">
+              <div>
+                <div class="footer-logo-name">Янтарный проспект</div>
+                <div class="footer-logo-tagline">Amber avenue</div>
+              </div>
+            </a>
+            <div class="footer-socials">
+              <a href="#" class="social-link" aria-label="Telegram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+              <a href="#" class="social-link" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></a>
+              <a href="#" class="social-link" aria-label="VK"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.391 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4.03 8.57 4.03 8.096c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.372 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.27-1.422 2.168-3.608 2.168-3.608.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z"/></svg></a>
+              <a href="#" class="social-link" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+            </div>
+          </div>
+
+          <!-- Каталог -->
+          <div class="footer-col">
+            <h3 class="footer-col-title">Каталог</h3>
+            <ul class="footer-links">
+              <li><a href="zhk.html">Все новостройки</a></li>
+              <li><a href="zhk-umory.html">ЖК у моря</a></li>
+              <li><a href="zhk-kaliningrad.html">ЖК Калининграда</a></li>
+              <li><a href="zhk-prigorod.html">ЖК Пригород</a></li>
+              <li><a href="zhk-oblast.html">ЖК Область</a></li>
+            </ul>
+          </div>
+
+          <!-- Компания -->
+          <div class="footer-col">
+            <h3 class="footer-col-title">Компания</h3>
+            <ul class="footer-links">
+              <li><a href="index.html">Главная</a></li>
+              <li><a href="developers.html">Застройщики</a></li>
+              <li><a href="about.html">О сервисе</a></li>
+              <li><a href="methodology.html">Методология рейтинга</a></li>
+              <li><a href="b2b-promo.html">Для застройщиков</a></li>
+              <li><a href="partners-promo.html">Для рекламодателей</a></li>
+            </ul>
+          </div>
+
+          <!-- Контакты -->
+          <div class="footer-col">
+            <h3 class="footer-col-title">Контакты</h3>
+            <ul class="footer-contacts">
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.36 11.37a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <div><a href="tel:+74012123456" class="contact-phone">+7 (4012) 12-34-56</a><span class="contact-hours">Пн–Пт: 9:00–20:00</span></div>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <a href="mailto:info@amberavenue.ru">info@amberavenue.ru</a>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>г. Калининград, Ленинский пр., 83</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-inner">
+        <div class="footer-bottom-inner">
+          <p class="footer-copyright">© 2026 Amber Avenue</p>
+          <div class="footer-legal">
+            <a href="#">Конфиденциальность</a>
+            <span class="legal-dot">·</span>
+            <a href="#">Пользовательское соглашение</a>
+            <span class="legal-dot">·</span>
+            <a href="#">Cookies</a>
+            <span class="legal-dot">·</span>
+            <span class="footer-disclaimer">Информация на сайте не является публичной офертой. Цены и условия могут отличаться.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="analytics.js" defer></script>
+  <script>
+    // ── Hero Slideshow Control ────────────────────────────────
+    (function() {
+      const slides = document.querySelectorAll('.hero-slide');
+      const dots = document.querySelectorAll('.indicator-dot');
+      let currentSlide = 0;
+      let slideInterval;
+
+      function showSlide(index) {
+        if (!slides.length || !dots.length) return;
+        // Remove active class from all slides and dots
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+
+        // Add active to current
+        slides[index].classList.add('active');
+        dots[index].classList.add('active');
+        currentSlide = index;
+      }
+
+      function nextSlide() {
+        let next = (currentSlide + 1) % slides.length;
+        showSlide(next);
+      }
+
+      function startAutoSlide() {
+        stopAutoSlide();
+        slideInterval = setInterval(nextSlide, 4500); // Change image every 4.5 seconds
+      }
+
+      function stopAutoSlide() {
+        if (slideInterval) clearInterval(slideInterval);
+      }
+
+      // Attach click events to dots for manual navigation
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          showSlide(index);
+          startAutoSlide(); // Reset timer on manual click
+        });
+      });
+
+      // Start slideshow on load
+      startAutoSlide();
+    })();
+  </script>
+</body>
+</html>

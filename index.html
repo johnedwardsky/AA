@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Официальный запуск платформы недвижимости Янтарный проспект (Amber Avenue) в Калининграде и области.">
+  <title>Янтарный проспект — Скоро открытие</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body.login-body {
+      width: 100vw;
+      height: 100vh;
+      min-height: -webkit-fill-available;
+      background: url('kaliningrad_welcome_bg.jpg') no-repeat center center;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    body.login-body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(14, 28, 54, 0.65) 0%,
+        rgba(21, 48, 91, 0.45) 45%,
+        rgba(14, 28, 54, 0.70) 75%,
+        rgba(10, 19, 36, 0.90) 100%
+      );
+      z-index: 1;
+    }
+
+    /* ══════════════════════════════
+       BRANDING HEADER
+    ══════════════════════════════ */
+    .brand-header {
+      z-index: 2;
+      margin-top: 5vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      user-select: none;
+    }
+
+    .brand-logo-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo-img {
+      width: 50px;
+      height: 50px;
+      background: #F5A623;
+      border-radius: 14px;
+      padding: 5px;
+      box-shadow: 0 6px 24px rgba(245, 166, 35, 0.5);
+    }
+
+    .brand-logo-text {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      line-height: 1.1;
+    }
+
+    .brand-logo-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.025em;
+    }
+
+    .brand-logo-subtitle {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .brand-divider {
+      width: 48px;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, rgba(245,166,35,0.65), transparent);
+      margin: 13px auto;
+    }
+
+    .brand-tagline {
+      font-size: 10.5px;
+      font-weight: 500;
+      text-transform: uppercase;
+      color: rgba(255, 238, 190, 0.85);
+      letter-spacing: 0.2em;
+      text-align: center;
+      max-width: 380px;
+      line-height: 1.6;
+    }
+
+    /* ══════════════════════════════
+       FLIP CARD WRAPPER
+    ══════════════════════════════ */
+    .flip-wrapper {
+      z-index: 2;
+      width: 92%;
+      max-width: 520px;
+      perspective: 1200px;
+      margin: 2vh 0;
+    }
+
+    .flip-inner {
+      position: relative;
+      width: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.72s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+    }
+
+    .flip-inner.is-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .flip-face {
+      width: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-radius: 26px;
+      box-shadow: 0 32px 80px rgba(10,25,50,0.35), 0 0 0 1px rgba(255,255,255,0.2);
+      padding: 40px 38px 36px;
+      text-align: center;
+    }
+
+    .flip-front {
+      position: relative;
+    }
+
+    .flip-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotateY(180deg);
+    }
+
+    .flip-wrapper:not(.hovering-disabled):hover .flip-inner:not(.is-flipped) {
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.1));
+    }
+
+    /* ── Launch Badge ── */
+    .launch-badge {
+      background: rgba(245, 166, 35, 0.12);
+      border: 1px solid rgba(245, 166, 35, 0.35);
+      padding: 6px 14px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 18px;
+    }
+    .l-badge-text {
+      color: #C47A08;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .login-title {
+      font-size: 23px;
+      font-weight: 800;
+      color: #1B3C6E;
+      margin: 0 0 10px;
+      letter-spacing: -0.025em;
+    }
+
+    .login-description {
+      font-size: 13.5px;
+      color: #5F7596;
+      line-height: 1.6;
+      margin: 0 0 24px;
+    }
+
+    /* ── Countdown section ── */
+    .countdown-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 22px 0 26px;
+    }
+    .countdown-item {
+      background: rgba(27, 60, 110, 0.05);
+      border: 1px solid rgba(27, 60, 110, 0.09);
+      border-radius: 14px;
+      padding: 10px 8px;
+      min-width: 80px;
+      text-align: center;
+      box-shadow: inset 0 2px 4px rgba(27,60,110,0.02);
+    }
+    .countdown-value {
+      display: block;
+      font-size: 32px;
+      font-weight: 900;
+      color: #F5A623;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+    .countdown-label {
+      display: block;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #5F7596;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+
+    /* ── Subscription Form ── */
+    .sub-info-text {
+      font-size: 13px;
+      color: #5F7596;
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+    .sub-form {
+      margin-bottom: 24px;
+    }
+    .sub-field-group {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-sub-submit {
+      padding: 13px 22px;
+      background: linear-gradient(135deg, #1B3C6E 0%, #0f2649 100%);
+      color: #fff;
+      border: none;
+      border-radius: 11px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(27,60,110,0.2);
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .btn-sub-submit:hover {
+      background: linear-gradient(135deg, #1a3868 0%, #0d2040 100%);
+      transform: translateY(-1px);
+    }
+    .sub-success-message {
+      display: none;
+      color: #2e7d32;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 10px;
+      animation: fadeSlideIn 0.3s ease-out;
+    }
+
+    /* ── Developer Gate Link ── */
+    .dev-gate-wrapper {
+      margin-top: 16px;
+      border-top: 1px solid rgba(27, 60, 110, 0.08);
+      padding-top: 18px;
+    }
+    .btn-dev-gate {
+      background: none;
+      border: none;
+      color: #1B3C6E;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .btn-dev-gate:hover {
+      color: #C47A08;
+    }
+    .btn-dev-gate svg {
+      color: #8C9EB8;
+    }
+
+    /* ── Lock badge ── */
+    .lock-badge {
+      background: linear-gradient(135deg, #EEF3FB 0%, #dde8f8 100%);
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 22px;
+      box-shadow: 0 4px 16px rgba(27,60,110,0.12);
+    }
+    .lock-badge svg { color: #1B3C6E; }
+
+    /* ── Code inputs ── */
+    .code-input-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #8C9EB8;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      display: block;
+      text-align: left;
+    }
+
+    .code-inputs-group {
+      display: flex;
+      justify-content: center;
+      gap: 9px;
+      margin-bottom: 22px;
+    }
+
+    .digit-input {
+      width: 50px !important;
+      min-width: 50px !important;
+      max-width: 50px !important;
+      height: 56px;
+      border: 1.5px solid #D2DCEB;
+      border-radius: 12px;
+      font-size: 24px;
+      font-weight: 800;
+      text-align: center;
+      color: #1B3C6E;
+      background: #fff;
+      transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+      outline: none;
+      font-family: inherit;
+    }
+    .digit-input:focus {
+      border-color: #1B3C6E;
+      box-shadow: 0 0 0 4px rgba(27,60,110,0.1);
+      transform: translateY(-2px);
+    }
+    .digit-input.error {
+      border-color: #E25C6A !important;
+      box-shadow: 0 0 0 4px rgba(226,92,106,0.15) !important;
+      color: #E25C6A !important;
+    }
+
+    .error-banner {
+      color: #E25C6A;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 18px;
+      text-align: left;
+      min-height: 18px;
+      display: none;
+    }
+
+    /* ── Login button ── */
+    .btn-login {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #1B3C6E 0%, #0f2649 100%);
+      color: #fff;
+      border: none;
+      border-radius: 13px;
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 8px 24px rgba(27,60,110,0.28);
+      font-family: inherit;
+    }
+    .btn-login:hover {
+      background: linear-gradient(135deg, #1a3868 0%, #0d2040 100%);
+      box-shadow: 0 10px 30px rgba(27,60,110,0.38);
+      transform: translateY(-1px);
+    }
+    .btn-login:active { transform: translateY(0); }
+
+    /* ── Help link ── */
+    .help-link-wrapper {
+      margin-top: 22px;
+      font-size: 13px;
+      color: #5F7596;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    .help-link-wrapper svg { color: #8C9EB8; flex-shrink: 0; }
+
+    .help-link {
+      color: #1B3C6E;
+      text-decoration: underline;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+      font-size: inherit;
+      padding: 0;
+      transition: color 0.2s;
+    }
+    .help-link:hover { color: #C47A08; }
+
+    /* ══════════════════════════════
+       BACK FACE — CONTACT FORM
+    ══════════════════════════════ */
+
+    /* Envelope badge on back */
+    .envelope-badge {
+      background: linear-gradient(135deg, #FFF8EE 0%, #FDEFD4 100%);
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 16px rgba(196,122,8,0.15);
+    }
+    .envelope-badge svg { color: #C47A08; }
+
+    .back-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1B3C6E;
+      margin: 0 0 8px;
+      letter-spacing: -0.025em;
+    }
+
+    .back-subtitle {
+      font-size: 13px;
+      color: #5F7596;
+      line-height: 1.55;
+      margin: 0 0 26px;
+    }
+
+    /* Fields */
+    .cf-field {
+      position: relative;
+      margin-bottom: 11px;
+      text-align: left;
+    }
+
+    .cf-input {
+      width: 100%;
+      padding: 13px 14px 13px 43px;
+      border: 1.5px solid #D2DCEB;
+      border-radius: 11px;
+      font-size: 14px;
+      color: #1B3C6E;
+      background: #f7f9fc;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      font-family: inherit;
+    }
+    .cf-input:focus {
+      border-color: #1B3C6E;
+      box-shadow: 0 0 0 3px rgba(27,60,110,0.09);
+      background: #fff;
+    }
+    .cf-input::placeholder { color: #a8bbd4; }
+
+    .cf-icon {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #8C9EB8;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Privacy checkbox */
+    .cf-privacy {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      text-align: left;
+    }
+    .cf-privacy input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      min-width: 17px;
+      accent-color: #1B3C6E;
+      cursor: pointer;
+      margin-top: 2px;
+    }
+    .cf-privacy-label {
+      font-size: 11.5px;
+      color: #5F7596;
+      line-height: 1.5;
+    }
+    .cf-privacy-label a { color: #1B3C6E; }
+
+    /* Submit button */
+    .btn-contact-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #1B3C6E 0%, #0f2649 100%);
+      color: #fff;
+      border: none;
+      border-radius: 13px;
+      font-size: 14.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 8px 24px rgba(27,60,110,0.28);
+      font-family: inherit;
+    }
+    .btn-contact-submit:hover {
+      background: linear-gradient(135deg, #1a3868 0%, #0d2040 100%);
+      box-shadow: 0 10px 30px rgba(27,60,110,0.38);
+      transform: translateY(-1px);
+    }
+
+    /* Back-to-code link */
+    .back-to-code {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #5F7596;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .back-to-code button {
+      color: #1B3C6E;
+      text-decoration: underline;
+      font-weight: 600;
+      border: none;
+      background: none;
+      font-family: inherit;
+      font-size: inherit;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s;
+    }
+    .back-to-code button:hover { color: #C47A08; }
+
+    /* ── Back button row inside dev panels ── */
+    .back-btn-row {
+      margin-top: 20px;
+      border-top: 1px solid rgba(27, 60, 110, 0.08);
+      padding-top: 14px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ── Thank-you state on back face ── */
+    .contact-thanks {
+      display: none;
+      text-align: center;
+      padding: 8px 0 4px;
+      animation: fadeSlideIn 0.4s ease-out;
+    }
+    .thanks-icon {
+      width: 58px;
+      height: 58px;
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .thanks-icon svg { color: #2e7d32; }
+    .thanks-title { font-size: 18px; font-weight: 800; color: #1B3C6E; margin-bottom: 8px; }
+    .thanks-text  { font-size: 13.5px; color: #5F7596; line-height: 1.6; margin-bottom: 24px; }
+    
+    .btn-back-after-thanks {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 11px 22px;
+      border: 1.5px solid #D2DCEB;
+      border-radius: 11px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #1B3C6E;
+      background: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .btn-back-after-thanks:hover {
+      background: #EEF3FB;
+      border-color: #1B3C6E;
+    }
+
+    /* ══════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════ */
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Shake on wrong code — applied to flip-inner */
+    .shake-card { animation: shake-anim 0.42s ease-in-out; }
+    @keyframes shake-anim {
+      0%, 100% { transform: rotateY(180deg)   translateX(0); }
+      20%, 60%  { transform: rotateY(180deg)   translateX(-7px); }
+      40%, 80%  { transform: rotateY(180deg)   translateX(7px); }
+    }
+
+    /* ── Footer ── */
+    .login-footer {
+      z-index: 2;
+      margin-bottom: 4vh;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .flip-face { padding: 32px 22px 28px; }
+      .digit-input { height: 50px; font-size: 20px; }
+      .countdown-item { min-width: 66px; }
+      .countdown-value { font-size: 26px; }
+      .countdown-label { font-size: 8.5px; }
+      .sub-field-group { flex-direction: column; }
+      .btn-sub-submit { width: 100%; }
+    }
+  </style>
+</head>
+<body class="login-body">
+
+  <!-- Branding Header -->
+  <header class="brand-header">
+    <div class="brand-logo-row">
+      <img src="AA.svg" class="brand-logo-img" alt="Янтарный проспект">
+      <div class="brand-logo-text">
+        <span class="brand-logo-title">Янтарный проспект</span>
+        <span class="brand-logo-subtitle">Amber avenue</span>
+      </div>
+    </div>
+    <div class="brand-divider"></div>
+    <span class="brand-tagline">Платформа недвижимости Калининграда<br>и Калининградской области</span>
+  </header>
+
+  <!-- ══ FLIP CARD ══ -->
+  <div class="flip-wrapper" id="flip-wrapper">
+    <div class="flip-inner" id="flip-inner">
+
+      <!-- ▓▓▓ FRONT — Countdown and Info ▓▓▓ -->
+      <div class="flip-face flip-front" id="flip-front">
+        
+        <div class="launch-badge">
+          <span class="l-badge-text">Скоро открытие</span>
+        </div>
+
+        <h1 class="login-title">Официальный старт Amber Avenue</h1>
+        <p class="login-description">
+          Флагманский проект самих жителей Калининграда с честной информацией, независимым рейтингом недвижимости и застройщиков.
+        </p>
+
+        <!-- Countdown Timer -->
+        <div class="countdown-container">
+          <div class="countdown-item">
+            <span class="countdown-value" id="cd-days">20</span>
+            <span class="countdown-label">дней</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-value" id="cd-hours">00</span>
+            <span class="countdown-label">часов</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-value" id="cd-minutes">00</span>
+            <span class="countdown-label">минут</span>
+          </div>
+          <div class="countdown-item">
+            <span class="countdown-value" id="cd-seconds">00</span>
+            <span class="countdown-label">секунд</span>
+          </div>
+        </div>
+
+        <!-- Subscribe Block -->
+        <p class="sub-info-text">
+          Оставьте свой email, чтобы первыми узнать о запуске и не пропустить самое интересное:
+        </p>
+        <form id="subscribe-form" onsubmit="handleSubscribe(event)" class="sub-form">
+          <div class="sub-field-group">
+            <div class="cf-field" style="margin-bottom: 0; flex: 1;">
+              <span class="cf-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </span>
+              <input type="email" class="cf-input" id="sub-email" placeholder="Ваш email" required>
+            </div>
+            <button type="submit" class="btn-sub-submit">Оповестить меня</button>
+          </div>
+          <div class="sub-success-message" id="sub-success-msg">
+            ✨ Спасибо! Мы уведомим вас об официальном открытии.
+          </div>
+        </form>
+
+        <!-- Developer access entry point -->
+        <div class="dev-gate-wrapper">
+          <button onclick="flipToDev()" class="btn-dev-gate">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            Есть код доступа застройщика
+          </button>
+        </div>
+
+      </div><!-- /flip-front -->
+
+      <!-- ▓▓▓ BACK — Developer Portal (Login / Contact forms) ▓▓▓ -->
+      <div class="flip-face flip-back" id="flip-back">
+        
+        <!-- ── STATE A: Passcode Login ── -->
+        <div id="back-login-state">
+          <div class="lock-badge">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+
+          <h2 class="login-title">Доступ для застройщиков</h2>
+          <p class="login-description">Введите код доступа, чтобы войти в личный кабинет</p>
+
+          <form id="login-form" onsubmit="handleLogin(event)">
+            <span class="code-input-label">Введите 6-значный код</span>
+            <div class="code-inputs-group">
+              <input type="text" maxlength="1" class="digit-input" pattern="[0-9]" inputmode="numeric" required autocomplete="off">
+              <input type="text" maxlength="1" class="digit-input" pattern="[0-9]" inputmode="numeric" required autocomplete="off">
+              <input type="text" maxlength="1" class="digit-input" pattern="[0-9]" inputmode="numeric" required autocomplete="off">
+              <input type="text" maxlength="1" class="digit-input" pattern="[0-9]" inputmode="numeric" required autocomplete="off">
+              <input type="text" maxlength="1" class="digit-input" pattern="[0-9]" inputmode="numeric" required autocomplete="off">
+              <input type="text" maxlength="1" class="digit-input" pattern="[0-9]" inputmode="numeric" required autocomplete="off">
+            </div>
+            <div class="error-banner" id="error-msg">Неверный код доступа. Попробуйте снова.</div>
+            <button type="submit" class="btn-login">
+              Войти в личный кабинет
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </form>
+
+          <div class="help-link-wrapper">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            Не знаете код?&nbsp;
+            <button class="help-link" onclick="showContactState()">Свяжитесь с нами</button>
+          </div>
+
+          <div class="back-btn-row">
+            <button class="btn-dev-gate" onclick="flipToTimer()">
+              ← Вернуться к таймеру
+            </button>
+          </div>
+        </div><!-- /back-login-state -->
+
+        <!-- ── STATE B: Contact Form ── -->
+        <div id="back-contact-state" style="display: none;">
+          <div class="envelope-badge">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+
+          <h2 class="back-title">Свяжитесь с нами</h2>
+          <p class="back-subtitle">Оставьте заявку — мы отправим вам код и поможем с регистрацией</p>
+
+          <form id="contact-form" onsubmit="handleContactSubmit(event)" novalidate>
+            <div class="cf-field">
+              <span class="cf-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </span>
+              <input type="text" class="cf-input" id="cf-name" placeholder="Ваше имя" required>
+            </div>
+
+            <div class="cf-field">
+              <span class="cf-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+              </span>
+              <input type="tel" class="cf-input" id="cf-phone" placeholder="Номер телефона" required>
+            </div>
+
+            <div class="cf-field">
+              <span class="cf-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </span>
+              <input type="email" class="cf-input" id="cf-email" placeholder="Email" required>
+            </div>
+
+            <label class="cf-privacy">
+              <input type="checkbox" id="cf-privacy-check" required checked>
+              <span class="cf-privacy-label">
+                Я ознакомлен(-а) с <a href="#" onclick="return false;">политикой конфиденциальности</a> и даю согласие на обработку персональных данных
+              </span>
+            </label>
+
+            <button type="submit" class="btn-contact-submit">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+              Отправить заявку
+            </button>
+          </form>
+
+          <div class="back-to-code">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            <button onclick="showLoginState()">Вернуться к вводу кода</button>
+          </div>
+
+          <div class="back-btn-row">
+            <button class="btn-dev-gate" onclick="flipToTimer()">
+              ← Вернуться к таймеру
+            </button>
+          </div>
+        </div><!-- /back-contact-state -->
+
+        <!-- ── STATE C: Thank-you state ── -->
+        <div class="contact-thanks" id="contact-thanks">
+          <div class="thanks-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <p class="thanks-title">Заявка отправлена!</p>
+          <p class="thanks-text">Мы свяжемся с вами в ближайшее время и отправим код доступа.</p>
+          <button class="btn-back-after-thanks" onclick="showLoginState()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Вернуться к входу
+          </button>
+        </div>
+
+      </div><!-- /flip-back -->
+    </div><!-- /flip-inner -->
+  </div><!-- /flip-wrapper -->
+
+  <footer class="login-footer">
+    © Amber Avenue, 2026 &nbsp;|&nbsp; Все права защищены
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="properties-data.js"></script>
+  <script>
+    /* ── Refs ── */
+    const flipInner     = document.getElementById('flip-inner');
+    const flipFront     = document.getElementById('flip-front');
+    const flipBack      = document.getElementById('flip-back');
+    const inputs        = document.querySelectorAll('.digit-input');
+    const errorMsg      = document.getElementById('error-msg');
+
+    const backLogin     = document.getElementById('back-login-state');
+    const backContact   = document.getElementById('back-contact-state');
+    const backThanks    = document.getElementById('contact-thanks');
+
+    /* ── Countdown Timer Logic ── */
+    // Set target date to exactly 20 days in the future from current context
+    const targetDate = new Date("2026-08-04T12:00:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        document.getElementById("cd-days").innerText = "00";
+        document.getElementById("cd-hours").innerText = "00";
+        document.getElementById("cd-minutes").innerText = "00";
+        document.getElementById("cd-seconds").innerText = "00";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("cd-days").innerText = String(days).padStart(2, '0');
+      document.getElementById("cd-hours").innerText = String(hours).padStart(2, '0');
+      document.getElementById("cd-minutes").innerText = String(minutes).padStart(2, '0');
+      document.getElementById("cd-seconds").innerText = String(seconds).padStart(2, '0');
+    }
+    
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    /* ── Sync wrapper height ── */
+    function syncHeight(isBackFace) {
+      requestAnimationFrame(() => {
+        if (!isBackFace) {
+          flipInner.style.height = flipFront.offsetHeight + 'px';
+        } else {
+          // Measure the height of the currently visible element inside the back face
+          let activeHeight = 0;
+          if (backLogin.style.display !== 'none') {
+            activeHeight = backLogin.offsetHeight;
+          } else if (backContact.style.display !== 'none') {
+            activeHeight = backContact.offsetHeight;
+          } else if (backThanks.style.display !== 'none') {
+            activeHeight = backThanks.offsetHeight;
+          }
+          // The face box padding is 40px top and 36px bottom = 76px
+          flipInner.style.height = (activeHeight + 76) + 'px';
+        }
+      });
+    }
+
+    // Initial sync
+    window.addEventListener('load', () => {
+      syncHeight(false);
+    });
+
+    /* ── Navigation / Transitions ── */
+    function flipToDev() {
+      showLoginState();
+      setTimeout(() => {
+        flipInner.classList.add('is-flipped');
+        syncHeight(true);
+      }, 10);
+    }
+
+    function flipToTimer() {
+      flipInner.classList.remove('is-flipped');
+      syncHeight(false);
+    }
+
+    function showLoginState() {
+      backLogin.style.display = 'block';
+      backContact.style.display = 'none';
+      backThanks.style.display = 'none';
+      syncHeight(true);
+    }
+
+    function showContactState() {
+      backLogin.style.display = 'none';
+      backContact.style.display = 'block';
+      backThanks.style.display = 'none';
+      syncHeight(true);
+    }
+
+    /* ── Email Subscription ── */
+    function handleSubscribe(e) {
+      e.preventDefault();
+      const email = document.getElementById('sub-email').value.trim();
+      if (!email) return;
+
+      // Show success message
+      document.getElementById('sub-success-msg').style.display = 'block';
+      document.getElementById('sub-email').value = '';
+      setTimeout(() => {
+        document.getElementById('sub-success-msg').style.display = 'none';
+      }, 5000);
+    }
+
+    /* ── Digit Inputs ── */
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        if (e.target.value.length === 1 && index < inputs.length - 1) inputs[index + 1].focus();
+        clearErrorStyles();
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && e.target.value === '' && index > 0) inputs[index - 1].focus();
+      });
+      input.addEventListener('paste', (e) => {
+        const d = (e.clipboardData || window.clipboardData).getData('text').trim();
+        if (d.length === 6 && /^\d+$/.test(d)) {
+          inputs.forEach((inp, i) => inp.value = d[i]);
+          inputs[5].focus();
+          e.preventDefault();
+        }
+      });
+    });
+
+    function clearErrorStyles() {
+      errorMsg.style.display = 'none';
+      inputs.forEach(inp => inp.classList.remove('error'));
+    }
+
+    /* ── Contact Form ── */
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const name    = document.getElementById('cf-name').value.trim();
+      const phone   = document.getElementById('cf-phone').value.trim();
+      const email   = document.getElementById('cf-email').value.trim();
+      const privacy = document.getElementById('cf-privacy-check').checked;
+      if (!name || !phone || !email || !privacy) return;
+
+      backContact.style.transition = 'opacity 0.2s ease';
+      backContact.style.opacity = '0';
+
+      setTimeout(() => {
+        backContact.style.display = 'none';
+        backContact.style.opacity = '1';
+        backThanks.style.display = 'block';
+        syncHeight(true);
+      }, 200);
+    }
+
+    /* ── Login Submit ── */
+    function handleLogin(event) {
+      event.preventDefault();
+      let code = '';
+      inputs.forEach(inp => code += inp.value);
+      if (code.length !== 6) return;
+
+      if (code === '777777') {
+        localStorage.setItem('auth_developer_id', 'admin');
+        localStorage.setItem('auth_developer_name', 'Администратор CMS');
+        window.location.href = 'admin.html';
+        return;
+      }
+
+      if (window.AMBER_DATA && window.AMBER_DATA.developers) {
+        const dev = window.AMBER_DATA.developers.find(d => d.code === code);
+        if (dev) {
+          localStorage.setItem('auth_developer_id', dev.id);
+          localStorage.setItem('auth_developer_name', dev.name);
+          window.location.href = 'zhk.html';
+          return;
+        }
+      }
+
+      if (code === '123456') {
+        localStorage.setItem('auth_developer_id', 'demo');
+        localStorage.setItem('auth_developer_name', 'Тестовый застройщик');
+        window.location.href = 'zhk.html';
+        return;
+      }
+
+      /* Wrong code — shake the card */
+      flipInner.classList.remove('shake-card');
+      void flipInner.offsetWidth; // reflow
+      flipInner.classList.add('shake-card');
+      inputs.forEach(inp => { inp.classList.add('error'); inp.value = ''; });
+      inputs[0].focus();
+      errorMsg.style.display = 'block';
+      
+      setTimeout(() => {
+        flipInner.classList.remove('shake-card');
+      }, 500);
+    }
+  </script>
+</body>
+</html>

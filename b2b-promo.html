@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Amber Avenue — коммерческое предложение для застройщиков Калининградской области. Официальные карточки объектов, партнёрские пакеты, безлимитные обращения.">
+  <meta name="theme-color" content="#1B3C6E">
+  <title>Для застройщиков | Amber Avenue</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
+  <script src="data.js"></script>
+  <script src="properties-data.js"></script>
+  <script src="menu.js"></script>
+  <style>
+    :root {
+      --p: #1B3C6E;
+      --p-d: #0F2548;
+      --p-l: #2A5298;
+      --a: #F5A623;
+      --a-h: #D97706;
+      --a-bg: #FFF8EC;
+      --bd: #E2E8F0;
+      --bd-l: #F1F5F9;
+      --muted: #64748B;
+      --txt: #1E293B;
+      --ok: #10B981;
+      --no: #EF4444;
+      --surf: #FFFFFF;
+      --bg: #F8FAFC;
+      --glow: rgba(245,166,35,0.35);
+    }
+
+    body { background: var(--bg); color: var(--txt); }
+
+    /* ─ Page wrap ─ */
+    .pg { max-width: 1060px; margin: 0 auto; padding: 36px 16px 100px; }
+
+    /* ─ Cross-nav ─ */
+    .xnav {
+      background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 10px;
+      padding: 10px 16px; margin-bottom: 24px; font-size: 12px; font-weight: 600;
+      color: #166534; display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 8px;
+    }
+    .xnav a { color: #15803D; text-decoration: underline; }
+
+    /* ─ Hero ─ */
+    .hero {
+      background: var(--surf); border: 1px solid var(--bd);
+      border-radius: 20px; padding: 52px 28px 46px;
+      margin-bottom: 48px; text-align: center;
+      box-shadow: 0 6px 24px rgba(27,60,110,0.04);
+      animation: fadeUp .45s ease both;
+    }
+    .hero-eyebrow {
+      display: inline-block; font-size: 11px; font-weight: 800;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--p-l); background: rgba(42,82,152,.08);
+      border: 1px solid rgba(42,82,152,.15);
+      padding: 5px 14px; border-radius: 30px; margin-bottom: 22px;
+    }
+    .hero h1 {
+      font-size: 30px; font-weight: 800; color: var(--p);
+      letter-spacing: -.02em; line-height: 1.22; margin-bottom: 16px;
+    }
+    .hero-sub {
+      font-size: 14px; color: var(--muted); max-width: 700px;
+      margin: 0 auto 16px; line-height: 1.65;
+    }
+    .hero-slogan {
+      display: inline-block; font-size: 13px; font-weight: 700;
+      background: var(--a-bg); color: var(--p);
+      border-left: 4px solid var(--a); padding: 9px 18px;
+      border-radius: 8px; margin-bottom: 30px;
+    }
+    .hero-bullets {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(210px,1fr));
+      gap: 12px; max-width: 880px; margin: 0 auto 34px; text-align: left;
+    }
+    .hb {
+      background: var(--bg); border: 1px solid var(--bd);
+      border-radius: 10px; padding: 11px 14px;
+      font-size: 12px; font-weight: 500; line-height: 1.45;
+      display: flex; gap: 8px;
+      transition: border-color .2s;
+    }
+    .hb:hover { border-color: var(--p-l); }
+    .hb-ck { color: var(--ok); font-weight: 900; flex-shrink: 0; }
+    .ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .btn {
+      padding: 11px 22px; border-radius: 9px; font-size: 13px;
+      font-weight: 700; text-decoration: none; display: inline-flex;
+      align-items: center; gap: 7px; transition: all .2s;
+    }
+    .btn-gold { background: var(--a); color: var(--p-d); box-shadow: 0 4px 12px rgba(245,166,35,.3); }
+    .btn-gold:hover { background: var(--a-h); transform: translateY(-1px); }
+    .btn-navy { background: var(--p); color: #fff; }
+    .btn-navy:hover { background: var(--p-l); transform: translateY(-1px); }
+    .btn-ghost { background: transparent; border: 1px solid var(--bd); color: var(--p); }
+    .btn-ghost:hover { background: var(--bd-l); border-color: var(--p-l); }
+
+    /* ─ Section headers ─ */
+    .sh { text-align: center; margin: 56px auto 28px; max-width: 760px; }
+    .sh h2 { font-size: 24px; font-weight: 800; color: var(--p); margin-bottom: 8px; }
+    .sh::after { content:''; display:block; width:44px; height:3px; background:var(--a); margin:10px auto 0; border-radius:2px; }
+    .sh p { font-size: 13px; color: var(--muted); line-height: 1.55; margin-top: 10px; }
+
+    /* ─ Card ─ */
+    .card {
+      background: var(--surf); border: 1px solid var(--bd);
+      border-radius: 16px; padding: 24px;
+      box-shadow: 0 2px 12px rgba(27,60,110,0.03);
+      transition: all .25s;
+    }
+    .card:hover { box-shadow: 0 6px 20px rgba(27,60,110,0.06); }
+
+    /* ─ Tables ─ */
+    .tbl-wrap { overflow-x: auto; border: 1px solid var(--bd); border-radius: 14px; background: var(--surf); margin-bottom: 32px; }
+    .tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .tbl th { background: var(--bd-l); color: var(--p); font-weight: 800; text-transform: uppercase; letter-spacing:.04em; padding: 13px 16px; border-bottom: 1px solid var(--bd); text-align: left; }
+    .tbl td { padding: 13px 16px; border-bottom: 1px solid var(--bd-l); vertical-align: top; }
+    .tbl tr:last-child td { border-bottom: none; }
+    .tbl tr:hover td { background: var(--bd-l); }
+    .tbl td strong { color: var(--p); }
+    .tag-ok { color: var(--ok); font-weight: 800; }
+    .tag-no { color: var(--no); font-weight: 800; }
+    .price-hi { font-size: 14px; font-weight: 800; color: var(--ok); }
+    .price-lo { font-size: 12px; font-weight: 700; color: var(--muted); }
+    .price-strike { text-decoration: line-through; color: var(--muted); }
+
+    /* ─ Package cards ─ */
+    .pkg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 18px; margin-bottom: 40px; }
+    .pkg {
+      background: var(--surf); border: 2px solid var(--bd);
+      border-radius: 16px; padding: 22px;
+      display: flex; flex-direction: column; gap: 14px;
+      transition: all .25s;
+    }
+    .pkg:hover { border-color: var(--p-l); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,60,110,0.06); }
+    .pkg.featured { border-color: var(--a); box-shadow: 0 0 0 3px var(--glow); }
+    .pkg-badge {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .1em; padding: 3px 10px; border-radius: 20px; width: fit-content;
+    }
+    .pkg-badge-gold { background: var(--a-bg); color: #92400E; }
+    .pkg-badge-blue { background: rgba(42,82,152,.1); color: var(--p-l); }
+    .pkg-badge-green { background: rgba(16,185,129,.1); color: #065F46; }
+    .pkg-name { font-size: 17px; font-weight: 800; color: var(--p); }
+    .pkg-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .pkg-price-block { display: flex; flex-direction: column; gap: 3px; }
+    .pkg-price-label { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing:.05em; }
+    .pkg-price-main { font-size: 22px; font-weight: 800; color: var(--p); }
+    .pkg-price-after { font-size: 11px; color: var(--muted); }
+    .pkg-tools { display: flex; flex-direction: column; gap: 7px; }
+    .pkg-tool {
+      font-size: 12px; display: flex; align-items: flex-start; gap: 7px;
+      padding: 6px 10px; background: var(--bg); border-radius: 7px;
+      line-height: 1.4;
+    }
+    .pkg-tool-ck { color: var(--ok); font-weight: 900; flex-shrink: 0; }
+
+    /* ─ ROI Calculator ─ */
+    .roi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media(max-width:680px) { .roi-grid { grid-template-columns: 1fr; } }
+    .roi-desc { font-size: 13px; color: var(--txt); line-height: 1.65; }
+    .roi-formula {
+      background: var(--a-bg); border: 1px solid var(--a);
+      border-radius: 10px; padding: 14px 16px;
+      font-size: 13px; font-weight: 700; color: var(--p);
+      text-align: center; margin: 12px 0;
+    }
+
+    /* ─ Steps ─ */
+    .steps { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+    .step {
+      display: flex; gap: 14px; align-items: flex-start;
+      background: var(--surf); border: 1px solid var(--bd);
+      border-radius: 12px; padding: 16px;
+    }
+    .step-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--p); color: #fff;
+      font-size: 13px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-body { flex: 1; }
+    .step-title { font-size: 13px; font-weight: 700; color: var(--p); margin-bottom: 3px; }
+    .step-sub { font-size: 12px; color: var(--muted); line-height: 1.45; }
+
+    /* ─ Accordion ─ */
+    .accordion { display: flex; flex-direction: column; gap: 8px; }
+    .acc-item { background: var(--surf); border: 1px solid var(--bd); border-radius: 10px; overflow: hidden; }
+    .acc-hdr {
+      width: 100%; padding: 14px 16px;
+      font-size: 13px; font-weight: 700; color: var(--p);
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; text-align: left; transition: background .2s;
+    }
+    .acc-hdr:hover { background: var(--bd-l); }
+    .acc-arrow { font-size: 14px; transition: transform .25s; }
+    .acc-item.open .acc-arrow { transform: rotate(180deg); }
+    .acc-body { display: none; padding: 4px 16px 14px; font-size: 12px; color: var(--muted); line-height: 1.6; border-top: 1px solid var(--bd-l); }
+    .acc-item.open .acc-body { display: block; }
+
+    /* ─ "Cannot buy" list ─ */
+    .cannot-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 10px; }
+    .cannot-item {
+      background: #FFF5F5; border: 1px solid #FECACA;
+      border-radius: 10px; padding: 10px 14px;
+      font-size: 12px; font-weight: 600; color: #991B1B;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .cannot-item::before { content: '✕'; font-weight: 900; flex-shrink: 0; }
+
+    /* ─ Audience stat grid ─ */
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 14px; }
+    .stat-card {
+      background: var(--surf); border: 1px solid var(--bd);
+      border-radius: 12px; padding: 16px; text-align: center;
+      transition: all .25s;
+    }
+    .stat-card:hover { transform: translateY(-2px); border-color: var(--p-l); }
+    .stat-val { font-size: 22px; font-weight: 800; color: var(--p); margin-bottom: 4px; }
+    .stat-lbl { font-size: 11px; font-weight: 700; color: var(--txt); }
+    .stat-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+    /* ─ Sandbox ─ */
+    .sandbox-wrap { display: grid; grid-template-columns: 320px 1fr; gap: 20px; margin-bottom: 48px; align-items: start; }
+    @media(max-width:900px) { .sandbox-wrap { grid-template-columns: 1fr; } }
+    .sandbox-opts { display: flex; flex-direction: column; gap: 10px; }
+    .sopt {
+      background: var(--surf); border: 1.5px solid var(--bd);
+      border-radius: 12px; padding: 14px; cursor: pointer;
+      text-align: left; transition: all .22s;
+    }
+    .sopt:hover { border-color: var(--a); transform: translateY(-1px); }
+    .sopt.active { background: var(--p); border-color: var(--p); color: #fff; box-shadow: 0 6px 20px rgba(27,60,110,.18); }
+    .sopt-head { font-size: 13px; font-weight: 800; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+    .sopt-tag {
+      font-size: 10px; padding: 2px 8px; border-radius: 8px;
+      background: rgba(245,166,35,.15); color: var(--a); font-weight: 800;
+    }
+    .sopt.active .sopt-tag { background: rgba(255,255,255,.2); color: #fff; }
+    .sopt-desc { font-size: 11px; line-height: 1.4; opacity: .8; }
+
+    /* ─ Browser mockup ─ */
+    .browser {
+      background: var(--surf); border: 1px solid var(--bd);
+      border-radius: 14px; box-shadow: 0 8px 28px rgba(27,60,110,.06);
+      overflow: hidden; display: flex; flex-direction: column;
+      max-height: 620px;
+    }
+    .browser-bar {
+      background: #F1F5F9; border-bottom: 1px solid var(--bd);
+      padding: 8px 14px; display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dr { background: #EF4444; } .dy { background: #F59E0B; } .dg { background: #10B981; }
+    .addr {
+      background: #fff; border: 1px solid var(--bd);
+      font-size: 10px; color: var(--muted);
+      padding: 3px 10px; border-radius: 5px;
+      flex: 1; margin-left: 12px; max-width: 380px;
+    }
+    .browser-body { padding: 14px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+
+    /* mock page header */
+    .m-hdr { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--bd-l); }
+    .m-logo { font-size: 11px; font-weight: 800; color: var(--p); display: flex; align-items: center; gap: 4px; }
+
+    /* highlight zones */
+    .zone {
+      position: relative; border: 2px dashed transparent;
+      border-radius: 8px; transition: all .3s ease;
+    }
+    .zone.lit {
+      border-color: var(--a) !important;
+      background: rgba(245,166,35,.05);
+      box-shadow: 0 0 14px var(--glow);
+      transform: scale(1.005);
+    }
+    .zone-lbl {
+      position: absolute; top: -10px; right: 10px;
+      font-size: 8px; font-weight: 800; color: #fff;
+      background: var(--a); padding: 2px 7px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: .05em;
+      opacity: 0; transition: opacity .3s; z-index: 5;
+    }
+    .zone.lit .zone-lbl { opacity: 1; }
+
+    /* mock top partner banner */
+    .m-top-partner {
+      background: linear-gradient(90deg, var(--p) 0%, #2A5298 100%);
+      color: #fff; border-radius: 8px; padding: 10px 14px;
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    }
+    .m-tp-left { display: flex; align-items: center; gap: 8px; }
+    .m-tp-badge { font-size: 7px; font-weight: 800; background: var(--a); color: var(--p-d); padding: 2px 6px; border-radius: 3px; text-transform: uppercase; }
+    .m-tp-title { font-size: 10px; font-weight: 700; }
+    .m-tp-sub { font-size: 8px; opacity: .8; }
+    .m-tp-btn { background: var(--a); color: var(--p-d); font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: 5px; border: none; white-space: nowrap; }
+
+    /* mock listing */
+    .m-feed { display: flex; flex-direction: column; gap: 10px; }
+    .m-card {
+      border: 1px solid var(--bd); border-radius: 8px;
+      padding: 10px; display: flex; gap: 10px; background: #fff;
+    }
+    .m-card-img { width: 64px; height: 56px; background: #E2E8F0; border-radius: 5px; flex-shrink: 0; }
+    .m-card-body { flex: 1; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+    .m-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; }
+    .m-card-title { font-size: 11px; font-weight: 700; color: var(--p); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px; }
+    .m-card-rating { font-size: 9px; font-weight: 700; color: var(--a); }
+    .m-card-line { height: 4px; background: var(--bd-l); border-radius: 2px; width: 80%; }
+    .m-card-actions { display: flex; gap: 5px; margin-top: 2px; }
+    .m-card-btn { height: 14px; padding: 0 7px; border-radius: 3px; border: 1px solid var(--bd); font-size: 7px; color: var(--muted); display: inline-flex; align-items: center; }
+    .m-card-btn.cta { background: var(--p); color: #fff; border-color: var(--p); }
+
+    /* mock mid banner (Eco-listing / second partner) */
+    .m-mid-banner {
+      background: linear-gradient(90deg, #0F2548, var(--p));
+      color: #fff; border-radius: 8px; padding: 9px 12px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .m-mb-l { display: flex; align-items: center; gap: 7px; }
+    .m-mb-icon { font-size: 14px; }
+    .m-mb-title { font-size: 10px; font-weight: 700; }
+    .m-mb-sub { font-size: 8px; opacity: .75; }
+    .m-mb-btn { background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.3); font-size: 8px; font-weight: 700; padding: 3px 8px; border-radius: 4px; border-style: solid; }
+
+    /* promo sticker */
+    .m-promo-sticker {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--a); color: var(--p-d);
+      font-size: 8px; font-weight: 800; padding: 2px 8px;
+      border-radius: 4px; align-self: flex-start;
+    }
+
+    /* side promo slot */
+    .m-card-row { display: flex; gap: 10px; align-items: stretch; }
+    .m-side-promo {
+      width: 80px; flex-shrink: 0;
+      background: var(--p); border: 1px solid var(--a);
+      border-radius: 7px; padding: 8px;
+      color: #fff; display: flex; flex-direction: column;
+      align-items: center; justify-content: space-between;
+      text-align: center;
+    }
+    .m-sp-label { font-size: 7px; font-weight: 700; opacity: .85; }
+    .m-sp-val { font-size: 11px; font-weight: 800; color: var(--a); }
+    .m-sp-btn { background: var(--a); border: none; width: 100%; height: 12px; border-radius: 2px; font-size: 7px; font-weight: 800; color: var(--p-d); }
+
+    /* ─ Final CTA block ─ */
+    .final-cta {
+      background: var(--surf); border: 1px solid var(--bd);
+      border-radius: 18px; padding: 40px 28px; text-align: center;
+    }
+    .final-cta h2 { font-size: 22px; font-weight: 800; color: var(--p); margin-bottom: 8px; }
+    .final-cta p { font-size: 13px; color: var(--muted); max-width: 540px; margin: 0 auto 24px; line-height: 1.55; }
+
+    /* ─ Form ─ */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 480px; margin: 0 auto; }
+    @media(max-width:500px) { .form-grid { grid-template-columns: 1fr; } }
+    .inp {
+      background: var(--bg); border: 1px solid var(--bd);
+      border-radius: 8px; height: 40px; padding: 0 12px;
+      font-size: 13px; font-family: inherit; color: var(--txt);
+      outline: none; transition: border-color .2s; width: 100%;
+    }
+    .inp:focus { border-color: var(--p-l); }
+    .inp.full { grid-column: 1 / -1; }
+    .form-note { font-size: 11px; color: var(--muted); grid-column: 1 / -1; text-align: center; }
+
+    /* ─ Info note ─ */
+    .info-note {
+      background: var(--bd-l); border-left: 3px solid var(--a);
+      padding: 10px 14px; border-radius: 6px;
+      font-size: 12px; color: var(--p); font-weight: 600;
+      font-style: italic; margin: 14px 0;
+    }
+
+    /* ─ Animations ─ */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ── Mobile Responsiveness Overrides ── */
+    @media (max-width: 600px) {
+      .hero {
+        padding: 32px 16px 28px;
+        border-radius: 12px;
+      }
+      .hero h1 {
+        font-size: 22px;
+      }
+      .hero-sub {
+        font-size: 13px;
+      }
+      .hero-slogan {
+        font-size: 11px;
+        padding: 6px 12px;
+      }
+      .ctas {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn {
+        justify-content: center;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .hero-bullets {
+        grid-template-columns: 1fr;
+      }
+      .sh h2 {
+        font-size: 18px;
+      }
+      .sh p {
+        font-size: 12px;
+      }
+      /* Scale browser mockup down beautifully */
+      .browser {
+        max-height: 480px;
+      }
+      .browser-body {
+        padding: 8px;
+        gap: 8px;
+      }
+      .m-hdr {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+      .m-top-partner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+      }
+      .m-tp-btn {
+        text-align: center;
+      }
+      .card-main {
+        flex-direction: column;
+      }
+      .card-image-col {
+        height: 120px !important;
+      }
+      .final-cta {
+        padding: 28px 16px;
+      }
+      .final-cta h2 {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ════════════════════════════════════════════════ -->
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <img src="AA.svg" class="logo-icon" alt="Янтарный проспект">
+      <div class="logo-text">
+        <span class="logo-name">Янтарный проспект</span>
+        <span class="logo-tagline">Amber avenue</span>
+      </div>
+    </a>
+    <div class="header-actions">
+      <a href="index.html" class="btn-header btn-header-ghost" style="text-decoration:none;">← На главную</a>
+    </div>
+  </div>
+</header>
+
+<!-- ══ MAIN ══════════════════════════════════════════════════ -->
+<main class="pg">
+
+  <!-- Cross-nav -->
+  <div class="xnav">
+    <span>Вы банк, страховая, юрист или сервисный бренд?</span>
+    <a href="partners-promo.html">Медиакит для рекламодателей и партнёров →</a>
+  </div>
+
+  <!-- ── 1. HERO ──────────────────────────────────────────── -->
+  <div class="hero">
+    <div class="hero-eyebrow">Для застройщиков</div>
+    <h1>Получайте обращения от людей, которые уже выбирают недвижимость.</h1>
+    <p class="hero-sub">Amber Avenue — информационная платформа о недвижимости Калининграда и Калининградской области. Мы помогаем пользователям сравнивать жилые комплексы, застройщиков и локации на основе проверяемых данных: документов, сроков, характеристик, инфраструктуры, транспорта, ипотечных условий, статуса готовности и Amber Index.<br><br>Для застройщиков Amber Avenue — это возможность быть представленными в моменте выбора недвижимости: когда пользователь уже изучает рынок, сравнивает объекты и готов перейти к действию.</p>
+    <div class="hero-slogan">Факты бесплатны. Коммуникация с покупателем — платная.</div>
+    <div class="hero-bullets">
+      <div class="hb"><span class="hb-ck">✓</span><span>Подключите официальные контакты объекта.</span></div>
+      <div class="hb"><span class="hb-ck">✓</span><span>Получайте заявки и переходы без лимита обращений.</span></div>
+      <div class="hb"><span class="hb-ck">✓</span><span>Показывайте промо-предложения рядом со своей карточкой.</span></div>
+      <div class="hb"><span class="hb-ck">✓</span><span>Усильте присутствие через партнёрские позиции на странице.</span></div>
+    </div>
+    <div class="ctas">
+      <a href="#connect" class="btn btn-gold">Подключить карточку объекта</a>
+      <a href="#packages" class="btn btn-navy">Стать партнёром страницы</a>
+      <a href="#connect" class="btn btn-ghost">Запросить условия размещения</a>
+    </div>
+  </div>
+
+  <!-- ── 2. КАК РАБОТАЕТ ──────────────────────────────────── -->
+  <div class="sh">
+    <h2>Как работает Amber Avenue</h2>
+    <p>Базовая информация об объекте может быть размещена на платформе независимо от коммерческого подключения. Коммерческое подключение открывает инструменты коммуникации с покупателем.</p>
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Бесплатная информационная часть</th>
+          <th>Коммерческое подключение</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Название ЖК, город, район, локация</td><td><strong>Официальные контакты</strong></td></tr>
+        <tr><td>Статус готовности и застройщик</td><td><strong>Сайт объекта или застройщика</strong></td></tr>
+        <tr><td>Документы и основные характеристики</td><td><strong>Кнопка заявки</strong></td></tr>
+        <tr><td>Инфраструктура и транспорт</td><td><strong>Карта / маршрут</strong></td></tr>
+        <tr><td>Ипотечные условия и Amber Index</td><td><strong>Промо-баннер у карточки</strong></td></tr>
+        <tr><td>Зоны, где данные требуют уточнения</td><td><strong>Статистика взаимодействий</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-note">Коммерческое подключение не меняет фактические данные объекта и не влияет на Amber Index.</div>
+
+  <!-- ── 3. ЧТО ПОЛУЧАЕТ ЗАСТРОЙЩИК ─────────────────────── -->
+  <div class="sh">
+    <h2>Официальная карточка объекта</h2>
+    <p>Официальная карточка — базовый коммерческий продукт Amber Avenue. Она превращает информационную карточку объекта в полноценную точку контакта с покупателем.</p>
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead>
+        <tr><th>Возможность</th><th>Что даёт</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Официальные контакты</strong></td><td>Пользователь понимает, куда обращаться.</td></tr>
+        <tr><td><strong>Активная ссылка на сайт</strong></td><td>Прямой переход на сайт ЖК или застройщика.</td></tr>
+        <tr><td><strong>Кнопка заявки</strong></td><td>Возможность оставить обращение.</td></tr>
+        <tr><td><strong>Карта / маршрут</strong></td><td>Пользователь видит расположение объекта.</td></tr>
+        <tr><td><strong>Промо-баннер у карточки</strong></td><td>Акция, ипотека, скидка или другое предложение.</td></tr>
+        <tr><td><strong>Коммерческое позиционирование</strong></td><td>Аккуратное описание объекта после модерации Amber.</td></tr>
+        <tr><td><strong>Статистика</strong></td><td>Клики, переходы, заявки и взаимодействия.</td></tr>
+        <tr><td><strong>Безлимит обращений</strong></td><td>Все обращения за период размещения без доплаты за каждый лид.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-note">Редакционно-модерируемое позиционирование объекта формируется по данным застройщика, открытым источникам и стандартам Amber Avenue.</div>
+
+  <!-- ── 4. ТАРИФ КАРТОЧКИ ─────────────────────────────────── -->
+  <div class="sh">
+    <h2>Тариф официальной карточки</h2>
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead>
+        <tr><th>Период</th><th>Стоимость</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>До запуска / первые 3 месяца после официального запуска</strong></td>
+          <td><span class="price-hi">15 000 ₽/мес</span></td>
+        </tr>
+        <tr>
+          <td>После стартового периода</td>
+          <td><span class="price-lo">30 000 ₽/мес</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-note">Официальный запуск объявляет Amber Avenue. Тестовая работа сайта, технический запуск или появление сайта на домене не считаются официальным запуском.</div>
+
+  <!-- ── 5. ПАРТНЁРСКИЕ ПАКЕТЫ ─────────────────────────────── -->
+  <div class="sh" id="packages">
+    <h2>Партнёрские пакеты</h2>
+    <p>Партнёрские пакеты подходят застройщикам, которые хотят получить не только карточку объекта, но и усиленное присутствие на странице направления.</p>
+  </div>
+
+  <div class="info-note" style="margin-bottom:24px;">Amber Avenue продаёт не один баннер, а систему касаний: пользователь видит партнёра в верхней части страницы, встречает его повторно в листинге, открывает карточку объекта и может сразу перейти к действию.</div>
+
+  <div class="pkg-grid">
+
+    <!-- Главный партнёр -->
+    <div class="pkg featured">
+      <span class="pkg-badge pkg-badge-gold">★ Главный партнёр</span>
+      <div class="pkg-name">Главный партнёр страницы</div>
+      <div class="pkg-desc">Для застройщика, который хочет получить максимальное присутствие на выбранной странице.</div>
+      <div class="pkg-price-block">
+        <span class="pkg-price-label">До запуска / первые 3 месяца</span>
+        <span class="pkg-price-main">90 000 ₽/мес</span>
+        <span class="pkg-price-after">После стартового периода: от 120 000 ₽/мес</span>
+      </div>
+      <div class="pkg-tools">
+        <div class="pkg-tool"><span class="pkg-tool-ck">✓</span><span>Партнёрская позиция №1 / верх страницы — <strong>1</strong></span></div>
+        <div class="pkg-tool"><span class="pkg-tool-ck">✓</span><span>Баннер в середине страницы — <strong>1</strong></span></div>
+        <div class="pkg-tool"><span class="pkg-tool-ck">✓</span><span>Баннер в конце страницы — <strong>1</strong></span></div>
+        <div class="pkg-tool"><span class="pkg-tool-ck">✓</span><span>Полная коммерческая карточка объекта — <strong>2</strong></span></div>
+        <div class="pkg-tool"><span class="pkg-tool-ck">✓</span><span>Промо-баннер у своих карточек — <strong>2</strong></span></div>
+      </div>
+    </div>
+
+    <!-- Бизнес-партнёр -->
+    <div class="pkg">
+      <span class="pkg-badge pkg-badge-blue">Бизнес-партнёр</span>
+      <div class="pkg-name">Бизнес-партнёр</div>
+      <div class="pkg-desc">Для застройщика, которому нужно сильное присутствие на странице без максимального пакета.</div>
+      <div class="pkg-price-block">
+        <span class="pkg-price-label">До запуска / первые 3 месяца</span>
+        <span class="pkg-price-main">69 000 ₽/мес</span>
+        <span class="pkg-price-after">После стартового периода: 90 000 ₽/мес</span>
+      </div>
+      <div class="pkg-tools">
+        <div class="pkg-tool"><span class="pkg-tool-ck">✓</span><span>Партнёрская позиция №2 — <strong>1</strong></span></div>
+        <div class="pkg-tool"><span class="pkg-tool-ck">✓</span><span>Эко-Листинг / дополнительный баннер — <strong>1</strong></span></div>
+        <div class="pkg-tool"><span class="pkg-tool-ck">✓</span><span>Полная коммерческая карточка объекта — <strong>1</strong></span></div>
+        <div class="pkg-tool"><span class="pkg-tool-ck">✓</span><span>Промо-баннер у своей карточки — <strong>1</strong></span></div>
+      </div>
+    </div>
+
+    <!-- Базовый партнёр -->
+    <div class="pkg">
+      <span class="pkg-badge pkg-badge-green">Базовый партнёр</span>
+      <div class="pkg-name">Базовый партнёр</div>
+      <div class="pkg-desc">Для застройщика, который хочет получить партнёрское присутствие и полноценную коммерческую карточку.</div>
+      <div class="pkg-price-block">
+        <span class="pkg-price-label">До запуска / первые 3 месяца</span>
+        <span class="pkg-price-main">45 000 ₽/мес</span>
+        <span class="pkg-price-after">После стартового периода: 69 000 ₽/мес</span>
+      </div>
+      <div class="pkg-tools">
+        <div class="pkg-tool"><span class="pkg-tool-ck">✓</span><span>Партнёрская позиция №3 — <strong>1</strong></span></div>
+        <div class="pkg-tool"><span class="pkg-tool-ck">✓</span><span>Полная коммерческая карточка объекта — <strong>1</strong></span></div>
+        <div class="pkg-tool"><span class="pkg-tool-ck">✓</span><span>Промо-баннер у своей карточки — <strong>1</strong></span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── 6. СРАВНЕНИЕ ПАКЕТОВ ──────────────────────────────── -->
+  <div class="sh">
+    <h2>Сравнение пакетов</h2>
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead>
+        <tr><th>Пакет</th><th>До запуска</th><th>После стартового периода</th><th>Что входит</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Официальная карточка</strong></td>
+          <td><span class="price-hi">15 000 ₽</span></td>
+          <td><span class="price-lo">30 000 ₽</span></td>
+          <td>контакты, сайт, заявка, карта, промо, статистика</td>
+        </tr>
+        <tr>
+          <td><strong>Базовый партнёр</strong></td>
+          <td><span class="price-hi">45 000 ₽</span></td>
+          <td><span class="price-lo">69 000 ₽</span></td>
+          <td>позиция №3 + карточка + промо</td>
+        </tr>
+        <tr>
+          <td><strong>Бизнес-партнёр</strong></td>
+          <td><span class="price-hi">69 000 ₽</span></td>
+          <td><span class="price-lo">90 000 ₽</span></td>
+          <td>позиция №2 + баннер + карточка + промо</td>
+        </tr>
+        <tr>
+          <td><strong>Главный партнёр</strong></td>
+          <td><span class="price-hi">90 000 ₽</span></td>
+          <td><span class="price-lo">от 120 000 ₽</span></td>
+          <td>верх страницы + 2 баннера + 2 карточки + 2 промо</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 7. ПОЧЕМУ ВЫГОДНО ──────────────────────────────────── -->
+  <div class="sh">
+    <h2>Почему это выгодно</h2>
+    <p>На многих площадках застройщик оплачивает каждый лид отдельно. Стоимость обращения может начинаться от нескольких тысяч рублей и расти в зависимости от конкуренции, локации и спроса.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:32px;">
+    <div class="roi-grid">
+      <div>
+        <p class="roi-desc">В Amber Avenue застройщик оплачивает фиксированное размещение и получает все обращения без лимита.<br><br>Фактическая стоимость обращения считается просто:</p>
+        <div class="roi-formula">стоимость тарифа ÷ количество обращений за месяц</div>
+        <p class="roi-desc">Чем больше интерес пользователей к объекту, тем ниже фактическая стоимость одного обращения.</p>
+      </div>
+      <div>
+        <p style="font-size:12px; font-weight:700; color:var(--p); margin-bottom:10px;">Пример для официальной карточки за 15 000 ₽:</p>
+        <div class="tbl-wrap" style="margin-bottom:0;">
+          <table class="tbl">
+            <thead>
+              <tr><th>Обращений/мес</th><th>Стоимость обращения</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>3</td><td><strong>5 000 ₽</strong></td></tr>
+              <tr><td>5</td><td><strong>3 000 ₽</strong></td></tr>
+              <tr><td>10</td><td><strong style="color:var(--ok);">1 500 ₽</strong></td></tr>
+              <tr><td>20</td><td><strong style="color:var(--ok);">750 ₽</strong></td></tr>
+              <tr><td>30</td><td><strong style="color:var(--ok);">500 ₽</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 8. АУДИТОРИЯ ──────────────────────────────────────── -->
+  <div class="sh">
+    <h2>Аудитория Amber Avenue</h2>
+    <p>Amber Avenue работает с пользователями, которые уже находятся в процессе выбора недвижимости.</p>
+  </div>
+
+  <div class="stat-grid" style="margin-bottom:24px;">
+    <div class="stat-card">
+      <div class="stat-val">5 000+</div>
+      <div class="stat-lbl">Квартиры в Калининграде</div>
+      <div class="stat-sub">целевых посетителей / мес</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">7 000+</div>
+      <div class="stat-lbl">Квартиры у моря</div>
+      <div class="stat-sub">целевых посетителей / мес</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">5 000+</div>
+      <div class="stat-lbl">Квартиры в пригороде</div>
+      <div class="stat-sub">целевых посетителей / мес</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">3 000+</div>
+      <div class="stat-lbl">Квартиры в области</div>
+      <div class="stat-sub">целевых посетителей / мес</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">500+</div>
+      <div class="stat-lbl">Застройщики</div>
+      <div class="stat-sub">целевых посетителей / мес</div>
+    </div>
+    <div class="stat-card" style="border-color:var(--a); background:var(--a-bg);">
+      <div class="stat-val" style="color:var(--a-h);">20 500+</div>
+      <div class="stat-lbl">Итого</div>
+      <div class="stat-sub">целевых посетителей / мес</div>
+    </div>
+  </div>
+
+  <div class="info-note">Целевые посетители — это люди, которые уже интересуются покупкой, сравнением или проверкой недвижимости. Дополнительно Amber Avenue развивает тематический трафик: ориентир — около 150 000 визитов / мес по основным направлениям.</div>
+
+  <!-- ── ВИЗУАЛИЗАТОР РЕКЛАМНЫХ ЗОН ───────────────────────── -->
+  <div class="sh">
+    <h2>Демонстрация рекламных зон</h2>
+    <p>Выберите пакет слева, чтобы увидеть, как ваш объект будет представлен на странице направления.</p>
+  </div>
+
+  <div class="sandbox-wrap">
+    <div class="sandbox-opts" id="sandbox-opts"></div>
+    <div class="browser">
+      <div class="browser-bar">
+        <span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span>
+        <span class="addr">amberavenue.ru/zhk-u-morya.html</span>
+      </div>
+      <div class="browser-body" id="mock-body">
+        <div class="m-hdr">
+          <span class="m-logo">🏘 Янтарный проспект</span>
+          <span style="font-size:8px;color:var(--muted);">Квартиры у моря · Новостройки</span>
+        </div>
+
+        <!-- Zone 1: Top partner -->
+        <div class="zone" id="z-top-partner">
+          <span class="zone-lbl">Позиция №1 — верх страницы</span>
+          <div class="m-top-partner">
+            <div class="m-tp-left">
+              <span class="m-tp-badge">★ Главный партнёр</span>
+              <div>
+                <div class="m-tp-title">ЖК «Морской Парк» — квартиры у Балтики</div>
+                <div class="m-tp-sub">Сдача 2026 · Элитный берег · Старт продаж</div>
+              </div>
+            </div>
+            <button class="m-tp-btn">Узнать цены</button>
+          </div>
+        </div>
+
+        <!-- Feed -->
+        <div class="m-feed">
+          <!-- Card 1 with promo sticker - zone 2 -->
+          <div class="zone" id="z-card-1">
+            <span class="zone-lbl">Карточка объекта + промо</span>
+            <div class="m-card">
+              <div class="m-card-img"></div>
+              <div class="m-card-body">
+                <div class="m-card-head">
+                  <span class="m-card-title">ЖК «Морской Парк»</span>
+                  <span class="m-card-rating">★ 4.92</span>
+                </div>
+                <span class="m-promo-sticker">🔥 Акция: Эко-отделка в подарок</span>
+                <div class="m-card-line"></div>
+                <div class="m-card-actions">
+                  <span class="m-card-btn">amberavenue.ru</span>
+                  <span class="m-card-btn cta">Оставить заявку</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Zone 6: Promo banner right of card -->
+          <div class="zone m-card-row" id="z-promo-slot">
+            <span class="zone-lbl">Промо-баннер у карточки (8 500 ₽)</span>
+            <div class="m-card" style="flex:1; margin:0;">
+              <div class="m-card-img"></div>
+              <div class="m-card-body">
+                <div class="m-card-head">
+                  <span class="m-card-title">ЖК «Янтарная Волна»</span>
+                  <span class="m-card-rating">★ 4.61</span>
+                </div>
+                <div class="m-card-line"></div>
+                <div class="m-card-actions">
+                  <span class="m-card-btn">amberavenue.ru</span>
+                  <span class="m-card-btn cta">Оставить заявку</span>
+                </div>
+              </div>
+            </div>
+            <div class="m-side-promo">
+              <span class="m-sp-label">🔥 Акция</span>
+              <span class="m-sp-val" style="font-size:9px;line-height:1.2;">Скидка 10%<br>при брони</span>
+              <button class="m-sp-btn">Подробнее</button>
+            </div>
+          </div>
+
+          <!-- Zone 3: Mid banner (Eco) -->
+          <div class="zone" id="z-mid-banner">
+            <span class="zone-lbl">Баннер в середине страницы</span>
+            <div class="m-mid-banner">
+              <div class="m-mb-l">
+                <span class="m-mb-icon">🏡</span>
+                <div>
+                  <div class="m-mb-title">ЖК «Балтийский Причал» — старт продаж</div>
+                  <div class="m-mb-sub">Квартиры с видом на море · застройщик ГК «Резиденс»</div>
+                </div>
+              </div>
+              <button class="m-mb-btn">Записаться на показ</button>
+            </div>
+          </div>
+
+          <!-- Card 2 with promo sticker - zone 4 -->
+          <div class="zone" id="z-card-2">
+            <span class="zone-lbl">Карточка объекта №2 + промо</span>
+            <div class="m-card">
+              <div class="m-card-img"></div>
+              <div class="m-card-body">
+                <div class="m-card-head"><span class="m-card-title">ЖК «Балтийский Причал»</span><span class="m-card-rating">★ 4.78</span></div>
+                <span class="m-promo-sticker">💳 Ипотека 5.9% — спецусловия</span>
+                <div class="m-card-line"></div>
+                <div class="m-card-actions">
+                  <span class="m-card-btn">amberavenue.ru</span>
+                  <span class="m-card-btn cta">Оставить заявку</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Regular card -->
+          <div class="m-card">
+            <div class="m-card-img"></div>
+            <div class="m-card-body">
+              <div class="m-card-head"><span class="m-card-title">ЖК «Дюны Востока»</span><span class="m-card-rating">★ 4.44</span></div>
+              <div class="m-card-line"></div>
+              <div class="m-card-actions"><span class="m-card-btn">Подробнее</span></div>
+            </div>
+          </div>
+
+          <!-- Zone 5: End banner -->
+          <div class="zone" id="z-end-banner">
+            <span class="zone-lbl">Баннер в конце страницы</span>
+            <div class="m-mid-banner" style="background:linear-gradient(90deg,#0F2548,#1B3C6E);">
+              <div class="m-mb-l">
+                <span class="m-mb-icon">🌊</span>
+                <div>
+                  <div class="m-mb-title">ЖК «Морской Парк» — ещё раз о главном</div>
+                  <div class="m-mb-sub">Последние квартиры с террасами · Успейте выбрать</div>
+                </div>
+              </div>
+              <button class="m-mb-btn">Узнать подробности</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 9. МОДЕРАЦИЯ ──────────────────────────────────────── -->
+  <div class="sh">
+    <h2>Почему партнёрские позиции проходят модерацию</h2>
+    <p>Amber Avenue — не обычная рекламная витрина. Мы сохраняем доверие пользователей к платформе.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:24px;">
+    <p style="font-size:13px; color:var(--txt); line-height:1.65; margin-bottom:16px;">Партнёрские позиции №1, №2 и №3 являются статусными зонами страницы. Поэтому Amber Avenue оставляет за собой право отказать в размещении на партнёрских позициях, если по объекту недостаточно подтверждённых данных или Amber Index ниже установленного уровня.<br><br>При этом объект может быть представлен в каталоге и подключить коммерческие функции карточки: контакты, сайт, заявку, карту, промо-баннер и статистику.</p>
+    <div class="info-note" style="margin:0;">Не каждый платный объект может стать партнёром страницы. Это защищает доверие к Amber Avenue и помогает пользователям отличать факты от рекламы.</div>
+  </div>
+
+  <!-- ── 10. ЧТО НЕЛЬЗЯ КУПИТЬ ──────────────────────────────── -->
+  <div class="sh">
+    <h2>Что нельзя купить на Amber Avenue</h2>
+  </div>
+
+  <div class="cannot-list" style="margin-bottom:48px;">
+    <div class="cannot-item">Повышение Amber Index</div>
+    <div class="cannot-item">Скрытие слабых параметров</div>
+    <div class="cannot-item">Удаление зон уточнения</div>
+    <div class="cannot-item">Изменение методологии оценки</div>
+    <div class="cannot-item">Поднятие карточки в органической выдаче</div>
+    <div class="cannot-item">Положительный вывод от Amber</div>
+    <div class="cannot-item">Удаление объективной информации</div>
+    <div class="cannot-item">Гарантия фиксированного числа лидов</div>
+  </div>
+
+  <div class="info-note">Amber Avenue может продвигать коммерческие предложения партнёров, но не продаёт доверие пользователя.</div>
+
+  <!-- ── 11. КАК ПОДКЛЮЧИТЬСЯ ──────────────────────────────── -->
+  <div class="sh" id="connect">
+    <h2>Как подключиться</h2>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Выберите объект или несколько объектов для коммерческого подключения.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Заполните форму с актуальными данными по ЖК.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Amber Avenue проверит и структурирует информацию.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Карточка получит коммерческие функции: контакты, сайт, заявку, карту, промо и статистику.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">При необходимости — подключите партнёрский пакет на выбранной странице.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 12. ФИНАЛЬНЫЙ БЛОК ─────────────────────────────────── -->
+  <div class="sh">
+    <h2>Amber Avenue — место, где покупатель выбирает недвижимость на основе фактов</h2>
+    <p>Мы не продаём место в рейтинге и не меняем оценку объекта за деньги.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:32px;">
+    <p style="font-size:13px; line-height:1.7; color:var(--txt); margin-bottom:14px;">Мы даём застройщику честный и понятный инструмент коммуникации с покупателем:</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:8px;">
+      <div class="hb"><span class="hb-ck">✓</span> Карточка объекта</div>
+      <div class="hb"><span class="hb-ck">✓</span> Официальные контакты</div>
+      <div class="hb"><span class="hb-ck">✓</span> Сайт</div>
+      <div class="hb"><span class="hb-ck">✓</span> Заявка</div>
+      <div class="hb"><span class="hb-ck">✓</span> Карта</div>
+      <div class="hb"><span class="hb-ck">✓</span> Промо-предложение</div>
+      <div class="hb"><span class="hb-ck">✓</span> Партнёрская позиция</div>
+      <div class="hb"><span class="hb-ck">✓</span> Статистика</div>
+      <div class="hb"><span class="hb-ck">✓</span> Обращения без лимита</div>
+    </div>
+    <div class="info-note" style="margin-top:16px;">Факты бесплатны. Коммуникация с покупателем — платная.</div>
+  </div>
+
+  <!-- ── 13. ФОРМУЛИРОВКИ ДЛЯ МЕНЕДЖЕРОВ ──────────────────── -->
+  <div class="sh">
+    <h2>Короткие формулировки для менеджеров</h2>
+  </div>
+
+  <div class="accordion" style="margin-bottom:48px;">
+    <div class="acc-item">
+      <button class="acc-hdr" onclick="toggleAcc(this)">
+        Как объяснить суть модели? <span class="acc-arrow">▾</span>
+      </button>
+      <div class="acc-body">Факты об объекте доступны пользователям бесплатно, а платными являются инструменты коммуникации: контакты, заявки, сайт, карта, промо и партнёрские позиции.</div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-hdr" onclick="toggleAcc(this)">
+        Как объяснить выгоду? <span class="acc-arrow">▾</span>
+      </button>
+      <div class="acc-body">Партнёр оплачивает фиксированное размещение и получает все обращения без лимита.</div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-hdr" onclick="toggleAcc(this)">
+        Как объяснить отличие от баннера? <span class="acc-arrow">▾</span>
+      </button>
+      <div class="acc-body">Партнёр покупает не один баннер, а систему касаний: позиция на странице, карточка, промо, заявка, сайт и статистика.</div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-hdr" onclick="toggleAcc(this)">
+        Как объяснить Amber Index? <span class="acc-arrow">▾</span>
+      </button>
+      <div class="acc-body">Коммерческое подключение не влияет на Amber Index, методологию оценки и фактическое содержание карточки.</div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-hdr" onclick="toggleAcc(this)">
+        Как объяснить модерацию? <span class="acc-arrow">▾</span>
+      </button>
+      <div class="acc-body">Статусные партнёрские позиции проходят модерацию Amber, потому что они воспринимаются пользователями как зоны повышенного доверия.</div>
+    </div>
+  </div>
+
+  <!-- ── ФОРМА ПОДКЛЮЧЕНИЯ ──────────────────────────────────── -->
+  <div class="final-cta">
+    <h2>Подключить карточку объекта</h2>
+    <p>Оставьте заявку — мы свяжемся в течение рабочего дня, ответим на вопросы и согласуем состав подключения.</p>
+    <form id="dev-form" onsubmit="submitForm(event,'dev-form')" style="max-width:460px;margin:0 auto;">
+      <div class="form-grid">
+        <input class="inp" type="text" placeholder="Ваше имя" required>
+        <input class="inp" type="tel" placeholder="Телефон" required>
+        <input class="inp full" type="text" placeholder="Название ЖК / застройщика" required>
+        <input class="inp full" type="email" placeholder="Электронная почта">
+        <p class="form-note">Нажимая «Отправить», вы соглашаетесь с политикой конфиденциальности</p>
+        <button type="submit" class="btn btn-gold" style="border:none;height:42px;justify-content:center;font-size:14px;grid-column:1/-1;justify-self:center;min-width:220px;">Отправить заявку</button>
+      </div>
+    </form>
+  </div>
+
+</main>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-trust-bar">
+    <div class="footer-inner">
+      <div class="trust-items">
+        <div class="trust-item"><div class="trust-icon">✓</div><div class="trust-text"><p class="trust-title">Проверяем каждый объект</p><p class="trust-sub">Ручная верификация</p></div></div>
+        <div class="trust-item"><div class="trust-icon">⚖</div><div class="trust-text"><p class="trust-title">Независимый рейтинг</p><p class="trust-sub">Без предвзятости</p></div></div>
+        <div class="trust-item"><div class="trust-icon">★</div><div class="trust-text"><p class="trust-title">Честные отзывы</p><p class="trust-sub">Без купленных рецензий</p></div></div>
+        <div class="trust-item"><div class="trust-icon">🔒</div><div class="trust-text"><p class="trust-title">Без скрытых комиссий</p><p class="trust-sub">Бесплатно для покупателей</p></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-main">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <a href="index.html" class="footer-logo">
+            <img src="AA.svg" class="logo-icon" alt="">
+            <div><div class="footer-logo-name">Янтарный проспект</div><div class="footer-logo-tagline">Amber avenue</div></div>
+          </a>
+          <p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-top:12px;">Независимый портал о новостройках Калининградской области.</p>
+        </div>
+        <div class="footer-col">
+          <h3 class="footer-col-title">Каталог ЖК</h3>
+          <ul class="footer-links">
+            <li><a href="zhk.html">Все новостройки</a></li>
+            <li><a href="zhk-umory.html">ЖК у моря</a></li>
+            <li><a href="zhk-kaliningrad.html">ЖК Калининграда</a></li>
+            <li><a href="zhk-prigorod.html">ЖК Пригород</a></li>
+            <li><a href="zhk-oblast.html">ЖК Область</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3 class="footer-col-title">Компания</h3>
+          <ul class="footer-links">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="developers.html">Застройщики</a></li>
+            <li><a href="about.html">О сервисе</a></li>
+            <li><a href="methodology.html">Методология</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3 class="footer-col-title">Сотрудничество</h3>
+          <ul class="footer-links">
+            <li><a href="b2b-promo.html"><strong>Для застройщиков</strong></a></li>
+            <li><a href="partners-promo.html">Для рекламодателей</a></li>
+          </ul>
+          <ul class="footer-contacts" style="margin-top:12px;">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:info@amberavenue.ru">info@amberavenue.ru</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-inner">
+      <div class="footer-bottom-inner">
+        <p class="footer-copyright">© 2026 Amber Avenue</p>
+        <div class="footer-legal"><a href="#">Конфиденциальность</a><span class="legal-dot">·</span><a href="#">Пользовательское соглашение</a></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+
+// ── Accordion ──
+function toggleAcc(btn) {
+  const item = btn.closest('.acc-item');
+  item.classList.toggle('open');
+}
+
+// ── Sandbox ──
+const sandboxConfig = [
+  {
+    id: 'main',
+    title: 'Главный партнёр страницы',
+    price: '90 000 ₽/мес',
+    desc: '3 рекламные позиции, 2 карточки с промо',
+    zones: ['z-top-partner','z-card-1','z-mid-banner','z-card-2','z-end-banner','z-promo-slot']
+  },
+  {
+    id: 'business',
+    title: 'Бизнес-партнёр',
+    price: '69 000 ₽/мес',
+    desc: 'Позиция №2 + Эко-баннер + карточка + промо',
+    zones: ['z-card-1','z-mid-banner','z-card-2','z-promo-slot']
+  },
+  {
+    id: 'basic',
+    title: 'Базовый партнёр',
+    price: '45 000 ₽/мес',
+    desc: 'Позиция №3 + карточка + промо',
+    zones: ['z-card-1','z-promo-slot']
+  },
+  {
+    id: 'card',
+    title: 'Официальная карточка',
+    price: '15 000 ₽/мес',
+    desc: 'Контакты, заявка, сайт, карта, промо, статистика',
+    zones: ['z-card-1','z-promo-slot']
+  },
+  {
+    id: 'promo',
+    title: 'Промо-баннер у карточки',
+    price: '8 500 ₽/мес',
+    desc: 'Рекламное предложение справа от карточки объекта',
+    zones: ['z-promo-slot']
+  }
+];
+
+function buildSandbox() {
+  const container = document.getElementById('sandbox-opts');
+  container.innerHTML = sandboxConfig.map((cfg, i) => `
+    <button class="sopt ${i===0?'active':''}" id="sopt-${cfg.id}" onclick="selectPkg('${cfg.id}')">
+      <div class="sopt-head"><span>${cfg.title}</span><span class="sopt-tag">${cfg.price}</span></div>
+      <div class="sopt-desc">${cfg.desc}</div>
+    </button>
+  `).join('');
+  lightZones(sandboxConfig[0].zones);
+}
+
+function selectPkg(id) {
+  sandboxConfig.forEach(c => {
+    const el = document.getElementById('sopt-' + c.id);
+    if (el) el.classList.toggle('active', c.id === id);
+  });
+  const cfg = sandboxConfig.find(c => c.id === id);
+  if (cfg) lightZones(cfg.zones);
+}
+
+function lightZones(activeIds) {
+  const allZones = ['z-top-partner','z-card-1','z-mid-banner','z-card-2','z-end-banner','z-promo-slot'];
+  allZones.forEach(zid => {
+    const el = document.getElementById(zid);
+    if (el) el.classList.toggle('lit', activeIds.includes(zid));
+  });
+  if (activeIds.length > 0) {
+    const first = document.getElementById(activeIds[0]);
+    if (first) first.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+}
+
+// ── Form ──
+function submitForm(e, formId) {
+  e.preventDefault();
+  alert('Заявка принята! Мы свяжемся с вами в течение рабочего дня.');
+  document.getElementById(formId)?.reset();
+}
+
+// ── Init ──
+buildSandbox();
+</script>
+</body>
+</html>

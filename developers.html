@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Amber Avenue — Застройщики Калининградской области. Рейтинг, отзывы, проекты.">
+  <meta name="theme-color" content="#1B3C6E">
+  <title>Застройщики — Amber Avenue</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="data.js"></script>
+  <script src="properties-data.js"></script>
+  <script src="menu.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    /* ── Developer Page Specific ─────────────────────────── */
+
+    /* Dev card */
+    .dev-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: box-shadow 0.25s ease, transform 0.2s ease;
+      animation: fadeInUp 0.4s ease both;
+    }
+    .dev-card:hover {
+      box-shadow: 0 8px 32px rgba(27,60,110,0.12);
+      transform: translateY(-2px);
+    }
+
+    .dev-card-main {
+      display: flex; gap: 0;
+    }
+
+    /* Logo column */
+    .dev-logo-col {
+      width: 160px; min-width: 160px;
+      background: var(--color-primary);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 24px 16px;
+      position: relative;
+    }
+    .dev-logo-letter {
+      width: 72px; height: 72px;
+      background: var(--color-accent);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; font-weight: 900;
+      color: var(--color-primary);
+      margin-bottom: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .dev-logo-name {
+      font-size: 11px; color: rgba(255,255,255,0.9);
+      font-weight: 600; text-align: center;
+      line-height: 1.3;
+    }
+    .dev-badge-verified {
+      position: absolute; top: 10px; left: 10px;
+      background: #10B981; color: #fff;
+      font-size: 9px; font-weight: 700;
+      padding: 3px 7px; border-radius: 6px;
+      display: flex; align-items: center; gap: 3px;
+    }
+
+    /* Content column */
+    .dev-content-col {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column;
+      padding: 14px 18px 10px;
+    }
+
+    .dev-top-row {
+      display: flex; align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+      padding-bottom: 7px;
+      border-bottom: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
+    }
+    .dev-title-group { flex: 1; min-width: 0; }
+    .dev-title {
+      font-size: 16px; font-weight: 700;
+      color: var(--color-text); line-height: 1.25;
+    }
+    .dev-subtitle {
+      font-size: 11px; color: var(--color-muted);
+      margin-top: 2px;
+    }
+
+    /* Rating */
+    .dev-rating {
+      display: flex; flex-direction: column;
+      align-items: flex-end; flex-shrink: 0; gap: 1px;
+    }
+    .dev-rating-label {
+      font-size: 9px; color: var(--color-muted);
+      display: flex; align-items: center; gap: 3px;
+    }
+    .dev-rating-score {
+      display: flex; align-items: baseline; gap: 3px;
+    }
+    .dev-rating-star { color: var(--color-accent); font-size: 18px; line-height: 1; }
+    .dev-rating-num { font-size: 20px; font-weight: 800; color: var(--color-primary); line-height: 1; }
+    .dev-rating-max { font-size: 11px; color: var(--color-muted); font-weight: 500; }
+    .dev-rating-sub { font-size: 9px; color: var(--color-muted); text-align: right; }
+
+    /* Stats strip */
+    .dev-stats-strip {
+      display: flex; align-items: center;
+      flex-wrap: wrap; gap: 0; row-gap: 4px;
+      background: color-mix(in srgb, var(--color-primary) 3%, var(--color-surface));
+      margin-left: -18px; margin-right: -18px;
+      padding: 8px 18px;
+      border-top: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+      border-bottom: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+      margin-top: 6px;
+    }
+    .dev-stat {
+      display: flex; flex-direction: column;
+      padding-right: 14px; margin-right: 14px;
+      border-right: 1px solid var(--color-border);
+    }
+    .dev-stat:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+    .dev-stat-value {
+      font-size: 14px; font-weight: 800; color: var(--color-primary);
+      line-height: 1.2;
+    }
+    .dev-stat-label {
+      font-size: 9px; color: var(--color-muted);
+      line-height: 1.2;
+    }
+
+    /* Location + contacts */
+    .dev-info-row {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 11px; color: var(--color-text-secondary);
+      margin-top: 6px;
+    }
+    .dev-info-row svg { color: var(--color-primary); flex-shrink: 0; }
+    .dev-website {
+      font-size: 10px; font-weight: 500; color: #2563EB;
+      display: inline-block; margin-top: 2px;
+    }
+    .dev-website:hover { text-decoration: underline; }
+
+    /* Description */
+    .dev-description {
+      font-size: 11px; color: var(--color-text-secondary);
+      line-height: 1.5;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+      margin: 0; padding-top: 8px;
+    }
+
+    /* Tags */
+    .dev-tags {
+      display: flex; flex-wrap: wrap; gap: 4px;
+      margin-top: 8px;
+    }
+
+    /* Projects row below card */
+    .dev-projects-row {
+      border-top: 1px solid var(--color-border-light);
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 10px;
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .dev-projects-row::-webkit-scrollbar { display: none; }
+    .dev-projects-label {
+      font-size: 10px; font-weight: 600;
+      color: var(--color-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .dev-project-thumb {
+      flex-shrink: 0;
+      width: 80px; height: 52px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1.5px solid var(--color-border);
+      position: relative;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .dev-project-thumb:hover {
+      border-color: var(--color-primary);
+      transform: scale(1.04);
+    }
+    .dev-project-thumb img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .dev-project-thumb .thumb-name {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      color: #fff; font-size: 8px; font-weight: 600;
+      padding: 10px 5px 4px;
+      line-height: 1;
+    }
+    /* Building status = green highlight */
+    .dev-project-thumb.is-building {
+      border-color: #10B981;
+      box-shadow: 0 0 0 2px rgba(16,185,129,0.25);
+    }
+    .dev-project-thumb.is-building .thumb-status {
+      position: absolute; top: 3px; right: 3px;
+      background: #10B981; color: #fff;
+      font-size: 7px; font-weight: 700;
+      padding: 2px 4px; border-radius: 4px;
+      line-height: 1; letter-spacing: 0.02em;
+    }
+
+    /* Promo strip */
+    .dev-promo-strip {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 16px;
+      background: linear-gradient(90deg, #FFF7ED, #FEF3C7);
+      border-top: 1px solid #FBBF24;
+      flex-wrap: wrap;
+    }
+    .dev-promo-badge {
+      font-size: 10px; font-weight: 700;
+      background: #F59E0B; color: #fff;
+      padding: 3px 8px; border-radius: 6px;
+      white-space: nowrap;
+    }
+    .dev-promo-text {
+      flex: 1; min-width: 0;
+      font-size: 11px; font-weight: 600;
+      color: #92400E; line-height: 1.3;
+    }
+    .dev-promo-btn {
+      font-size: 10px; font-weight: 700;
+      color: #B45309; background: none;
+      border: 1.5px solid #D97706;
+      border-radius: 6px;
+      padding: 4px 10px; cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+      transition: background 0.2s, color 0.2s;
+    }
+    .dev-promo-btn:hover { background: #F59E0B; color: #fff; }
+
+    /* Right-side promo panel (like ЖК page) */
+    .dev-card-row {
+      display: flex; gap: 12px; align-items: stretch;
+    }
+    .dev-card-row .dev-card { flex: 1; min-width: 0; }
+    .dev-side-promo {
+      width: 200px; min-width: 200px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--color-primary) 0%, #2a5298 100%);
+      border-radius: 14px;
+      padding: 18px 16px;
+      color: #fff;
+      display: flex; flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(27,60,110,0.15);
+      align-self: stretch;
+    }
+    .dev-side-promo .promo-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(245,166,35,0.2);
+      border: 1px solid rgba(245,166,35,0.4);
+      color: var(--color-accent);
+      font-size: 10px; font-weight: 700;
+      padding: 3px 8px; border-radius: 4px;
+      width: fit-content; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .dev-side-promo .promo-discount {
+      font-size: 26px; font-weight: 800; line-height: 1;
+      color: var(--color-accent);
+    }
+    .dev-side-promo .promo-title {
+      font-size: 14px; font-weight: 700; line-height: 1.3;
+    }
+    .dev-side-promo .promo-text {
+      font-size: 11px; color: rgba(255,255,255,0.75);
+      line-height: 1.5; flex: 1;
+    }
+    .dev-side-promo .promo-btn {
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; padding: 10px 14px;
+      background: var(--color-accent);
+      color: var(--color-primary-dark);
+      border: none; border-radius: 8px;
+      font-size: 12px; font-weight: 700;
+      cursor: pointer; transition: background 0.2s, transform 0.1s;
+      font-family: inherit;
+    }
+    .dev-side-promo .promo-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+    @media (max-width: 900px) {
+      .dev-side-promo { width: 160px; min-width: 160px; padding: 14px 12px; }
+      .dev-side-promo .promo-discount { font-size: 22px; }
+      .dev-side-promo .promo-title { font-size: 12px; }
+    }
+    @media (max-width: 768px) {
+      .dev-card-row { flex-direction: column; gap: 0; }
+      .dev-card-row .dev-card { position: relative; z-index: 1; }
+      .dev-side-promo {
+        width: 100%; min-width: 100%;
+        flex-direction: row; align-items: center;
+        padding: 22px 16px 14px; gap: 10px;
+        border-radius: 0 0 14px 14px;
+        margin-top: -14px;
+        position: relative; z-index: 0;
+      }
+      .dev-side-promo .promo-discount { font-size: 20px; }
+      .dev-side-promo .promo-title { font-size: 12px; flex: 1; min-width: 100px; }
+      .dev-side-promo .promo-text { display: none; }
+      .dev-side-promo .promo-btn { white-space: nowrap; flex: 0 0 auto; }
+    }
+
+    /* CTA row */
+    .dev-actions {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      padding: 10px 16px;
+      border-top: 1px solid var(--color-border-light);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .dev-card-main { flex-direction: column; }
+      .dev-logo-col {
+        width: 100%; min-width: 100%;
+        flex-direction: row; padding: 14px 16px;
+        justify-content: flex-start; gap: 12px;
+      }
+      .dev-logo-letter {
+        width: 48px; height: 48px;
+        font-size: 22px; border-radius: 12px;
+        margin-bottom: 0;
+      }
+      .dev-logo-name { text-align: left; }
+      .dev-content-col { padding: 10px 12px 6px; }
+      .dev-stats-strip {
+        margin-left: -12px; margin-right: -12px;
+        padding: 8px 12px;
+      }
+      .dev-projects-row { padding: 10px 12px; }
+      .dev-actions { padding: 10px 12px; }
+    }
+
+    /* ── Property Preview Modal Overlay ── */
+    .prop-modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .prop-modal-overlay.active {
+      opacity: 1; pointer-events: auto;
+    }
+    .prop-modal-container {
+      background: var(--color-surface);
+      width: 100%; max-width: 600px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      transform: translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex; flex-direction: column;
+      max-height: 90vh;
+    }
+    .prop-modal-overlay.active .prop-modal-container {
+      transform: translateY(0);
+    }
+    .prop-modal-hero {
+      height: 240px; position: relative; width: 100%;
+    }
+    .prop-modal-hero img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .prop-modal-hero-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(15, 23, 42, 0.95));
+      padding: 24px 20px 16px;
+      color: #fff;
+    }
+    .prop-modal-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 36px; height: 36px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      z-index: 10;
+    }
+    .prop-modal-close:hover {
+      background: rgba(15, 23, 42, 0.8);
+      transform: scale(1.05);
+    }
+    .prop-modal-class-badge {
+      background: var(--color-accent);
+      color: var(--color-primary-dark);
+      font-size: 10px; font-weight: 800;
+      padding: 4px 8px; border-radius: 6px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      width: fit-content; margin-bottom: 8px;
+    }
+    .prop-modal-title {
+      font-size: 24px; font-weight: 800; margin: 0 0 4px 0;
+      line-height: 1.2; text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .prop-modal-dev {
+      font-size: 13px; color: rgba(255, 255, 255, 0.8);
+      margin: 0; font-weight: 500;
+    }
+    .prop-modal-body {
+      padding: 24px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .prop-modal-metrics {
+      display: grid; grid-template-columns: auto 1fr auto;
+      gap: 24px;
+      background: color-mix(in srgb, var(--color-primary) 3%, var(--color-surface));
+      border: 1px solid var(--color-border-light);
+      padding: 16px; border-radius: 14px;
+    }
+    .prop-modal-metric {
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .prop-modal-metric:last-child {
+      align-items: flex-end;
+      text-align: right;
+    }
+    .prop-modal-metric-label {
+      font-size: 10px; color: var(--color-muted); font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.02em;
+    }
+    .prop-modal-metric-value {
+      font-size: 15px; font-weight: 800; color: var(--color-primary);
+    }
+    .prop-modal-info-item {
+      display: flex; gap: 10px; font-size: 13px;
+      color: var(--color-text-secondary); line-height: 1.4;
+    }
+    .prop-modal-info-item svg {
+      color: var(--color-primary); flex-shrink: 0; margin-top: 2px;
+    }
+    .prop-modal-desc {
+      font-size: 13px; color: var(--color-text-secondary);
+      line-height: 1.6; margin: 0;
+    }
+    .prop-modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--color-border-light);
+      display: flex; gap: 12px;
+      background: var(--color-surface);
+    }
+    .prop-modal-footer .btn {
+      flex: 1; justify-content: center;
+    }
+    @media (max-width: 640px) {
+      .prop-modal-container { max-height: 95vh; border-radius: 16px 16px 0 0; position: fixed; bottom: 0; left: 0; right: 0; }
+      .prop-modal-hero { height: 180px; }
+      .prop-modal-title { font-size: 20px; }
+      .prop-modal-body { padding: 16px; gap: 16px; }
+      .prop-modal-footer { padding: 12px 16px; }
+    }
+  </style>
+
+</head>
+<body>
+
+  <!-- ══ SITE HEADER ════════════════════════════════════════ -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="Янтарный проспект — на главную">
+        <img src="AA.svg" class="logo-icon" alt="Янтарный проспект">
+        <div class="logo-text">
+          <span class="logo-name">Янтарный проспект</span>
+          <span class="logo-tagline">Amber avenue</span>
+        </div>
+      </a>
+
+      <div class="header-search">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="search" id="dev-search" placeholder="Название застройщика..." aria-label="Поиск застройщиков" autocomplete="off">
+      </div>
+
+      <div class="header-actions">
+        <a href="zhk.html" class="btn-header btn-header-ghost" style="text-decoration:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          Каталог ЖК
+        </a>
+        <button class="btn-header btn-header-accent" id="btn-expert">Консультация</button>
+      </div>
+
+      <button class="burger-btn" id="burger-btn" aria-label="Открыть меню" aria-expanded="false">
+        <div class="burger-lines">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </div>
+        <span class="burger-txt">МЕНЮ</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ══ FILTER BAR ════════════════════════════════════════ -->
+  <nav class="filter-bar" aria-label="Фильтры">
+    <div class="filter-bar-inner">
+      <span class="filter-label">Фильтр:</span>
+      <button class="filter-chip active" data-filter="all">Все <span class="chip-count" id="count-all">0</span></button>
+      <button class="filter-chip" data-filter="verified">Проверенные <span class="chip-count" id="count-verified">0</span></button>
+      <button class="filter-chip" data-filter="top">Топ рейтинга <span class="chip-count" id="count-top">0</span></button>
+      <button class="filter-chip" data-filter="experience">10+ лет <span class="chip-count" id="count-exp">0</span></button>
+      <button class="filter-chip" data-filter="promo">С акциями <span class="chip-count" id="count-promo">0</span></button>
+      <button class="filter-chip" data-filter="premium">Премиум <span class="chip-count" id="count-premium">0</span></button>
+    </div>
+  </nav>
+
+  <!-- ══ MAIN CONTENT ════════════════════════════════════════ -->
+  <main class="page-content" id="main-content">
+    <div class="feed-header" role="region">
+      <div>
+        <h1 class="feed-title">Застройщики Калининградской области</h1>
+        <p class="feed-count" aria-live="polite">6 компаний</p>
+      </div>
+      <div class="feed-sort">
+        <select id="sort-select" aria-label="Сортировать по">
+          <option value="rating">По рейтингу Amber</option>
+          <option value="projects">По количеству проектов</option>
+          <option value="experience">По опыту (лет)</option>
+          <option value="name">По алфавиту</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="listing-feed" id="dev-feed" role="feed" aria-label="Список застройщиков">
+      <!-- Cards rendered by JS -->
+    </div>
+  </main>
+
+  <!-- ══ SITE FOOTER ═══════════════════════════════════════════ -->
+    <footer class="site-footer" role="contentinfo">
+    <div class="footer-trust-bar">
+      <div class="footer-inner">
+        <div class="trust-items">
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">✓</div>
+            <div class="trust-text">
+              <p class="trust-title">Проверяем каждый объект</p>
+              <p class="trust-sub">Ручная верификация</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">⚖</div>
+            <div class="trust-text">
+              <p class="trust-title">Независимый рейтинг</p>
+              <p class="trust-sub">Без предвзятости</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">★</div>
+            <div class="trust-text">
+              <p class="trust-title">Честные отзывы</p>
+              <p class="trust-sub">Без купленных рецензий</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">🔒</div>
+            <div class="trust-text">
+              <p class="trust-title">Без скрытых комиссий</p>
+              <p class="trust-sub">Бесплатно для покупателей</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Footer -->
+    <div class="footer-main">
+      <div class="footer-inner">
+        <div class="footer-grid">
+
+          <!-- Brand -->
+          <div class="footer-col footer-brand-col">
+            <a href="index.html" class="footer-logo">
+              <img src="AA.svg" class="logo-icon" alt="Янтарный проспект">
+              <div>
+                <div class="footer-logo-name">Янтарный проспект</div>
+                <div class="footer-logo-tagline">Amber avenue</div>
+              </div>
+            </a>
+            <div class="footer-socials">
+              <a href="#" class="social-link" aria-label="Telegram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+              <a href="#" class="social-link" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></a>
+              <a href="#" class="social-link" aria-label="VK"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.391 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4.03 8.57 4.03 8.096c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.372 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.27-1.422 2.168-3.608 2.168-3.608.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z"/></svg></a>
+              <a href="#" class="social-link" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+            </div>
+          </div>
+
+          <!-- Каталог -->
+          <div class="footer-col">
+            <h3 class="footer-col-title">Каталог</h3>
+            <ul class="footer-links">
+              <li><a href="zhk.html">Все новостройки</a></li>
+              <li><a href="zhk-umory.html">ЖК у моря</a></li>
+              <li><a href="zhk-kaliningrad.html">ЖК Калининграда</a></li>
+              <li><a href="zhk-prigorod.html">ЖК Пригород</a></li>
+              <li><a href="zhk-oblast.html">ЖК Область</a></li>
+            </ul>
+          </div>
+
+          <!-- Компания -->
+          <div class="footer-col">
+            <h3 class="footer-col-title">Компания</h3>
+            <ul class="footer-links">
+              <li><a href="index.html">Главная</a></li>
+              <li><a href="developers.html">Застройщики</a></li>
+              <li><a href="about.html">О сервисе</a></li>
+              <li><a href="methodology.html">Методология рейтинга</a></li>
+              <li><a href="b2b-promo.html">Для застройщиков</a></li>
+              <li><a href="partners-promo.html">Для рекламодателей</a></li>
+            </ul>
+          </div>
+
+          <!-- Контакты -->
+          <div class="footer-col">
+            <h3 class="footer-col-title">Контакты</h3>
+            <ul class="footer-contacts">
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.36 11.37a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <div><a href="tel:+74012123456" class="contact-phone">+7 (4012) 12-34-56</a><span class="contact-hours">Пн–Пт: 9:00–20:00</span></div>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <a href="mailto:info@amberavenue.ru">info@amberavenue.ru</a>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>г. Калининград, Ленинский пр., 83</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-inner">
+        <div class="footer-bottom-inner">
+          <p class="footer-copyright">© 2026 Amber Avenue</p>
+          <div class="footer-legal">
+            <a href="#">Конфиденциальность</a>
+            <span class="legal-dot">·</span>
+            <a href="#">Пользовательское соглашение</a>
+            <span class="legal-dot">·</span>
+            <a href="#">Cookies</a>
+            <span class="legal-dot">·</span>
+            <span class="footer-disclaimer">Информация на сайте не является публичной офертой. Цены и условия могут отличаться.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Property Preview Modal Overlay -->
+  <div id="prop-modal-overlay" class="prop-modal-overlay" onclick="closePropModal(event)">
+    <div class="prop-modal-container" onclick="event.stopPropagation()">
+      <div id="prop-modal-content">
+        <!-- Content injected dynamically by Javascript -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+'use strict';
+
+var PROPERTIES = window.PROPERTIES || (window.AMBER_DATA ? window.AMBER_DATA.properties : []);
+
+function buildDynamicDevelopers() {
+  const baseDevs = window.AMBER_DATA ? window.AMBER_DATA.developers : [];
+  const props = PROPERTIES;
+  
+  const devMap = {};
+  baseDevs.forEach(d => {
+    devMap[d.id] = {
+      ...d,
+      projects: []
+    };
+  });
+  
+  const dynamicDevs = [];
+  const dynamicMap = {};
+  
+  function getMatchedDevId(devStr) {
+    if (!devStr) return null;
+    const s = devStr.toLowerCase().replace(/[^a-zа-я0-9]/g, '');
+    
+    if (s.includes('к8') || s.includes('k8')) return 4;
+    if (s.includes('кси') || s.includes('калининградстройинвест')) return 1;
+    if (s.includes('фжсс') || s.includes('фонджилищного') || s.includes('фонджсс')) return 2;
+    if (s.includes('расцвет')) return 3;
+    if (s.includes('макрострой')) return 5;
+    if (s.includes('модульстройград')) return 6;
+    if (s.includes('мегаполис')) return 7;
+    if (s.includes('бдн') || s.includes('балтийскийдом')) return 8;
+    if (s.includes('кранцпарк') || s.includes('westdream') || s.includes('вестдрим')) return 9;
+    if (s.includes('ойкумена') || s.includes('евростройинвест')) return 10;
+    if (s.includes('кпд')) return 11;
+    if (s.includes('инвент')) return 12;
+    if (s.includes('мпк')) return 13;
+    if (s.includes('балтпарус') || s.includes('балтийскийпарус')) return 14;
+    if (s.includes('кск')) return 15;
+    if (s.includes('строиттрест') || s.includes('строительныйтрест')) return 16;
+    if (s.includes('стройинвестиция')) return 17;
+    
+    // Put 'kst'/'кст' and 'русскаяевропа' before 'сск' and 'рекстрой'
+    // 'рекстрой' contains 'кст' (реКСТрой), so check for 'рекстрой' when using 'кст'
+    if (s.includes('kst') || (s.includes('кст') && !s.includes('рекстрой'))) return 39;
+    if (s.includes('русскаяевропа') || s.includes('авангардинвест')) return 21;
+    if (s.includes('сск') || s.includes('сибирская')) return 18;
+    if (s.includes('рекстрой')) return 19;
+    if (s.includes('setl') || s.includes('сетл')) return 20;
+    
+    // Custom checks for Specstroy & Bagration
+    if (s.includes('багратион') || (s.includes('спецстрой') && !s.includes('спецремстройтрест')) || s.includes('билдингинвест')) return 22;
+    
+    if (s.includes('лидерстрой') || s.includes('центрфорвард')) return 23;
+    if (s.includes('юстрой')) return 24;
+    if (s.includes('иском')) return 25;
+    if (s.includes('регионстроительство')) return 26;
+    if (s.includes('ласкино')) return 27;
+    if (s.includes('балткоттедж') || s.includes('балтиккоттедж')) return 28;
+    if (s.includes('домарт')) return 29;
+    if (s.includes('балтияинвест')) return 30;
+    if (s.includes('зеленоградсксельстрой')) return 31;
+    if (s.includes('автотор')) return 32;
+    if (s.includes('новостройплюс')) return 33;
+    if (s.includes('зеленыйгород')) return 34;
+    if (s.includes('отрада')) return 35;
+    if (s.includes('раушен')) return 36;
+    if (s.includes('акфен')) return 37;
+    if (s.includes('спецремстройтрест')) return 38;
+    if (s.includes('мидгард')) return 40;
+    if (s.includes('альбатрос')) return 41;
+    if (s.includes('виктория')) return 42;
+    if (s.includes('премьер')) return 43;
+    if (s.includes('ривьера')) return 44;
+    
+    // New developer mappings
+    if (s.includes('корторос') || s.includes('кортрос') || s.includes('kortros')) return 45;
+    if (s.includes('лидергрупп') || s.includes('lidergrupp') || s.includes('смоленское')) return 46;
+    if (s.includes('меркури') || s.includes('merkur')) return 47;
+    if (s.includes('астори') || s.includes('astor')) return 48;
+    if (s.includes('твн') || s.includes('tvn')) return 49;
+    if (s.includes('доминвест') || s.includes('dominvest')) return 50;
+    if (s.includes('эллипс') || s.includes('ellips')) return 51;
+    if (s.includes('нановой') || s.includes('nanovoi') || s.includes('гармония')) return 52;
+    if (s.includes('мпстрой') || s.includes('mpstroy') || s.includes('челноков')) return 53;
+    if (s.includes('кдстрой') || s.includes('kdstroi') || s.includes('стройсервис')) return 54;
+    
+    return null;
+  }
+  
+  props.forEach(p => {
+    const devStr = p.developer || 'Застройщик уточняется';
+    const matchedId = getMatchedDevId(devStr);
+    
+    const proj = {
+      name: p.name,
+      img: p.imgSrc || p.image || 'images/default-zhk.jpg',
+      building: p.deliveryShort && !p.deliveryShort.toLowerCase().includes('сдан') && p.deliveryShort.toLowerCase() !== 'нет данных',
+      rating: p.rating
+    };
+    
+    if (matchedId && devMap[matchedId]) {
+      devMap[matchedId].projects.push(proj);
+    } else {
+      let cleanDevName = devStr.trim().replace(/\.+$/, '');
+      if (!cleanDevName) cleanDevName = 'Застройщик уточняется';
+      
+      if (!dynamicMap[cleanDevName]) {
+        dynamicMap[cleanDevName] = {
+          id: 'dynamic-' + cleanDevName.replace(/[^a-zA-Zа-яА-Я0-9]/g, ''),
+          name: cleanDevName,
+          fullName: cleanDevName,
+          letter: cleanDevName.charAt(0).toUpperCase(),
+          color: '#5F7596',
+          rating: 4.0,
+          reviews: 5,
+          years: 5,
+          projectsDone: 0,
+          projectsActive: 0,
+          totalApts: 'Уточняется',
+          totalSqm: 'Уточняется',
+          city: 'Калининградская область',
+          address: 'Адрес уточняется',
+          website: 'amberavenue.ru',
+          description: 'Застройщик жилых комплексов в Калининградской области. Проекты верифицируются экспертами Amber Avenue.',
+          tags: ['проверенные'],
+          promo: null,
+          projects: []
+        };
+        dynamicDevs.push(dynamicMap[cleanDevName]);
+      }
+      dynamicMap[cleanDevName].projects.push(proj);
+    }
+  });
+  
+  const allDevs = [
+    ...Object.values(devMap),
+    ...dynamicDevs
+  ].filter(d => d.projects.length > 0);
+  
+  allDevs.forEach(d => {
+    let done = 0;
+    let active = 0;
+    let ratingSum = 0;
+    let ratingCount = 0;
+    
+    d.projects.forEach(p => {
+      if (p.building) {
+        active++;
+      } else {
+        done++;
+      }
+      if (typeof p.rating === 'number' && p.rating > 0) {
+        ratingSum += p.rating;
+        ratingCount++;
+      }
+    });
+    d.projectsDone = done;
+    d.projectsActive = active;
+    
+    // Formula: average rating of all projects, rounded to 1 decimal place.
+    if (ratingCount > 0) {
+      d.rating = parseFloat((ratingSum / ratingCount).toFixed(1));
+    } else {
+      d.rating = d.rating || 4.0;
+    }
+  });
+  
+  return allDevs;
+}
+
+const DEVELOPERS = buildDynamicDevelopers();
+
+const TAG_STYLES = {
+  'комфорт': 'tag-comfort',
+  'бизнес': 'tag-mortgage',
+  'премиум': 'tag-author',
+  'эконом': 'tag-class',
+  'у моря': 'tag-family',
+  'топ рейтинга': 'tag-it',
+  'комплексная застройка': 'tag-autonomous',
+  'проверенные': 'tag-family',
+  'семейная ипотека': 'tag-family',
+  'детская инфраструктура': 'tag-comfort',
+  'авторская архитектура': 'tag-author',
+  'быстрая сдача': 'tag-it',
+  'рассрочка': 'tag-autonomous',
+};
+
+function normalizeName(str) {
+  if (!str) return '';
+  return str.toLowerCase().replace(/[«»"'\s-]/g, '').trim();
+}
+
+function buildDevCard(d, idx) {
+  const tags = d.tags.map(t =>
+    `<span class="tag ${TAG_STYLES[t] || 'tag-class'}">${t}</span>`
+  ).join('');
+
+  const projectsHTML = d.projects.map(p => {
+    // Find the property ID for openPropModal if it exists in PROPERTIES
+    const normProjName = normalizeName(p.name);
+    const matchedProp = PROPERTIES.find(prop => normalizeName(prop.name) === normProjName);
+    
+    let onclickAction = '';
+    if (matchedProp) {
+      onclickAction = `openPropModal(${matchedProp.id}, event)`;
+    } else {
+      onclickAction = `goToZhkSearch('${p.name.replace(/'/g, "\\'")}', event)`;
+    }
+
+    // Use the real image from PROPERTIES if it exists, otherwise fallback to developer project's image
+    const projImg = (matchedProp && (matchedProp.imgSrc || matchedProp.image)) ? (matchedProp.imgSrc || matchedProp.image) : p.img;
+
+    return `<div class="dev-project-thumb${p.building ? ' is-building' : ''}" onclick="${onclickAction}" title="${p.name}">
+      <img src="${projImg}" alt="${p.name}" loading="lazy">
+      ${p.building ? '<span class="thumb-status">🏗 строится</span>' : ''}
+      <div class="thumb-name">${p.name}</div>
+    </div>`;
+  }).join('');
+
+  const projectsRowHTML = d.projects.length > 0 ? `
+    <div class="dev-projects-row">
+      <span class="dev-projects-label">Проекты (${d.projects.length}):</span>
+      ${projectsHTML}
+    </div>
+  ` : '';
+
+  return `<div class="property-card-wrapper" style="animation-delay:${idx * 0.06}s">
+    <div class="${d.promo && d.promo.type === 'panel' ? 'dev-card-row' : ''}">
+    <div class="dev-card">
+      <div class="dev-card-main">
+        <div class="dev-logo-col" style="background:${d.color}">
+          ${d.verified ? '<div class="dev-badge-verified">✓ Проверен</div>' : ''}
+          <div class="dev-logo-letter">${d.letter}</div>
+          <div class="dev-logo-name">${d.fullName}</div>
+        </div>
+        <div class="dev-content-col">
+          <div class="dev-top-row">
+            <div class="dev-title-group">
+              <div class="dev-title">${d.name}</div>
+              <div class="dev-subtitle">${d.fullName}</div>
+            </div>
+            <div class="dev-rating">
+              <div class="dev-rating-label">Рейтинг Amber <i>ⓘ</i></div>
+              <div class="dev-rating-score">
+                <span class="dev-rating-star">★</span>
+                <span class="dev-rating-num">${d.rating}</span>
+                <span class="dev-rating-max">/ 5</span>
+              </div>
+              <div class="dev-rating-sub">${d.reviews} отзывов</div>
+            </div>
+          </div>
+
+          <div class="dev-info-row">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>${d.city} · ${d.address}</span>
+          </div>
+          <a class="dev-website" href="https://${d.website}" target="_blank">${d.website} ↗</a>
+
+          <div class="dev-stats-strip">
+            <div class="dev-stat"><span class="dev-stat-value">${d.years} лет</span><span class="dev-stat-label">на рынке</span></div>
+            <div class="dev-stat"><span class="dev-stat-value">${d.projectsDone}</span><span class="dev-stat-label">сдано</span></div>
+            <div class="dev-stat"><span class="dev-stat-value">${d.projectsActive}</span><span class="dev-stat-label">строится</span></div>
+            <div class="dev-stat"><span class="dev-stat-value">${d.totalApts}</span><span class="dev-stat-label">квартир</span></div>
+            <div class="dev-stat"><span class="dev-stat-value">${d.totalSqm}</span><span class="dev-stat-label">построено</span></div>
+          </div>
+
+          <p class="dev-description">${d.description}</p>
+          <div class="dev-tags">${tags}</div>
+        </div>
+      </div>
+
+      ${d.promo && d.promo.type === 'strip' ? `<div class="dev-promo-strip">
+         <span class="dev-promo-badge">${d.promo.badge}</span>
+         <span class="dev-promo-text">${d.promo.text}</span>
+         <button class="dev-promo-btn" onclick="showToast('Подробности акции отправлены на почту!')">Подробнее →</button>
+      </div>` : ''}
+
+      ${projectsRowHTML}
+
+      <div class="dev-actions">
+        <button class="btn btn-primary" onclick="showToast('Заявка на консультацию отправлена!')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.36 11.37a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Связаться
+        </button>
+        <button class="btn btn-outline" onclick="window.location='index.html'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          Все ЖК
+        </button>
+        <button class="btn btn-outline">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Сайт ↗
+        </button>
+      </div>
+    </div>
+
+    ${d.promo && d.promo.type === 'panel' ? `<div class="dev-side-promo">
+      <div class="promo-badge">★ ${d.promo.badge}</div>
+      <div class="promo-discount">${d.promo.discount}</div>
+      <div class="promo-title">${d.promo.title}</div>
+      <div class="promo-text">${d.promo.text}</div>
+      <button class="promo-btn" onclick="showToast('Подробности отправлены!')">Подробнее →</button>
+    </div>` : ''}
+
+  </div>`;  // closes dev-card-row
+}
+
+const DEV_BANNERS = [
+  {
+    icon: '🏗',
+    headline: 'Вы застройщик?',
+    sub: 'Добавьте свой ЖК на платформу Amber Avenue — бесплатная публикация, охват 50 000+ покупателей в месяц.',
+    cta: 'Добавить ЖК →',
+    ctaLink: 'b2b-promo.html',
+    stats: [
+      { num: '50K+', label: 'покупателей/мес' },
+      { num: '120+', label: 'ЖК на платформе' },
+      { num: '1-2 дня', label: 'модерация' },
+    ],
+  },
+  {
+    icon: '📊',
+    headline: 'Рейтинг застройщиков 2025',
+    sub: 'Объективная оценка на основе сроков сдачи, качества строительства, отзывов покупателей и финансовой устойчивости.',
+    cta: 'Методология рейтинга →',
+    ctaLink: '#',
+    stats: [
+      { num: '14', label: 'критериев оценки' },
+      { num: '534', label: 'проверенных отзывов' },
+      { num: '100%', label: 'независимость' },
+    ],
+  },
+];
+
+function buildDevBanner(b) {
+  return `<div class="property-card-wrapper">
+    <div class="banner-card">
+      <div class="banner-icon">${b.icon}</div>
+      <div class="banner-body">
+        <div class="banner-headline">${b.headline}</div>
+        <p class="banner-sub">${b.sub}</p>
+        <button class="banner-cta" onclick="${b.ctaLink.startsWith('#') ? "showToast('Скоро!')" : "window.location='" + b.ctaLink + "'"}">${b.cta}</button>
+      </div>
+      <div class="banner-stats">
+        ${b.stats.map(s => `<div class="banner-stat"><span class="num">${s.num}</span><span class="label">${s.label}</span></div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+let activeFilters = {
+  search: '',
+  chip: 'all',
+  sort: 'rating'
+};
+
+function renderDevFeed() {
+  let filtered = [...DEVELOPERS];
+
+  // 1. Search filter
+  if (activeFilters.search) {
+    const q = activeFilters.search.toLowerCase();
+    filtered = filtered.filter(d => 
+      d.name.toLowerCase().includes(q) || 
+      d.fullName.toLowerCase().includes(q) ||
+      (d.projects && d.projects.some(p => p.name.toLowerCase().includes(q)))
+    );
+  }
+
+  // 2. Chip filter
+  if (activeFilters.chip !== 'all') {
+    if (activeFilters.chip === 'verified') {
+      filtered = filtered.filter(d => d.verified);
+    } else if (activeFilters.chip === 'top') {
+      filtered = filtered.filter(d => d.rating >= 4.5);
+    } else if (activeFilters.chip === 'experience') {
+      filtered = filtered.filter(d => d.years >= 10);
+    } else if (activeFilters.chip === 'promo') {
+      filtered = filtered.filter(d => d.promo);
+    } else if (activeFilters.chip === 'premium') {
+      filtered = filtered.filter(d => d.tags.includes('премиум') || d.tags.includes('бизнес'));
+    }
+  }
+
+  // 3. Sorting
+  if (activeFilters.sort === 'rating') {
+    filtered.sort((a, b) => b.rating - a.rating);
+  } else if (activeFilters.sort === 'projects') {
+    filtered.sort((a, b) => (b.projectsDone + b.projectsActive) - (a.projectsDone + a.projectsActive));
+  } else if (activeFilters.sort === 'experience') {
+    filtered.sort((a, b) => b.years - a.years);
+  } else if (activeFilters.sort === 'name') {
+    filtered.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+  }
+
+  const feed = document.getElementById('dev-feed');
+  if (filtered.length === 0) {
+    feed.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 60px 0; color: var(--color-muted)">
+        <div style="font-size: 32px; margin-bottom: 12px">🔍</div>
+        <p style="font-size: 14px">Застройщики с такими параметрами не найдены.</p>
+      </div>`;
+    document.querySelector('.feed-count').textContent = '0 компаний';
+    return;
+  }
+
+  const cards = filtered.map((d, i) => buildDevCard(d, i));
+  const result = [];
+  cards.forEach((card, i) => {
+    result.push(card);
+    if (i === 1) result.push(buildDevBanner(DEV_BANNERS[0]));
+    if (i === 3) result.push(buildDevBanner(DEV_BANNERS[1]));
+  });
+  feed.innerHTML = result.join('');
+
+  // Update counts
+  const countStr = filtered.length + ' ' + getRussianDeclension(filtered.length, ['компания', 'компании', 'компаний']);
+  document.querySelector('.feed-count').textContent = countStr;
+}
+
+function getRussianDeclension(num, words) {
+  const n = Math.abs(num) % 100;
+  const n1 = n % 10;
+  if (n > 10 && n < 20) return words[2];
+  if (n1 > 1 && n1 < 5) return words[1];
+  if (n1 === 1) return words[0];
+  return words[2];
+}
+
+function updateChipCounts() {
+  document.getElementById('count-all').textContent = DEVELOPERS.length;
+  document.getElementById('count-verified').textContent = DEVELOPERS.filter(d => d.verified).length;
+  document.getElementById('count-top').textContent = DEVELOPERS.filter(d => d.rating >= 4.5).length;
+  document.getElementById('count-exp').textContent = DEVELOPERS.filter(d => d.years >= 10).length;
+  document.getElementById('count-promo').textContent = DEVELOPERS.filter(d => d.promo).length;
+  document.getElementById('count-premium').textContent = DEVELOPERS.filter(d => d.tags.includes('премиум') || d.tags.includes('бизнес')).length;
+}
+
+function showToast(msg) {
+  let c = document.querySelector('.toast-container');
+  if (!c) { c = document.createElement('div'); c.className = 'toast-container'; document.body.appendChild(c); }
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  c.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3000);
+}
+
+window.openPropModal = function(propId, event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  const prop = PROPERTIES.find(p => p.id === propId);
+  if (!prop) return;
+
+  const contentEl = document.getElementById('prop-modal-content');
+  if (!contentEl) return;
+
+  contentEl.innerHTML = `
+    <div class="prop-modal-hero">
+      <img src="${prop.imgSrc || prop.image || 'images/default-zhk.jpg'}" alt="${prop.name}">
+      <button class="prop-modal-close" onclick="closePropModal(event)" aria-label="Закрыть">✕</button>
+      <div class="prop-modal-hero-overlay">
+        <div class="prop-modal-class-badge">${prop.class || 'комфорт-класс'}</div>
+        <h3 class="prop-modal-title">${prop.name}</h3>
+        <p class="prop-modal-dev">Застройщик: ${prop.developer}</p>
+      </div>
+    </div>
+    <div class="prop-modal-body">
+      <div class="prop-modal-metrics">
+        <div class="prop-modal-metric">
+          <span class="prop-modal-metric-label">Цена от</span>
+          <span class="prop-modal-metric-value">${prop.priceFrom || 'Уточняется'}</span>
+        </div>
+        <div class="prop-modal-metric">
+          <span class="prop-modal-metric-label">Срок сдачи</span>
+          <span class="prop-modal-metric-value">${prop.delivery || 'Уточняется'}</span>
+        </div>
+        <div class="prop-modal-metric">
+          <span class="prop-modal-metric-label">Рейтинг</span>
+          <span class="prop-modal-metric-value">★ ${prop.rating || '—'}</span>
+        </div>
+      </div>
+
+      <div class="prop-modal-info-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span><strong>Адрес:</strong> ${prop.address || 'Калининградская область'}</span>
+      </div>
+
+      ${prop.walkToSea ? `
+        <div class="prop-modal-info-item">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M2 12a10 10 0 0 1 20 0M2 12a10 10 0 0 0 20 0"/></svg>
+          <span><strong>До моря:</strong> ${prop.walkToSea}</span>
+        </div>
+      ` : ''}
+
+      <p class="prop-modal-desc">${prop.description || 'Нет описания объекта.'}</p>
+    </div>
+    <div class="prop-modal-footer">
+      <button class="btn btn-outline" onclick="handleMapClick('${prop.address}', '${prop.name}', 'yandex', event)">
+        🗺 Карта Яндекс
+      </button>
+      <button class="btn btn-outline" onclick="handleMapClick('${prop.address}', '${prop.name}', '2gis', event)">
+        🗺 Карта 2ГИС
+      </button>
+      <button class="btn btn-primary" onclick="goToZhkPage('${prop.name}')">
+        Посмотреть карточку объекта
+      </button>
+    </div>
+  `;
+
+  const overlay = document.getElementById('prop-modal-overlay');
+  if (overlay) {
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+};
+
+window.closePropModal = function(event) {
+  if (event) event.preventDefault();
+  const overlay = document.getElementById('prop-modal-overlay');
+  if (overlay) {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+};
+
+window.goToZhkPage = function(propName) {
+  // Find the exact property object
+  const normTarget = normalizeName(propName);
+  const prop = PROPERTIES.find(p => normalizeName(p.name) === normTarget);
+  if (!prop) {
+    showToast('ЖК не найден');
+    return;
+  }
+
+  // Set the target ZHK ID globally
+  window.targetZhkId = prop.id;
+
+  // Close modal
+  closePropModal();
+
+  // Route to zhk
+  if (typeof navigateToPage === 'function') {
+    // In SPA bundle mode
+    location.hash = '#zhk';
+  } else {
+    // In standalone file mode
+    window.location.href = `zhk.html?id=${prop.id}`;
+  }
+};
+
+window.goToZhkSearch = function(projectName, event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  // Clear target ID
+  window.targetZhkId = null;
+  // Set search query
+  window.targetZhkSearch = projectName;
+
+  // Close modal
+  closePropModal();
+
+  // Route to zhk
+  if (typeof navigateToPage === 'function') {
+    location.hash = '#zhk';
+  } else {
+    window.location.href = `zhk.html?search=${encodeURIComponent(projectName)}`;
+  }
+};
+
+window.handleMapClick = function(address, title, service, event) {
+  if (event) event.preventDefault();
+  if (typeof window.openMapModal === 'function') {
+    window.openMapModal(address, title, service, event);
+  } else {
+    // Fallback: open directly in a new tab
+    if (service === '2gis') {
+      window.open(`https://2gis.ru/search/${encodeURIComponent(address)}`, '_blank', 'noopener');
+    } else {
+      window.open(`https://yandex.ru/maps/?text=${encodeURIComponent(address)}`, '_blank', 'noopener');
+    }
+  }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  updateChipCounts();
+
+  const params = new URLSearchParams(window.location.search);
+  const targetDev = params.get('devName') || window.targetDeveloperSearch;
+  if (targetDev) {
+    activeFilters.search = targetDev;
+    const searchInput = document.getElementById('dev-search');
+    if (searchInput) searchInput.value = targetDev;
+  }
+
+  renderDevFeed();
+
+  // Escape key handler to close property modal
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closePropModal();
+    }
+  });
+
+  // Search event
+  const searchInput = document.getElementById('dev-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+      activeFilters.search = e.target.value;
+      renderDevFeed();
+    });
+  }
+
+  // Sort event
+  const sortSelect = document.getElementById('sort-select');
+  if (sortSelect) {
+    sortSelect.addEventListener('change', function(e) {
+      activeFilters.sort = e.target.value;
+      renderDevFeed();
+    });
+  }
+
+  // Filter chips events
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      activeFilters.chip = this.getAttribute('data-filter');
+      renderDevFeed();
+    });
+  });
+});
+  </script>
+</body>
+</html>
