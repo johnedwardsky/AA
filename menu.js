@@ -1215,13 +1215,13 @@
     if (newsEl && d.blog) {
       const items = d.blog.slice(0, 3);
       newsEl.innerHTML = items.map(article => `
-        <a href="blog.html" class="mg-news-row">
+        <div class="mg-news-row" style="cursor: default;">
           <div class="mg-news-meta">
             <span class="mg-news-tag">${article.tag || ''}</span>
             <span>${article.date || ''}</span>
           </div>
           <div class="mg-news-title">${article.title || ''}</div>
-        </a>
+        </div>
       `).join('');
     }
 
