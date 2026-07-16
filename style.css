@@ -1564,8 +1564,25 @@ ul { list-style: none; }
   border-radius: 16px;
   box-shadow: 0 25px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.06);
   width: 100%; max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
   overflow: hidden;
   position: relative;
+}
+
+.modal-body {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  min-height: 0;
+}
+
+@media (max-width: 480px) {
+  .modal-card {
+    max-height: calc(100dvh - 40px);
+    border-radius: 14px;
+  }
 }
 
 .modal-header {
@@ -1595,7 +1612,7 @@ ul { list-style: none; }
   background: var(--color-bg); color: var(--color-text);
 }
 
-.modal-body { padding: 18px 24px 24px; }
+.modal-body { padding: 18px 24px 24px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
 .modal-field {
   margin-bottom: 14px;
