@@ -942,29 +942,15 @@
           </table>
         </div>
 
-        <!-- ⚙️ Yandex Forms Integration Card -->
+        <!-- ⚙️ Yandex Cloud Webhook Integration Card -->
         <div style="margin-top: 32px; padding: var(--space-lg); background: var(--clr-surface); border: 1px solid var(--clr-border); border-radius: var(--radius-lg);">
-          <h2 style="font-size: 1.15rem; margin-top: 0; display: flex; align-items: center; gap: 8px; color: var(--clr-amber);">⚙️ Интеграция с Яндекс.Формами</h2>
+          <h2 style="font-size: 1.15rem; margin-top: 0; display: flex; align-items: center; gap: 8px; color: var(--clr-amber);">⚙️ Интеграция с Yandex Cloud (Яндекс.Таблицы)</h2>
           <p style="font-size: 0.8rem; color: var(--clr-text-dim); margin-bottom: 20px; line-height: 1.5;">
-            Вставьте ссылки на ваши <strong>Яндекс.Формы</strong> ниже. Когда ссылки указаны, сайт автоматически заменит стандартные встроенные формы на формы Яндекс (в виде iframe), и все отправленные лиды будут мгновенно поступать напрямую в ваши <strong>Яндекс.Таблицы</strong>. Оставьте поля пустыми, чтобы использовать встроенные дизайнерские формы.
+            Вставьте адрес вашего вебхука Яндекс.Облака ниже. Когда вебхук указан, все отправленные лиды с премиальных HTML-форм на сайте будут автоматически пересылаться на этот вебхук и мгновенно записываться напрямую в ваши <strong>Яндекс.Таблицы</strong> (ФЗ-152 полностью соблюден, данные хранятся в РФ). Оставьте поле пустым, чтобы лиды сохранялись только локально в браузере.
           </p>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-            <div>
-              <label class="modal-label" style="color: var(--clr-text-muted); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Форма подписки Email (Главная)</label>
-              <input type="text" id="config-sub-url" placeholder="https://forms.yandex.ru/u/..." style="width:100%; padding: 10px 12px; border: 1px solid var(--clr-border); border-radius: 6px; background: var(--clr-bg); color: var(--clr-text); outline: none; font-size: 0.85rem;">
-            </div>
-            <div>
-              <label class="modal-label" style="color: var(--clr-text-muted); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Форма обратной связи (Главная)</label>
-              <input type="text" id="config-contact-url" placeholder="https://forms.yandex.ru/u/..." style="width:100%; padding: 10px 12px; border: 1px solid var(--clr-border); border-radius: 6px; background: var(--clr-bg); color: var(--clr-text); outline: none; font-size: 0.85rem;">
-            </div>
-            <div>
-              <label class="modal-label" style="color: var(--clr-text-muted); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Форма узнать наличие (Карточка ЖК)</label>
-              <input type="text" id="config-avail-url" placeholder="https://forms.yandex.ru/u/..." style="width:100%; padding: 10px 12px; border: 1px solid var(--clr-border); border-radius: 6px; background: var(--clr-bg); color: var(--clr-text); outline: none; font-size: 0.85rem;">
-            </div>
-            <div>
-              <label class="modal-label" style="color: var(--clr-text-muted); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Форма консультации эксперта (Меню)</label>
-              <input type="text" id="config-consult-url" placeholder="https://forms.yandex.ru/u/..." style="width:100%; padding: 10px 12px; border: 1px solid var(--clr-border); border-radius: 6px; background: var(--clr-bg); color: var(--clr-text); outline: none; font-size: 0.85rem;">
-            </div>
+          <div style="margin-bottom: 20px;">
+            <label class="modal-label" style="color: var(--clr-text-muted); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Адрес Webhook (Yandex Cloud Function)</label>
+            <input type="text" id="config-webhook-url" placeholder="https://functions.yandexcloud.net/..." style="width:100%; padding: 10px 12px; border: 1px solid var(--clr-border); border-radius: 6px; background: var(--clr-bg); color: var(--clr-text); outline: none; font-size: 0.85rem;">
           </div>
           <button class="btn-admin" onclick="saveYandexConfig()" style="background: var(--clr-amber); color: #111; font-weight: bold; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.85rem;">Сохранить настройки интеграции</button>
         </div>
@@ -2319,24 +2305,45 @@
 
     window.saveYandexConfig = function() {
       const config = {
-        subscribe: document.getElementById('config-sub-url').value.trim(),
-        contact: document.getElementById('config-contact-url').value.trim(),
-        availability: document.getElementById('config-avail-url').value.trim(),
-        consult: document.getElementById('config-consult-url').value.trim()
+        webhookUrl: document.getElementById('config-webhook-url').value.trim()
       };
       localStorage.setItem('amber_yandex_config', JSON.stringify(config));
-      showAdminToast('Настройки интеграции с Яндекс.Формами успешно сохранены!');
+      showAdminToast('Настройки интеграции с Yandex Cloud успешно сохранены!');
+      window.fetchLeadsFromYandexCloud();
     };
 
     window.loadYandexConfig = function() {
       try {
         const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
-        document.getElementById('config-sub-url').value = config.subscribe || '';
-        document.getElementById('config-contact-url').value = config.contact || '';
-        document.getElementById('config-avail-url').value = config.availability || '';
-        document.getElementById('config-consult-url').value = config.consult || '';
+        document.getElementById('config-webhook-url').value = config.webhookUrl || '';
       } catch (e) {
         console.error('Error loading Yandex configuration:', e);
+      }
+    };
+
+    window.fetchLeadsFromYandexCloud = function() {
+      try {
+        const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
+        const webhookUrl = config.webhookUrl || '';
+        if (webhookUrl && webhookUrl.startsWith('http')) {
+          fetch(webhookUrl)
+            .then(res => {
+              if (res.ok) return res.json();
+              throw new Error('GET failed');
+            })
+            .then(leads => {
+              if (Array.isArray(leads)) {
+                localStorage.setItem('amber_leads', JSON.stringify(leads));
+                renderAmberLeadsTable();
+                console.log('Successfully synced leads database from Yandex Cloud!');
+              }
+            })
+            .catch(err => {
+              console.log('Fetch from Yandex Cloud Webhook GET failed (normal if write-only):', err);
+            });
+        }
+      } catch (e) {
+        console.error('Error in fetchLeadsFromYandexCloud:', e);
       }
     };
 
@@ -2345,6 +2352,7 @@
       renderPropertiesTable();
       renderAmberLeadsTable();
       loadYandexConfig();
+      fetchLeadsFromYandexCloud();
     });
   </script>
 
