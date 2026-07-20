@@ -992,6 +992,8 @@
         window.submitLeadToGoogleSheets(leadData);
       } else {
         const googleSheetsUrl = 'https://script.google.com/macros/s/AKfycbzUwQYRumtyw7jNUE8Y0LooqG90qfbMO71s4JwTc15foOeAW6TSGdVFVvCVQDWhi6Ax/exec';
+        let phoneVal = (leadData.phone || '').trim();
+        if (phoneVal && !phoneVal.startsWith("'")) phoneVal = "'" + phoneVal;
         fetch(googleSheetsUrl, {
           method: 'POST',
           mode: 'no-cors',
@@ -1000,7 +1002,7 @@
             date: new Date().toLocaleString('ru-RU'),
             source: leadData.source || 'Форма с Главной страницы',
             name: leadData.name || '',
-            phone: leadData.phone || '',
+            phone: phoneVal,
             email: leadData.email || '',
             details: leadData.details || ''
           })

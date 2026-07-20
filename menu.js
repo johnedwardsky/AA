@@ -1427,11 +1427,15 @@
         const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
         const googleSheetsUrl = (config.googleSheetsUrl && config.googleSheetsUrl.startsWith('http')) ? config.googleSheetsUrl : (localStorage.getItem('amber_google_sheets_url') || 'https://script.google.com/macros/s/AKfycbzUwQYRumtyw7jNUE8Y0LooqG90qfbMO71s4JwTc15foOeAW6TSGdVFVvCVQDWhi6Ax/exec');
         if (googleSheetsUrl && googleSheetsUrl.startsWith('http')) {
+          let phoneVal = (lead.phone || '').trim();
+          if (phoneVal && !phoneVal.startsWith("'")) {
+            phoneVal = "'" + phoneVal;
+          }
           const payload = JSON.stringify({
             date: lead.date || new Date().toLocaleString('ru-RU'),
             source: lead.source || 'Заявка с сайта Amber Avenue',
             name: lead.name || '',
-            phone: lead.phone || '',
+            phone: phoneVal,
             email: lead.email || '',
             details: lead.details || ''
           });
@@ -1607,7 +1611,7 @@
           msgrs.push(cb.closest('.cm-msgr-chip').textContent.trim());
         });
         
-        window.submitLeadToYandexCloud({
+        window.saveAmberLead({
           source: 'Задать вопрос эксперту (Меню)',
           name: nameVal,
           phone: phoneVal,
