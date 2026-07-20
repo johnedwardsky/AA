@@ -991,32 +991,23 @@
       } else if (typeof window.submitLeadToGoogleSheets === 'function') {
         window.submitLeadToGoogleSheets(leadData);
       } else {
-        const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
-        const targetUrl = (config.googleSheetsUrl && config.googleSheetsUrl.startsWith('http')) 
-          ? config.googleSheetsUrl 
-          : (config.yandexFnUrl && config.yandexFnUrl.startsWith('http'))
-          ? config.yandexFnUrl
-          : (config.webhookUrl && config.webhookUrl.startsWith('http'))
-          ? config.webhookUrl
-          : (localStorage.getItem('amber_google_sheets_url') || '');
-
-        if (targetUrl && targetUrl.startsWith('http')) {
-          let phoneVal = (leadData.phone || '').trim();
-          if (phoneVal && !phoneVal.startsWith("'")) phoneVal = "'" + phoneVal;
-          fetch(targetUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              date: new Date().toLocaleString('ru-RU'),
-              source: leadData.source || 'Форма с Главной страницы',
-              name: leadData.name || '',
-              phone: phoneVal,
-              email: leadData.email || '',
-              details: leadData.details || ''
-            })
-          }).catch(err => console.error('Fallback lead send error:', err));
-        }
+        const googleSheetsUrl = 'https://script.google.com/macros/s/AKfycbzUwQYRumtyw7jNUE8Y0LooqG90qfbMO71s4JwTc15foOeAW6TSGdVFVvCVQDWhi6Ax/exec';
+        let phoneVal = (leadData.phone || '').trim();
+        if (phoneVal && !phoneVal.startsWith("'")) phoneVal = "'" + phoneVal;
+        fetch(googleSheetsUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            date: new Date().toLocaleString('ru-RU'),
+            source: leadData.source || 'Форма с Главной страницы',
+            name: leadData.name || '',
+            phone: phoneVal,
+            email: leadData.email || '',
+            details: leadData.details || ''
+          })
+        }).catch(err => console.error('Fallback lead send error:', err));
+      }
     }
 
     /* ── Email Subscription ── */
