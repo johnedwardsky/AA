@@ -67342,6 +67342,27 @@ document.addEventListener('DOMContentLoaded', function() {
       submissions.push(submission);
       localStorage.setItem('dev_submissions', JSON.stringify(submissions));
 
+      // Send developer portal data directly to Google Sheets (creates/updates tab per developer)
+      try {
+        const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
+        const googleSheetsUrl = (config.googleSheetsUrl && config.googleSheetsUrl.startsWith('http')) 
+          ? config.googleSheetsUrl 
+          : (localStorage.getItem('amber_google_sheets_url') || 'https://script.google.com/macros/s/AKfycbzUwQYRumtyw7jNUE8Y0LooqG90qfbMO71s4JwTc15foOeAW6TSGdVFVvCVQDWhi6Ax/exec');
+
+        if (googleSheetsUrl && googleSheetsUrl.startsWith('http')) {
+          fetch(googleSheetsUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(submission)
+          })
+          .then(() => console.log('Developer data successfully sent to Google Sheet tab:', submission.devName))
+          .catch(err => console.error('Error sending developer data to Google Sheets:', err));
+        }
+      } catch (err) {
+        console.error('Error in developer Google Sheets dispatch:', err);
+      }
+
       // Trigger Webhook POST request
       const url = submission.webhookUrl;
       if (url && url.startsWith('http')) {
