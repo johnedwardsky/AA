@@ -69069,6 +69069,23 @@ function navigateToPage(hash) {
       }
     }
   });
+
+  // Header visibility check for main page
+  if (typeof updateHeaderVisibility === 'function') {
+    updateHeaderVisibility();
+  } else {
+    const siteHdr = document.querySelector('.site-header') || document.getElementById('aa-hdr');
+    const siteHdrWrp = document.querySelector('.site-header-wrapper');
+    if (pageId === 'index' || pageId === 'main') {
+      document.body.classList.add('page-is-index');
+      if (siteHdr) siteHdr.style.setProperty('display', 'none', 'important');
+      if (siteHdrWrp) siteHdrWrp.style.setProperty('display', 'none', 'important');
+    } else {
+      document.body.classList.remove('page-is-index');
+      if (siteHdr) siteHdr.style.removeProperty('display');
+      if (siteHdrWrp) siteHdrWrp.style.removeProperty('display');
+    }
+  }
   
   if (pageId === 'zhk' && typeof renderFeed === 'function') {
     if (window.targetZhkId) {

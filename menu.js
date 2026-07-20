@@ -38,6 +38,16 @@
     .suggestion-title { font-weight: 600 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
     .suggestion-subtitle { font-size: 10.5px !important; color: var(--color-muted, #888) !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
 
+    /* Hide site header on the main/index page */
+    #page-index.active ~ .site-header,
+    #page-index.active ~ .site-header-wrapper,
+    #page-index.active ~ #aa-hdr,
+    body.page-is-index .site-header,
+    body.page-is-index .site-header-wrapper,
+    body.page-is-index #aa-hdr {
+      display: none !important;
+    }
+
     /* ── HEADER BASE ─ only styling, stickiness handled by .site-header-wrapper ── */
     .site-header, .aa-hdr {
       z-index: 200;
@@ -1287,6 +1297,42 @@
     setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3200);
   };
 
+  function updateHeaderVisibility() {
+    const pathname = window.location.pathname || '';
+    const isIndexFile = (
+      pathname.endsWith('/index.html') ||
+      pathname.endsWith('/') ||
+      pathname === '' ||
+      pathname.endsWith('/index')
+    );
+    const hash = window.location.hash || '';
+    const isIndexHash = (
+      typeof navigateToPage === 'function' &&
+      (!hash || hash === '#' || hash === '#index' || hash === '#main')
+    );
+    const pageIndexEl = document.getElementById('page-index');
+    const isPageIndexActive = pageIndexEl && pageIndexEl.classList.contains('active');
+
+    const isMainPage = isIndexFile || isIndexHash || isPageIndexActive;
+
+    const hdr = document.querySelector('.site-header') || document.getElementById('aa-hdr');
+    const hdrWrp = document.querySelector('.site-header-wrapper');
+
+    if (isMainPage) {
+      document.body.classList.add('page-is-index');
+      if (hdr) hdr.style.setProperty('display', 'none', 'important');
+      if (hdrWrp) hdrWrp.style.setProperty('display', 'none', 'important');
+    } else {
+      document.body.classList.remove('page-is-index');
+      if (hdr) hdr.style.removeProperty('display');
+      if (hdrWrp) hdrWrp.style.removeProperty('display');
+    }
+  }
+
+  window.updateHeaderVisibility = updateHeaderVisibility;
+  window.addEventListener('hashchange', updateHeaderVisibility);
+  window.addEventListener('popstate', updateHeaderVisibility);
+
   // 6. Bootstrap Menu Injection
   function initMenu() {
     // A. Re-render/inject header
@@ -1304,6 +1350,8 @@
       newHeader.innerHTML = headerTemplate;
       document.body.insertBefore(newHeader, document.body.firstChild);
     }
+
+    updateHeaderVisibility();
 
     // B. Append drawer layouts to body
     const oldPanel = document.getElementById('mg-panel');
