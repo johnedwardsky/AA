@@ -1297,8 +1297,21 @@ function lightZones(activeIds) {
 
 function submitForm(e, formId) {
   e.preventDefault();
-  alert('Заявка принята! Наш специалист свяжется с вами в течение рабочего дня.');
-  document.getElementById(formId)?.reset();
+  const form = document.getElementById(formId);
+  const name = form ? (form.querySelector('input[type="text"]')?.value || '') : '';
+  const phone = form ? (form.querySelector('input[type="tel"]')?.value || '') : '';
+  const email = form ? (form.querySelector('input[type="email"]')?.value || '') : '';
+  if (typeof window.saveAmberLead === 'function') {
+    window.saveAmberLead({
+      source: 'Заявка партнёра (Partners Promo)',
+      name: name,
+      phone: phone,
+      email: email,
+      details: 'Форма сотрудничества с агентами и партнёрами'
+    });
+  }
+  alert('Заявка принята! Мы свяжемся с вами в течение рабочего дня.');
+  if (form) form.reset();
 }
 
 buildSandbox();

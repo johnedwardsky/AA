@@ -942,12 +942,22 @@
           </table>
         </div>
 
-        <!-- ⚙️ Yandex Cloud Webhook Integration Card -->
+        <!-- ⚙️ External Integrations Card (Google Sheets & Yandex) -->
         <div style="margin-top: 32px; padding: var(--space-lg); background: var(--clr-surface); border: 1px solid var(--clr-border); border-radius: var(--radius-lg);">
-          <h2 style="font-size: 1.15rem; margin-top: 0; display: flex; align-items: center; gap: 8px; color: var(--clr-amber);">⚙️ Интеграция с Yandex Cloud (Яндекс.Таблицы)</h2>
+          <h2 style="font-size: 1.15rem; margin-top: 0; display: flex; align-items: center; gap: 8px; color: var(--clr-amber);">📊 Автоматическая интеграция с Google Таблицами и Яндекс</h2>
           <p style="font-size: 0.8rem; color: var(--clr-text-dim); margin-bottom: 20px; line-height: 1.5;">
-            Вставьте адрес вашего вебхука Яндекс.Облака ниже. Когда вебхук указан, все отправленные лиды с премиальных HTML-форм на сайте будут автоматически пересылаться на этот вебхук и мгновенно записываться напрямую в ваши <strong>Яндекс.Таблицы</strong> (ФЗ-152 полностью соблюден, данные хранятся в РФ). Оставьте поле пустым, чтобы лиды сохранялись только локально в браузере.
+            Все всплывающие формы и заявки на сайте автоматически записываются в браузерное CRM и могут параллельно передаваться в вашу <strong>Google Таблицу</strong> или <strong>Яндекс.Таблицы</strong>.
           </p>
+
+          <div style="margin-bottom: 20px; padding: 16px; background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px;">
+            <label class="modal-label" style="color: #3b82f6; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">🟢 Web App URL Google Таблицы (Google Apps Script)</label>
+            <input type="text" id="config-google-sheets-url" placeholder="https://script.google.com/macros/s/.../exec" style="width:100%; padding: 10px 12px; border: 1px solid var(--clr-border); border-radius: 6px; background: var(--clr-bg); color: var(--clr-text); outline: none; font-size: 0.85rem; margin-bottom: 8px;">
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+              <button class="btn-admin" onclick="testGoogleSheets()" style="background: #3b82f6; color: #fff; font-weight: bold; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">🧪 Проверить отправку в Google Таблицу</button>
+              <button class="btn-admin" onclick="toggleGoogleScriptModal()" style="background: transparent; color: var(--clr-text); border: 1px solid var(--clr-border); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">📜 Получить готовый скрипт для Google Таблиц</button>
+            </div>
+          </div>
+
           <div style="margin-bottom: 20px;">
             <label class="modal-label" style="color: var(--clr-text-muted); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; display: block;">Адрес Webhook (Yandex Cloud Function)</label>
             <input type="text" id="config-webhook-url" placeholder="https://functions.yandexcloud.net/..." style="width:100%; padding: 10px 12px; border: 1px solid var(--clr-border); border-radius: 6px; background: var(--clr-bg); color: var(--clr-text); outline: none; font-size: 0.85rem;">
@@ -2304,11 +2314,16 @@
     };
 
     window.saveYandexConfig = function() {
-      const config = {
-        webhookUrl: document.getElementById('config-webhook-url').value.trim()
-      };
+      const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
+      config.webhookUrl = document.getElementById('config-webhook-url').value.trim();
+      const gUrl = document.getElementById('config-google-sheets-url');
+      if (gUrl) config.googleSheetsUrl = gUrl.value.trim();
+      
       localStorage.setItem('amber_yandex_config', JSON.stringify(config));
-      showAdminToast('Настройки интеграции с Yandex Cloud успешно сохранены!');
+      if (config.googleSheetsUrl) {
+        localStorage.setItem('amber_google_sheets_url', config.googleSheetsUrl);
+      }
+      showAdminToast('Настройки интеграций с Google Таблицами и Яндекс сохранены!');
       window.fetchLeadsFromYandexCloud();
     };
 
@@ -2316,9 +2331,98 @@
       try {
         const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
         document.getElementById('config-webhook-url').value = config.webhookUrl !== undefined ? config.webhookUrl : 'https://functions.yandexcloud.net/b1g095m5l7b0t3s9oskp';
+        const gUrl = document.getElementById('config-google-sheets-url');
+        if (gUrl) {
+          gUrl.value = config.googleSheetsUrl || localStorage.getItem('amber_google_sheets_url') || '';
+        }
       } catch (e) {
-        console.error('Error loading Yandex configuration:', e);
+        console.error('Error loading configuration:', e);
       }
+    };
+
+    window.testGoogleSheets = function() {
+      const gUrl = document.getElementById('config-google-sheets-url');
+      const url = gUrl ? gUrl.value.trim() : '';
+      if (!url || !url.startsWith('http')) {
+        alert('Пожалуйста, введите корректную ссылку Web App URL Google Таблицы (начинается с https://script.google.com/macros/s/...)');
+        return;
+      }
+
+      const testLead = {
+        date: new Date().toLocaleString('ru-RU'),
+        source: 'Тестовая проверка (Админка)',
+        name: 'Александр (Тест)',
+        phone: '+7 (999) 777-77-77',
+        email: 'test@amber-avenue.ru',
+        details: 'Проверочный лид для валидации Google Таблиц'
+      };
+
+      fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(testLead)
+      })
+      .then(() => {
+        showAdminToast('Тестовый лид успешно отправлен в Google Таблицу!');
+      })
+      .catch(err => {
+        alert('Ошибка при отправке в Google Таблицы: ' + err.message);
+      });
+    };
+
+    window.toggleGoogleScriptModal = function() {
+      const scriptCode = `// Google Apps Script для автоматической записи заявок с сайта Amber Avenue
+// -------------------------------------------------------------------------
+// ИНСТРУКЦИЯ ПО НАСТРОЙКЕ ЗА 2 МИНУТЫ:
+// 1. Создайте новую таблицу в Google Таблицах (https://sheets.new)
+// 2. В верхнем меню выберите: Расширения -> Apps Script
+// 3. Вставьте весь код ниже вместо стандартного кода и нажмите "Сохранить" (Ctrl+S / Cmd+S)
+// 4. Нажмите синюю кнопку "Развернуть" (Deploy) -> "Новое развертывание" (New deployment)
+// 5. Выберите тип: "Веб-приложение" (Web app)
+// 6. Установите параметры:
+//    - Развертывание от имени: Меня (Me)
+//    - У кого есть доступ: Все (Anyone)
+// 7. Нажмите "Развернуть", разрешите доступ к Google Таблице и скопируйте "URL веб-приложения" (Web App URL)
+// 8. Вставьте полученную ссылку в поле ниже на сайте Amber Avenue!
+
+function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    
+    // Автоматическое создание шапки таблицы при первом вызове
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["Дата и время", "Источник / Форма", "Имя клиента", "Телефон", "Email", "Детали / Запрос"]);
+      sheet.getRange(1, 1, 1, 6)
+           .setFontWeight("bold")
+           .setBackground("#15305B")
+           .setFontColor("#FFFFFF")
+           .setHorizontalAlignment("center");
+      sheet.setRowHeight(1, 35);
+    }
+    
+    var data = JSON.parse(e.postData.contents);
+    
+    var date = data.date || new Date().toLocaleString("ru-RU");
+    var source = data.source || "Заявка с сайта";
+    var name = data.name || "";
+    var phone = data.phone || "";
+    var email = data.email || "";
+    var details = data.details || "";
+    
+    sheet.appendRow([date, source, name, phone, email, details]);
+    sheet.getRange(sheet.getLastRow(), 1, 1, 6).setVerticalAlignment("middle");
+    
+    return ContentService.createTextOutput(JSON.stringify({ "result": "success" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ "result": "error", "error": err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}`;
+
+      const win = window.open('', '_blank');
+      win.document.write('<pre style="font-family:monospace; padding:20px; background:#1e1e1e; color:#d4d4d4; white-space:pre-wrap; word-break:break-all;">' + scriptCode.replace(/</g, '&lt;') + '</pre>');
     };
 
     window.fetchLeadsFromYandexCloud = function() {

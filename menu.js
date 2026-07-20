@@ -1413,17 +1413,49 @@
         leads.unshift(newLead);
         localStorage.setItem('amber_leads', JSON.stringify(leads));
         console.log('Amber Lead captured successfully:', newLead);
+
+        // Send automatically to external services (Google Sheets + Yandex Cloud)
+        window.submitLeadToExternalServices(newLead);
       } catch (err) {
         console.error('Error saving Amber Lead:', err);
       }
     };
 
-    // Submit Lead to Yandex Cloud Webhook Helper
-    window.submitLeadToYandexCloud = function(lead) {
-      // 1. Save locally first (backup/immediate display in CMS)
-      window.saveAmberLead(lead);
+    // Submit Lead to Google Sheets Helper (via Google Apps Script Web App)
+    window.submitLeadToGoogleSheets = function(lead) {
+      try {
+        const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
+        const googleSheetsUrl = config.googleSheetsUrl || localStorage.getItem('amber_google_sheets_url');
+        if (googleSheetsUrl && googleSheetsUrl.startsWith('http')) {
+          const payload = JSON.stringify({
+            date: lead.date || new Date().toLocaleString('ru-RU'),
+            source: lead.source || 'Заявка с сайта Amber Avenue',
+            name: lead.name || '',
+            phone: lead.phone || '',
+            email: lead.email || '',
+            details: lead.details || ''
+          });
 
-      // 2. Trigger Yandex Cloud Webhook if configured
+          fetch(googleSheetsUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload
+          })
+          .then(() => console.log('Lead successfully sent to Google Sheets'))
+          .catch(err => console.error('Error sending lead to Google Sheets:', err));
+        }
+      } catch (e) {
+        console.error('Error in submitLeadToGoogleSheets:', e);
+      }
+    };
+
+    // External Services Lead Dispatcher (Google Sheets & Yandex Cloud Webhook)
+    window.submitLeadToExternalServices = function(lead) {
+      // 1. Google Sheets
+      window.submitLeadToGoogleSheets(lead);
+
+      // 2. Yandex Cloud Webhook
       try {
         const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
         const webhookUrl = config.webhookUrl !== undefined ? config.webhookUrl : 'https://functions.yandexcloud.net/b1g095m5l7b0t3s9oskp';
@@ -1437,8 +1469,13 @@
           .catch(err => console.error('Error sending lead to Yandex Cloud Webhook:', err));
         }
       } catch (e) {
-        console.error('Error in submitLeadToYandexCloud:', e);
+        console.error('Error in Yandex Cloud Webhook:', e);
       }
+    };
+
+    // Legacy helper wrapper for backwards compatibility
+    window.submitLeadToYandexCloud = function(lead) {
+      window.saveAmberLead(lead);
     };
 
     // Setup Consultation Modal logic

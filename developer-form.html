@@ -1641,10 +1641,19 @@
         webhookUrl: document.getElementById('webhook-url').value
       };
 
-      // Save submission locally
       let submissions = JSON.parse(localStorage.getItem('dev_submissions') || '[]');
       submissions.push(submission);
       localStorage.setItem('dev_submissions', JSON.stringify(submissions));
+
+      if (typeof window.saveAmberLead === 'function') {
+        window.saveAmberLead({
+          source: 'Личный кабинет Застройщика',
+          name: submission.fullName,
+          phone: submission.phone,
+          email: submission.email,
+          details: `Застройщик: ${submission.devName}. Сайт: ${submission.website}. Лет на рынке: ${submission.years}`
+        });
+      }
 
       // Trigger Webhook POST request
       const url = submission.webhookUrl;
