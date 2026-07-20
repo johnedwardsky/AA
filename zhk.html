@@ -5701,8 +5701,8 @@ function renderFeed(appendOnly = false) {
 
       // Chip filter
       if (currentFilter === 'all') return true;
-      if (currentFilter === 'partner') return p.partner;
-      if (currentFilter === 'budget') return parseFloat(p.priceFrom.replace(/[^\d.]/g, '')) <= 5.0;
+      if (currentFilter === 'partner') return !!p.partner;
+      if (currentFilter === 'budget') { const n = parseFloat((p.priceFrom || '').replace(/[^\d.]/g, '')); return !isNaN(n) && n <= 5.0; }
       if (currentFilter === 'sea') return p.direction === 'sea';
       if (currentFilter === 'city') return p.direction === 'city';
       if (currentFilter === 'prigorod') return p.direction === 'prigorod';
@@ -5710,14 +5710,17 @@ function renderFeed(appendOnly = false) {
       if (currentFilter === 'district-len') return p.district === 'Ленинградский';
       if (currentFilter === 'district-cen') return p.district === 'Центральный';
       if (currentFilter === 'district-mos') return p.district === 'Московский';
-      if (currentFilter === '2025') return p.delivery.includes('2025');
+      if (currentFilter === '2025') return (p.delivery || '').includes('2025');
 
-      // Tags & Class match
+      // Class filter
       if (currentFilter === 'comfort') return p.class === 'комфорт-класс';
       if (currentFilter === 'business') return p.class === 'бизнес-класс';
       if (currentFilter === 'premium') return p.class === 'премиум';
-      if (currentFilter === 'family') return p.tags.includes('семейная ипотека');
-      if (currentFilter === 'it') return p.tags.includes('IT-ипотека');
+      if (currentFilter === 'standard') return p.class === 'стандарт-класс';
+
+      // Tags filter
+      if (currentFilter === 'family') return (p.tags || []).includes('семейная ипотека');
+      if (currentFilter === 'it') return (p.tags || []).includes('IT-ипотека');
 
       return true;
     });
