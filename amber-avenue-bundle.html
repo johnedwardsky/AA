@@ -61689,18 +61689,39 @@ window.AmberAnalytics = { trackEvent, getAnalytics, clearAnalytics };
       syncHeight(true);
     }
 
+    function triggerLeadCapture(leadData) {
+      if (typeof window.saveAmberLead === 'function') {
+        window.saveAmberLead(leadData);
+      } else if (typeof window.submitLeadToGoogleSheets === 'function') {
+        window.submitLeadToGoogleSheets(leadData);
+      } else {
+        const googleSheetsUrl = 'https://script.google.com/macros/s/AKfycbzUwQYRumtyw7jNUE8Y0LooqG90qfbMO71s4JwTc15foOeAW6TSGdVFVvCVQDWhi6Ax/exec';
+        fetch(googleSheetsUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            date: new Date().toLocaleString('ru-RU'),
+            source: leadData.source || 'Форма с Главной страницы',
+            name: leadData.name || '',
+            phone: leadData.phone || '',
+            email: leadData.email || '',
+            details: leadData.details || ''
+          })
+        }).catch(err => console.error('Fallback lead send error:', err));
+      }
+    }
+
     /* ── Email Subscription ── */
     function handleSubscribe(e) {
       e.preventDefault();
       const email = document.getElementById('sub-email').value.trim();
       if (!email) return;
 
-      if (typeof window.saveAmberLead === 'function') {
-        window.saveAmberLead({
-          source: 'Подписка на Email (Главная)',
-          email: email
-        });
-      }
+      triggerLeadCapture({
+        source: 'Подписка на Email (Главная)',
+        email: email
+      });
 
       // Show success message
       document.getElementById('sub-success-msg').style.display = 'block';
@@ -61744,15 +61765,13 @@ window.AmberAnalytics = { trackEvent, getAnalytics, clearAnalytics };
       const privacy = document.getElementById('cf-privacy-check').checked;
       if (!name || !phone || !email || !privacy) return;
 
-      if (typeof window.saveAmberLead === 'function') {
-        window.saveAmberLead({
-          source: 'Обратная связь (Главная)',
-          name: name,
-          phone: phone,
-          email: email,
-          details: 'Заявка на обратный звонок (связаться с нами)'
-        });
-      }
+      triggerLeadCapture({
+        source: 'Обратная связь (Главная)',
+        name: name,
+        phone: phone,
+        email: email,
+        details: 'Заявка на обратный звонок (связаться с нами)'
+      });
 
       backContact.style.transition = 'opacity 0.2s ease';
       backContact.style.opacity = '0';
