@@ -573,22 +573,6 @@
         </div>
       </div>
 
-      <!-- 3. Настройки интеграции -->
-      <div class="webhook-card">
-        <div class="webhook-header">
-          <span class="webhook-icon">📊</span>
-          <span class="webhook-title">Настройка интеграции (Webhook)</span>
-        </div>
-        <p class="webhook-desc">
-          Данная форма автоматически выгружает измененные поля в соответствующую вкладку таблицы. Вы можете также указать дополнительный Webhook URL (опционально):
-        </p>
-        <div class="form-row">
-          <div class="form-col">
-            <label class="form-label" for="webhook-url">Дополнительный Webhook URL (опционально)</label>
-            <input class="form-input" type="url" id="webhook-url" placeholder="https://script.google.com/macros/s/.../exec" value="" style="background:#FFFDF6; border-color: rgba(212,175,55,0.4);">
-          </div>
-        </div>
-      </div>
 
       <!-- Submit Block -->
       <div class="form-submit-section">
@@ -1638,7 +1622,7 @@
         address: document.getElementById('dev-address').value,
         description: document.getElementById('dev-desc').value,
         properties: localProperties,
-        webhookUrl: document.getElementById('webhook-url').value
+        webhookUrl: document.getElementById('webhook-url') ? document.getElementById('webhook-url').value : ''
       };
 
       let submissions = JSON.parse(localStorage.getItem('dev_submissions') || '[]');
