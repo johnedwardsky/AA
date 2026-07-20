@@ -1944,31 +1944,13 @@
     }
   };
 
-  // ── Global Error Catching: Redirect to 404 page ────────────────────
-  if (window.location.pathname.indexOf('404.html') === -1 && window.location.hash.indexOf('#404') === -1) {
-    window.addEventListener('error', function(event) {
-      // Only catch errors from local files (our domain) to avoid browser extensions breaking UX
-      const url = event.filename || '';
-      if (url && (url.indexOf(window.location.origin) === 0 || url.indexOf('/') === 0)) {
-        if (!url.includes('chrome-extension') && !url.includes('moz-extension')) {
-          console.error('Unhandled script error captured, redirecting to 404 page:', event.message);
-          if (typeof navigateToPage === 'function') {
-            window.location.hash = '404';
-          } else {
-            window.location.href = '404.html';
-          }
-        }
-      }
-    });
+  // ── Global Error Catching: Log error without redirecting user to 404 page ──
+  window.addEventListener('error', function(event) {
+    console.error('Captured script error:', event.message, event.filename);
+  });
 
-    window.addEventListener('unhandledrejection', function(event) {
-      console.error('Unhandled promise rejection captured, redirecting to 404 page:', event.reason);
-      if (typeof navigateToPage === 'function') {
-        window.location.hash = '404';
-      } else {
-        window.location.href = '404.html';
-      }
-    });
-  }
+  window.addEventListener('unhandledrejection', function(event) {
+    console.warn('Unhandled promise rejection:', event.reason);
+  });
 
 })();

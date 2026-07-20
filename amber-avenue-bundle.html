@@ -61440,32 +61440,14 @@ function showToast(msg) {
     }
   };
 
-  // ── Global Error Catching: Redirect to 404 page ────────────────────
-  if (window.location.pathname.indexOf('404.html') === -1 && window.location.hash.indexOf('#404') === -1) {
-    window.addEventListener('error', function(event) {
-      // Only catch errors from local files (our domain) to avoid browser extensions breaking UX
-      const url = event.filename || '';
-      if (url && (url.indexOf(window.location.origin) === 0 || url.indexOf('/') === 0)) {
-        if (!url.includes('chrome-extension') && !url.includes('moz-extension')) {
-          console.error('Unhandled script error captured, redirecting to 404 page:', event.message);
-          if (typeof navigateToPage === 'function') {
-            window.location.hash = '404';
-          } else {
-            window.location.href = '404.html';
-          }
-        }
-      }
-    });
+  // ── Global Error Catching: Log error without redirecting user to 404 page ──
+  window.addEventListener('error', function(event) {
+    console.error('Captured script error:', event.message, event.filename);
+  });
 
-    window.addEventListener('unhandledrejection', function(event) {
-      console.error('Unhandled promise rejection captured, redirecting to 404 page:', event.reason);
-      if (typeof navigateToPage === 'function') {
-        window.location.hash = '404';
-      } else {
-        window.location.href = '404.html';
-      }
-    });
-  }
+  window.addEventListener('unhandledrejection', function(event) {
+    console.warn('Unhandled promise rejection:', event.reason);
+  });
 
 })();
 
@@ -69050,8 +69032,10 @@ function navigateToPage(hash) {
   
   // Parse hash (e.g. #zhk, #calc, #index-calc)
   if (hash) {
-    const rawHash = hash.replace("#", "");
-    if (pages.includes(rawHash)) {
+    const rawHash = hash.replace("#", "").split("?")[0].split("/")[0].trim();
+    if (!rawHash || rawHash === "index" || rawHash === "main") {
+      pageId = "index";
+    } else if (pages.includes(rawHash)) {
       pageId = rawHash;
     } else {
       // Check if it's an anchor on the index page (e.g. #calc, #garden-city, etc.)
@@ -69064,6 +69048,8 @@ function navigateToPage(hash) {
         pageId = "404";
       }
     }
+  } else {
+    pageId = "index";
   }
   
   // Close all mobile drawers first to clean up UI
@@ -69144,7 +69130,18 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.addEventListener("click", (e) => {
     const a = e.target.closest("a");
     if (a && a.getAttribute("href")) {
-      const href = a.getAttribute("href");
+      const href = a.getAttribute("href").trim();
+      
+      // Match homepage links explicitly
+      if (href === 'index.html' || href === 'index' || href === '/' || href === '#' || href === '#index') {
+        e.preventDefault();
+        if (location.hash === '#index' || location.hash === '' || location.hash === '#') {
+          navigateToPage('#index');
+        } else {
+          location.hash = 'index';
+        }
+        return;
+      }
       
       // Match something like "zhk-kaliningrad.html?filter=district-cen" or "zhk.html"
       const match = href.match(/^([^?#]+)\.html(?:[?#](.*))?$/);
