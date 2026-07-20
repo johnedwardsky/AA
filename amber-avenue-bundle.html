@@ -64757,11 +64757,25 @@ function renderFeed(appendOnly = false) {
   }
 
   // Set the title dynamically if a target ZHK is selected
-  const titleEl = document.querySelector('#page-zhk .feed-title');
+  const titleEl = document.querySelector('#page-zhk .feed-title') || document.querySelector('.feed-title');
   if (titleEl) {
     if (window.targetZhkId) {
       const targetProp = PROPERTIES.find(p => p.id === window.targetZhkId);
       titleEl.textContent = getPageTitleForProp(targetProp);
+    } else if (currentFilter === 'district-len') {
+      titleEl.textContent = 'ЖК в Калининграде (район Ленинградский)';
+    } else if (currentFilter === 'district-cen') {
+      titleEl.textContent = 'ЖК в Калининграде (район Центральный)';
+    } else if (currentFilter === 'district-mos') {
+      titleEl.textContent = 'ЖК в Калининграде (район Московский)';
+    } else if (currentFilter === 'city') {
+      titleEl.textContent = 'ЖК в Калининграде';
+    } else if (currentFilter === 'sea') {
+      titleEl.textContent = 'Все ЖК Калининградской области (у моря)';
+    } else if (currentFilter === 'prigorod') {
+      titleEl.textContent = 'ЖК Калининградской области (пригород)';
+    } else if (currentFilter === 'oblast') {
+      titleEl.textContent = 'ЖК Калининградской области (область)';
     } else {
       titleEl.textContent = 'Все новостройки Калининградской области';
     }
