@@ -5681,6 +5681,9 @@ function renderFeed(appendOnly = false) {
       // Developer filter
       if (currentDeveloper && getCleanDeveloperName(p.developer) !== currentDeveloper) return false;
 
+      // Page-level base filter: only У моря (sea) properties
+      if (p.direction !== 'sea') return false;
+
       // Chip filter
       if (currentFilter === 'all') return true;
       if (currentFilter === 'partner') return p.partner;
@@ -5708,9 +5711,9 @@ function renderFeed(appendOnly = false) {
   const countEl = document.querySelector('#page-zhk-umory .feed-count');
   if (countEl) countEl.textContent = filtered.length + ' объектов';
 
-  // Update total count on "All" chip
+  // Update total count on "All" chip (only sea properties)
   const allCount = document.querySelector('#page-zhk-umory .filter-chip[data-filter="all"] .chip-count');
-  if (allCount) allCount.textContent = PROPERTIES.length;
+  if (allCount) allCount.textContent = PROPERTIES.filter(p => p.direction === 'sea').length;
 
   if (filtered.length === 0) {
     feed.innerHTML = `<div style="padding: 40px; text-align: center; color: var(--color-muted); font-size: 14px; width: 100%;">
