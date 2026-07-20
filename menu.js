@@ -1335,19 +1335,26 @@
 
   // 6. Bootstrap Menu Injection
   function initMenu() {
-    // A. Re-render/inject header
-    const oldHeader = document.querySelector('.site-header') || document.querySelector('.aa-hdr') || document.querySelector('header');
+    // A. Re-render/inject header (ignore .brand-header on index page)
+    const oldHeader = document.querySelector('.site-header') || document.querySelector('.aa-hdr') || document.querySelector('header:not(.brand-header)');
     if (oldHeader) {
       oldHeader.className = 'site-header';
       oldHeader.id = 'aa-hdr';
       oldHeader.innerHTML = headerTemplate;
     } else {
-      // If no header, prepend to body
+      // If no site header, prepend to body
       const newHeader = document.createElement('header');
       newHeader.className = 'site-header';
       newHeader.id = 'aa-hdr';
       newHeader.role = 'banner';
       newHeader.innerHTML = headerTemplate;
+      const path = window.location.pathname.toLowerCase();
+      const hash = window.location.hash.toLowerCase();
+      const isIndexFile = path.endsWith('/') || path.endsWith('/index.html') || path === '';
+      const isIndexHash = hash === '' || hash === '#' || hash.startsWith('#index');
+      if (isIndexFile || isIndexHash || document.body.classList.contains('page-is-index')) {
+        newHeader.style.display = 'none';
+      }
       document.body.insertBefore(newHeader, document.body.firstChild);
     }
 
