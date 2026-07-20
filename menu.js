@@ -1425,7 +1425,7 @@
     window.submitLeadToGoogleSheets = function(lead) {
       try {
         const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
-        const googleSheetsUrl = (config.googleSheetsUrl && config.googleSheetsUrl.startsWith('http')) ? config.googleSheetsUrl : (localStorage.getItem('amber_google_sheets_url') || 'https://script.google.com/macros/s/AKfycbzUwQYRumtyw7jNUE8Y0LooqG90qfbMO71s4JwTc15foOeAW6TSGdVFVvCVQDWhi6Ax/exec');
+        const googleSheetsUrl = (config.googleSheetsUrl && config.googleSheetsUrl.startsWith('http')) ? config.googleSheetsUrl : (config.yandexFnUrl && config.yandexFnUrl.startsWith('http')) ? config.yandexFnUrl : (localStorage.getItem('amber_google_sheets_url') || '');
         if (googleSheetsUrl && googleSheetsUrl.startsWith('http')) {
           let phoneVal = (lead.phone || '').trim();
           if (phoneVal && !phoneVal.startsWith("'")) {

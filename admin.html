@@ -2333,7 +2333,7 @@
         document.getElementById('config-webhook-url').value = config.webhookUrl !== undefined ? config.webhookUrl : 'https://functions.yandexcloud.net/b1g095m5l7b0t3s9oskp';
         const gUrl = document.getElementById('config-google-sheets-url');
         if (gUrl) {
-          gUrl.value = (config.googleSheetsUrl && config.googleSheetsUrl.startsWith('http')) ? config.googleSheetsUrl : (localStorage.getItem('amber_google_sheets_url') || 'https://script.google.com/macros/s/AKfycbzUwQYRumtyw7jNUE8Y0LooqG90qfbMO71s4JwTc15foOeAW6TSGdVFVvCVQDWhi6Ax/exec');
+          gUrl.value = (config.googleSheetsUrl && config.googleSheetsUrl.startsWith('http')) ? config.googleSheetsUrl : (localStorage.getItem('amber_google_sheets_url') || '');
         }
       } catch (e) {
         console.error('Error loading configuration:', e);

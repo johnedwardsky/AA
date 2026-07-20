@@ -8626,7 +8626,7 @@ ul { list-style: none; }
 
     <div class="dev-form-hero">
       <h1>Кабинет застройщика</h1>
-      <p>Отредактируйте данные вашей компании и характеристики ваших жилых комплексов. Все изменения автоматически выгружаются в вашу Яндекс.Таблицу.</p>
+      <p>Отредактируйте данные вашей компании и характеристики ваших жилых комплексов. Все изменения отправляются на модерацию.</p>
     </div>
 
     <!-- Active Developer Picker -->
@@ -8734,15 +8734,15 @@ ul { list-style: none; }
       <div class="webhook-card">
         <div class="webhook-header">
           <span class="webhook-icon">📊</span>
-          <span class="webhook-title">Интеграция с Яндекс.Таблицей</span>
+          <span class="webhook-title">Настройка интеграции (Webhook)</span>
         </div>
         <p class="webhook-desc">
-          Данная форма автоматически выгружает измененные поля в отдельную вкладку вашей Яндекс.Таблицы. Если у вас настроен скрипт синхронизации (Make.com, Integromat или Yandex App), укажите его адрес (Webhook URL) ниже:
+          Данная форма автоматически выгружает измененные поля в соответствующую вкладку таблицы. Вы можете также указать дополнительный Webhook URL (опционально):
         </p>
         <div class="form-row">
           <div class="form-col">
-            <label class="form-label" for="webhook-url">Яндекс.Таблица Webhook URL</label>
-            <input class="form-input" type="url" id="webhook-url" value="https://functions.yandexcloud.net/d4e7bf89ab12cd34efgh/yandex-sheets-sync" style="background:#FFFDF6; border-color: rgba(255,193,7,0.5);">
+            <label class="form-label" for="webhook-url">Дополнительный Webhook URL (опционально)</label>
+            <input class="form-input" type="url" id="webhook-url" placeholder="https://script.google.com/macros/s/.../exec" value="" style="background:#FFFDF6; border-color: rgba(212,175,55,0.4);">
           </div>
         </div>
       </div>
@@ -8753,7 +8753,7 @@ ul { list-style: none; }
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           Сохранить и отправить на проверку
         </button>
-        <p class="form-submit-note">После сохранения копия данных будет отправлена в вашу Яндекс.Таблицу и на проверку редактору.<br>Письмо с подтверждением придет на указанный Email.</p>
+        <p class="form-submit-note">После сохранения данные отправляются на модерацию редактору.<br>Письмо с подтверждением придет на указанный Email.</p>
       </div>
 
     </form>
@@ -8900,7 +8900,7 @@ ul { list-style: none; }
       <div style="font-size: 52px; margin-bottom: 16px;">✉️</div>
       <h3 style="font-size: 20px; font-weight: 800; color: var(--color-primary); margin: 0 0 12px 0;">Форма успешно отправлена!</h3>
       <p style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; margin: 0 0 24px 0;">
-        Все изменения зафиксированы и выгружены в Яндекс.Таблицу застройщика. На вашу электронную почту отправлено письмо с подтверждением отправки.
+        Все изменения зафиксированы и отправлены на модерацию. На вашу электронную почту отправлено письмо с подтверждением отправки.
       </p>
       <button class="btn btn-primary" onclick="closeSuccessModal()" style="width: 100%; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-family: inherit; font-size: 13px; cursor: pointer; color: #fff; background: var(--color-primary);">Хорошо</button>
     </div>
@@ -60939,7 +60939,7 @@ function showToast(msg) {
     window.submitLeadToGoogleSheets = function(lead) {
       try {
         const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
-        const googleSheetsUrl = (config.googleSheetsUrl && config.googleSheetsUrl.startsWith('http')) ? config.googleSheetsUrl : (localStorage.getItem('amber_google_sheets_url') || 'https://script.google.com/macros/s/AKfycbzUwQYRumtyw7jNUE8Y0LooqG90qfbMO71s4JwTc15foOeAW6TSGdVFVvCVQDWhi6Ax/exec');
+        const googleSheetsUrl = (config.googleSheetsUrl && config.googleSheetsUrl.startsWith('http')) ? config.googleSheetsUrl : (config.yandexFnUrl && config.yandexFnUrl.startsWith('http')) ? config.yandexFnUrl : (localStorage.getItem('amber_google_sheets_url') || '');
         if (googleSheetsUrl && googleSheetsUrl.startsWith('http')) {
           let phoneVal = (lead.phone || '').trim();
           if (phoneVal && !phoneVal.startsWith("'")) phoneVal = "'" + phoneVal;
@@ -61697,22 +61697,32 @@ window.AmberAnalytics = { trackEvent, getAnalytics, clearAnalytics };
       } else if (typeof window.submitLeadToGoogleSheets === 'function') {
         window.submitLeadToGoogleSheets(leadData);
       } else {
-        const googleSheetsUrl = 'https://script.google.com/macros/s/AKfycbzUwQYRumtyw7jNUE8Y0LooqG90qfbMO71s4JwTc15foOeAW6TSGdVFVvCVQDWhi6Ax/exec';
-        let phoneVal = (leadData.phone || '').trim();
-        if (phoneVal && !phoneVal.startsWith("'")) phoneVal = "'" + phoneVal;
-        fetch(googleSheetsUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            date: new Date().toLocaleString('ru-RU'),
-            source: leadData.source || 'Форма с Главной страницы',
-            name: leadData.name || '',
-            phone: phoneVal,
-            email: leadData.email || '',
-            details: leadData.details || ''
-          })
-        }).catch(err => console.error('Fallback lead send error:', err));
+        const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
+        const targetUrl = (config.googleSheetsUrl && config.googleSheetsUrl.startsWith('http')) 
+          ? config.googleSheetsUrl 
+          : (config.yandexFnUrl && config.yandexFnUrl.startsWith('http'))
+          ? config.yandexFnUrl
+          : (config.webhookUrl && config.webhookUrl.startsWith('http'))
+          ? config.webhookUrl
+          : (localStorage.getItem('amber_google_sheets_url') || '');
+
+        if (targetUrl && targetUrl.startsWith('http')) {
+          let phoneVal = (leadData.phone || '').trim();
+          if (phoneVal && !phoneVal.startsWith("'")) phoneVal = "'" + phoneVal;
+          fetch(targetUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              date: new Date().toLocaleString('ru-RU'),
+              source: leadData.source || 'Форма с Главной страницы',
+              name: leadData.name || '',
+              phone: phoneVal,
+              email: leadData.email || '',
+              details: leadData.details || ''
+            })
+          }).catch(err => console.error('Fallback lead send error:', err));
+        }
       }
     }
 
@@ -67342,25 +67352,27 @@ document.addEventListener('DOMContentLoaded', function() {
       submissions.push(submission);
       localStorage.setItem('dev_submissions', JSON.stringify(submissions));
 
-      // Send developer portal data directly to Google Sheets (creates/updates tab per developer)
+      // Send developer portal data to backend / Webhook
       try {
         const config = JSON.parse(localStorage.getItem('amber_yandex_config') || '{}');
-        const googleSheetsUrl = (config.googleSheetsUrl && config.googleSheetsUrl.startsWith('http')) 
-          ? config.googleSheetsUrl 
-          : (localStorage.getItem('amber_google_sheets_url') || 'https://script.google.com/macros/s/AKfycbzUwQYRumtyw7jNUE8Y0LooqG90qfbMO71s4JwTc15foOeAW6TSGdVFVvCVQDWhi6Ax/exec');
+        const targetUrl = (config.webhookUrl && config.webhookUrl.startsWith('http')) 
+          ? config.webhookUrl 
+          : (config.yandexFnUrl && config.yandexFnUrl.startsWith('http'))
+          ? config.yandexFnUrl
+          : (localStorage.getItem('amber_google_sheets_url') || '');
 
-        if (googleSheetsUrl && googleSheetsUrl.startsWith('http')) {
-          fetch(googleSheetsUrl, {
+        if (targetUrl && targetUrl.startsWith('http')) {
+          fetch(targetUrl, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(submission)
           })
-          .then(() => console.log('Developer data successfully sent to Google Sheet tab:', submission.devName))
-          .catch(err => console.error('Error sending developer data to Google Sheets:', err));
+          .then(() => console.log('Developer data successfully sent:', submission.devName))
+          .catch(err => console.error('Error sending developer data:', err));
         }
       } catch (err) {
-        console.error('Error in developer Google Sheets dispatch:', err);
+        console.error('Error in developer data dispatch:', err);
       }
 
       // Trigger Webhook POST request
