@@ -66638,22 +66638,34 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load active developer data
     window.loadDeveloper = function(id) {
       const baseDevs = window.AMBER_DATA ? window.AMBER_DATA.developers : [];
-      const dev = baseDevs.find(d => d.id === id);
+      let dev = baseDevs.find(d => d.id === id);
       if (!dev) return;
+
+      // Check if developer info was updated/saved previously
+      const savedDevs = JSON.parse(localStorage.getItem('amber_saved_developers') || '{}');
+      if (savedDevs[id]) {
+        dev = Object.assign({}, dev, savedDevs[id]);
+      }
 
       currentDev = JSON.parse(JSON.stringify(dev));
       
-      const devNameClean = getCleanDeveloperName(currentDev.name).toLowerCase();
-      const matchedProps = PROPERTIES.filter(p => {
-        const cleanPDev = getCleanDeveloperName(p.developer).toLowerCase();
-        if (cleanPDev === devNameClean) return true;
-        if (p.developer && currentDev.name) {
-          const pDevNorm = p.developer.toLowerCase().replace(/[^a-zа-я0-9]/g, '');
-          const devNorm = currentDev.name.toLowerCase().replace(/[^a-zа-я0-9]/g, '');
-          if (pDevNorm.includes(devNorm) || devNorm.includes(pDevNorm)) return true;
-        }
-        return false;
-      });
+      const savedProps = JSON.parse(localStorage.getItem('amber_saved_properties_' + id) || 'null');
+      let matchedProps = [];
+      if (savedProps && Array.isArray(savedProps)) {
+        matchedProps = savedProps;
+      } else {
+        const devNameClean = getCleanDeveloperName(currentDev.name).toLowerCase();
+        matchedProps = PROPERTIES.filter(p => {
+          const cleanPDev = getCleanDeveloperName(p.developer).toLowerCase();
+          if (cleanPDev === devNameClean) return true;
+          if (p.developer && currentDev.name) {
+            const pDevNorm = p.developer.toLowerCase().replace(/[^a-zа-я0-9]/g, '');
+            const devNorm = currentDev.name.toLowerCase().replace(/[^a-zа-я0-9]/g, '');
+            if (pDevNorm.includes(devNorm) || devNorm.includes(pDevNorm)) return true;
+          }
+          return false;
+        });
+      }
 
       // Ensure all loaded properties have their developer property matching the brand name!
       localProperties = matchedProps.map(p => {
@@ -67309,32 +67321,86 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!currentDev) return;
 
       const activeDevName = document.getElementById('dev-name').value;
+      const fullName = document.getElementById('dev-fullname').value;
+      const phone = document.getElementById('dev-phone').value;
+      const email = document.getElementById('dev-contact-email').value;
+      const website = document.getElementById('dev-website').value;
+      const years = document.getElementById('dev-experience').value;
+      const projectsDone = document.getElementById('dev-projects-done').value;
+      const projectsActive = document.getElementById('dev-projects-active').value;
+      const address = document.getElementById('dev-address').value;
+      const description = document.getElementById('dev-desc').value;
+
+      // Update currentDev object
+      currentDev.name = activeDevName;
+      currentDev.fullName = fullName;
+      currentDev.phone = phone;
+      currentDev.email = email;
+      currentDev.website = website;
+      currentDev.years = years;
+      currentDev.projectsDone = projectsDone;
+      currentDev.projectsActive = projectsActive;
+      currentDev.address = address;
+      currentDev.description = description;
+
+      // Ensure localProperties are updated with new developer name
       localProperties.forEach(p => {
         p.developer = activeDevName;
       });
+
+      // Save updated developer and properties into localStorage so form reloads keep all edits!
+      const savedDevs = JSON.parse(localStorage.getItem('amber_saved_developers') || '{}');
+      savedDevs[currentDev.id] = currentDev;
+      localStorage.setItem('amber_saved_developers', JSON.stringify(savedDevs));
+      localStorage.setItem('amber_saved_properties_' + currentDev.id, JSON.stringify(localProperties));
 
       const submission = {
         id: Date.now(),
         timestamp: new Date().toLocaleString('ru-RU'),
         devId: currentDev.id,
         devName: activeDevName,
-        fullName: document.getElementById('dev-fullname').value,
-        phone: document.getElementById('dev-phone').value,
-        email: document.getElementById('dev-contact-email').value,
-        website: document.getElementById('dev-website').value,
-        years: document.getElementById('dev-experience').value,
-        projectsDone: document.getElementById('dev-projects-done').value,
-        projectsActive: document.getElementById('dev-projects-active').value,
-        address: document.getElementById('dev-address').value,
-        description: document.getElementById('dev-desc').value,
-        properties: localProperties,
-        webhookUrl: document.getElementById('webhook-url') ? document.getElementById('webhook-url').value : ''
+        fullName: fullName,
+        phone: phone,
+        email: email,
+        website: website,
+        years: years,
+        projectsDone: projectsDone,
+        projectsActive: projectsActive,
+        address: address,
+        description: description,
+        properties: localProperties
       };
 
       // Save submission locally
       let submissions = JSON.parse(localStorage.getItem('dev_submissions') || '[]');
       submissions.push(submission);
       localStorage.setItem('dev_submissions', JSON.stringify(submissions));
+
+      // Format complete details text including developer profile & ALL housing complexes (ЖК)
+      let jkSummary = localProperties.length > 0
+        ? localProperties.map((p, i) => `${i+1}. ${p.name || 'ЖК'} (${p.location || ''}, ${p.address || ''}) — ${p.priceFrom || ''}, сдача: ${p.delivery || ''}`).join('\n')
+        : 'ЖК не добавлены';
+
+      const fullDetails = `Застройщик: ${activeDevName} (${fullName})
+Телефон: ${phone} | Email: ${email} | Сайт: ${website}
+Адрес: ${address}
+Опыт: ${years} лет | Сдано: ${projectsDone} | В стройке: ${projectsActive}
+Описание: ${description}
+
+=== ЖК ЗАСТРОЙЩИКА (${localProperties.length}) ===
+${jkSummary}`;
+
+      if (typeof window.saveAmberLead === 'function') {
+        window.saveAmberLead({
+          source: `Застройщик: ${activeDevName}`,
+          name: fullName || activeDevName,
+          phone: phone,
+          email: email,
+          details: fullDetails,
+          devName: activeDevName,
+          properties: localProperties
+        });
+      }
 
       // Send developer portal data to backend / Webhook
       try {
@@ -67350,9 +67416,16 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(submission)
+            body: JSON.stringify({
+              ...submission,
+              source: `Застройщик: ${activeDevName}`,
+              name: fullName || activeDevName,
+              phone: phone,
+              email: email,
+              details: fullDetails
+            })
           })
-          .then(() => console.log('Developer data successfully sent:', submission.devName))
+          .then(() => console.log('Developer & ЖК data successfully sent:', activeDevName))
           .catch(err => console.error('Error sending developer data:', err));
         }
       } catch (err) {
