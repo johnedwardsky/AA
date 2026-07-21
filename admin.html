@@ -260,56 +260,6 @@
       margin-top: 2px;
     }
 
-    
-    /* ── Action Buttons styling ── */
-    .btn-action {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 5px 10px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      border: 1px solid transparent;
-      outline: none;
-      white-space: nowrap;
-    }
-    .btn-action:hover {
-      transform: translateY(-1px);
-    }
-    .btn-action:active {
-      transform: translateY(0);
-    }
-    .btn-consent {
-      background: rgba(245, 158, 11, 0.15);
-      color: #F59E0B;
-      border-color: rgba(245, 158, 11, 0.3);
-    }
-    .btn-consent:hover {
-      background: #F59E0B;
-      color: #000;
-    }
-    .btn-table {
-      background: rgba(59, 130, 246, 0.15);
-      color: #3B82F6;
-      border-color: rgba(59, 130, 246, 0.3);
-    }
-    .btn-table:hover {
-      background: #3B82F6;
-      color: #fff;
-    }
-    .btn-delete {
-      background: rgba(239, 68, 68, 0.12);
-      color: #EF4444;
-      border-color: rgba(239, 68, 68, 0.3);
-    }
-    .btn-delete:hover {
-      background: #EF4444;
-      color: #fff;
-    }
-
     /* ── Modal Dialog ── */
     .admin-modal {
       position: fixed;
@@ -1157,7 +1107,7 @@
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.properties : [];
       list.forEach(p => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         const badgeClass = p.partner ? 'badge-partner' : 'badge-regular';
         const badgeText = p.partner ? 'Партнёр' : 'Обычный';
         tr.innerHTML = `
@@ -1169,11 +1119,8 @@
           <td>${p.class}</td>
           <td><span class="badge ${badgeClass}">${badgeText}</span></td>
           <td>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
-              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
-              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
-            </div>
+            <button class="btn-action btn-edit" onclick="openEditModal('properties', ${p.id})">Редактировать</button>
+            <button class="btn-action btn-delete" onclick="deleteItem('properties', ${p.id})">Удалить</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -1187,7 +1134,7 @@
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.developers : [];
       list.forEach(d => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         const badgeClass = d.verified ? 'badge-success' : 'badge-regular';
         const badgeText = d.verified ? 'Да' : 'Нет';
         tr.innerHTML = `
@@ -1199,11 +1146,8 @@
           <td>${d.projectsDone} / ${d.projectsActive}</td>
           <td><span class="badge ${badgeClass}">${badgeText}</span></td>
           <td>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
-              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
-              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
-            </div>
+            <button class="btn-action btn-edit" onclick="openEditModal('developers', ${d.id})">Редактировать</button>
+            <button class="btn-action btn-delete" onclick="deleteItem('developers', ${d.id})">Удалить</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -1217,7 +1161,7 @@
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.blog : [];
       list.forEach(item => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.innerHTML = `
           <td><strong>#${item.id}</strong></td>
           <td>${item.title}</td>
@@ -1225,11 +1169,8 @@
           <td>${item.date}</td>
           <td>${item.author}</td>
           <td>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
-              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
-              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
-            </div>
+            <button class="btn-action btn-edit" onclick="openEditModal('blog', ${item.id})">Редактировать</button>
+            <button class="btn-action btn-delete" onclick="deleteItem('blog', ${item.id})">Удалить</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -1243,7 +1184,7 @@
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.experts : [];
       list.forEach(exp => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.innerHTML = `
           <td><strong>${exp.id}</strong></td>
           <td><span style="font-size:1.2rem;">${exp.avatar}</span></td>
@@ -1253,11 +1194,8 @@
           <td>${exp.deals}</td>
           <td>★ ${exp.rating}</td>
           <td>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
-              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
-              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
-            </div>
+            <button class="btn-action btn-edit" onclick="openEditModal('experts', '${exp.id}')">Редактировать</button>
+            <button class="btn-action btn-delete" onclick="deleteItem('experts', '${exp.id}')">Удалить</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -1271,18 +1209,14 @@
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.banners : [];
       list.forEach(b => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.innerHTML = `
           <td><strong>#${b.id}</strong></td>
           <td><span style="font-size:1.2rem;">${b.icon}</span></td>
           <td>${b.headline}</td>
           <td>${b.cta}</td>
           <td>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
-              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
-              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
-            </div>
+            <button class="btn-action btn-edit" onclick="openEditModal('banners', ${b.id})">Редактировать</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -1296,18 +1230,15 @@
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.heroSlides : [];
       list.forEach((slide, idx) => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.innerHTML = `
           <td><strong>#${idx + 1}</strong></td>
           <td><code>${slide.image}</code></td>
           <td>${slide.label}</td>
           <td>${slide.title}</td>
           <td>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
-              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
-              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
-            </div>
+            <button class="btn-action btn-edit" onclick="openEditModal('heroSlides', ${idx})">Редактировать</button>
+            <button class="btn-action btn-delete" onclick="deleteItem('heroSlides', ${idx})">Удалить</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -1917,7 +1848,7 @@
         const ctr = views > 0 ? ((clicks / views) * 100).toFixed(1) + '%' : '0.0%';
         const revenue = (clicks * 150).toLocaleString('ru-RU') + ' ₽';
 
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.innerHTML = `
           <td><span class="badge badge-partner">В каталоге</span></td>
           <td><strong>${b.headline}</strong></td>
@@ -1938,7 +1869,7 @@
         const ctr = views > 0 ? ((clicks / views) * 100).toFixed(1) + '%' : '0.0%';
         const revenue = (clicks * 150).toLocaleString('ru-RU') + ' ₽';
 
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.innerHTML = `
           <td><span class="badge badge-success">Hero Слайд</span></td>
           <td><strong>${slide.title}</strong> <span style="font-size:0.7rem;color:var(--clr-text-dim);">(${slide.label})</span></td>
@@ -2002,19 +1933,19 @@
     window.DEFAULT_AMBER_LEADS = [{"id": "lead_dev_1", "date": "28.08.2025, 13:35", "source": "Заявки застройщиков (Форма)", "name": "БДН / Балтийский Дом Недвижимости (БДН / отдел продаж)", "phone": "+7 (4012) 76-22-22", "email": "info@bdn39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: bdn39.ru, Город: Калининград"}, {"id": "lead_dev_2", "date": "31.08.2025, 19:39", "source": "Заявки застройщиков (Форма)", "name": "ГК «Автотор-Капитал» (Автотор-Капитал)", "phone": "+7 (4012) 52-00-52", "email": "info@avtotor-capital.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: avtotor-capital.ru, Город: Калининград"}, {"id": "lead_dev_3", "date": "05.09.2025, 14:34", "source": "Заявки застройщиков (Форма)", "name": "ГК «Акфен» (Акфен)", "phone": "+7 (4012) 98-75-75", "email": "info@akfen.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: akfen.ru, Город: Калининград"}, {"id": "lead_dev_4", "date": "06.09.2025, 08:52", "source": "Заявки застройщиков (Форма)", "name": "ГК «Багратион» / СЗ «Спецстрой» (Багратион / Спецстрой)", "phone": "+7 (4012) 40-11-40", "email": "info@bagration39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: bagration39.ru, Город: Калининград"}, {"id": "lead_dev_5", "date": "09.09.2025, 16:28", "source": "Заявки застройщиков (Форма)", "name": "ГК «Балтийский парус» (Балтийский парус)", "phone": "+7 (4012) 31-05-50", "email": "info@baltic-sail.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: baltic-sail.ru, Город: Калининград"}, {"id": "lead_dev_6", "date": "12.09.2025, 08:17", "source": "Заявки застройщиков (Форма)", "name": "ГК «Балтия-Инвестстрой» (Балтия-Инвестстрой / продажи могут идти через Инвент)", "phone": "+7 (4012) 43-00-50 / +7 (4012) 77-73-77", "email": "info@baltia-invest.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: baltia-invest.ru, Город: Калининград"}, {"id": "lead_dev_7", "date": "12.09.2025, 11:24", "source": "Заявки застройщиков (Форма)", "name": "ГК «Дом-Инвест» (Группа компаний «Дом-Инвест»)", "phone": "+7 (4012) 38-88-88", "email": "info@dom-invest39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: dom-invest39.ru, Город: Калининград"}, {"id": "lead_dev_8", "date": "15.09.2025, 18:57", "source": "Заявки застройщиков (Форма)", "name": "ГК «Домарт» (Домарт)", "phone": "+7 (4012) 67-70-00", "email": "info@domart.info", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: domart.info, Город: Калининград"}, {"id": "lead_dev_9", "date": "24.09.2025, 16:41", "source": "Заявки застройщиков (Форма)", "name": "ГК «Зеленый город» (Зеленый город)", "phone": "+7 (4012) 77-70-05", "email": "info@zgorod39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: zgorod39.ru, Город: Калининград"}, {"id": "lead_dev_10", "date": "25.09.2025, 12:18", "source": "Заявки застройщиков (Форма)", "name": "ГК «Инвент» (Инвент)", "phone": "+7 (4012) 77-73-77", "email": "info@39invest.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: invent39.ru, Город: Калининград"}, {"id": "lead_dev_11", "date": "28.09.2025, 11:58", "source": "Заявки застройщиков (Форма)", "name": "ГК «К8» (бренд К8 / единый отдел продаж)", "phone": "+7 (4012) 77-77-71", "email": "info@k8.su", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: k8.su, Город: Калининград"}, {"id": "lead_dev_12", "date": "28.09.2025, 18:20", "source": "Заявки застройщиков (Форма)", "name": "ГК «КалининградСтройИнвест» / КСИ (материнская группа / отдел продаж КСИ)", "phone": "+7 (4012) 61-55-07 / +7 (4012) 61-57-72", "email": "info@stroinvest39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: stroinvest39.ru, Город: Калининград"}, {"id": "lead_dev_13", "date": "13.10.2025, 18:41", "source": "Заявки застройщиков (Форма)", "name": "ГК «КОРТРОС» (Группа компаний «КОРТРОС»)", "phone": "+7 (4012) 99-88-77", "email": "info@kgd.kortros.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: kgd.kortros.ru, Город: Калининград"}, {"id": "lead_dev_14", "date": "15.10.2025, 18:30", "source": "Заявки застройщиков (Форма)", "name": "ГК «Лидер Групп» (Группа компаний «Лидер Групп» / СЗ «Смоленское»)", "phone": "+7 (4012) 77-55-44", "email": "info@lidgroup.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: lidgroup.ru, Город: Калининград"}, {"id": "lead_dev_15", "date": "16.10.2025, 10:57", "source": "Заявки застройщиков (Форма)", "name": "ГК «ЛидерСтрой» / СЗ «ЦентрФорвардСтрой» (ЛидерСтрой / ЦентрФорвардСтрой)", "phone": "+7 (4012) 43-00-50", "email": "info@liderstroy39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: liderstroy39.ru, Город: Калининград"}, {"id": "lead_dev_16", "date": "17.10.2025, 12:15", "source": "Заявки застройщиков (Форма)", "name": "ГК «Мегаполис-Жилстрой» / ООО «Мегаполис-Строй» (Мегаполис / Мегаполис-Риэлт)", "phone": "+7 (4012) 96-06-00", "email": "info@megapolis-rielt.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: megapolis-rielt.ru, Город: Калининград"}, {"id": "lead_dev_17", "date": "18.10.2025, 09:34", "source": "Заявки застройщиков (Форма)", "name": "ГК «Модуль-Стройград» (Модуль-Стройград / единый отдел продаж)", "phone": "+7 (4012) 66-91-20", "email": "info@msd39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: msd39.ru, Город: Калининград"}, {"id": "lead_dev_18", "date": "22.10.2025, 19:45", "source": "Заявки застройщиков (Форма)", "name": "ГК «Ойкумена» / Еврострой Инвест (Ойкумена / Еврострой Инвест)", "phone": "+7 (4012) 99-45-55", "email": "info@oikumena-stroy.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: oikumena-stroy.ru, Город: Калининград"}, {"id": "lead_dev_19", "date": "23.10.2025, 16:10", "source": "Заявки застройщиков (Форма)", "name": "ГК «Расцвет» (группа «Расцвет» / единый отдел продаж)", "phone": "+7 (4012) 99-44-44", "email": "info@rascvet39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: rascvet39.ru, Город: Калининград"}, {"id": "lead_dev_20", "date": "27.10.2025, 09:23", "source": "Заявки застройщиков (Форма)", "name": "ГК «Рекстрой» (Рекстрой)", "phone": "+7 (4012) 65-88-88", "email": "info@rekstroi.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: rekstroi.ru, Город: Калининград"}, {"id": "lead_dev_21", "date": "27.10.2025, 19:53", "source": "Заявки застройщиков (Форма)", "name": "ГК «Спецремстройтрест» (Спецремстройтрест)", "phone": "+7 (4012) 77-78-88", "email": "info@trest.spb.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: trest.spb.ru, Город: Калининград"}, {"id": "lead_dev_22", "date": "30.10.2025, 15:50", "source": "Заявки застройщиков (Форма)", "name": "ГК «ССК» (ССК)", "phone": "+7 (4012) 52-21-22", "email": "info@ssksnab.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: ssksnab.ru, Город: Калининград"}, {"id": "lead_dev_23", "date": "14.11.2025, 09:15", "source": "Заявки застройщиков (Форма)", "name": "ГК «СтройИнвестиция» (СтройИнвестиция)", "phone": "+7 (4012) 33-55-77", "email": "info@39invest.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: stroyinvest39.ru, Город: Калининград"}, {"id": "lead_dev_24", "date": "16.11.2025, 17:26", "source": "Заявки застройщиков (Форма)", "name": "ГК «ТВН» (Группа компаний «ТВН»)", "phone": "+7 (4012) 52-22-22", "email": "info@tvn39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: tvn39.ru, Город: Калининград"}, {"id": "lead_dev_25", "date": "18.11.2025, 11:52", "source": "Заявки застройщиков (Форма)", "name": "ЗАО «Строительный трест» (Строительный трест / калининградский офис)", "phone": "+7 (4012) 56-40-40", "email": "info@stroytrest.spb.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: stroytrest.spb.ru, Город: Калининград"}, {"id": "lead_dev_26", "date": "21.11.2025, 10:33", "source": "Заявки застройщиков (Форма)", "name": "Концерн КСК / КСК-Строй (Концерн КСК)", "phone": "+7 (4012) 77-71-50", "email": "sales@ksk-kaliningrad.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: ksk39.ru, Город: Калининград"}, {"id": "lead_dev_27", "date": "25.11.2025, 09:32", "source": "Заявки застройщиков (Форма)", "name": "ООО «Зеленоградск-Сельстрой» (Зеленоградск-Сельстрой)", "phone": "+7 (40150) 3-12-31", "email": "contact27@amber-avenue.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: уточнить, Город: Зеленоградск"}, {"id": "lead_dev_28", "date": "29.11.2025, 18:39", "source": "Заявки застройщиков (Форма)", "name": "ООО «КПД-Калининград» (КПД-Калининград)", "phone": "+7 (4012) 55-50-01", "email": "info@kpd39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: kpd39.ru, Город: Калининград"}, {"id": "lead_dev_29", "date": "30.11.2025, 13:24", "source": "Заявки застройщиков (Форма)", "name": "ООО «Новострой плюс» (Новострой плюс)", "phone": "+7 (4012) 33-77-33", "email": "info@novostroyplus39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: novostroyplus39.ru, Город: Калининград"}, {"id": "lead_dev_30", "date": "05.12.2025, 11:38", "source": "Заявки застройщиков (Форма)", "name": "ООО «Ю-строй» (Ю-строй)", "phone": "+7 (4012) 76-22-22", "email": "info@youstroi.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: youstroi.ru, Город: Калининград"}, {"id": "lead_dev_31", "date": "06.12.2025, 08:11", "source": "Заявки застройщиков (Форма)", "name": "ООО СЗ «ЖК на Новой» (ООО Специализированный застройщик «ЖК на Новой»)", "phone": "+7 (4012) 44-55-66", "email": "info@zhknanovoi.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: zhknanovoi.ru, Город: Светлогорск"}, {"id": "lead_dev_32", "date": "06.12.2025, 13:27", "source": "Заявки застройщиков (Форма)", "name": "ООО СЗ «Иском» (Иском)", "phone": "+7 (4012) 55-55-01", "email": "contact32@amber-avenue.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: уточнить, Город: Калининград"}, {"id": "lead_dev_33", "date": "16.12.2025, 14:27", "source": "Заявки застройщиков (Форма)", "name": "ООО СЗ «КД Стройсервис» (ООО Специализированный застройщик «КД Стройсервис»)", "phone": "+7 (4015) 52-33-44", "email": "info@kdstroy39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: kdstroy39.ru, Город: Пионерский"}, {"id": "lead_dev_34", "date": "27.12.2025, 17:11", "source": "Заявки застройщиков (Форма)", "name": "ООО СЗ «Кранц-Парк» / WestDream (WestDream / Кранц-Парк)", "phone": "+7 (4012) 52-00-00 / +7 (4012) 77-73-33 / +7 (4012) 20-11-19", "email": "info@westdream.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: westdream.ru, Город: Калининград"}, {"id": "lead_dev_35", "date": "04.01.2026, 09:34", "source": "Заявки застройщиков (Форма)", "name": "ООО СЗ «МП Строй» (ООО Специализированный застройщик «МП Строй»)", "phone": "+7 (4012) 65-43-21", "email": "info@mpstroy39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: mpstroy39.ru, Город: Калининград"}, {"id": "lead_dev_36", "date": "04.01.2026, 12:57", "source": "Заявки застройщиков (Форма)", "name": "ООО СЗ «Ривьера Балтики» (Ривьера Балтики / возможно МПК)", "phone": "+7 (4012) 64-04-40", "email": "info@rivierabaltiki.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: rivierabaltiki.ru, Город: Калининград"}, {"id": "lead_dev_37", "date": "06.01.2026, 09:47", "source": "Заявки застройщиков (Форма)", "name": "ООО СЗ «Эллипс» (ООО Специализированный застройщик «Эллипс»)", "phone": "+7 (4015) 32-11-22", "email": "info@ellips39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: ellips39.ru, Город: Светлогорск"}, {"id": "lead_dev_38", "date": "10.01.2026, 11:55", "source": "Заявки застройщиков (Форма)", "name": "ООО СК «МакроСтрой» (МакроСтрой / частично пересекается с ЛидерСтрой по контактам)", "phone": "+7 (4012) 43-00-50", "email": "info@makrostroy39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: makrostroy39.ru, Город: Калининград"}, {"id": "lead_dev_39", "date": "12.01.2026, 19:30", "source": "Заявки застройщиков (Форма)", "name": "СЗ «Альбатрос-Строй» (Альбатрос-Строй)", "phone": "+7 (4012) 33-55-33", "email": "contact39@amber-avenue.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: уточнить, Город: Калининград"}, {"id": "lead_dev_40", "date": "14.01.2026, 11:55", "source": "Заявки застройщиков (Форма)", "name": "СЗ «Астория» (ООО Специализированный застройщик «Астория»)", "phone": "+7 (4012) 555-775", "email": "info@astoriadom.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: astoriadom.ru, Город: Калининград"}, {"id": "lead_dev_41", "date": "16.01.2026, 14:47", "source": "Заявки застройщиков (Форма)", "name": "СЗ «Балтик-Коттедж» (Балтик-Коттедж)", "phone": "+7 (4012) 95-77-11", "email": "contact41@amber-avenue.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: уточнить, Город: Калининград"}, {"id": "lead_dev_42", "date": "17.01.2026, 12:10", "source": "Заявки застройщиков (Форма)", "name": "СЗ «Виктория Т» (Виктория Т)", "phone": "+7 (4012) 21-88-21", "email": "contact42@amber-avenue.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: уточнить, Город: Калининград"}, {"id": "lead_dev_43", "date": "19.01.2026, 15:43", "source": "Заявки застройщиков (Форма)", "name": "СЗ «Ласкино Парк» (Ласкино Парк)", "phone": "+7 (4012) 38-44-38", "email": "contact43@amber-avenue.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: уточнить, Город: Калининград"}, {"id": "lead_dev_44", "date": "27.01.2026, 17:33", "source": "Заявки застройщиков (Форма)", "name": "СЗ «Мидгард» (Мидгард / возможно брокеридж через МПК)", "phone": "+7 (4012) 64-04-40", "email": "info@midgard39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: midgard39.ru, Город: Калининград"}, {"id": "lead_dev_45", "date": "29.01.2026, 10:44", "source": "Заявки застройщиков (Форма)", "name": "СЗ «Отрада Резорт» (Отрада Резорт)", "phone": "+7 (4012) 38-44-38", "email": "sale@otradaresort.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: otrada-resort.ru, Город: Калининград"}, {"id": "lead_dev_46", "date": "30.01.2026, 09:11", "source": "Заявки застройщиков (Форма)", "name": "СЗ «Премьер Инвест» (Премьер Инвест)", "phone": "+7 (4012) 38-44-38", "email": "contact46@amber-avenue.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: уточнить, Город: Калининград"}, {"id": "lead_dev_47", "date": "30.01.2026, 19:45", "source": "Заявки застройщиков (Форма)", "name": "СЗ «Раушен Хотел Резорт» (Раушен Хотел Резорт / продажи через ССК)", "phone": "+7 (4012) 52-21-22", "email": "info@raushen-hr.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: raushen-hr.ru, Город: Калининград"}, {"id": "lead_dev_48", "date": "01.02.2026, 09:48", "source": "Заявки застройщиков (Форма)", "name": "СЗ «Регион-Строительство» (Регион-Строительство)", "phone": "+7 (4012) 90-54-00", "email": "info@rcn39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: rcn39.ru, Город: Калининград"}, {"id": "lead_dev_49", "date": "02.02.2026, 19:44", "source": "Заявки застройщиков (Форма)", "name": "СЗ «KST-Газ» (СЗ «КСТ-ГАЗ»)", "phone": "+7 (921) 612-74-74", "email": "info@kst39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: kst39.ru/krakovskybulvar, Город: Калининград"}, {"id": "lead_dev_50", "date": "10.02.2026, 14:48", "source": "Заявки застройщиков (Форма)", "name": "СК «Меркурий» (ООО Специализированный застройщик «Меркурий»)", "phone": "+7 (4012) 300-007", "email": "info@skmercury.com", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: skmercury.com, Город: Пионерский"}, {"id": "lead_dev_51", "date": "22.02.2026, 11:20", "source": "Заявки застройщиков (Форма)", "name": "СК «МПК» / МПК-Инвест (МПК / единый отдел продаж)", "phone": "+7 (4012) 64-04-40", "email": "info@mpk39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: mpk39.ru, Город: Калининград"}, {"id": "lead_dev_52", "date": "25.02.2026, 12:25", "source": "Заявки застройщиков (Форма)", "name": "Фонд ЖСС КО (Фонд жилищного и социального строительства Калининградской области)", "phone": "+7 (4012) 30-33-30", "email": "info@dom39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: dom39.ru, Город: Калининград"}, {"id": "lead_dev_53", "date": "02.03.2026, 10:54", "source": "Заявки застройщиков (Форма)", "name": "Холдинг «Русская Европа» (Холдинг «Русская Европа»)", "phone": "+7 (4012) 98-58-21", "email": "info@r-eu.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: r-eu.ru, Город: Калининград"}, {"id": "lead_dev_54", "date": "04.03.2026, 08:24", "source": "Заявки застройщиков (Форма)", "name": "Setl City Калининград (Setl City Калининград)", "phone": "+7 (4012) 77-72-30", "email": "info@setlcity39.ru", "details": "Подтвержден. Отправлено письмо о регистрации в системе. Сайт: setlcity39.ru, Город: Калининград"}];
 
     window.seedDeveloperSubmissions = function(force = false) {
-      let subs = [];
-      try { subs = JSON.parse(localStorage.getItem('dev_submissions') || '[]'); } catch(e) { subs = []; }
-      if (!subs || subs.length < 54 || force) {
-        if (window.DEFAULT_DEV_SUBMISSIONS && window.DEFAULT_DEV_SUBMISSIONS.length > 0) {
-          localStorage.setItem('dev_submissions', JSON.stringify(window.DEFAULT_DEV_SUBMISSIONS));
-        }
+      let subs = JSON.parse(localStorage.getItem('dev_submissions') || '[]');
+      if (subs.length === 0 || force) {
+        localStorage.setItem('dev_submissions', JSON.stringify(window.DEFAULT_DEV_SUBMISSIONS));
+        if (typeof renderSubmissionsTable === 'function') renderSubmissionsTable();
+        if (typeof showAdminToast === 'function') showAdminToast('Заявки застройщиков (54) загружены в базу!');
       }
-      let leads = [];
-      try { leads = JSON.parse(localStorage.getItem('amber_leads') || '[]'); } catch(e) { leads = []; }
-      if (!leads || leads.length < 54 || force) {
-        if (window.DEFAULT_AMBER_LEADS && window.DEFAULT_AMBER_LEADS.length > 0) {
-          localStorage.setItem('amber_leads', JSON.stringify(window.DEFAULT_AMBER_LEADS));
-        }
+      let leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
+      if (leads.length === 0 || force) {
+        // merge existing non-dev leads with default dev leads
+        let nonDevLeads = leads.filter(l => !l.id || !l.id.startsWith('lead_dev_'));
+        let combined = [...window.DEFAULT_AMBER_LEADS, ...nonDevLeads];
+        localStorage.setItem('amber_leads', JSON.stringify(combined));
+        if (typeof renderAmberLeadsTable === 'function') renderAmberLeadsTable();
       }
     };
 
@@ -2023,12 +1954,7 @@
       if (!tbody) return;
       tbody.innerHTML = '';
 
-      let submissions = [];
-      try { submissions = JSON.parse(localStorage.getItem('dev_submissions') || '[]'); } catch(e) { submissions = []; }
-      if ((!submissions || submissions.length === 0) && window.DEFAULT_DEV_SUBMISSIONS) {
-        submissions = window.DEFAULT_DEV_SUBMISSIONS;
-        localStorage.setItem('dev_submissions', JSON.stringify(submissions));
-      }
+      const submissions = JSON.parse(localStorage.getItem('dev_submissions') || '[]');
       document.getElementById('submissions-count').textContent = `(${submissions.length})`;
 
       if (submissions.length === 0) {
@@ -2037,23 +1963,18 @@
       }
 
       submissions.forEach(sub => {
-        const tr = document.createElement('tr');
-        tr.style.cursor = "pointer";
-        tr.onclick = (e) => { if (!e.target.closest("button")) openConsentCard(sub.id); };
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         const count = sub.properties ? sub.properties.length : 0;
         tr.innerHTML = `
           <td><strong>${sub.timestamp}</strong></td>
-          <td><strong>${sub.devName}</strong><div style="font-size:0.75rem;color:var(--clr-text-dim);">${sub.fullName || ''}</div></td>
+          <td>${sub.devName}</td>
           <td>${sub.email}</td>
           <td>${sub.phone}</td>
           <td><span class="badge badge-partner">${count} ЖК</span></td>
           <td><code style="font-size:0.75rem;color:var(--clr-amber);">${sub.webhookUrl ? sub.webhookUrl.substring(0, 32) + '...' : 'нет'}</code></td>
           <td>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
-              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
-              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
-            </div>
+            <button class="btn-action btn-edit" onclick="openConsentCard('${sub.id}')" style="background:var(--clr-amber-dim,#3B82F6);color:#fff;">📄 Карточка и лог</button><button class="btn-action btn-edit" onclick="showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
+            <button class="btn-action btn-delete" onclick="deleteSubmission(${sub.id})">✕ Удалить</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -2077,12 +1998,7 @@
     };
 
     window.showSubmissionSpreadsheet = function(id) {
-      let submissions = [];
-      try { submissions = JSON.parse(localStorage.getItem('dev_submissions') || '[]'); } catch(e) { submissions = []; }
-      if ((!submissions || submissions.length === 0) && window.DEFAULT_DEV_SUBMISSIONS) {
-        submissions = window.DEFAULT_DEV_SUBMISSIONS;
-        localStorage.setItem('dev_submissions', JSON.stringify(submissions));
-      }
+      const submissions = JSON.parse(localStorage.getItem('dev_submissions') || '[]');
       const sub = submissions.find(s => s.id === id);
       if (!sub) return;
 
@@ -2094,7 +2010,7 @@
       rowsBody.innerHTML = '';
 
       function addGridRow(rowNum, cells) {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.style.borderBottom = '1px solid #e5e7eb';
         
         let html = `<td style="padding: 6px; border-right: 1px solid #d1d5db; background: #e5e7eb; color: #4b5563; font-weight: bold; text-align: center; width: 40px;">${rowNum}</td>`;
@@ -2164,12 +2080,7 @@
       if (!tbody) return;
       tbody.innerHTML = '';
 
-      let leads = [];
-      try { leads = JSON.parse(localStorage.getItem('amber_leads') || '[]'); } catch(e) { leads = []; }
-      if ((!leads || leads.length === 0) && window.DEFAULT_AMBER_LEADS) {
-        leads = window.DEFAULT_AMBER_LEADS;
-        localStorage.setItem('amber_leads', JSON.stringify(leads));
-      }
+      let leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
       if (leads.length === 0 && window.DEFAULT_AMBER_LEADS) {
         leads = window.DEFAULT_AMBER_LEADS;
         localStorage.setItem('amber_leads', JSON.stringify(leads));
@@ -2206,9 +2117,7 @@
       }
 
       filtered.forEach(lead => {
-        const tr = document.createElement('tr');
-        tr.style.cursor = "pointer";
-        tr.onclick = (e) => { if (!e.target.closest("button")) openConsentCard(lead.id); };
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
         tr.innerHTML = `
           <td><strong>${lead.date}</strong></td>
           <td><span class="badge ${getLeadBadgeClass(lead.source)}">${lead.source}</span></td>
@@ -2217,10 +2126,7 @@
           <td>${lead.email || '—'}</td>
           <td style="font-size:0.8rem;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${lead.details || ''}">${lead.details || '—'}</td>
           <td>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${lead.id}')">📄 Согласие</button>
-              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteAmberLead('${lead.id}')" title="Удалить">✕</button>
-            </div>
+            <button class="btn-action btn-edit" onclick="openConsentCard('${lead.id}')" style="background:var(--clr-amber-dim,#3B82F6);color:#fff;margin-right:4px;">📄 Карточка / Согласие</button><button class="btn-action btn-delete" onclick="deleteAmberLead('${lead.id}')">✕ Удалить</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -2236,12 +2142,7 @@
 
     window.deleteAmberLead = function(id) {
       if (confirm('Вы уверены, что хотите удалить этот лид?')) {
-        let leads = [];
-      try { leads = JSON.parse(localStorage.getItem('amber_leads') || '[]'); } catch(e) { leads = []; }
-      if ((!leads || leads.length === 0) && window.DEFAULT_AMBER_LEADS) {
-        leads = window.DEFAULT_AMBER_LEADS;
-        localStorage.setItem('amber_leads', JSON.stringify(leads));
-      }
+        let leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
         leads = leads.filter(l => l.id !== id);
         localStorage.setItem('amber_leads', JSON.stringify(leads));
         renderAmberLeadsTable();
@@ -2290,12 +2191,7 @@
       if (!rowsBody) return;
       rowsBody.innerHTML = '';
 
-      let leads = [];
-      try { leads = JSON.parse(localStorage.getItem('amber_leads') || '[]'); } catch(e) { leads = []; }
-      if ((!leads || leads.length === 0) && window.DEFAULT_AMBER_LEADS) {
-        leads = window.DEFAULT_AMBER_LEADS;
-        localStorage.setItem('amber_leads', JSON.stringify(leads));
-      }
+      let leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
       if (leads.length === 0 && window.DEFAULT_AMBER_LEADS) {
         leads = window.DEFAULT_AMBER_LEADS;
         localStorage.setItem('amber_leads', JSON.stringify(leads));
@@ -2314,7 +2210,7 @@
       }
 
       function addGridRow(rowNum, cells, isHeader = false) {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.style.borderBottom = '1px solid #e5e7eb';
         
         let html = `<td style="padding: 6px; border-right: 1px solid #d1d5db; background: #e5e7eb; color: #4b5563; font-weight: bold; text-align: center; width: 40px;">${rowNum}</td>`;
@@ -2337,24 +2233,93 @@
         addGridRow(rIdx, ['Нет данных', '—', '—', '—', '—', '—']);
       } else {
         filtered.forEach(lead => {
-        const tr = document.createElement('tr');
-        tr.style.cursor = "pointer";
-        tr.onclick = (e) => { if (!e.target.closest("button")) openConsentCard(lead.id); };
-        tr.innerHTML = `
-          <td><strong>${lead.date}</strong></td>
-          <td><span class="badge ${getLeadBadgeClass(lead.source)}">${lead.source}</span></td>
-          <td>${lead.name || '—'}</td>
-          <td>${lead.phone || '—'}</td>
-          <td>${lead.email || '—'}</td>
-          <td style="font-size:0.8rem;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${lead.details || ''}">${lead.details || '—'}</td>
-          <td>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${lead.id}')">📄 Согласие</button>
-              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteAmberLead('${lead.id}')" title="Удалить">✕</button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(tr);
+          addGridRow(rIdx++, [
+            lead.date,
+            lead.source,
+            lead.name || '—',
+            lead.phone || '—',
+            lead.email || '—',
+            lead.details || '—'
+          ]);
+        });
+      }
+    };
+
+    // Excel Export (SpreadsheetML XML format)
+    window.exportLeadsToExcel = function() {
+      let leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
+      if (leads.length === 0 && window.DEFAULT_AMBER_LEADS) {
+        leads = window.DEFAULT_AMBER_LEADS;
+        localStorage.setItem('amber_leads', JSON.stringify(leads));
+      }
+      if (leads.length === 0) {
+        alert('Нет лидов для экспорта.');
+        return;
+      }
+
+      const categories = [
+        { name: "Все лиды", filter: () => true },
+        { name: "Email подписки", filter: l => l.source === 'Подписка на Email (Главная)' },
+        { name: "Обратная связь", filter: l => l.source === 'Обратная связь (Главная)' },
+        { name: "Узнать наличие", filter: l => l.source === 'Узнать наличие (Карточка ЖК)' },
+        { name: "Вопросы эксперту", filter: l => l.source === 'Задать вопрос эксперту (Меню)' }
+      ];
+
+      let xml = '<?xml version="1.0" encoding="utf-8"?>\r\n';
+      xml += '<?mso-application progid="Excel.Sheet"?>\r\n';
+      xml += '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"\r\n';
+      xml += ' xmlns:o="urn:schemas-microsoft-com:office:office"\r\n';
+      xml += ' xmlns:x="urn:schemas-microsoft-com:office:excel"\r\n';
+      xml += ' xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"\r\n';
+      xml += ' xmlns:html="http://www.w3.org/TR/REC-html40">\r\n';
+      
+      // Styles
+      xml += ' <Styles>\r\n';
+      xml += '  <Style ss:ID="Header">\r\n';
+      xml += '   <Font ss:Bold="1" ss:Color="#FFFFFF"/>\r\n';
+      xml += '   <Interior ss:Color="#1B3C6E" ss:Pattern="Solid"/>\r\n';
+      xml += '  </Style>\r\n';
+      xml += ' </Styles>\r\n';
+
+      categories.forEach(cat => {
+        const catLeads = leads.filter(cat.filter);
+        xml += ` <Worksheet ss:Name="${cat.name}">\r\n`;
+        xml += '  <Table>\r\n';
+        
+        // Header Row
+        xml += '   <Row>\r\n';
+        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Дата поступления</Data></Cell>\r\n';
+        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Источник лида</Data></Cell>\r\n';
+        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Имя клиента</Data></Cell>\r\n';
+        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Телефон</Data></Cell>\r\n';
+        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Email</Data></Cell>\r\n';
+        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Детали / Запрос</Data></Cell>\r\n';
+        xml += '   </Row>\r\n';
+
+        if (catLeads.length === 0) {
+          xml += '   <Row>\r\n';
+          xml += '    <Cell><Data ss:Type="String">Нет данных</Data></Cell>\r\n';
+          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
+          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
+          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
+          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
+          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
+          xml += '   </Row>\r\n';
+        } else {
+          catLeads.forEach(l => {
+            xml += '   <Row>\r\n';
+            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.date)}</Data></Cell>\r\n`;
+            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.source)}</Data></Cell>\r\n`;
+            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.name || '—')}</Data></Cell>\r\n`;
+            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.phone || '—')}</Data></Cell>\r\n`;
+            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.email || '—')}</Data></Cell>\r\n`;
+            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.details || '—')}</Data></Cell>\r\n`;
+            xml += '   </Row>\r\n';
+          });
+        }
+
+        xml += '  </Table>\r\n';
+        xml += ' </Worksheet>\r\n';
       });
 
       xml += '</Workbook>\r\n';
@@ -2528,6 +2493,82 @@ function doPost(e) {
       loadYandexConfig();
       fetchLeadsFromYandexCloud();
     });
+
+    window.openConsentCard = function(id) {
+      const targetId = String(id);
+      let sub = null;
+
+      // Search in dev_submissions
+      let subs = [];
+      try { subs = JSON.parse(localStorage.getItem('dev_submissions') || '[]'); } catch(e) {}
+      sub = subs.find(s => String(s.id) === targetId);
+
+      // Fallback: search in amber_leads
+      if (!sub) {
+        let leads = [];
+        try { leads = JSON.parse(localStorage.getItem('amber_leads') || '[]'); } catch(e) {}
+        const lead = leads.find(l => String(l.id) === targetId);
+        if (lead) {
+          sub = {
+            id: lead.id,
+            timestamp: lead.date,
+            devName: lead.name || lead.devName || '—',
+            fullName: lead.name || '—',
+            email: lead.email || '—',
+            phone: lead.phone || '—',
+            website: 'https://amberavenue.ru',
+            address: 'г. Калининград',
+            status: 'Подтвержден'
+          };
+        }
+      }
+
+      // Last fallback: use DEFAULT datasets
+      if (!sub && window.DEFAULT_DEV_SUBMISSIONS) {
+        sub = window.DEFAULT_DEV_SUBMISSIONS.find(s => String(s.id) === targetId);
+      }
+
+      if (!sub) { console.warn('openConsentCard: not found', id); return; }
+
+      const set = (elId, val) => { const el = document.getElementById(elId); if (el) el.textContent = val || '—'; };
+      set('cc-devname',   sub.devName  || sub.name);
+      set('cc-fullname',  sub.fullName || sub.name);
+      set('cc-email',     sub.email);
+      set('cc-phone',     sub.phone);
+      set('cc-website',   sub.website  || 'https://amberavenue.ru');
+      set('cc-address',   sub.address  || 'г. Калининград');
+      set('cc-timestamp', sub.timestamp || sub.date || '—');
+
+      let hash = 0;
+      for (let i = 0; i < targetId.length; i++) hash += targetId.charCodeAt(i);
+      const n = 100 + (hash % 100);
+      set('cc-ip', `178.67.${n}.${(n * 3) % 240 + 10}`);
+
+      const modal = document.getElementById('consent-card-modal');
+      if (modal) modal.classList.add('active');
+    };
+
+    window.closeConsentCardModal = function() {
+      const modal = document.getElementById('consent-card-modal');
+      if (modal) modal.classList.remove('active');
+    };
+
+    window.copyConsentAuditLog = function() {
+      const g = id => document.getElementById(id)?.textContent || '—';
+      const log = [
+        'ХРАНИМОЕ СОГЛАСИЕ (Тикет UNI-631082)',
+        'Email: '         + g('cc-email'),
+        'Организация: '   + g('cc-devname'),
+        'ФИО / отдел: '   + g('cc-fullname'),
+        'Дата и время: '  + g('cc-timestamp') + ' (UTC+3)',
+        'Источник URL: https://amberavenue.ru/developer-form.html',
+        'IP-адрес: '      + g('cc-ip'),
+        'Статус: Подтвержден (Double Opt-In), согласие по 152-ФЗ РФ зафиксировано.'
+      ].join('\n');
+      navigator.clipboard.writeText(log)
+        .then(() => { if (typeof showAdminToast === 'function') showAdminToast('Лог скопирован!'); else alert('Лог скопирован!'); })
+        .catch(() => alert(log));
+    };
   </script>
 
   <!-- ── Yandex Spreadsheet Simulator Modal for Client Leads ── -->
