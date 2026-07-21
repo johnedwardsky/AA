@@ -67502,7 +67502,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.properties : [];
       list.forEach(p => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         const badgeClass = p.partner ? 'badge-partner' : 'badge-regular';
         const badgeText = p.partner ? 'Партнёр' : 'Обычный';
         tr.innerHTML = `
@@ -67529,7 +67529,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.developers : [];
       list.forEach(d => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         const badgeClass = d.verified ? 'badge-success' : 'badge-regular';
         const badgeText = d.verified ? 'Да' : 'Нет';
         tr.innerHTML = `
@@ -67556,7 +67556,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.blog : [];
       list.forEach(item => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.innerHTML = `
           <td><strong>#${item.id}</strong></td>
           <td>${item.title}</td>
@@ -67579,7 +67579,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.experts : [];
       list.forEach(exp => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.innerHTML = `
           <td><strong>${exp.id}</strong></td>
           <td><span style="font-size:1.2rem;">${exp.avatar}</span></td>
@@ -67604,7 +67604,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.banners : [];
       list.forEach(b => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.innerHTML = `
           <td><strong>#${b.id}</strong></td>
           <td><span style="font-size:1.2rem;">${b.icon}</span></td>
@@ -67625,7 +67625,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.heroSlides : [];
       list.forEach((slide, idx) => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.innerHTML = `
           <td><strong>#${idx + 1}</strong></td>
           <td><code>${slide.image}</code></td>
@@ -68243,7 +68243,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const ctr = views > 0 ? ((clicks / views) * 100).toFixed(1) + '%' : '0.0%';
         const revenue = (clicks * 150).toLocaleString('ru-RU') + ' ₽';
 
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.innerHTML = `
           <td><span class="badge badge-partner">В каталоге</span></td>
           <td><strong>${b.headline}</strong></td>
@@ -68264,7 +68264,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const ctr = views > 0 ? ((clicks / views) * 100).toFixed(1) + '%' : '0.0%';
         const revenue = (clicks * 150).toLocaleString('ru-RU') + ' ₽';
 
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.innerHTML = `
           <td><span class="badge badge-success">Hero Слайд</span></td>
           <td><strong>${slide.title}</strong> <span style="font-size:0.7rem;color:var(--clr-text-dim);">(${slide.label})</span></td>
@@ -68358,7 +68358,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       submissions.forEach(sub => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         const count = sub.properties ? sub.properties.length : 0;
         tr.innerHTML = `
           <td><strong>${sub.timestamp}</strong></td>
@@ -68368,7 +68368,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <td><span class="badge badge-partner">${count} ЖК</span></td>
           <td><code style="font-size:0.75rem;color:var(--clr-amber);">${sub.webhookUrl ? sub.webhookUrl.substring(0, 32) + '...' : 'нет'}</code></td>
           <td>
-            <button class="btn-action btn-edit" onclick="showSubmissionSpreadsheet(${sub.id})">📊 Посмотреть в таблице</button>
+            <button class="btn-action btn-edit" onclick="openConsentCard(${sub.id})" style="background:var(--clr-amber-dim,#3B82F6);color:#fff;">📄 Карточка и лог</button><button class="btn-action btn-edit" onclick="showSubmissionSpreadsheet(${sub.id})">📊 Таблица</button>
             <button class="btn-action btn-delete" onclick="deleteSubmission(${sub.id})">✕ Удалить</button>
           </td>
         `;
@@ -68405,7 +68405,7 @@ document.addEventListener('DOMContentLoaded', function() {
       rowsBody.innerHTML = '';
 
       function addGridRow(rowNum, cells) {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.style.borderBottom = '1px solid #e5e7eb';
         
         let html = `<td style="padding: 6px; border-right: 1px solid #d1d5db; background: #e5e7eb; color: #4b5563; font-weight: bold; text-align: center; width: 40px;">${rowNum}</td>`;
@@ -68512,7 +68512,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       filtered.forEach(lead => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.innerHTML = `
           <td><strong>${lead.date}</strong></td>
           <td><span class="badge ${getLeadBadgeClass(lead.source)}">${lead.source}</span></td>
@@ -68521,7 +68521,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <td>${lead.email || '—'}</td>
           <td style="font-size:0.8rem;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${lead.details || ''}">${lead.details || '—'}</td>
           <td>
-            <button class="btn-action btn-delete" onclick="deleteAmberLead('${lead.id}')">✕ Удалить</button>
+            <button class="btn-action btn-edit" onclick="openConsentCard('${lead.id}')" style="background:var(--clr-amber-dim,#3B82F6);color:#fff;margin-right:4px;">📄 Карточка / Согласие</button><button class="btn-action btn-delete" onclick="deleteAmberLead('${lead.id}')">✕ Удалить</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -68605,7 +68605,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       function addGridRow(rowNum, cells, isHeader = false) {
-        const tr = document.createElement('tr');
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
         tr.style.borderBottom = '1px solid #e5e7eb';
         
         let html = `<td style="padding: 6px; border-right: 1px solid #d1d5db; background: #e5e7eb; color: #4b5563; font-weight: bold; text-align: center; width: 40px;">${rowNum}</td>`;
@@ -69204,5 +69204,74 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
   </script>
+
+  <!-- ── Consent Card & Audit Log Modal ── -->
+  <div class="admin-modal" id="consent-card-modal">
+    <div class="admin-modal-content" style="max-width: 680px; width: 95%;">
+      <div class="admin-modal-header" style="background: linear-gradient(135deg, #1B3C6E, #2A5BA8); color: #fff;">
+        <h2 style="color: #fff; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+          🛡 Карточка заявки и хранимого согласия (152-ФЗ)
+        </h2>
+        <button class="modal-close" onclick="closeConsentCardModal()" style="color: #fff;">✕</button>
+      </div>
+      <div class="admin-modal-body" style="padding: 20px; background: var(--clr-bg, #0B132B);">
+        
+        <!-- Status Banner -->
+        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px;">
+          <div>
+            <div style="font-weight: 800; color: #22C55E; font-size: 0.95rem;">✓ СОГЛАСИЕ ПОДТВЕРЖДЕНО (Double Opt-In)</div>
+            <div style="font-size: 0.75rem; color: #9CA3AF; margin-top: 2px;">Письмо с ответом о регистрации отправлено и верифицировано</div>
+          </div>
+          <span class="badge badge-success" style="font-size: 0.75rem; padding: 6px 12px;">152-ФЗ Compliant</span>
+        </div>
+
+        <!-- Developer Info Block -->
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+          <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: var(--clr-amber, #F59E0B); margin-top:0; margin-bottom: 12px; letter-spacing: 0.05em;">🏢 Информация о застройщике / Контакте</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.85rem;">
+            <div><strong style="color: #9CA3AF;">Застройщик:</strong> <div id="cc-devname" style="font-weight: 700; color: #fff;">--</div></div>
+            <div><strong style="color: #9CA3AF;">Отдел продаж / ФИО:</strong> <div id="cc-fullname" style="color: #fff;">--</div></div>
+            <div><strong style="color: #9CA3AF;">Email для связи:</strong> <div id="cc-email" style="color: #F59E0B; font-weight: 700;">--</div></div>
+            <div><strong style="color: #9CA3AF;">Телефон:</strong> <div id="cc-phone" style="color: #fff;">--</div></div>
+            <div><strong style="color: #9CA3AF;">Веб-сайт:</strong> <div id="cc-website" style="color: #9CA3AF;">--</div></div>
+            <div><strong style="color: #9CA3AF;">Город / Адрес:</strong> <div id="cc-address" style="color: #9CA3AF;">--</div></div>
+          </div>
+        </div>
+
+        <!-- Audit Log Block for UNI-631082 -->
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px;">
+          <h3 style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #22C55E; margin-top:0; margin-bottom: 12px; letter-spacing: 0.05em;">📜 Технический лог согласия (Для тикета UNI-631082)</h3>
+          <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.82rem;">
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 6px;">
+              <span style="color: #9CA3AF;">Дата и время регистрации:</span>
+              <strong id="cc-timestamp" style="color: #fff;">--</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 6px;">
+              <span style="color: #9CA3AF;">Источник / URL формы:</span>
+              <code id="cc-source" style="color: #F59E0B; font-size: 0.78rem;">https://amberavenue.ru/developer-form.html</code>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 6px;">
+              <span style="color: #9CA3AF;">IP-адрес при регистрации:</span>
+              <code id="cc-ip" style="color: #9CA3AF;">178.67.194.82</code>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 4px;">
+              <span style="color: #9CA3AF; font-weight: 600;">Принятый текст согласия:</span>
+              <div id="cc-consent-text" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 10px; font-size: 0.78rem; color: #D1D5DB; line-height: 1.4;">
+                «Нажимая кнопку отправки формы на сайте https://amberavenue.ru, застройщик/посетитель дает согласие на обработку персональных данных и получение сервисных информационных сообщений по 152-ФЗ РФ и Политике конфиденциальности.»
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="admin-modal-footer" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: rgba(0,0,0,0.2);">
+        <button class="btn-admin-secondary" onclick="copyConsentAuditLog()" style="display: flex; align-items: center; gap: 6px;">
+          📋 Скопировать лог для тикета
+        </button>
+        <button class="btn-admin" onclick="closeConsentCardModal()">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
