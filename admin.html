@@ -2485,7 +2485,7 @@ function doPost(e) {
 
     // Initialize the properties view on loading the script
     document.addEventListener('DOMContentLoaded', () => {
-      seedDeveloperSubmissions();
+      seedDeveloperSubmissions(true); // always sync localStorage with latest DEFAULT data
       renderPropertiesTable();
       renderAmberLeadsTable();
       loadYandexConfig();
