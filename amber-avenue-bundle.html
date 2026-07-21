@@ -5646,6 +5646,56 @@ ul { list-style: none; }
       margin-top: 2px;
     }
 
+    
+    /* ── Action Buttons styling ── */
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      outline: none;
+      white-space: nowrap;
+    }
+    .btn-action:hover {
+      transform: translateY(-1px);
+    }
+    .btn-action:active {
+      transform: translateY(0);
+    }
+    .btn-consent {
+      background: rgba(245, 158, 11, 0.15);
+      color: #F59E0B;
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    .btn-consent:hover {
+      background: #F59E0B;
+      color: #000;
+    }
+    .btn-table {
+      background: rgba(59, 130, 246, 0.15);
+      color: #3B82F6;
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    .btn-table:hover {
+      background: #3B82F6;
+      color: #fff;
+    }
+    .btn-delete {
+      background: rgba(239, 68, 68, 0.12);
+      color: #EF4444;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .btn-delete:hover {
+      background: #EF4444;
+      color: #fff;
+    }
+
     /* ── Modal Dialog ── */
     .admin-modal {
       position: fixed;
@@ -67502,7 +67552,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.properties : [];
       list.forEach(p => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
         const badgeClass = p.partner ? 'badge-partner' : 'badge-regular';
         const badgeText = p.partner ? 'Партнёр' : 'Обычный';
         tr.innerHTML = `
@@ -67514,8 +67564,11 @@ document.addEventListener('DOMContentLoaded', function() {
           <td>${p.class}</td>
           <td><span class="badge ${badgeClass}">${badgeText}</span></td>
           <td>
-            <button class="btn-action btn-edit" onclick="openEditModal('properties', ${p.id})">Редактировать</button>
-            <button class="btn-action btn-delete" onclick="deleteItem('properties', ${p.id})">Удалить</button>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
+              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
+              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -67529,7 +67582,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.developers : [];
       list.forEach(d => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
         const badgeClass = d.verified ? 'badge-success' : 'badge-regular';
         const badgeText = d.verified ? 'Да' : 'Нет';
         tr.innerHTML = `
@@ -67541,8 +67594,11 @@ document.addEventListener('DOMContentLoaded', function() {
           <td>${d.projectsDone} / ${d.projectsActive}</td>
           <td><span class="badge ${badgeClass}">${badgeText}</span></td>
           <td>
-            <button class="btn-action btn-edit" onclick="openEditModal('developers', ${d.id})">Редактировать</button>
-            <button class="btn-action btn-delete" onclick="deleteItem('developers', ${d.id})">Удалить</button>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
+              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
+              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -67556,7 +67612,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.blog : [];
       list.forEach(item => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
         tr.innerHTML = `
           <td><strong>#${item.id}</strong></td>
           <td>${item.title}</td>
@@ -67564,8 +67620,11 @@ document.addEventListener('DOMContentLoaded', function() {
           <td>${item.date}</td>
           <td>${item.author}</td>
           <td>
-            <button class="btn-action btn-edit" onclick="openEditModal('blog', ${item.id})">Редактировать</button>
-            <button class="btn-action btn-delete" onclick="deleteItem('blog', ${item.id})">Удалить</button>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
+              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
+              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -67579,7 +67638,7 @@ document.addEventListener('DOMContentLoaded', function() {
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.experts : [];
       list.forEach(exp => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
         tr.innerHTML = `
           <td><strong>${exp.id}</strong></td>
           <td><span style="font-size:1.2rem;">${exp.avatar}</span></td>
@@ -67589,8 +67648,11 @@ document.addEventListener('DOMContentLoaded', function() {
           <td>${exp.deals}</td>
           <td>★ ${exp.rating}</td>
           <td>
-            <button class="btn-action btn-edit" onclick="openEditModal('experts', '${exp.id}')">Редактировать</button>
-            <button class="btn-action btn-delete" onclick="deleteItem('experts', '${exp.id}')">Удалить</button>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
+              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
+              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -67604,14 +67666,18 @@ document.addEventListener('DOMContentLoaded', function() {
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.banners : [];
       list.forEach(b => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
         tr.innerHTML = `
           <td><strong>#${b.id}</strong></td>
           <td><span style="font-size:1.2rem;">${b.icon}</span></td>
           <td>${b.headline}</td>
           <td>${b.cta}</td>
           <td>
-            <button class="btn-action btn-edit" onclick="openEditModal('banners', ${b.id})">Редактировать</button>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
+              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
+              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -67625,15 +67691,18 @@ document.addEventListener('DOMContentLoaded', function() {
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.heroSlides : [];
       list.forEach((slide, idx) => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
         tr.innerHTML = `
           <td><strong>#${idx + 1}</strong></td>
           <td><code>${slide.image}</code></td>
           <td>${slide.label}</td>
           <td>${slide.title}</td>
           <td>
-            <button class="btn-action btn-edit" onclick="openEditModal('heroSlides', ${idx})">Редактировать</button>
-            <button class="btn-action btn-delete" onclick="deleteItem('heroSlides', ${idx})">Удалить</button>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
+              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
+              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -68243,7 +68312,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const ctr = views > 0 ? ((clicks / views) * 100).toFixed(1) + '%' : '0.0%';
         const revenue = (clicks * 150).toLocaleString('ru-RU') + ' ₽';
 
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
         tr.innerHTML = `
           <td><span class="badge badge-partner">В каталоге</span></td>
           <td><strong>${b.headline}</strong></td>
@@ -68264,7 +68333,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const ctr = views > 0 ? ((clicks / views) * 100).toFixed(1) + '%' : '0.0%';
         const revenue = (clicks * 150).toLocaleString('ru-RU') + ' ₽';
 
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
         tr.innerHTML = `
           <td><span class="badge badge-success">Hero Слайд</span></td>
           <td><strong>${slide.title}</strong> <span style="font-size:0.7rem;color:var(--clr-text-dim);">(${slide.label})</span></td>
@@ -68368,8 +68437,11 @@ document.addEventListener('DOMContentLoaded', function() {
           <td><span class="badge badge-partner">${count} ЖК</span></td>
           <td><code style="font-size:0.75rem;color:var(--clr-amber);">${sub.webhookUrl ? sub.webhookUrl.substring(0, 32) + '...' : 'нет'}</code></td>
           <td>
-            <button class="btn-action btn-edit" onclick="openConsentCard(${sub.id})" style="background:var(--clr-amber-dim,#3B82F6);color:#fff;">📄 Карточка и лог</button><button class="btn-action btn-edit" onclick="showSubmissionSpreadsheet(${sub.id})">📊 Таблица</button>
-            <button class="btn-action btn-delete" onclick="deleteSubmission(${sub.id})">✕ Удалить</button>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
+              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
+              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -68405,7 +68477,7 @@ document.addEventListener('DOMContentLoaded', function() {
       rowsBody.innerHTML = '';
 
       function addGridRow(rowNum, cells) {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
+        const tr = document.createElement('tr');
         tr.style.borderBottom = '1px solid #e5e7eb';
         
         let html = `<td style="padding: 6px; border-right: 1px solid #d1d5db; background: #e5e7eb; color: #4b5563; font-weight: bold; text-align: center; width: 40px;">${rowNum}</td>`;
@@ -68512,7 +68584,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       filtered.forEach(lead => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
         tr.innerHTML = `
           <td><strong>${lead.date}</strong></td>
           <td><span class="badge ${getLeadBadgeClass(lead.source)}">${lead.source}</span></td>
@@ -68521,7 +68593,11 @@ document.addEventListener('DOMContentLoaded', function() {
           <td>${lead.email || '—'}</td>
           <td style="font-size:0.8rem;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${lead.details || ''}">${lead.details || '—'}</td>
           <td>
-            <button class="btn-action btn-edit" onclick="openConsentCard('${lead.id}')" style="background:var(--clr-amber-dim,#3B82F6);color:#fff;margin-right:4px;">📄 Карточка / Согласие</button><button class="btn-action btn-delete" onclick="deleteAmberLead('${lead.id}')">✕ Удалить</button>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
+              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
+              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -68605,7 +68681,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       function addGridRow(rowNum, cells, isHeader = false) {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
+        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
         tr.style.borderBottom = '1px solid #e5e7eb';
         
         let html = `<td style="padding: 6px; border-right: 1px solid #d1d5db; background: #e5e7eb; color: #4b5563; font-weight: bold; text-align: center; width: 40px;">${rowNum}</td>`;
