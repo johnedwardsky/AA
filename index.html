@@ -1060,18 +1060,41 @@
     /* ── Contact Form ── */
     function handleContactSubmit(e) {
       e.preventDefault();
-      const name    = document.getElementById('cf-name').value.trim();
-      const phone   = document.getElementById('cf-phone').value.trim();
-      const email   = document.getElementById('cf-email').value.trim();
-      const privacy = document.getElementById('cf-privacy-check').checked;
-      if (!name || !phone || !email || !privacy) return;
+      const nameEl    = document.getElementById('cf-name');
+      const phoneEl   = document.getElementById('cf-phone');
+      const emailEl   = document.getElementById('cf-email');
+      const privacyEl = document.getElementById('cf-privacy-check');
+
+      const name    = nameEl.value.trim();
+      const phone   = phoneEl.value.trim();
+      const email   = emailEl.value.trim();
+      const privacy = privacyEl.checked;
+
+      // Reset previous error states
+      nameEl.style.borderColor = '';
+      phoneEl.style.borderColor = '';
+      emailEl.style.borderColor = '';
+
+      let hasError = false;
+      if (!name) { nameEl.style.borderColor = '#e53e3e'; hasError = true; }
+      if (!phone && !email) {
+        phoneEl.style.borderColor = '#e53e3e';
+        emailEl.style.borderColor = '#e53e3e';
+        hasError = true;
+      }
+      if (!privacy) {
+        if (privacyEl.parentElement) privacyEl.parentElement.style.color = '#e53e3e';
+        hasError = true;
+      }
+
+      if (hasError) return;
 
       triggerLeadCapture({
         source: 'Обратная связь (Главная)',
         name: name,
-        phone: phone,
-        email: email,
-        details: 'Заявка на обратный звонок (связаться с нами)'
+        phone: phone || 'Не указан',
+        email: email || '',
+        details: 'Заявка на обратную связь с Главной страницы'
       });
 
       backContact.style.transition = 'opacity 0.2s ease';

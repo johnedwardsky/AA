@@ -2423,33 +2423,140 @@
 
 function doPost(e) {
   try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    
-    // Автоматическое создание шапки таблицы при первом вызове
-    if (sheet.getLastRow() === 0) {
-      sheet.appendRow(["Дата и время", "Источник / Форма", "Имя клиента", "Телефон", "Email", "Детали / Запрос"]);
-      sheet.getRange(1, 1, 1, 6)
-           .setFontWeight("bold")
-           .setBackground("#15305B")
-           .setFontColor("#FFFFFF")
-           .setHorizontalAlignment("center");
-      sheet.setRowHeight(1, 35);
+    var spreadsheet;
+    try {
+      spreadsheet = SpreadsheetApp.openById("1GRPxt0vCyVhB3aeQS0x0IB7prucB5vn7ly_exFWcAp8");
+    } catch(eOpen) {
+      spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     }
     
-    var data = JSON.parse(e.postData.contents);
+    var data = {};
+    if (e && e.postData && e.postData.contents) {
+      try {
+        data = JSON.parse(e.postData.contents);
+      } catch(errJson) {
+        data = e.parameter || {};
+      }
+    } else if (e && e.parameter) {
+      data = e.parameter;
+    }
+    
+    if (data.devName || data.type === 'developer_submission') {
+      var devName = (data.devName || "Застройщик").toString().trim();
+      var tabName = devName.length > 30 ? devName.substring(0, 30) : devName;
+      
+      var devSheet = spreadsheet.getSheetByName(tabName);
+      if (!devSheet) {
+        devSheet = spreadsheet.insertSheet(tabName);
+      } else {
+        devSheet.clear();
+      }
+      
+      devSheet.getRange(1, 1).setValue("ПАСПОРТ ЗАСТРОЙЩИКА: " + devName.toUpperCase())
+              .setFontWeight("bold").setFontSize(14).setFontColor("#15305B");
+      devSheet.getRange(2, 1).setValue("Дата последнего обновления: " + (data.timestamp || new Date().toLocaleString("ru-RU")))
+              .setFontStyle("italic").setFontColor("#555555");
+              
+      var profileHeaders = ["Контактное лицо", "Телефон", "Email", "Веб-сайт", "Опыт работы", "Сдано объектов", "Строится объектов", "Адрес"];
+      var phoneStr = data.phone ? (data.phone.toString().startsWith("'") ? data.phone : "'" + data.phone) : "";
+      var profileValues = [
+        data.fullName || "",
+        phoneStr,
+        data.email || "",
+        data.website || "",
+        data.years || "",
+        data.projectsDone || "",
+        data.projectsActive || "",
+        data.address || ""
+      ];
+      
+      devSheet.getRange(4, 1, 1, 8).setValues([profileHeaders])
+              .setFontWeight("bold").setBackground("#15305B").setFontColor("#FFFFFF").setHorizontalAlignment("center");
+      devSheet.getRange(5, 1, 1, 8).setValues([profileValues])
+              .setHorizontalAlignment("center").setVerticalAlignment("middle");
+      devSheet.getRange(5, 2).setNumberFormat("@");
+      
+      if (data.description) {
+        devSheet.getRange(7, 1).setValue("О компании:").setFontWeight("bold");
+        devSheet.getRange(7, 2, 1, 7).merge().setValue(data.description).setWrap(true);
+      }
+      
+      devSheet.getRange(9, 1).setValue("СПИСОК И ХАРАКТЕРИСТИКИ ЖИЛЫХ КОМПЛЕКСОВ (ЖК)")
+              .setFontWeight("bold").setFontSize(12).setFontColor("#15305B");
+              
+      var propHeaders = [
+        "№", "Название ЖК", "Локация / Район", "Класс жилья", "Срок сдачи", 
+        "Диапазон цен", "Оценка Amber Avenue", "Архитектура", "Двор и благоустройство", 
+        "Инфраструктура", "Безопасность", "Статус"
+      ];
+      
+      devSheet.getRange(11, 1, 1, propHeaders.length).setValues([propHeaders])
+              .setFontWeight("bold").setBackground("#D9E2EC").setFontColor("#15305B").setHorizontalAlignment("center");
+      
+      var properties = data.properties || [];
+      if (properties.length > 0) {
+        var propRows = [];
+        for (var i = 0; i < properties.length; i++) {
+          var p = properties[i];
+          propRows.push([
+            i + 1,
+            p.title || p.name || "ЖК " + (i + 1),
+            p.location || p.district || "",
+            p.class || "Комфорт-класс",
+            p.completion || p.delivery || "",
+            p.priceRange || (p.priceMin ? "от " + p.priceMin + " млн ₽" : ""),
+            p.rating || p.score || "8.5 / 10",
+            p.architecture || (p.yard ? (p.yard.arch || "Современная") : "Современная"),
+            p.yardDesc || (p.yard ? (p.yard.landscaping || "Закрытый двор") : "Благоустроенный"),
+            p.infraDesc || "Развитая",
+            p.securityDesc || (p.yard ? (p.yard.security || "Охрана / Видеонаблюдение") : "Видеонаблюдение"),
+            p.status || "На проверке редакции"
+          ]);
+        }
+        
+        devSheet.getRange(12, 1, propRows.length, propHeaders.length).setValues(propRows)
+                .setHorizontalAlignment("center").setVerticalAlignment("middle");
+      } else {
+        devSheet.getRange(12, 1, 1, propHeaders.length).merge()
+                .setValue("Объекты застройщика не указаны").setHorizontalAlignment("center");
+      }
+      
+      devSheet.setRowHeight(11, 30);
+      
+      return ContentService.createTextOutput(JSON.stringify({ "result": "success", "sheet": tabName }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    var leadsSheet = spreadsheet.getSheetByName("Лиды") || spreadsheet.getSheetByName("Заявки") || spreadsheet.getActiveSheet();
+    
+    if (leadsSheet.getLastRow() === 0) {
+      leadsSheet.appendRow(["Дата и время", "Источник / Форма", "Имя клиента", "Телефон", "Email", "Детали / Запрос"]);
+      leadsSheet.getRange(1, 1, 1, 6)
+                .setFontWeight("bold")
+                .setBackground("#15305B")
+                .setFontColor("#FFFFFF")
+                .setHorizontalAlignment("center");
+      leadsSheet.setRowHeight(1, 35);
+    }
     
     var date = data.date || new Date().toLocaleString("ru-RU");
     var source = data.source || "Заявка с сайта";
-    var name = data.name || "";
-    var phone = data.phone || "";
+    var name = data.name || (data.email ? "Подписчик" : "Клиент");
+    var phone = data.phone || "Не указан";
+    if (phone && typeof phone === 'string' && !phone.startsWith("'")) {
+      phone = "'" + phone;
+    }
     var email = data.email || "";
-    var details = data.details || "";
+    var details = data.details || "Заявка с сайта Amber Avenue";
     
-    sheet.appendRow([date, source, name, phone, email, details]);
-    sheet.getRange(sheet.getLastRow(), 1, 1, 6).setVerticalAlignment("middle");
+    leadsSheet.appendRow([date, source, name, phone, email, details]);
+    var lastRow = leadsSheet.getLastRow();
+    leadsSheet.getRange(lastRow, 1, 1, 6).setVerticalAlignment("middle");
+    leadsSheet.getRange(lastRow, 4).setNumberFormat("@");
     
-    return ContentService.createTextOutput(JSON.stringify({ "result": "success" }))
+    return ContentService.createTextOutput(JSON.stringify({ "result": "success", "sheet": leadsSheet.getName() }))
       .setMimeType(ContentService.MimeType.JSON);
+      
   } catch (err) {
     return ContentService.createTextOutput(JSON.stringify({ "result": "error", "error": err.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
