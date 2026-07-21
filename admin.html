@@ -1157,7 +1157,7 @@
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.properties : [];
       list.forEach(p => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
+        const tr = document.createElement('tr');
         const badgeClass = p.partner ? 'badge-partner' : 'badge-regular';
         const badgeText = p.partner ? 'Партнёр' : 'Обычный';
         tr.innerHTML = `
@@ -1187,7 +1187,7 @@
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.developers : [];
       list.forEach(d => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
+        const tr = document.createElement('tr');
         const badgeClass = d.verified ? 'badge-success' : 'badge-regular';
         const badgeText = d.verified ? 'Да' : 'Нет';
         tr.innerHTML = `
@@ -1217,7 +1217,7 @@
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.blog : [];
       list.forEach(item => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
+        const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>#${item.id}</strong></td>
           <td>${item.title}</td>
@@ -1243,7 +1243,7 @@
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.experts : [];
       list.forEach(exp => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
+        const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>${exp.id}</strong></td>
           <td><span style="font-size:1.2rem;">${exp.avatar}</span></td>
@@ -1271,7 +1271,7 @@
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.banners : [];
       list.forEach(b => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
+        const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>#${b.id}</strong></td>
           <td><span style="font-size:1.2rem;">${b.icon}</span></td>
@@ -1296,7 +1296,7 @@
       tbody.innerHTML = '';
       const list = window.AMBER_DATA ? window.AMBER_DATA.heroSlides : [];
       list.forEach((slide, idx) => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
+        const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>#${idx + 1}</strong></td>
           <td><code>${slide.image}</code></td>
@@ -1917,7 +1917,7 @@
         const ctr = views > 0 ? ((clicks / views) * 100).toFixed(1) + '%' : '0.0%';
         const revenue = (clicks * 150).toLocaleString('ru-RU') + ' ₽';
 
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
+        const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><span class="badge badge-partner">В каталоге</span></td>
           <td><strong>${b.headline}</strong></td>
@@ -1938,7 +1938,7 @@
         const ctr = views > 0 ? ((clicks / views) * 100).toFixed(1) + '%' : '0.0%';
         const revenue = (clicks * 150).toLocaleString('ru-RU') + ' ₽';
 
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
+        const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><span class="badge badge-success">Hero Слайд</span></td>
           <td><strong>${slide.title}</strong> <span style="font-size:0.7rem;color:var(--clr-text-dim);">(${slide.label})</span></td>
@@ -2032,11 +2032,13 @@
       }
 
       submissions.forEach(sub => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(sub.id); };
+        const tr = document.createElement('tr');
+        tr.style.cursor = "pointer";
+        tr.onclick = (e) => { if (!e.target.closest("button")) openConsentCard(sub.id); };
         const count = sub.properties ? sub.properties.length : 0;
         tr.innerHTML = `
           <td><strong>${sub.timestamp}</strong></td>
-          <td>${sub.devName}</td>
+          <td><strong>${sub.devName}</strong><div style="font-size:0.75rem;color:var(--clr-text-dim);">${sub.fullName || ''}</div></td>
           <td>${sub.email}</td>
           <td>${sub.phone}</td>
           <td><span class="badge badge-partner">${count} ЖК</span></td>
@@ -2189,7 +2191,9 @@
       }
 
       filtered.forEach(lead => {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
+        const tr = document.createElement('tr');
+        tr.style.cursor = "pointer";
+        tr.onclick = (e) => { if (!e.target.closest("button")) openConsentCard(lead.id); };
         tr.innerHTML = `
           <td><strong>${lead.date}</strong></td>
           <td><span class="badge ${getLeadBadgeClass(lead.source)}">${lead.source}</span></td>
@@ -2199,9 +2203,8 @@
           <td style="font-size:0.8rem;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${lead.details || ''}">${lead.details || '—'}</td>
           <td>
             <div style="display:flex; gap:6px; align-items:center;">
-              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${sub.id}')">📄 Согласие</button>
-              <button class="btn-action btn-table" onclick="event.stopPropagation(); showSubmissionSpreadsheet('${sub.id}')">📊 Таблица</button>
-              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteSubmission('${sub.id}')" title="Удалить">✕</button>
+              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${lead.id}')">📄 Согласие</button>
+              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteAmberLead('${lead.id}')" title="Удалить">✕</button>
             </div>
           </td>
         `;
@@ -2286,7 +2289,7 @@
       }
 
       function addGridRow(rowNum, cells, isHeader = false) {
-        const tr = document.createElement('tr'); tr.style.cursor="pointer"; tr.onclick=(e)=>{ if(!e.target.closest("button")) openConsentCard(lead.id); };
+        const tr = document.createElement('tr');
         tr.style.borderBottom = '1px solid #e5e7eb';
         
         let html = `<td style="padding: 6px; border-right: 1px solid #d1d5db; background: #e5e7eb; color: #4b5563; font-weight: bold; text-align: center; width: 40px;">${rowNum}</td>`;
@@ -2309,93 +2312,24 @@
         addGridRow(rIdx, ['Нет данных', '—', '—', '—', '—', '—']);
       } else {
         filtered.forEach(lead => {
-          addGridRow(rIdx++, [
-            lead.date,
-            lead.source,
-            lead.name || '—',
-            lead.phone || '—',
-            lead.email || '—',
-            lead.details || '—'
-          ]);
-        });
-      }
-    };
-
-    // Excel Export (SpreadsheetML XML format)
-    window.exportLeadsToExcel = function() {
-      let leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
-      if (leads.length === 0 && window.DEFAULT_AMBER_LEADS) {
-        leads = window.DEFAULT_AMBER_LEADS;
-        localStorage.setItem('amber_leads', JSON.stringify(leads));
-      }
-      if (leads.length === 0) {
-        alert('Нет лидов для экспорта.');
-        return;
-      }
-
-      const categories = [
-        { name: "Все лиды", filter: () => true },
-        { name: "Email подписки", filter: l => l.source === 'Подписка на Email (Главная)' },
-        { name: "Обратная связь", filter: l => l.source === 'Обратная связь (Главная)' },
-        { name: "Узнать наличие", filter: l => l.source === 'Узнать наличие (Карточка ЖК)' },
-        { name: "Вопросы эксперту", filter: l => l.source === 'Задать вопрос эксперту (Меню)' }
-      ];
-
-      let xml = '<?xml version="1.0" encoding="utf-8"?>\r\n';
-      xml += '<?mso-application progid="Excel.Sheet"?>\r\n';
-      xml += '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"\r\n';
-      xml += ' xmlns:o="urn:schemas-microsoft-com:office:office"\r\n';
-      xml += ' xmlns:x="urn:schemas-microsoft-com:office:excel"\r\n';
-      xml += ' xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"\r\n';
-      xml += ' xmlns:html="http://www.w3.org/TR/REC-html40">\r\n';
-      
-      // Styles
-      xml += ' <Styles>\r\n';
-      xml += '  <Style ss:ID="Header">\r\n';
-      xml += '   <Font ss:Bold="1" ss:Color="#FFFFFF"/>\r\n';
-      xml += '   <Interior ss:Color="#1B3C6E" ss:Pattern="Solid"/>\r\n';
-      xml += '  </Style>\r\n';
-      xml += ' </Styles>\r\n';
-
-      categories.forEach(cat => {
-        const catLeads = leads.filter(cat.filter);
-        xml += ` <Worksheet ss:Name="${cat.name}">\r\n`;
-        xml += '  <Table>\r\n';
-        
-        // Header Row
-        xml += '   <Row>\r\n';
-        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Дата поступления</Data></Cell>\r\n';
-        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Источник лида</Data></Cell>\r\n';
-        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Имя клиента</Data></Cell>\r\n';
-        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Телефон</Data></Cell>\r\n';
-        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Email</Data></Cell>\r\n';
-        xml += '    <Cell ss:StyleID="Header"><Data ss:Type="String">Детали / Запрос</Data></Cell>\r\n';
-        xml += '   </Row>\r\n';
-
-        if (catLeads.length === 0) {
-          xml += '   <Row>\r\n';
-          xml += '    <Cell><Data ss:Type="String">Нет данных</Data></Cell>\r\n';
-          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
-          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
-          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
-          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
-          xml += '    <Cell><Data ss:Type="String">—</Data></Cell>\r\n';
-          xml += '   </Row>\r\n';
-        } else {
-          catLeads.forEach(l => {
-            xml += '   <Row>\r\n';
-            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.date)}</Data></Cell>\r\n`;
-            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.source)}</Data></Cell>\r\n`;
-            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.name || '—')}</Data></Cell>\r\n`;
-            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.phone || '—')}</Data></Cell>\r\n`;
-            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.email || '—')}</Data></Cell>\r\n`;
-            xml += `    <Cell><Data ss:Type="String">${escapeXml(l.details || '—')}</Data></Cell>\r\n`;
-            xml += '   </Row>\r\n';
-          });
-        }
-
-        xml += '  </Table>\r\n';
-        xml += ' </Worksheet>\r\n';
+        const tr = document.createElement('tr');
+        tr.style.cursor = "pointer";
+        tr.onclick = (e) => { if (!e.target.closest("button")) openConsentCard(lead.id); };
+        tr.innerHTML = `
+          <td><strong>${lead.date}</strong></td>
+          <td><span class="badge ${getLeadBadgeClass(lead.source)}">${lead.source}</span></td>
+          <td>${lead.name || '—'}</td>
+          <td>${lead.phone || '—'}</td>
+          <td>${lead.email || '—'}</td>
+          <td style="font-size:0.8rem;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${lead.details || ''}">${lead.details || '—'}</td>
+          <td>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <button class="btn-action btn-consent" onclick="event.stopPropagation(); openConsentCard('${lead.id}')">📄 Согласие</button>
+              <button class="btn-action btn-delete" onclick="event.stopPropagation(); deleteAmberLead('${lead.id}')" title="Удалить">✕</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
       });
 
       xml += '</Workbook>\r\n';
