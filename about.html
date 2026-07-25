@@ -544,6 +544,18 @@
 
   <!-- Header is injected by menu.js -->
 
+  <script>
+    // Hide header & footer when opened with ?noheader=1 (e.g. from pre-launch countdown)
+    if (new URLSearchParams(window.location.search).get('noheader') === '1') {
+      const style = document.createElement('style');
+      style.textContent = `
+        .site-header, header, nav.site-nav, footer, .site-footer { display: none !important; }
+        .about-main-container { padding-top: 40px !important; }
+      `;
+      document.head.appendChild(style);
+    }
+  </script>
+
   <main class="about-main-container">
     
     <!-- ── SECTION 1: HERO ── -->

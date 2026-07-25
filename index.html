@@ -280,6 +280,10 @@
       margin-top: 16px;
       border-top: 1px solid rgba(27, 60, 110, 0.08);
       padding-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
     }
     .btn-dev-gate {
       background: none;
@@ -292,12 +296,37 @@
       align-items: center;
       gap: 6px;
       transition: color 0.2s;
+      padding: 0;
     }
     .btn-dev-gate:hover {
       color: #C47A08;
     }
     .btn-dev-gate svg {
       color: #8C9EB8;
+    }
+    .gate-divider {
+      width: 1px;
+      height: 14px;
+      background: rgba(27, 60, 110, 0.15);
+      flex-shrink: 0;
+    }
+    .btn-gate-link {
+      background: none;
+      border: none;
+      color: #1B3C6E;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      text-decoration: none;
+      transition: color 0.2s;
+      padding: 0;
+      font-family: inherit;
+    }
+    .btn-gate-link:hover {
+      color: #C47A08;
     }
 
     /* ── Lock badge ── */
@@ -737,6 +766,10 @@
             </svg>
             Есть код доступа застройщика
           </button>
+          <div class="gate-divider"></div>
+          <a href="about.html?noheader=1" class="btn-gate-link" target="_blank" rel="noopener">О проекте</a>
+          <div class="gate-divider"></div>
+          <a href="b2b-promo.html?noheader=1" class="btn-gate-link" target="_blank" rel="noopener">Коммерческое предложение</a>
         </div>
 
       </div><!-- /flip-front -->

@@ -471,6 +471,42 @@
   </div>
 </header>
 
+<script>
+  // Hide header & footer when opened with ?noheader=1 (e.g. from pre-launch countdown)
+  if (new URLSearchParams(window.location.search).get('noheader') === '1') {
+    const style = document.createElement('style');
+    style.textContent = `
+      .site-header, header, nav.site-nav, footer, .site-footer { display: none !important; }
+      .pg { padding-top: 20px !important; }
+    `;
+    document.head.appendChild(style);
+
+    // Inject a "back to main" button at the top of .pg when it's ready
+    document.addEventListener('DOMContentLoaded', function () {
+      const pg = document.querySelector('.pg');
+      if (pg) {
+        const backBtn = document.createElement('a');
+        backBtn.href = 'index.html';
+        backBtn.style.cssText = `
+          display: inline-flex; align-items: center; gap: 6px;
+          margin-bottom: 24px; font-size: 13px; font-weight: 600;
+          color: #1B3C6E; text-decoration: none; background: none; border: none;
+          cursor: pointer; transition: color 0.2s; font-family: inherit;
+        `;
+        backBtn.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+          </svg>
+          Вернуться на главную
+        `;
+        backBtn.addEventListener('mouseover', () => backBtn.style.color = '#C47A08');
+        backBtn.addEventListener('mouseout', () => backBtn.style.color = '#1B3C6E');
+        pg.insertBefore(backBtn, pg.firstChild);
+      }
+    });
+  }
+</script>
+
 <!-- ══ MAIN ══════════════════════════════════════════════════ -->
 <main class="pg">
 
