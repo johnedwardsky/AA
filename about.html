@@ -553,6 +553,44 @@
         .about-main-container { padding-top: 40px !important; }
       `;
       document.head.appendChild(style);
+
+      document.addEventListener('DOMContentLoaded', function () {
+        // Inject "back to main" button at the very top of the page
+        const main = document.querySelector('.about-main-container');
+        if (main) {
+          const backBtn = document.createElement('a');
+          backBtn.href = 'index.html';
+          backBtn.style.cssText = `
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-bottom: 28px; font-size: 13px; font-weight: 600;
+            color: #1B3C6E; text-decoration: none;
+            transition: color 0.2s; font-family: inherit;
+          `;
+          backBtn.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+            </svg>
+            Вернуться на главную
+          `;
+          backBtn.addEventListener('mouseover', () => backBtn.style.color = '#C47A08');
+          backBtn.addEventListener('mouseout', () => backBtn.style.color = '#1B3C6E');
+          main.insertBefore(backBtn, main.firstChild);
+        }
+
+        // Propagate ?noheader=1 to "Стать партнером" → partners-promo link
+        document.querySelectorAll('a[href*="partners-promo"]').forEach(link => {
+          const url = new URL(link.href, window.location.href);
+          url.searchParams.set('noheader', '1');
+          link.href = url.toString();
+        });
+
+        // Propagate ?noheader=1 to any b2b-promo links too
+        document.querySelectorAll('a[href*="b2b-promo"]').forEach(link => {
+          const url = new URL(link.href, window.location.href);
+          url.searchParams.set('noheader', '1');
+          link.href = url.toString();
+        });
+      });
     }
   </script>
 
