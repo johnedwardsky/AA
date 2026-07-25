@@ -492,6 +492,10 @@
 </header>
 
 <script>
+  // Scroll to top on every load
+  window.scrollTo(0, 0);
+  window.addEventListener('load', () => window.scrollTo(0, 0));
+
   // Hide header & footer when opened with ?noheader=1
   if (new URLSearchParams(window.location.search).get('noheader') === '1') {
     const style = document.createElement('style');
@@ -502,6 +506,8 @@
     document.head.appendChild(style);
 
     document.addEventListener('DOMContentLoaded', function () {
+      window.scrollTo(0, 0);
+
       const pg = document.querySelector('.pg');
       if (pg) {
         const backBtn = document.createElement('a');

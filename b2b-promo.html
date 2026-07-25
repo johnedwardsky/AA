@@ -472,6 +472,10 @@
 </header>
 
 <script>
+  // Scroll to top on every load
+  window.scrollTo(0, 0);
+  window.addEventListener('load', () => window.scrollTo(0, 0));
+
   // Hide header & footer when opened with ?noheader=1 (e.g. from pre-launch countdown)
   if (new URLSearchParams(window.location.search).get('noheader') === '1') {
     const style = document.createElement('style');
@@ -481,8 +485,10 @@
     `;
     document.head.appendChild(style);
 
-    // Inject a "back to main" button at the top of .pg when it's ready
     document.addEventListener('DOMContentLoaded', function () {
+      window.scrollTo(0, 0);
+
+      // Inject a "back to main" button at the top of .pg
       const pg = document.querySelector('.pg');
       if (pg) {
         const backBtn = document.createElement('a');
@@ -503,6 +509,13 @@
         backBtn.addEventListener('mouseout', () => backBtn.style.color = '#1B3C6E');
         pg.insertBefore(backBtn, pg.firstChild);
       }
+
+      // Propagate ?noheader=1 to all partners-promo links
+      document.querySelectorAll('a[href*="partners-promo"]').forEach(link => {
+        const url = new URL(link.href, window.location.href);
+        url.searchParams.set('noheader', '1');
+        link.href = url.toString();
+      });
     });
   }
 </script>
