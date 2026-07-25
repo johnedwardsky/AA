@@ -2,7 +2,14 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <script>if('scrollRestoration' in history){history.scrollRestoration='manual';}window.scrollTo(0,0);window.addEventListener('pageshow',function(){window.scrollTo(0,0);});window.addEventListener('load',function(){window.scrollTo(0,0);});</script>
+  <style>html,body{scroll-behavior:auto!important}</style>
+  <script>
+    if('scrollRestoration'in history)history.scrollRestoration='manual';
+    document.documentElement.scrollTop=0;
+    document.addEventListener('DOMContentLoaded',function(){document.documentElement.scrollTop=0;document.body&&(document.body.scrollTop=0);});
+    window.addEventListener('load',function(){document.documentElement.scrollTop=0;document.body&&(document.body.scrollTop=0);window.scrollTo({top:0,left:0,behavior:'instant'});});
+    window.addEventListener('pageshow',function(){document.documentElement.scrollTop=0;document.body&&(document.body.scrollTop=0);window.scrollTo({top:0,left:0,behavior:'instant'});});
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="Amber Avenue — коммерческое предложение для застройщиков Калининградской области. Официальные карточки объектов, партнёрские пакеты, безлимитные обращения.">
   <meta name="theme-color" content="#1B3C6E">
