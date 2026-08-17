@@ -1,55 +1,7 @@
-// Inject this script into the HTML to display console errors on screen
-(function() {
-    function showErrorOnScreen(msg) {
-        var div = document.createElement('div');
-        div.style.position = 'fixed';
-        div.style.bottom = '10px';
-        div.style.left = '10px';
-        div.style.right = '10px';
-        div.style.background = 'rgba(220, 38, 38, 0.95)';
-        div.style.color = 'white';
-        div.style.padding = '15px';
-        div.style.borderRadius = '8px';
-        div.style.zIndex = '999999';
-        div.style.fontFamily = 'monospace';
-        div.style.fontSize = '12px';
-        div.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
-        div.innerHTML = '<strong>Debug Error:</strong><br>' + msg;
-        
-        var closeBtn = document.createElement('button');
-        closeBtn.innerHTML = '✕';
-        closeBtn.style.position = 'absolute';
-        closeBtn.style.top = '5px';
-        closeBtn.style.right = '10px';
-        closeBtn.style.background = 'none';
-        closeBtn.style.border = 'none';
-        closeBtn.style.color = 'white';
-        closeBtn.style.cursor = 'pointer';
-        closeBtn.onclick = function() { div.remove(); };
-        div.appendChild(closeBtn);
-        
-        if (document.body) document.body.appendChild(div);
-        else document.addEventListener('DOMContentLoaded', function() { document.body.appendChild(div); });
-    }
-
-    var oldErr = console.error;
-    console.error = function() {
-        var msg = Array.from(arguments).join(' ');
-        showErrorOnScreen('Console: ' + msg);
-        oldErr.apply(console, arguments);
-    };
-
-    window.addEventListener('error', function(e) {
-        showErrorOnScreen('Global: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
-    });
-
-    window.addEventListener('unhandledrejection', function(e) {
-        showErrorOnScreen('Promise: ' + (e.reason ? (e.reason.message || e.reason) : 'Unknown'));
-    });
-})();
 /* ============================================================
-   AMBER AVENUE — Yandex Maps Interactive Regional Map
+   AMBER AVENUE — Yandex Maps Interactive Regional Map Modal
    API Key: a2dacfa0-5027-4d77-8085-92e462c8017a
+   Full-screen adaptive overlay modal that floats on top of all windows
    ============================================================ */
 
 (function(window, document) {
@@ -61,44 +13,48 @@
   var currentProperties = [];
   var mapReady = false;
 
-  // ── Switch Catalog View (list / map) ─────────────────────
+  // ── Switch Catalog View (list / map modal) ────────────────
   function switchCatalogView(targetView) {
     var listBtn = document.getElementById('view-toggle-list');
     var mapBtn = document.getElementById('view-toggle-map');
-    var feedEl = document.querySelector('.listing-feed') || document.getElementById('listing-feed');
     var mapWrapper = document.getElementById('zhk-map-container-wrapper');
-    var loadMoreBtn = document.querySelector('.load-more-wrapper');
 
     currentView = targetView;
     window.currentCatalogView = currentView;
 
     if (targetView === 'map') {
-      if (feedEl) feedEl.style.display = 'none';
-      if (loadMoreBtn) loadMoreBtn.style.display = 'none';
       if (mapWrapper) {
-        mapWrapper.style.display = 'block';
-        mapWrapper.classList.add('active');
+        mapWrapper.style.display = 'flex';
+        // Trigger animation
+        requestAnimationFrame(function() {
+          mapWrapper.classList.add('active');
+        });
       }
+      document.body.style.overflow = 'hidden';
+
       if (mapBtn) { mapBtn.classList.add('active'); mapBtn.setAttribute('aria-pressed', 'true'); }
       if (listBtn) { listBtn.classList.remove('active'); listBtn.setAttribute('aria-pressed', 'false'); }
 
       if (!yandexMap) {
-        // Delay ensures container is painted with non-zero dimensions before Yandex Map init
-        setTimeout(function() { initYandexMap(); }, 50);
+        setTimeout(function() { initYandexMap(); }, 80);
       } else {
         setTimeout(function() {
           yandexMap.container.fitToViewport();
           updateMapMarkers(getProperties());
-        }, 50);
+        }, 80);
       }
 
     } else {
-      if (feedEl) feedEl.style.display = 'flex';
-      if (loadMoreBtn) loadMoreBtn.style.display = '';
       if (mapWrapper) {
-        mapWrapper.style.display = 'none';
         mapWrapper.classList.remove('active');
+        setTimeout(function() {
+          if (currentView === 'list') {
+            mapWrapper.style.display = 'none';
+          }
+        }, 250);
       }
+      document.body.style.overflow = '';
+
       if (listBtn) { listBtn.classList.add('active'); listBtn.setAttribute('aria-pressed', 'true'); }
       if (mapBtn) { mapBtn.classList.remove('active'); mapBtn.setAttribute('aria-pressed', 'false'); }
     }
@@ -108,6 +64,7 @@
     if (currentProperties && currentProperties.length > 0) return currentProperties;
     if (typeof PROPERTIES !== 'undefined' && PROPERTIES) return PROPERTIES;
     if (window.PROPERTIES) return window.PROPERTIES;
+    if (window.AMBER_DATA && window.AMBER_DATA.properties) return window.AMBER_DATA.properties;
     return [];
   }
 
@@ -119,34 +76,19 @@
     if (yandexMap) { yandexMap.container.fitToViewport(); return yandexMap; }
 
     if (typeof ymaps === 'undefined') {
-      container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748B;font-size:14px;text-align:center;padding:40px;">Ошибка загрузки Яндекс Карт. Проверьте подключение API.</div>';
+      container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748B;font-size:14px;text-align:center;padding:40px;">Загрузка Яндекс Карт... Проверьте подключение к интернету.</div>';
       return null;
     }
 
-    var readyFired = false;
-    var readyTimeout = setTimeout(function() {
-      if (!readyFired) {
-        readyFired = true;
-        container.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#64748B;font-size:14px;text-align:center;padding:40px;gap:12px;">' +
-          '<div style="font-size:32px;">🗺️</div>' +
-          '<div><strong>Карта загружается...</strong></div>' +
-          '<div style="font-size:12px;">Если карта не появляется, проверьте настройки API-ключа Яндекс Карт:<br>HTTP Referer должен содержать <code>amberavenue.ru</code></div>' +
-          '</div>';
-      }
-    }, 8000);
-
     ymaps.ready(function() {
-      if (readyFired) return;
-      readyFired = true;
-      clearTimeout(readyTimeout);
-
       try {
         yandexMap = new ymaps.Map(containerId, {
           center: [54.7104, 20.4522],
           zoom: 10,
           controls: ['zoomControl', 'geolocationControl', 'fullscreenControl', 'typeSelector']
         }, {
-          searchControlProvider: 'yandex#search'
+          searchControlProvider: 'yandex#search',
+          suppressMapOpenBlock: true
         });
 
         yandexClusterer = new ymaps.Clusterer({
@@ -162,11 +104,13 @@
 
         updateMapMarkers(getProperties());
 
-        setTimeout(function() { yandexMap.container.fitToViewport(); }, 100);
-        setTimeout(function() { yandexMap.container.fitToViewport(); }, 500);
+        // Ensure canvas adapts to viewport dimensions
+        setTimeout(function() { if (yandexMap) yandexMap.container.fitToViewport(); }, 100);
+        setTimeout(function() { if (yandexMap) yandexMap.container.fitToViewport(); }, 400);
 
       } catch (err) {
-        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#EF4444;font-size:14px;text-align:center;padding:40px;">Ошибка: ' + err.message + '</div>';
+        console.error('Yandex Map init error:', err);
+        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#EF4444;font-size:14px;text-align:center;padding:40px;">Ошибка инициализации карты: ' + err.message + '</div>';
       }
     });
 
@@ -195,7 +139,7 @@
       var balloonBody;
 
       if (isPartner) {
-        balloonBody = '<div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:4px;width:240px;color:#1A1A2E;">' +
+        balloonBody = '<div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:6px;width:240px;color:#1A1A2E;">' +
           '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">' +
             '<span style="font-size:10px;color:#D97706;font-weight:800;background:#FEF3C7;padding:2px 6px;border-radius:4px;text-transform:uppercase;">★ Партнёр</span>' +
             '<span style="font-size:11px;font-weight:800;color:#F5A623;">★ ' + (p.rating || '4.8') + '</span>' +
@@ -208,10 +152,10 @@
             '📅 <b>Срок сдачи:</b> ' + (p.deliveryShort || p.delivery || 'Сдан') + '<br>' +
             '💎 <b>Класс:</b> ' + (p.class || 'Комфорт') +
           '</div>' +
-          '<div style="text-align:center;"><a href="#" onclick="window.navigateToZhkCard(' + p.id + ');return false;" style="display:inline-block;width:100%;background:#15305B;color:#fff;padding:9px 12px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;text-align:center;">Посмотреть карточку →</a></div>' +
+          '<div style="text-align:center;"><a href="#" onclick="window.navigateToZhkCard(' + p.id + ');return false;" style="display:inline-block;width:100%;background:#15305B;color:#fff;padding:9px 12px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;text-align:center;">Посмотреть в каталоге →</a></div>' +
         '</div>';
       } else {
-        balloonBody = '<div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:4px;width:220px;">' +
+        balloonBody = '<div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:6px;width:220px;">' +
           '<div style="font-size:14px;font-weight:700;color:#15305B;margin-bottom:6px;">' + (p.name || 'ЖК') + '</div>' +
           '<div style="font-size:11px;color:#64748B;line-height:1.5;margin-bottom:10px;">' +
             '🏗 ' + (p.developer || 'Уточняется') + '<br>' +
@@ -239,9 +183,14 @@
         if (placemarks.length === 1) {
           yandexMap.setCenter(currentProperties[0].coords, 14);
         } else {
-          yandexMap.setBounds(yandexClusterer.getBounds(), { checkZoomRange: true, zoomMargin: 40 });
+          var bounds = yandexClusterer.getBounds();
+          if (bounds) {
+            yandexMap.setBounds(bounds, { checkZoomRange: true, zoomMargin: 50 });
+          }
         }
-      } catch (e) {}
+      } catch (e) {
+        console.warn('Map setBounds error:', e);
+      }
     }
   }
 
@@ -265,7 +214,7 @@
     }
   }
 
-  // ── Basic ZHK Modal (CSS: .zhk-basic-modal-overlay.open) ─
+  // ── Basic ZHK Modal ──────────────────────────────────────
   function injectBasicModalHTML() {
     if (document.getElementById('zhk-basic-modal')) return;
     var html = '<div class="zhk-basic-modal-overlay" id="zhk-basic-modal" onclick="if(event.target===this)window.closeBasicZhkModal()">' +
@@ -317,18 +266,20 @@
     }
 
     modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
   }
 
   function closeBasicZhkModal() {
     var modal = document.getElementById('zhk-basic-modal');
-    if (modal) { modal.classList.remove('open'); document.body.style.overflow = ''; }
+    if (modal) { modal.classList.remove('open'); }
   }
 
-  // ── Init ─────────────────────────────────────────────────
+  // ── Init & Event Listeners ───────────────────────────────
   function initViewToggle() {
     var listBtn = document.getElementById('view-toggle-list');
     var mapBtn = document.getElementById('view-toggle-map');
+    var mapWrapper = document.getElementById('zhk-map-container-wrapper');
+    var closeBtn = document.getElementById('zhk-map-close-btn');
+
     if (listBtn && !listBtn.dataset.bound) {
       listBtn.dataset.bound = 'true';
       listBtn.addEventListener('click', function() { switchCatalogView('list'); });
@@ -336,6 +287,39 @@
     if (mapBtn && !mapBtn.dataset.bound) {
       mapBtn.dataset.bound = 'true';
       mapBtn.addEventListener('click', function() { switchCatalogView('map'); });
+    }
+    if (closeBtn && !closeBtn.dataset.bound) {
+      closeBtn.dataset.bound = 'true';
+      closeBtn.addEventListener('click', function() { switchCatalogView('list'); });
+    }
+    if (mapWrapper && !mapWrapper.dataset.bound) {
+      mapWrapper.dataset.bound = 'true';
+      mapWrapper.addEventListener('click', function(e) {
+        if (e.target === mapWrapper) {
+          switchCatalogView('list');
+        }
+      });
+    }
+
+    // ESC key closes map modal
+    if (!window._mapEscListenerBound) {
+      window._mapEscListenerBound = true;
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          if (document.getElementById('zhk-basic-modal') && document.getElementById('zhk-basic-modal').classList.contains('open')) {
+            closeBasicZhkModal();
+          } else if (currentView === 'map') {
+            switchCatalogView('list');
+          }
+        }
+      });
+
+      // Automatically fit map to viewport on screen / window resize
+      window.addEventListener('resize', function() {
+        if (yandexMap && currentView === 'map') {
+          yandexMap.container.fitToViewport();
+        }
+      });
     }
   }
 

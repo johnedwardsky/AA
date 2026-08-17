@@ -2683,18 +2683,22 @@ ul { list-style: none; }
     </div>
 
         <!-- Map Container -->
+        <!-- Interactive Regional Map Modal (Popup on top of all windows) -->
     <div class="zhk-map-container-wrapper" id="zhk-map-container-wrapper" style="display: none;">
-      <div class="zhk-map-toolbar">
-        <div class="zhk-map-stats" id="zhk-map-stats">
-          <span class="zhk-map-stat-badge">Объектов на карте: <strong id="zhk-map-count">0</strong></span>
-          <span class="zhk-map-stat-badge partner-badge">Партнёров: <strong id="zhk-map-partner-count">0</strong></span>
+      <div class="zhk-map-modal-dialog">
+        <div class="zhk-map-toolbar">
+          <div class="zhk-map-stats" id="zhk-map-stats">
+            <span class="zhk-map-stat-badge">Объектов на карте: <strong id="zhk-map-count">0</strong></span>
+            <span class="zhk-map-stat-badge partner-badge">Партнёров: <strong id="zhk-map-partner-count">0</strong></span>
+          </div>
+          <div class="zhk-map-legend">
+            <span class="legend-item partner"><span class="legend-dot gold"></span> ★ Оплаченные партнёры</span>
+            <span class="legend-item basic"><span class="legend-dot navy"></span> ● Базовые ЖК</span>
+          </div>
+          <button class="zhk-map-close-btn" id="zhk-map-close-btn" type="button" aria-label="Закрыть карту">✕ Закрыть карту</button>
         </div>
-        <div class="zhk-map-legend">
-          <span class="legend-item partner"><span class="legend-dot gold"></span> Оплаченные партнёры</span>
-          <span class="legend-item basic"><span class="legend-dot navy"></span> Базовые ЖК</span>
-        </div>
+        <div class="zhk-map-view" id="zhk-interactive-map"></div>
       </div>
-      <div class="zhk-map-view" id="zhk-interactive-map"></div>
     </div>
 
     <!-- Listing feed — JS renders cards here -->
