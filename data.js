@@ -126,7 +126,12 @@ const AMBER_DATA = {
                 "finishing": "1 год на отделку",
                 "startDate": "С момента подписания передаточного акта",
                 "contact": "Отдел продаж СК «МПК»: +7 (4012) 55-55-22"
-            }
+            },
+            "coords": [
+                54.96063,
+                20.488986
+            ],
+            "direction": "sea"
         },
         {
             "id": 2,
@@ -252,7 +257,12 @@ const AMBER_DATA = {
                 "finishing": "2 года на чистовую отделку",
                 "startDate": "С момента передачи ключей",
                 "contact": "Отдел гарантии ГК «Русская Европа»: +7 (4012) 77-78-88"
-            }
+            },
+            "coords": [
+                54.9426,
+                20.159857
+            ],
+            "direction": "sea"
         },
         {
             "id": 3,
@@ -377,7 +387,12 @@ const AMBER_DATA = {
                 "finishing": "1 год на ремонт застройщика",
                 "startDate": "С момента передачи объекта дольщику",
                 "contact": "Служба поддержки Концерна КСК: +7 (4012) 30-35-55"
-            }
+            },
+            "coords": [
+                54.8722,
+                20.010143
+            ],
+            "direction": "city"
         },
         {
             "id": 4,
@@ -502,7 +517,12 @@ const AMBER_DATA = {
                 "finishing": "1 год на отделку",
                 "startDate": "С момента подписания передаточного акта",
                 "contact": "Отдел продаж ГК «Русская Европа»: +7 (4012) 77-78-88"
-            }
+            },
+            "coords": [
+                54.95254,
+                20.2386
+            ],
+            "direction": "sea"
         },
         {
             "id": 5,
@@ -628,7 +648,12 @@ const AMBER_DATA = {
                 "finishing": "2 года на чистовую отделку",
                 "startDate": "С момента передачи ключей",
                 "contact": "Отдел гарантии КалининградСтройИнвест: +7 (4012) 61-55-07"
-            }
+            },
+            "coords": [
+                54.71262,
+                20.496943
+            ],
+            "direction": "city"
         },
         {
             "id": 6,
@@ -749,7 +774,12 @@ const AMBER_DATA = {
                 "finishing": "1 год на отделку",
                 "startDate": "С момента подписания передаточного акта",
                 "contact": "Отдел продаж КПД-Калининград: +7 (4012) 30-33-30"
-            }
+            },
+            "coords": [
+                54.96011,
+                20.486757
+            ],
+            "direction": "sea"
         },
         {
             "id": 7,
@@ -870,7 +900,12 @@ const AMBER_DATA = {
                 "finishing": "1 год на отделку",
                 "startDate": "С момента подписания передаточного акта",
                 "contact": "Отдел продаж Модуль-Стройград: +7 (4012) 33-36-35"
-            }
+            },
+            "coords": [
+                54.70849,
+                20.493529
+            ],
+            "direction": "city"
         },
         {
             "id": 8,
@@ -997,7 +1032,12 @@ const AMBER_DATA = {
                 "finishing": "2 года на отделку",
                 "startDate": "С момента передачи ключей",
                 "contact": "Отдел гарантии ГК «МПК»: +7 (4012) 55-55-22"
-            }
+            },
+            "coords": [
+                54.71179,
+                20.493386
+            ],
+            "direction": "city"
         },
         {
             "id": 9,
@@ -1121,7 +1161,11 @@ const AMBER_DATA = {
                 "docLink": "Памятка новосела и гарантийный паспорт доступны в личном кабинете"
             },
             "direction": "city",
-            "district": "Московский"
+            "district": "Московский",
+            "coords": [
+                54.70917,
+                20.496443
+            ]
         },
         {
             "id": 10,
@@ -1244,7 +1288,11 @@ const AMBER_DATA = {
                 "docLink": "Электронный гарантийный паспорт в приложении жителя"
             },
             "direction": "city",
-            "district": "Московский"
+            "district": "Московский",
+            "coords": [
+                54.7121,
+                20.494714
+            ]
         },
         {
             "id": 11,
@@ -1365,7 +1413,11 @@ const AMBER_DATA = {
                 "contact": "Отдел клиентского сервиса СЗ «Меркурий»: +7 (4012) 300-007"
             },
             "direction": "sea",
-            "district": null
+            "district": null,
+            "coords": [
+                54.94937,
+                20.225014
+            ]
         },
         {
             "id": 12,
@@ -1487,7 +1539,11 @@ const AMBER_DATA = {
                 "contact": "Служба гарантийного контроля: +7 (4012) 300-007"
             },
             "direction": "sea",
-            "district": null
+            "district": null,
+            "coords": [
+                54.86971,
+                19.999471
+            ]
         },
         {
             "id": 13,
@@ -1600,7 +1656,11 @@ const AMBER_DATA = {
                 "startDate": "С момента подписания акта приема-передачи"
             },
             "direction": "city",
-            "district": "Московский"
+            "district": "Московский",
+            "coords": [
+                54.70905,
+                20.495929
+            ]
         },
         {
             "id": 14,
@@ -1713,7 +1773,11 @@ const AMBER_DATA = {
                 "startDate": "С момента подписания акта приема-передачи"
             },
             "direction": "sea",
-            "district": null
+            "district": null,
+            "coords": [
+                54.94187,
+                20.156729
+            ]
         },
         {
             "id": 15,
@@ -1830,7 +1894,11 @@ const AMBER_DATA = {
                 "startDate": "С момента подписания акта приема-передачи"
             },
             "direction": "prigorod",
-            "district": null
+            "district": null,
+            "coords": [
+                54.77447,
+                20.610014
+            ]
         },
         {
             "id": 16,
@@ -1942,7 +2010,11 @@ const AMBER_DATA = {
                 "startDate": "С момента подписания акта приема-передачи"
             },
             "direction": "sea",
-            "district": null
+            "district": null,
+            "coords": [
+                54.94181,
+                20.156471
+            ]
         },
         {
             "id": 17,
@@ -2054,7 +2126,11 @@ const AMBER_DATA = {
                 "startDate": "С момента подписания акта приема-передачи"
             },
             "direction": "sea",
-            "district": null
+            "district": null,
+            "coords": [
+                54.9403,
+                20.15
+            ]
         },
         {
             "id": 18,
@@ -2166,7 +2242,11 @@ const AMBER_DATA = {
                 "startDate": "С момента подписания акта приема-передачи"
             },
             "direction": "city",
-            "district": "Ленинградский"
+            "district": "Ленинградский",
+            "coords": [
+                54.70964,
+                20.498457
+            ]
         },
         {
             "id": 19,
@@ -2278,7 +2358,11 @@ const AMBER_DATA = {
                 "startDate": "С момента подписания акта приема-передачи"
             },
             "direction": "sea",
-            "district": null
+            "district": null,
+            "coords": [
+                54.95542,
+                20.236657
+            ]
         }
     ],
     "banners": [
@@ -5717,7 +5801,7 @@ const AMBER_DATA = {
             "label": "Реклама · Балтик Девелопмент",
             "title": "11 лет надёжности",
             "desc": "4 сданных объекта · Эскроу · Индекс Amber 4.3",
-            "link": "#developers",
+            "link": "developers.html",
             "views": 945,
             "clicks": 56
         }
@@ -5727,12 +5811,295 @@ const AMBER_DATA = {
         "featuredTag": "🏆 ТОП ЖК недели",
         "expertTipId": "expert-volkova",
         "expertTipText": "«Перед покупкой обязательно проверьте эскроу-счёт и проектную декларацию на наш.дом.рф.»"
+    },
+    "nativeAdInventory": {
+        "prices": [
+            {
+                "id": "ad_escrow_sber",
+                "tier": 1,
+                "badge": "Банк-партнёр",
+                "badgeColor": "#10B981",
+                "icon": "💳",
+                "title": "Ипотечные программы от 6%",
+                "text": "Рассчитайте ежемесячный платёж и получите персональные условия в аккредитованных банках (Сбер, ВТБ, Дом.РФ).",
+                "cta": "Рассчитать платёж",
+                "ctaUrl": "https://www.sberbank.ru/ru/person/credits/home?erid=2VtzqxSberEscrowKLD",
+                "partnerName": "ПАО «Банк Дом.РФ»",
+                "partnerInn": "7707083893",
+                "erid": "2VtzqxSberEscrowKLD",
+                "categoryMatch": [
+                    "city",
+                    "sea",
+                    "prigorod",
+                    "oblast"
+                ],
+                "classMatch": [
+                    "эконом",
+                    "комфорт",
+                    "комфорт-класс",
+                    "бизнес",
+                    "бизнес-класс",
+                    "премиум"
+                ]
+            },
+            {
+                "id": "ad_installment_vtb",
+                "tier": 2,
+                "badge": "Рассрочка 0%",
+                "badgeColor": "#10B981",
+                "icon": "💎",
+                "title": "Беспроцентная рассрочка",
+                "text": "Индивидуальные графики выплат без переплат от банков-партнёров на весь период строительства ЖК.",
+                "cta": "Получить расчёт",
+                "ctaUrl": "https://www.vtb.ru/personal/ipoteka?erid=2VtzqxVtbInstallment",
+                "partnerName": "Банк ВТБ (ПАО)",
+                "partnerInn": "7702070139",
+                "erid": "2VtzqxVtbInstallment",
+                "categoryMatch": [
+                    "city",
+                    "sea",
+                    "prigorod",
+                    "oblast"
+                ],
+                "classMatch": [
+                    "комфорт",
+                    "комфорт-класс",
+                    "бизнес",
+                    "бизнес-класс",
+                    "премиум"
+                ]
+            }
+        ],
+        "mortgage": [
+            {
+                "id": "ad_mortgage_domclick",
+                "tier": 1,
+                "badge": "Ипотечный брокер",
+                "badgeColor": "#2563EB",
+                "icon": "🏦",
+                "title": "Одобрение ипотеки за 2 мин",
+                "text": "Семейная, IT и субсидированная ипотека от застройщика. Подача одной заявки во все банки региона.",
+                "cta": "Подать заявку",
+                "ctaUrl": "https://domclick.ru/ipoteka?erid=2VtzqxDomclickKLD",
+                "partnerName": "Ипотечный центр Amber",
+                "partnerInn": "7736249247",
+                "erid": "2VtzqxDomclickKLD",
+                "categoryMatch": [
+                    "city",
+                    "sea",
+                    "prigorod",
+                    "oblast"
+                ],
+                "classMatch": [
+                    "эконом",
+                    "комфорт",
+                    "комфорт-класс",
+                    "бизнес",
+                    "бизнес-класс",
+                    "премиум"
+                ]
+            },
+            {
+                "id": "ad_mortgage_baltic",
+                "tier": 1,
+                "badge": "Субсидия 5.9%",
+                "badgeColor": "#2563EB",
+                "icon": "⚡",
+                "title": "Балтийская и семейная ипотека",
+                "text": "Субсидированная ставка от 5.9% в банках-партнёрах. Экспресс-одобрение онлайн за 2 минуты без визита в офис.",
+                "cta": "Рассчитать ставку",
+                "ctaUrl": "partners-promo.html?ref=mortgage_broker",
+                "partnerName": "ООО «Домклик»",
+                "partnerInn": "7736249247",
+                "erid": "2VtzqxDomclickKLD",
+                "categoryMatch": [
+                    "city",
+                    "sea",
+                    "prigorod",
+                    "oblast"
+                ],
+                "classMatch": [
+                    "эконом",
+                    "комфорт",
+                    "комфорт-класс",
+                    "бизнес",
+                    "бизнес-класс",
+                    "премиум"
+                ]
+            }
+        ],
+        "location": [
+            {
+                "id": "ad_transfer_baltic",
+                "tier": 1,
+                "badge": "Трансфер & Такси",
+                "badgeColor": "#F59E0B",
+                "icon": "🚕",
+                "title": "Трансфер на просмотр ЖК",
+                "text": "Комфортная поездка на объект / трансфер из аэропорта Храброво для покупателей новостроек.",
+                "cta": "Заказать трансфер",
+                "ctaUrl": "partners-promo.html?ref=transfer",
+                "partnerName": "Сервис «Балтик Драйв»",
+                "partnerInn": "3906112233",
+                "erid": "2VtzqxBalticTransfer",
+                "categoryMatch": [
+                    "city",
+                    "sea",
+                    "prigorod",
+                    "oblast"
+                ],
+                "classMatch": [
+                    "комфорт",
+                    "комфорт-класс",
+                    "бизнес",
+                    "бизнес-класс",
+                    "премиум"
+                ]
+            },
+            {
+                "id": "ad_rentacar_coast",
+                "tier": 2,
+                "badge": "Автопрокат 15%",
+                "badgeColor": "#F59E0B",
+                "icon": "🚗",
+                "title": "Аренда авто со скидкой 15%",
+                "text": "Специальный тариф для покупателей курортной недвижимости на побережье Балтийского моря.",
+                "cta": "Выбрать авто",
+                "ctaUrl": "https://rentacar39.ru/?erid=2VtzqxRentACarCoast",
+                "partnerName": "ООО «Рент-а-Кар 39»",
+                "partnerInn": "3906223344",
+                "erid": "2VtzqxRentACarCoast",
+                "categoryMatch": [
+                    "sea",
+                    "city"
+                ],
+                "classMatch": [
+                    "комфорт",
+                    "комфорт-класс",
+                    "бизнес",
+                    "бизнес-класс",
+                    "премиум"
+                ]
+            }
+        ],
+        "warranty": [
+            {
+                "id": "ad_insurance_vsk",
+                "tier": 1,
+                "badge": "Страхование",
+                "badgeColor": "#8B5CF6",
+                "icon": "🛡️",
+                "title": "Защита сделки и конструктива",
+                "text": "Комплексное страхование титула, ремонта и отделки со скидкой до 20% от аккредитованных страховых.",
+                "cta": "Оформить полис",
+                "ctaUrl": "https://sogaz.ru/property?erid=2VtzqxSogazProperty",
+                "partnerName": "САО «ВСК»",
+                "partnerInn": "7710030411",
+                "erid": "2VtzqxVskProperty",
+                "categoryMatch": [
+                    "city",
+                    "sea",
+                    "prigorod",
+                    "oblast"
+                ],
+                "classMatch": [
+                    "эконом",
+                    "комфорт",
+                    "комфорт-класс",
+                    "бизнес",
+                    "бизнес-класс",
+                    "премиум"
+                ]
+            },
+            {
+                "id": "ad_insurance_sogaz",
+                "tier": 1,
+                "badge": "Страхование 214-ФЗ",
+                "badgeColor": "#8B5CF6",
+                "icon": "📑",
+                "title": "Защита конструктива и ремонта",
+                "text": "Комплексное страхование квартиры, отделки и ответственности перед соседями со скидкой 20%.",
+                "cta": "Оформить полис",
+                "ctaUrl": "https://sogaz.ru/property?erid=2VtzqxSogazProperty",
+                "partnerName": "АО «СОГАЗ»",
+                "partnerInn": "7736035485",
+                "erid": "2VtzqxSogazProperty",
+                "categoryMatch": [
+                    "city",
+                    "sea",
+                    "prigorod",
+                    "oblast"
+                ],
+                "classMatch": [
+                    "эконом",
+                    "комфорт",
+                    "комфорт-класс",
+                    "бизнес",
+                    "бизнес-класс",
+                    "премиум"
+                ]
+            }
+        ],
+        "docs": [
+            {
+                "id": "ad_legal_audit_ddu",
+                "tier": 1,
+                "badge": "Юридический аудит",
+                "badgeColor": "#EC4899",
+                "icon": "⚖️",
+                "title": "Проверка ДДУ и рисков",
+                "text": "Независимая юридическая проверка договора долевого участия, чистоты эскроу и истории застройщика.",
+                "cta": "Проверить ДДУ",
+                "ctaUrl": "partners-promo.html?ref=legal_audit",
+                "partnerName": "ЮК «Право Недвижимости»",
+                "partnerInn": "3906334455",
+                "erid": "2VtzqxPravo39Audit",
+                "categoryMatch": [
+                    "city",
+                    "sea",
+                    "prigorod",
+                    "oblast"
+                ],
+                "classMatch": [
+                    "эконом",
+                    "комфорт",
+                    "комфорт-класс",
+                    "бизнес",
+                    "бизнес-класс",
+                    "премиум"
+                ]
+            },
+            {
+                "id": "ad_legal_audit_pravo39",
+                "tier": 1,
+                "badge": "Юр. проверка 24ч",
+                "badgeColor": "#EC4899",
+                "icon": "📜",
+                "title": "Аудит ДДУ и застройщика за 24ч",
+                "text": "Независимая экспертиза договора, проверка финансовой устойчивости девелопера и рисков ЕИСЖС.",
+                "cta": "Заказать проверку",
+                "ctaUrl": "partners-promo.html?ref=legal_audit",
+                "partnerName": "Юридическое бюро «Право39»",
+                "partnerInn": "3906334455",
+                "erid": "2VtzqxPravo39Audit",
+                "categoryMatch": [
+                    "city",
+                    "sea",
+                    "prigorod",
+                    "oblast"
+                ],
+                "classMatch": [
+                    "эконом",
+                    "комфорт",
+                    "комфорт-класс",
+                    "бизнес",
+                    "бизнес-класс",
+                    "премиум"
+                ]
+            }
+        ]
     }
 };
-
-
-
-
 
 if (typeof window !== 'undefined') {
   window.AMBER_DATA = AMBER_DATA;

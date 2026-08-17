@@ -55,8 +55,9 @@
       box-shadow: 0 1px 0 rgba(255,255,255,0.06), 0 4px 20px rgba(0,0,0,0.15) !important;
     }
     .header-inner, .aa-hdr-in {
-      max-width: var(--feed-max-width, 960px) !important; margin: 0 auto !important;
-      padding: 0 16px !important; height: 56px !important;
+      max-width: var(--feed-max-width, 1240px) !important; margin: 0 auto !important;
+      padding: 0 var(--feed-padding, 20px) !important; height: 56px !important;
+      box-sizing: border-box !important;
       display: flex !important; align-items: center !important; gap: 20px !important;
     }
 
@@ -764,6 +765,10 @@
         <aside class="mg-left">
           <div class="mg-sec">
             <div class="mg-lbl">Каталог</div>
+            <a href="hub.html" class="mg-lnk">
+              <span class="mg-lnk-ic">🧭</span>Инфо-Хаб
+              <svg class="mg-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
             <a href="zhk.html" class="mg-lnk active">
               <span class="mg-lnk-ic">🏠</span>Все новостройки
               <svg class="mg-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
@@ -798,6 +803,7 @@
             <div class="mg-lbl">Компания</div>
             <a href="about.html" class="mg-lnk"><span class="mg-lnk-ic">ℹ️</span>О сервисе</a>
             <a href="methodology.html" class="mg-lnk"><span class="mg-lnk-ic">📊</span>Методология рейтинга</a>
+            <a href="whitepaper.html" class="mg-lnk"><span class="mg-lnk-ic">📄</span>Whitepaper инвестора</a>
             <a href="b2b-promo.html" class="mg-lnk"><span class="mg-lnk-ic">🏗</span>Для застройщиков</a>
             <a href="partners-promo.html" class="mg-lnk"><span class="mg-lnk-ic">📢</span>Для рекламодателей</a>
           </div>
@@ -908,6 +914,10 @@
       </div>
 
       <div class="mb-body">
+        <a href="hub.html" class="mb-ni">
+          <span class="mb-ni-ic">🧭</span><span class="mb-ni-lb">Инфо-Хаб</span>
+          <svg class="mb-ni-ch" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
         <a href="zhk.html" class="mb-ni">
           <span class="mb-ni-ic">🏠</span><span class="mb-ni-lb">Все новостройки</span>
           <svg class="mb-ni-ch" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
@@ -939,6 +949,7 @@
 
         <a href="about.html" class="mb-ni"><span class="mb-ni-ic">ℹ️</span><span class="mb-ni-lb">О сервисе</span></a>
         <a href="methodology.html" class="mb-ni"><span class="mb-ni-ic">📊</span><span class="mb-ni-lb">Методология рейтинга</span></a>
+        <a href="whitepaper.html" class="mb-ni"><span class="mb-ni-ic">📄</span><span class="mb-ni-lb">Whitepaper инвестора</span></a>
         <a href="b2b-promo.html" class="mb-ni"><span class="mb-ni-ic">🏗</span><span class="mb-ni-lb">Для застройщиков</span></a>
         <a href="partners-promo.html" class="mb-ni"><span class="mb-ni-ic">📢</span><span class="mb-ni-lb">Для рекламодателей</span></a>
 
@@ -1797,29 +1808,84 @@
         }
       });
 
+      // Хелпер: определение страницы одного из 4х направлений для ЖК
+      const getZhkDirectionUrl = function(itemOrId) {
+        const props = (typeof PROPERTIES !== 'undefined' ? PROPERTIES : []) ||
+                      (window.PROPERTIES || (window.AMBER_DATA ? window.AMBER_DATA.properties : [])) || [];
+        let prop = null;
+        if (itemOrId && typeof itemOrId === 'object') {
+          prop = itemOrId.id ? props.find(p => p.id === itemOrId.id) || itemOrId : itemOrId;
+        } else if (itemOrId) {
+          const numId = parseInt(itemOrId, 10);
+          prop = props.find(p => p.id === numId || (p.name && p.name.toLowerCase() === String(itemOrId).toLowerCase()));
+        }
+
+        if (prop) {
+          const dir = prop.direction;
+          if (dir === 'sea') return 'zhk-umory.html';
+          if (dir === 'prigorod' || dir === 'suburb') return 'zhk-prigorod.html';
+          if (dir === 'oblast') return 'zhk-oblast.html';
+          if (dir === 'city') return 'zhk-kaliningrad.html';
+
+          const loc = (prop.location || '').toLowerCase();
+          const addr = (prop.address || '').toLowerCase();
+          const fullText = loc + ' ' + addr;
+
+          if (/зеленоградск|светлогорск|пионерск|янтарн|балтийск|море|побереж/i.test(fullText)) {
+            return 'zhk-umory.html';
+          }
+          if (/гурьевск|васильково|исаково|холмогоровк|орловк|луговое|ласкино/i.test(fullText)) {
+            return 'zhk-prigorod.html';
+          }
+          if (/(?:^|\s|г\.)(советск|черняховск|гвардейск|багратионовск|неман|полесск|гусев)\b/i.test(fullText) && !/советский\s+просп/i.test(fullText)) {
+            return 'zhk-oblast.html';
+          }
+          return 'zhk-kaliningrad.html';
+        }
+        return 'zhk-kaliningrad.html';
+      };
+
+      const getDirectionUrlByLocation = function(locName) {
+        const q = (locName || '').toLowerCase();
+        if (/зеленоградск|светлогорск|пионерск|янтарн|море|побереж/i.test(q)) {
+          return 'zhk-umory.html';
+        }
+        if (/гурьевск|васильково|исаково|холмогоровк|орловк|луговое|ласкино|пригород/i.test(q)) {
+          return 'zhk-prigorod.html';
+        }
+        if (/советск|черняховск|гвардейск|багратионовск|неман|полесск|гусев|балтийск|област/i.test(q)) {
+          return 'zhk-oblast.html';
+        }
+        return 'zhk-kaliningrad.html';
+      };
+
       // Логика перехода при выборе подсказки
       const handleSuggestionClick = function(item) {
         dropdown.classList.remove('active');
         globalSearchInput.value = item.name;
 
         if (item.type === 'zhk') {
-          // Перейти на карточку ЖК
+          // Перейти на карточку ЖК в соответствующем из 4х направлений
+          const targetUrl = getZhkDirectionUrl(item);
           if (typeof navigateToPage === 'function') {
             window.targetZhkId = item.id;
-            location.hash = '#zhk';
+            const targetPageName = targetUrl.replace('.html', '').replace('zhk-', '');
+            location.hash = '#' + targetPageName;
           } else {
-            window.location.href = `zhk.html?id=${item.id}`;
+            window.location.href = `${targetUrl}?id=${item.id}`;
           }
         } else if (item.type === 'developer') {
           // Перейти на страницу застройщика
           window.goToDeveloperPage(item.name);
         } else if (item.type === 'location') {
-          // Поиск по городу/району
+          // Поиск по городу/району в соответствующем направлении
+          const targetUrl = getDirectionUrlByLocation(item.name);
           if (typeof navigateToPage === 'function') {
             window.targetZhkSearch = item.name;
-            location.hash = '#zhk';
+            const targetPageName = targetUrl.replace('.html', '').replace('zhk-', '');
+            location.hash = '#' + targetPageName;
           } else {
-            window.location.href = `zhk.html?search=${encodeURIComponent(item.name)}`;
+            window.location.href = `${targetUrl}?search=${encodeURIComponent(item.name)}`;
           }
         }
       };
@@ -1839,7 +1905,7 @@
         // 1. Поиск по ЖК
         const matchedZhk = props.filter(p => p.name.toLowerCase().includes(query))
                                 .slice(0, 4)
-                                .map(p => ({ type: 'zhk', id: p.id, name: p.name, subtitle: p.developer }));
+                                .map(p => ({ type: 'zhk', id: p.id, name: p.name, subtitle: p.developer, direction: p.direction, location: p.location, address: p.address }));
 
         // 2. Поиск по застройщикам
         const matchedDevs = devs.filter(d => d.name.toLowerCase().includes(query) || d.fullName.toLowerCase().includes(query))
@@ -1895,9 +1961,32 @@
 
       const triggerGlobalSearch = function(query) {
         if (!query) return;
-        const isMainZhkPage = window.location.pathname.includes('zhk.html') || window.location.pathname.includes('zhk.html');
+        const q = query.trim().toLowerCase();
+        const props = window.PROPERTIES || (window.AMBER_DATA ? window.AMBER_DATA.properties : []) || [];
+
+        // Проверяем, совпадает ли запрос с названием ЖК
+        const exactZhk = props.find(p => p.name.toLowerCase() === q) ||
+                         props.find(p => p.name.toLowerCase().includes(q));
+
+        if (exactZhk && q.length >= 3) {
+          const targetUrl = getZhkDirectionUrl(exactZhk);
+          if (typeof navigateToPage === 'function') {
+            window.targetZhkId = exactZhk.id;
+            const targetPageName = targetUrl.replace('.html', '').replace('zhk-', '');
+            location.hash = '#' + targetPageName;
+          } else {
+            window.location.href = `${targetUrl}?id=${exactZhk.id}`;
+          }
+          return;
+        }
+
+        const isDirectionPage = window.location.pathname.includes('zhk-kaliningrad.html') ||
+                               window.location.pathname.includes('zhk-umory.html') ||
+                               window.location.pathname.includes('zhk-prigorod.html') ||
+                               window.location.pathname.includes('zhk-oblast.html') ||
+                               window.location.pathname.includes('zhk.html');
         
-        if (isMainZhkPage) {
+        if (isDirectionPage) {
           window.targetZhkId = null;
           if (typeof currentSearchQuery !== 'undefined') {
             currentSearchQuery = query;
@@ -1907,11 +1996,13 @@
             renderFeed();
           }
         } else {
+          const targetUrl = getDirectionUrlByLocation(query);
           if (typeof navigateToPage === 'function') {
             window.targetZhkSearch = query;
-            location.hash = '#zhk';
+            const targetPageName = targetUrl.replace('.html', '').replace('zhk-', '');
+            location.hash = '#' + targetPageName;
           } else {
-            window.location.href = `zhk.html?search=${encodeURIComponent(query)}`;
+            window.location.href = `${targetUrl}?search=${encodeURIComponent(query)}`;
           }
         }
       };
