@@ -2355,13 +2355,17 @@ ul { list-style: none; }
 
 /* Map container */
 .zhk-map-container-wrapper {
+  display: none;
   background: var(--color-surface, #FFFFFF);
   border: 1px solid var(--color-border, #E5E7EB);
   border-radius: var(--radius-card, 14px);
   box-shadow: var(--shadow-card, 0 2px 12px rgba(21,48,91,0.08));
   overflow: hidden;
   margin-bottom: 32px;
-  animation: fadeInUp 0.35s ease both;
+}
+
+.zhk-map-container-wrapper.active {
+  display: block;
 }
 
 .zhk-map-toolbar {

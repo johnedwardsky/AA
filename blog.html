@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Информационный блог о недвижимости, инвестициях и жизни в Калининградской области.">
+  <meta name="description" content="Блог о недвижимости, инвестициях и жизни в Калининградской области — Amber Avenue.">
   <meta name="theme-color" content="#1B3C6E">
   <title>Блог о жизни и недвижимости — Amber Avenue</title>
   <link rel="icon" href="logo.png" type="image/png">
@@ -11,284 +11,799 @@
   <script src="data.js"></script>
   <script src="properties-data.js"></script>
   <script src="menu.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ── Blog Grid Layout ── */
-    .blog-layout {
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px; line-height: 1.5;
+      color: #1A1A2E; background: #F0F3F8;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+
+    :root {
+      --cp: #1B3C6E; --cpd: #122a52; --ca: #F5A623; --cah: #e0911a;
+      --cnl: #EEF3FB; --ct: #1A1A2E; --cts: #4B5563; --cm: #9CA3AF;
+      --cb: #E5E7EB; --cbl: #F3F4F6; --cs: #FFFFFF; --cbg: #F0F3F8;
+      --tr: 0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HEADER
+       ═══════════════════════════════════════════════════════════ */
+    .site-header {
+      background: linear-gradient(135deg, var(--cp) 0%, var(--cpd) 100%);
+      box-shadow: 0 2px 16px rgba(21,48,91,0.25);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-inner {
+      max-width: 1400px; margin: 0 auto; padding: 0 20px;
+      height: 56px; display: flex; align-items: center; gap: 16px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; text-decoration: none; }
+    .logo-icon {
+      width: 36px; height: 36px; background: var(--ca); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .logo-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .logo-name { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: 0.02em; }
+    .logo-tagline { font-size: 9px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    .header-search { flex: 1; max-width: 480px; position: relative; }
+    .header-search input {
+      width: 100%; height: 38px;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px; padding: 0 14px 0 38px;
+      color: #fff; font-family: inherit; font-size: 13px; outline: none;
+      transition: var(--tr);
+    }
+    .header-search input::placeholder { color: rgba(255,255,255,0.5); }
+    .header-search input:focus { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.4); }
+    .header-search-ic {
+      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+      color: rgba(255,255,255,0.5); pointer-events: none;
+    }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+    .btn-hdr {
+      height: 34px; padding: 0 14px; border-radius: 7px;
+      font-size: 12px; font-weight: 600; transition: var(--tr);
+      display: flex; align-items: center; gap: 5px; white-space: nowrap;
+    }
+    .btn-hdr-ghost { color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.2); }
+    .btn-hdr-ghost:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .btn-hdr-accent { background: var(--ca); color: var(--cpd); border: none; }
+    .btn-hdr-accent:hover { background: var(--cah); }
+
+    /* ═══════════════════════════════════════════════════════════
+       MAIN 4-COLUMN LAYOUT
+       ═══════════════════════════════════════════════════════════ */
+    .blog-page-layout {
+      max-width: 1440px; margin: 0 auto; padding: 16px 20px 40px;
       display: grid;
-      grid-template-columns: 1fr 280px;
-      gap: 30px;
-      margin-top: 20px;
+      grid-template-columns: 190px 1fr 240px 190px;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 1360px) {
+      .blog-page-layout { grid-template-columns: 190px 1fr 240px; }
+    }
+    @media (max-width: 1100px) {
+      .blog-page-layout { grid-template-columns: 180px 1fr 240px; gap: 14px; }
     }
     @media (max-width: 1024px) {
-      .blog-layout { grid-template-columns: 1fr; }
-      .blog-sidebar { display: none; }
+      .blog-page-layout { grid-template-columns: 1fr 240px; gap: 14px; }
+      .blog-left-nav { display: none; }
+    }
+    @media (max-width: 768px) {
+      .blog-page-layout {
+        grid-template-columns: 1fr;
+        gap: 16px; padding: 12px 12px 30px;
+      }
+      .blog-left-nav { display: none; }
+      .blog-center { order: 1; }
+
+      .blog-right-sidebar {
+        order: 3;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        align-self: start;
+      }
+      .blog-right-sidebar > .widget:first-child,
+      .blog-right-sidebar > .widget.calc-widget {
+        grid-column: 1 / -1;
+      }
     }
 
-    .blog-hero {
-      background: linear-gradient(135deg, var(--color-primary), #0d2242);
-      border-radius: 20px;
-      padding: 40px 24px;
-      color: #fff;
-      margin-bottom: 30px;
-      text-align: center;
+    @media (max-width: 480px) {
+      .hero-slider { height: 200px; }
+      .hero-slide-title { font-size: 16px; }
+      .hero-slide-desc { font-size: 10px; }
+      .hero-slide-btn { font-size: 11px; padding: 7px 14px; }
+      .video-grid { grid-template-columns: 1fr; }
+      .sector-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+      .invest-city-name { width: 65px; font-size: 10px; }
+      .article-card-img img { height: 160px; }
+      .infeed-ad { flex-direction: column; padding: 16px; }
+      .partner-card { flex-direction: column; }
+      .partner-card-img { width: 100%; height: 120px; }
+      .blog-right-sidebar { grid-template-columns: 1fr; }
+      .blog-right-sidebar > .widget:first-child,
+      .blog-right-sidebar > .widget.calc-widget { grid-column: auto; }
     }
-    .blog-hero h1 { font-size: 28px; font-weight: 800; margin-bottom: 10px; }
-    .blog-hero p { font-size: 14px; opacity: 0.85; max-width: 600px; margin: 0 auto; }
 
-    .blog-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+    /* ── LEFT NAV SIDEBAR ── */
+    .blog-left-nav {
+      padding: 16px 0;
+      align-self: start;
     }
+    .nav-sec { padding: 0 12px; margin-bottom: 10px; }
+    .nav-lbl {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--cm); padding: 0 8px; margin-bottom: 4px;
+    }
+    .nav-lnk {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 10px; border-radius: 8px;
+      font-size: 12px; font-weight: 500; color: var(--ct);
+      text-decoration: none; transition: all 0.18s ease;
+      margin-bottom: 2px;
+    }
+    .nav-lnk:hover {
+      background: #FFFFFF; color: var(--cp); font-weight: 600;
+      box-shadow: 0 2px 8px rgba(27,60,110,0.08);
+    }
+    .nav-lnk.active {
+      background: #FFFFFF; color: var(--cp); font-weight: 700;
+      box-shadow: 0 2px 8px rgba(27,60,110,0.08);
+    }
+    .nav-lnk-ic {
+      width: 26px; height: 26px; border-radius: 7px;
+      background: var(--cnl); display: flex; align-items: center;
+      justify-content: center; font-size: 13px; flex-shrink: 0;
+      transition: background 0.18s;
+    }
+    .nav-lnk:hover .nav-lnk-ic,
+    .nav-lnk.active .nav-lnk-ic { background: var(--cnl); }
+    .nav-lnk-highlight {
+      color: var(--ca); font-weight: 600;
+    }
+    .nav-lnk-highlight .nav-lnk-ic { background: #FFF8EC; }
+    .nav-div { height: 1px; background: var(--cbl); margin: 8px 12px 10px; }
 
-    /* Article Card horizontal */
-    .article-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border-light);
-      border-radius: 16px;
-      overflow: hidden;
-      display: flex;
-      gap: 20px;
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
-      cursor: pointer;
+    /* ── ОБРАЩЕНИЕ CARD HIGHLIGHT ── */
+    .nav-obr-card {
+      margin: 12px 6px 0; background: #EEF3FB;
+      border: 1px solid rgba(27,60,110,0.12);
+      border-radius: 12px; padding: 12px 12px;
+      display: flex; align-items: flex-start; gap: 10px;
+      cursor: pointer; transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(27, 60, 110, 0.05);
     }
-    .article-card:hover {
-      box-shadow: var(--shadow-md);
+    .nav-obr-card:hover {
+      background: #E2ECFA;
+      border-color: rgba(27,60,110,0.25);
+      box-shadow: 0 4px 12px rgba(27, 60, 110, 0.1);
       transform: translateY(-1px);
     }
-    .article-card img {
-      width: 240px;
-      height: 160px;
-      object-fit: cover;
-      flex-shrink: 0;
+    .nav-obr-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: #FFFFFF; display: flex; align-items: center;
+      justify-content: center; font-size: 16px; flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(27,60,110,0.08);
     }
-    .article-content {
-      padding: 20px 20px 20px 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      flex: 1;
-    }
-    @media (max-width: 600px) {
-      .article-card { flex-direction: column; gap: 0; }
-      .article-card img { width: 100%; height: 160px; }
-      .article-content { padding: 16px; }
-    }
+    .nav-obr-title { font-size: 12px; font-weight: 700; color: var(--cp); line-height: 1.3; }
+    .nav-obr-desc { font-size: 10px; color: var(--cts); margin-top: 3px; line-height: 1.35; }
 
+    /* ── CENTER COLUMN ── */
+    .blog-center { min-width: 0; }
+
+    /* Hero Slider */
+    .hero-slider {
+      position: relative; border-radius: 14px; overflow: hidden;
+      height: 260px; background: var(--cpd); margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(21,48,91,0.12);
+    }
+    .hero-slider-track {
+      display: flex; height: 100%;
+      transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+    }
+    .hero-slide { flex: 0 0 100%; position: relative; overflow: hidden; }
+    .hero-slide img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-slide-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(10,20,40,0.82) 0%, rgba(10,20,40,0.15) 60%);
+      padding: 24px; display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .hero-slide-badge {
+      font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--ca); background: rgba(245,166,35,0.15); padding: 3px 8px;
+      border-radius: 4px; width: fit-content; margin-bottom: 8px;
+    }
+    .hero-slide-title { font-size: 22px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 4px; }
+    .hero-slide-desc { font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 12px; }
+    .hero-slide-btn {
+      display: inline-block; padding: 9px 20px; background: var(--ca); color: var(--cpd);
+      border-radius: 8px; font-size: 12px; font-weight: 700; width: fit-content; transition: var(--tr);
+    }
+    .hero-slide-btn:hover { background: var(--cah); }
+    .hero-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 30px; height: 30px; border-radius: 50%;
+      background: rgba(255,255,255,0.18); backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff; font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2; transition: background 0.2s;
+    }
+    .hero-nav:hover { background: rgba(255,255,255,0.32); }
+    .hero-nav-prev { left: 10px; }
+    .hero-nav-next { right: 10px; }
+    .hero-dots {
+      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 6px; z-index: 2;
+    }
+    .hero-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(255,255,255,0.35); border: none;
+      cursor: pointer; padding: 0; transition: background 0.2s, transform 0.2s;
+    }
+    .hero-dot.active { background: var(--ca); transform: scale(1.3); }
+
+    /* Featured Property Card */
+    .featured-card {
+      background: var(--cs); border-radius: 14px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(21,48,91,0.08); margin-bottom: 20px;
+    }
+    .featured-card-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--ca);
+      background: rgba(245,166,35,0.1); padding: 5px 10px;
+      border-radius: 6px; margin: 16px 16px 8px;
+    }
+    .featured-card-body { padding: 0 16px 16px; }
+    .featured-card-name { font-size: 18px; font-weight: 800; color: var(--ct); margin-bottom: 4px; }
+    .featured-card-meta { font-size: 11px; color: var(--cm); margin-bottom: 8px; }
+    .featured-card-price { font-size: 16px; font-weight: 800; color: var(--ca); margin-bottom: 10px; }
+    .featured-card-link {
+      font-size: 12px; font-weight: 600; color: var(--cp);
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .featured-card-link:hover { color: var(--ca); }
+
+    /* Video Reviews Section */
+    .video-section { margin-bottom: 20px; }
+    .section-header {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 12px; padding: 0 4px;
+    }
+    .section-icon {
+      font-size: 14px; background: var(--cnl); width: 28px; height: 28px;
+      border-radius: 7px; display: flex; align-items: center; justify-content: center;
+    }
+    .section-title { font-size: 15px; font-weight: 700; color: var(--ct); }
+
+    .video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .video-card {
+      position: relative; border-radius: 12px; overflow: hidden;
+      height: 140px; background: #0a1428; cursor: pointer;
+    }
+    .video-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; transition: opacity 0.3s; }
+    .video-card:hover img { opacity: 1; }
+    .video-play {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .video-play::after {
+      content: ''; width: 0; height: 0;
+      border-left: 12px solid var(--cp); border-top: 7px solid transparent; border-bottom: 7px solid transparent;
+      margin-left: 3px;
+    }
+    .video-duration {
+      position: absolute; bottom: 8px; right: 8px;
+      background: rgba(0,0,0,0.7); color: #fff; font-size: 10px; font-weight: 600;
+      padding: 2px 6px; border-radius: 4px;
+    }
+    .video-title-bar {
+      font-size: 11px; font-weight: 600; color: var(--ct);
+      padding: 8px 4px 0; line-height: 1.3;
+    }
+    .video-meta-bar { font-size: 10px; color: var(--cm); padding: 2px 4px 0; }
+
+    /* Article Cards */
+    .article-card {
+      background: var(--cs); border-radius: 14px; overflow: hidden;
+      display: flex; gap: 0; box-shadow: 0 2px 12px rgba(21,48,91,0.06);
+      transition: var(--tr); cursor: pointer; margin-bottom: 16px;
+    }
+    .article-card:hover { box-shadow: 0 6px 24px rgba(21,48,91,0.12); transform: translateY(-1px); }
+    .article-card-img { width: 100%; border-radius: 14px 14px 0 0; }
+    .article-card-img img { width: 100%; height: 220px; object-fit: cover; }
+    .article-card-body { padding: 16px; }
     .article-tag {
       font-size: 9px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.04em; color: var(--color-primary);
-      background: var(--color-navy-light); padding: 4px 8px;
-      border-radius: 4px; width: fit-content; margin-bottom: 10px;
+      letter-spacing: 0.04em; padding: 4px 8px;
+      border-radius: 4px; width: fit-content; margin-bottom: 8px;
+      display: inline-block;
     }
-    .article-title { font-size: 16px; font-weight: 700; color: var(--color-text); line-height: 1.35; margin-bottom: 8px; }
-    .article-excerpt { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 12px; }
-    .article-meta { font-size: 10px; color: var(--color-muted); display: flex; gap: 12px; }
+    .article-title { font-size: 16px; font-weight: 700; color: var(--ct); line-height: 1.35; margin-bottom: 8px; }
+    .article-excerpt { font-size: 12px; color: var(--cts); line-height: 1.6; margin-bottom: 10px; }
+    .article-meta { font-size: 10px; color: var(--cm); display: flex; gap: 12px; margin-bottom: 8px; }
+    .article-read-more { font-size: 12px; font-weight: 600; color: var(--cp); }
+    .article-read-more:hover { color: var(--ca); }
 
-    /* Wide in-feed ad banners style matching b2b promo */
-    .wide-infeed-ad {
-      background: var(--color-primary);
-      border-radius: 16px;
-      padding: 24px 30px;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap;
+    /* Partner Card (Визитная карточка) */
+    .partner-card {
+      background: var(--cs); border-radius: 14px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(21,48,91,0.06);
+      padding: 16px; display: flex; gap: 16px; align-items: center;
+      margin-bottom: 16px;
+    }
+    .partner-card-img {
+      width: 100px; height: 80px; border-radius: 10px; overflow: hidden; flex-shrink: 0;
+    }
+    .partner-card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .partner-card-body { flex: 1; }
+    .partner-card-badge {
+      font-size: 9px; font-weight: 700; color: var(--cp);
+      background: var(--cnl); padding: 3px 7px; border-radius: 4px;
+      display: inline-block; margin-bottom: 6px;
+    }
+    .partner-card-title { font-size: 14px; font-weight: 700; color: var(--ct); margin-bottom: 4px; }
+    .partner-card-desc { font-size: 11px; color: var(--cts); line-height: 1.5; margin-bottom: 6px; }
+    .partner-card-link { font-size: 11px; font-weight: 600; color: var(--cp); }
+    .partner-card-link:hover { color: var(--ca); }
+
+    /* Wide In-feed Ad */
+    .infeed-ad {
+      background: var(--cp); border-radius: 14px; padding: 20px 24px;
+      color: #fff; display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap; margin-bottom: 16px;
       box-shadow: 0 4px 16px rgba(27,60,110,0.15);
     }
-    .wide-infeed-ad .ad-badge {
-      font-size: 8px; font-weight: 800; background: var(--color-accent);
-      color: var(--color-primary-dark); padding: 2px 6px; border-radius: 4px;
+    .infeed-ad-badge {
+      font-size: 8px; font-weight: 800; background: var(--ca);
+      color: var(--cpd); padding: 2px 6px; border-radius: 4px;
       text-transform: uppercase; letter-spacing: 0.04em; width: fit-content; margin-bottom: 6px;
     }
-    .wide-infeed-ad h3 { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 4px; }
-    .wide-infeed-ad p { font-size: 11px; color: rgba(255,255,255,0.7); max-width: 480px; margin: 0; }
-    .wide-infeed-ad .ad-btn {
-      background: var(--color-accent); color: var(--color-primary-dark);
-      border: none; border-radius: 6px; padding: 10px 20px; font-size: 11px;
-      font-weight: 700; cursor: pointer; transition: var(--transition);
+    .infeed-ad h3 { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+    .infeed-ad p { font-size: 11px; color: rgba(255,255,255,0.7); max-width: 420px; margin: 0; }
+    .infeed-ad-btn {
+      background: var(--ca); color: var(--cpd); border: none; border-radius: 7px;
+      padding: 10px 18px; font-size: 11px; font-weight: 700; cursor: pointer; transition: var(--tr);
     }
-    .wide-infeed-ad .ad-btn:hover { background: var(--color-accent-hover); }
+    .infeed-ad-btn:hover { background: var(--cah); }
 
-    /* Sidebar Ad Stack */
-    .blog-sidebar {
-      position: sticky;
-      top: 80px;
+    /* ── RIGHT SIDEBAR ── */
+    .blog-right-sidebar {
+      display: flex; flex-direction: column; gap: 16px;
       align-self: start;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
     }
-    .side-ad-box {
-      border-radius: 12px;
-      overflow: hidden;
-      position: relative;
-      height: 200px;
-      background: #0f2440;
-      cursor: pointer;
+    .widget {
+      background: var(--cs); border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(21,48,91,0.06);
+      padding: 12px; overflow: hidden;
     }
-    .side-ad-box img {
-      width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: transform 0.4s;
+    .widget-header {
+      display: flex; align-items: center; gap: 5px;
+      margin-bottom: 8px;
     }
-    .side-ad-box:hover img { transform: scale(1.03); }
-    .side-ad-ov {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(10,20,40,0.9) 0%, rgba(10,20,40,0.2) 60%);
-      padding: 14px;
-      display: flex; flex-direction: column; justify-content: flex-end;
+    .widget-icon {
+      font-size: 11px; background: var(--cnl); width: 20px; height: 20px;
+      border-radius: 5px; display: flex; align-items: center; justify-content: center;
     }
-    .side-ad-badge {
-      font-size: 7px; font-weight: 700; text-transform: uppercase;
-      color: var(--color-accent); background: rgba(245,166,35,0.15);
-      padding: 2px 6px; border-radius: 3px; width: fit-content; margin-bottom: 4px;
+    .widget-title {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--cp);
     }
-  </style>
 
+    /* Invest Index Widget */
+    .invest-region { font-size: 12px; font-weight: 700; color: var(--ct); margin-bottom: 2px; }
+    .invest-score { font-size: 36px; font-weight: 800; color: var(--ct); line-height: 1; }
+    .invest-change {
+      font-size: 11px; font-weight: 600; color: #10B981; margin-top: 4px; margin-bottom: 12px;
+    }
+    .invest-chart {
+      height: 44px; background: linear-gradient(135deg, var(--cnl), #e6f0fd);
+      border-radius: 6px; margin-bottom: 8px; display: flex; align-items: flex-end;
+      padding: 6px; gap: 2px; overflow: hidden;
+    }
+    .invest-chart-bar {
+      flex: 1; background: #10B981; border-radius: 2px 2px 0 0; min-height: 4px;
+      transition: height 0.4s;
+    }
+    .invest-cities { display: flex; flex-direction: column; gap: 6px; }
+    .invest-city-row { display: flex; align-items: center; gap: 6px; }
+    .invest-city-name { font-size: 10px; color: var(--ct); width: 70px; flex-shrink: 0; }
+    .invest-city-bar-wrap { flex: 1; height: 6px; background: var(--cbl); border-radius: 3px; overflow: hidden; }
+    .invest-city-bar { height: 100%; border-radius: 3px; }
+    .invest-city-score { font-size: 10px; font-weight: 700; color: var(--ct); width: 22px; text-align: right; }
+
+    /* Sector Index Widget */
+    .sector-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .sector-cell {
+      background: var(--cbl); border-radius: 8px; padding: 7px 8px; text-align: center;
+    }
+    .sector-arrow { font-size: 10px; font-weight: 700; }
+    .sector-arrow.up { color: #10B981; }
+    .sector-value { font-size: 16px; font-weight: 800; margin: 1px 0; }
+    .sector-value.green { color: #10B981; }
+    .sector-value.amber { color: var(--ca); }
+    .sector-label { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--cm); }
+
+    /* Top-5 Widget */
+    .top5-list { display: flex; flex-direction: column; gap: 4px; }
+    .top5-row {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 4px; border-radius: 7px; transition: background 0.18s;
+    }
+    .top5-row:hover { background: var(--cnl); }
+    .top5-rank {
+      width: 20px; height: 20px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 800; flex-shrink: 0;
+      background: var(--cnl); color: var(--cp);
+    }
+    .top5-rank.gold { background: var(--ca); color: var(--cpd); }
+    .top5-info { flex: 1; min-width: 0; }
+    .top5-name { font-size: 11px; font-weight: 600; color: var(--ct); }
+    .top5-loc { font-size: 9px; color: var(--cm); }
+    .top5-score { font-size: 11px; font-weight: 800; color: #10B981; flex-shrink: 0; }
+    .top5-link {
+      font-size: 11px; font-weight: 700; color: var(--cp); margin-top: 8px;
+      display: inline-block;
+    }
+    .top5-link:hover { color: var(--ca); }
+
+    /* Calculator Widget */
+    .calc-widget { background: linear-gradient(135deg, var(--cp), #2a5298); color: #fff; }
+    .calc-widget .widget-title { color: #fff; }
+    .calc-widget .widget-icon { background: rgba(255,255,255,0.15); }
+    .calc-label { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .calc-row {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+    }
+    .calc-row-label { font-size: 11px; color: rgba(255,255,255,0.7); }
+    .calc-row-value { font-size: 13px; font-weight: 700; color: #fff; }
+    .calc-slider {
+      width: 100%; height: 4px; -webkit-appearance: none; appearance: none;
+      background: rgba(255,255,255,0.2); border-radius: 4px; outline: none;
+      margin-bottom: 12px;
+    }
+    .calc-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 16px; height: 16px;
+      border-radius: 50%; background: var(--ca); cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .calc-result {
+      background: rgba(255,255,255,0.1); border-radius: 8px;
+      padding: 10px; text-align: center; margin-top: 8px;
+    }
+    .calc-result-label { font-size: 10px; color: rgba(255,255,255,0.6); margin-bottom: 2px; }
+    .calc-result-value { font-size: 20px; font-weight: 800; color: var(--ca); }
+
+    /* News sidebar section */
+    .news-list { display: flex; flex-direction: column; gap: 2px; }
+    .news-row {
+      display: block; padding: 8px 6px; border-radius: 8px;
+      transition: background 0.18s; cursor: pointer;
+    }
+    .news-row:hover { background: var(--cnl); }
+    .news-meta {
+      display: flex; gap: 8px; font-size: 9px; font-weight: 700; color: var(--cm);
+      text-transform: uppercase; margin-bottom: 3px;
+    }
+    .news-tag { color: var(--cp); }
+    .news-title {
+      font-size: 11px; font-weight: 600; color: var(--ct); line-height: 1.4;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .news-link {
+      font-size: 11px; font-weight: 700; color: var(--cp); margin-top: 6px;
+      display: inline-block;
+    }
+    .news-link:hover { color: var(--ca); }
+
+    /* ── FAR-RIGHT BANNER COLUMN ── */
+    .blog-banners-col {
+      position: sticky; top: 72px;
+      display: flex; flex-direction: column; gap: 12px;
+      align-self: start;
+    }
+    .banner-ad {
+      border-radius: 10px; overflow: hidden;
+      position: relative; height: 148px; background: #0f2440;
+      cursor: pointer; flex-shrink: 0;
+    }
+    .banner-ad img { width: 100%; height: 100%; object-fit: cover; opacity: 0.75; transition: transform 0.4s, opacity 0.3s; }
+    .banner-ad:hover img { transform: scale(1.03); opacity: 0.85; }
+    .banner-ad-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,20,40,0.92) 0%, rgba(10,20,40,0.15) 60%);
+      padding: 10px; display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .banner-ad-badge {
+      font-size: 7px; font-weight: 700; text-transform: uppercase;
+      color: var(--ca); background: rgba(245,166,35,0.15);
+      padding: 2px 5px; border-radius: 3px; width: fit-content; margin-bottom: 3px;
+    }
+    .banner-ad-title { font-size: 11px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 2px; }
+    .banner-ad-desc { font-size: 8px; color: rgba(255,255,255,0.65); margin-bottom: 4px; line-height: 1.3; }
+    .banner-ad-btn {
+      display: inline-block; padding: 4px 10px; background: var(--ca); color: var(--cpd);
+      border-radius: 5px; font-size: 9px; font-weight: 700; width: fit-content; transition: var(--tr);
+    }
+    .banner-ad-btn:hover { background: var(--cah); }
+
+    /* ═══════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════ */
+    .site-footer { margin-top: 40px; }
+  </style>
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- ═══ HEADER ═══ -->
   <header class="site-header" role="banner">
     <div class="header-inner">
       <a href="index.html" class="logo" aria-label="Янтарный проспект">
-        <img src="AA.svg" class="logo-icon" alt="Янтарный проспект">
+        <div class="logo-icon">
+          <img src="AA.svg" alt="Янтарный проспект" onerror="this.parentNode.textContent='Я'">
+        </div>
         <div class="logo-text">
           <span class="logo-name">Янтарный проспект</span>
-          <span class="logo-tagline">Amber avenue</span>
+          <span class="logo-tagline">Amber Avenue</span>
         </div>
       </a>
+      <div class="header-search" role="search">
+        <svg class="header-search-ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="search" placeholder="ЖК, застройщик, район..." aria-label="Поиск" autocomplete="off">
+      </div>
       <div class="header-actions">
-        <a href="index.html" class="btn-header btn-header-ghost">← На главную</a>
-        <a href="zhk.html" class="btn-header btn-header-accent">Каталог новостроек</a>
+        <a href="b2b-promo.html" class="btn-hdr btn-hdr-ghost">Для застройщиков</a>
+        <button class="btn-hdr btn-hdr-accent">Консультация</button>
       </div>
     </div>
   </header>
 
-  <!-- Page Content -->
-  <main class="page-content">
-    
-    <div class="blog-hero">
-      <h1>Блог о недвижимости и туризме</h1>
-      <p>Полезные советы покупателям квартир, обзоры районов, динамика цен, веломаршруты и гиды по Балтийскому побережью.</p>
-    </div>
+  <!-- ═══ MAIN 4-COLUMN LAYOUT ═══ -->
+  <div class="blog-page-layout">
 
-    <div class="blog-layout">
-      
-      <!-- Left: Articles & In-feed Ads -->
-      <div class="blog-grid" id="blog-grid">
-        <!-- Will be rendered dynamically -->
+    <!-- ─── LEFT NAV SIDEBAR ─── -->
+    <aside class="blog-left-nav">
+      <div class="nav-sec">
+        <div class="nav-lbl">Каталог</div>
+        <a href="zhk.html" class="nav-lnk active">
+          <span class="nav-lnk-ic">🏠</span> Все новостройки
+        </a>
+        <a href="zhk-umory.html" class="nav-lnk">
+          <span class="nav-lnk-ic">🌊</span> ЖК у моря
+        </a>
+        <a href="zhk-kaliningrad.html" class="nav-lnk">
+          <span class="nav-lnk-ic">🏢</span> ЖК Калининграда
+        </a>
+        <a href="zhk-prigorod.html" class="nav-lnk">
+          <span class="nav-lnk-ic">🌲</span> ЖК Пригород
+        </a>
+        <a href="zhk-oblast.html" class="nav-lnk">
+          <span class="nav-lnk-ic">🗺</span> ЖК Область
+        </a>
       </div>
 
-      <!-- Right: Sticky Sidebar Ads Stack -->
-      <div class="blog-sidebar" id="blog-sidebar">
-        <!-- Will be rendered dynamically -->
+      <div class="nav-div"></div>
+
+      <div class="nav-sec">
+        <div class="nav-lbl">Компания</div>
+        <a href="about.html" class="nav-lnk">
+          <span class="nav-lnk-ic">ℹ️</span> О сервисе
+        </a>
+        <a href="methodology.html" class="nav-lnk">
+          <span class="nav-lnk-ic">📊</span> Методология рейтинга
+        </a>
+        <a href="b2b-promo.html" class="nav-lnk">
+          <span class="nav-lnk-ic">🏗</span> Для застройщиков
+        </a>
+        <a href="blog.html" class="nav-lnk active">
+          <span class="nav-lnk-ic">📰</span> Блог
+        </a>
       </div>
+
+      <div class="nav-div"></div>
+
+      <div class="nav-sec">
+        <div class="nav-lbl">О регионе</div>
+        <a href="#" class="nav-lnk">
+          <span class="nav-lnk-ic">🌿</span> Город-сад
+        </a>
+        <a href="#" class="nav-lnk">
+          <span class="nav-lnk-ic">🏖</span> Куршская коса
+        </a>
+        <a href="#" class="nav-lnk">
+          <span class="nav-lnk-ic">🌅</span> Балтийское побережье
+        </a>
+      </div>
+
+      <div class="nav-div"></div>
+
+      <div class="nav-obr-card">
+        <div class="nav-obr-icon">💬</div>
+        <div>
+          <div class="nav-obr-title">Обращение</div>
+          <div class="nav-obr-desc">Обращения от жителей<br>уже заселенных ЖК</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ─── CENTER CONTENT ─── -->
+    <div class="blog-center">
+
+      <!-- Hero Slider -->
+      <div class="hero-slider" id="hero-slider">
+        <div class="hero-slider-track" id="hero-slider-track"></div>
+        <button class="hero-nav hero-nav-prev" id="hero-prev" aria-label="Назад">‹</button>
+        <button class="hero-nav hero-nav-next" id="hero-next" aria-label="Вперёд">›</button>
+        <div class="hero-dots" id="hero-dots"></div>
+      </div>
+
+      <!-- Featured Property -->
+      <div class="featured-card" id="featured-card"></div>
+
+      <!-- Video Reviews -->
+      <div class="video-section">
+        <div class="section-header">
+          <div class="section-icon">🎬</div>
+          <div class="section-title">Видео-обзоры</div>
+        </div>
+        <div class="section-title" style="font-size:14px; font-weight:700; margin-bottom:12px; padding-left:4px;">Блогеры и эксперты о Калининграде</div>
+        <div class="video-grid" id="video-grid"></div>
+      </div>
+
+      <!-- Blog Articles & Partner Cards -->
+      <div id="blog-feed"></div>
 
     </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const data = window.AMBER_DATA || { blog: [], properties: [], banners: [] };
-      
-      // 1. Render Blog Articles and In-Feed Banners
-      const blogGrid = document.getElementById('blog-grid');
-      if (blogGrid && data.blog) {
-        let html = '';
-        data.blog.forEach((article, idx) => {
-          // Article Card
-          html += `
-            <div class="article-card" onclick="alert('Открытие статьи: ${article.title}')">
-              <img src="${article.imgSrc}" alt="${article.title}">
-              <div class="article-content">
-                <div>
-                  <div class="article-tag" style="background:${article.tagBg || '#EFF6FF'}; color:${article.tagColor || '#1E40AF'};">
-                    ${article.tag}
-                  </div>
-                  <h2 class="article-title">${article.title}</h2>
-                  <p class="article-excerpt">${article.excerpt}</p>
-                </div>
-                <div class="article-meta">
-                  <span>📅 ${article.date}</span>
-                  <span>👁 ${article.viewsCount} просмотров</span>
-                  <span>✍ ${article.author}</span>
-                </div>
-              </div>
-            </div>
-          `;
-          
-          // In-feed Ads insertion
-          if (idx === 1) {
-            // First Ad Banner (Alfa-Bank style Lead banner)
-            const ad1 = data.banners && data.banners[0] ? data.banners[0] : {
-              headline: 'Подобрать квартиру бесплатно',
-              sub: 'Наши эксперты отлично знают рынок Калининграда и побережья. Оставьте заявку, и мы бесплатно соберем подборку лучших объектов под ваш бюджет.',
-              cta: 'Получить консультацию'
-            };
-            html += `
-              <div class="wide-infeed-ad">
-                <div>
-                  <div class="ad-badge">Спецпредложение</div>
-                  <h3>${ad1.headline}</h3>
-                  <p>${ad1.sub}</p>
-                </div>
-                <button class="ad-btn" onclick="alert('Вызов формы: ${ad1.cta}')">${ad1.cta}</button>
-              </div>
-            `;
-          } else if (idx === 3) {
-            // Second Ad Banner (Developer Direct Ad)
-            const prop = data.properties && data.properties[0] ? data.properties[0] : {
-              name: 'ЖК «Морской квартал»',
-              priceFrom: '4.8 млн ₽',
-              delivery: 'IV кв. 2026',
-              location: 'Зеленоградск'
-            };
-            html += `
-              <div class="wide-infeed-ad" style="background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);">
-                <div>
-                  <div class="ad-badge" style="background:var(--color-accent); color:var(--color-primary-dark)">Реклама ЖК</div>
-                  <h3>Старт продаж квартир у моря в ${prop.location}</h3>
-                  <p>${prop.name}. Цены от ${prop.priceFrom}. Автономное отопление, панорамное остекление, беспроцентная рассрочка. Сдача ${prop.delivery} г.</p>
-                </div>
-                <button class="ad-btn" onclick="window.location.href='zhk.html'">Смотреть ЖК ↗</button>
-              </div>
-            `;
-          }
-        });
-        blogGrid.innerHTML = html;
-      }
-      
-      // 2. Render Sidebar Popular Properties
-      const blogSidebar = document.getElementById('blog-sidebar');
-      if (blogSidebar && data.properties) {
-        const popularProps = data.properties.slice(0, 2);
-        let sidebarHtml = `
-          <h3 style="font-size:12px; font-weight:700; color:var(--color-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;">Популярные ЖК</h3>
-        `;
-        popularProps.forEach((p, idx) => {
-          const badgeText = idx === 0 ? 'Партнер' : 'Премиум';
-          sidebarHtml += `
-            <div class="side-ad-box" onclick="window.location.href='zhk.html'">
-              <img src="${idx === 0 ? 'dev-banner.png' : 'svetlogorsk.png'}" alt="${p.name}">
-              <div class="side-ad-ov">
-                <span class="side-ad-badge">${badgeText}</span>
-                <strong style="color:#fff; font-size:12px; display:block; margin-bottom:2px;">${p.name}</strong>
-                <span style="color:rgba(255,255,255,0.7); font-size:10px; display:block;">от ${p.priceFrom} · ${p.location}</span>
-              </div>
-            </div>
-          `;
-        });
-        blogSidebar.innerHTML = sidebarHtml;
-      }
-    });
-  </script>
+    <!-- ─── RIGHT SIDEBAR ─── -->
+    <aside class="blog-right-sidebar">
 
-  </main>
+      <!-- Invest Index Widget -->
+      <div class="widget" id="widget-invest">
+        <div class="widget-header">
+          <div class="widget-icon">📈</div>
+          <span class="widget-title">Инвест-индекс</span>
+        </div>
+        <div class="invest-region">Калининградская обл.</div>
+        <div class="invest-score">7.4</div>
+        <div class="invest-change">▲ +0.8 за год · Рост</div>
+        <div style="font-size:9px; color:var(--cm); margin-bottom:8px;">2020–2026 · Amber Analytics</div>
+        <div class="invest-chart" id="invest-chart"></div>
+        <div class="invest-cities">
+          <div class="invest-city-row">
+            <span class="invest-city-name">Калининград</span>
+            <div class="invest-city-bar-wrap"><div class="invest-city-bar" style="width:100%; background:linear-gradient(90deg,#10B981,#22C55E);"></div></div>
+            <span class="invest-city-score">7.4</span>
+          </div>
+          <div class="invest-city-row">
+            <span class="invest-city-name">Краснодар</span>
+            <div class="invest-city-bar-wrap"><div class="invest-city-bar" style="width:93%; background:linear-gradient(90deg,#10B981,#22C55E);"></div></div>
+            <span class="invest-city-score">6.9</span>
+          </div>
+          <div class="invest-city-row">
+            <span class="invest-city-name">Сочи</span>
+            <div class="invest-city-bar-wrap"><div class="invest-city-bar" style="width:88%; background:linear-gradient(90deg,#3B82F6,#60A5FA);"></div></div>
+            <span class="invest-city-score">6.5</span>
+          </div>
+          <div class="invest-city-row">
+            <span class="invest-city-name">Тюмень</span>
+            <div class="invest-city-bar-wrap"><div class="invest-city-bar" style="width:80%; background:linear-gradient(90deg,#3B82F6,#60A5FA);"></div></div>
+            <span class="invest-city-score">5.9</span>
+          </div>
+          <div class="invest-city-row">
+            <span class="invest-city-name">Казань</span>
+            <div class="invest-city-bar-wrap"><div class="invest-city-bar" style="width:74%; background:linear-gradient(90deg,#3B82F6,#60A5FA);"></div></div>
+            <span class="invest-city-score">5.5</span>
+          </div>
+        </div>
+      </div>
 
-  <!-- Footer -->
-      <footer class="site-footer" role="contentinfo">
+      <!-- Sector Index Widget -->
+      <div class="widget">
+        <div class="widget-header">
+          <div class="widget-icon">🏘</div>
+          <span class="widget-title">Индекс секторов</span>
+        </div>
+        <div style="font-size:14px; font-weight:700; color:var(--ct); text-align:center; margin-bottom:10px;">Привлекательность</div>
+        <div class="sector-grid">
+          <div class="sector-cell">
+            <div class="sector-arrow up">↑</div>
+            <div class="sector-value green">8.2</div>
+            <div class="sector-label">Комфорт</div>
+          </div>
+          <div class="sector-cell">
+            <div class="sector-arrow up">↑</div>
+            <div class="sector-value green">7.6</div>
+            <div class="sector-label">Бизнес</div>
+          </div>
+          <div class="sector-cell">
+            <div class="sector-value" style="color:var(--ct)">6.1</div>
+            <div class="sector-label">Премиум</div>
+          </div>
+          <div class="sector-cell">
+            <div class="sector-arrow up">↑</div>
+            <div class="sector-value green">9.0</div>
+            <div class="sector-label">У моря</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top-5 Amber Widget -->
+      <div class="widget">
+        <div class="widget-header">
+          <div class="widget-icon">🏆</div>
+          <span class="widget-title">ТОП-5 Amber</span>
+        </div>
+        <div class="top5-list" id="top5-list"></div>
+        <a href="zhk.html" class="top5-link">Все 48 ЖК →</a>
+      </div>
+
+      <!-- News Widget -->
+      <div class="widget">
+        <div class="widget-header">
+          <div class="widget-icon">📰</div>
+          <span class="widget-title">Актуальные новости</span>
+        </div>
+        <div class="news-list" id="news-list"></div>
+        <a href="blog.html" class="news-link">Все новости →</a>
+      </div>
+
+      <!-- Calculator Widget -->
+      <div class="widget calc-widget">
+        <div class="widget-header">
+          <div class="widget-icon">🔒</div>
+          <span class="widget-title">Калькулятор</span>
+        </div>
+        <div class="calc-label">Ипотечный платёж</div>
+        <div class="calc-row">
+          <span class="calc-row-label">Стоимость</span>
+          <span class="calc-row-value" id="calc-price">6 000 000 ₽</span>
+        </div>
+        <input type="range" class="calc-slider" id="calc-price-slider" min="2000000" max="20000000" step="100000" value="6000000">
+        <div class="calc-row">
+          <span class="calc-row-label">Срок</span>
+          <span class="calc-row-value" id="calc-term">20 лет</span>
+        </div>
+        <input type="range" class="calc-slider" id="calc-term-slider" min="5" max="30" step="1" value="20">
+        <div class="calc-result">
+          <div class="calc-result-label">Ежемесячный платёж</div>
+          <div class="calc-result-value" id="calc-payment">≈ 42 900 ₽</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ─── FAR-RIGHT BANNER ADS ─── -->
+    <div class="blog-banners-col" id="banner-ads"></div>
+
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="site-footer" role="contentinfo">
     <div class="footer-trust-bar">
       <div class="footer-inner">
         <div class="trust-items">
@@ -323,13 +838,9 @@
         </div>
       </div>
     </div>
-
-    <!-- Main Footer -->
     <div class="footer-main">
       <div class="footer-inner">
         <div class="footer-grid">
-
-          <!-- Brand -->
           <div class="footer-col footer-brand-col">
             <a href="index.html" class="footer-logo">
               <img src="AA.svg" class="logo-icon" alt="Янтарный проспект">
@@ -342,11 +853,8 @@
               <a href="#" class="social-link" aria-label="Telegram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
               <a href="#" class="social-link" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></a>
               <a href="#" class="social-link" aria-label="VK"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.391 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4.03 8.57 4.03 8.096c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.372 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.27-1.422 2.168-3.608 2.168-3.608.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z"/></svg></a>
-              <a href="#" class="social-link" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
             </div>
           </div>
-
-          <!-- Каталог -->
           <div class="footer-col">
             <h3 class="footer-col-title">Каталог</h3>
             <ul class="footer-links">
@@ -357,8 +865,6 @@
               <li><a href="zhk-oblast.html">ЖК Область</a></li>
             </ul>
           </div>
-
-          <!-- Компания -->
           <div class="footer-col">
             <h3 class="footer-col-title">Компания</h3>
             <ul class="footer-links">
@@ -370,8 +876,6 @@
               <li><a href="partners-promo.html">Для рекламодателей</a></li>
             </ul>
           </div>
-
-          <!-- Контакты -->
           <div class="footer-col">
             <h3 class="footer-col-title">Контакты</h3>
             <ul class="footer-contacts">
@@ -389,12 +893,9 @@
               </li>
             </ul>
           </div>
-
         </div>
       </div>
     </div>
-
-    <!-- Bottom -->
     <div class="footer-bottom">
       <div class="footer-inner">
         <div class="footer-bottom-inner">
@@ -412,6 +913,329 @@
       </div>
     </div>
   </footer>
+
+  <!-- ═══ SCRIPT ═══ -->
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const data = window.AMBER_DATA || {};
+    const props = data.properties || [];
+    const blog = data.blog || [];
+    const slides = data.heroSlides || [];
+    const devs = data.developers || [];
+
+    // ── 1. Hero Slider ──
+    const track = document.getElementById('hero-slider-track');
+    const dotsWrap = document.getElementById('hero-dots');
+    let heroIdx = 0;
+
+    if (track && slides.length) {
+      track.innerHTML = slides.map(s => `
+        <div class="hero-slide">
+          <img src="${s.image}" alt="${s.title}">
+          <div class="hero-slide-overlay">
+            <div class="hero-slide-badge">${s.label}</div>
+            <div class="hero-slide-title">${s.title}</div>
+            <div class="hero-slide-desc">${s.desc}</div>
+            <a href="${s.link || 'zhk.html'}" class="hero-slide-btn">Подробнее</a>
+          </div>
+        </div>
+      `).join('');
+
+      dotsWrap.innerHTML = slides.map((_, i) =>
+        `<button class="hero-dot${i === 0 ? ' active' : ''}" data-i="${i}"></button>`
+      ).join('');
+
+      const goHero = (i) => {
+        heroIdx = ((i % slides.length) + slides.length) % slides.length;
+        track.style.transform = `translateX(-${heroIdx * 100}%)`;
+        dotsWrap.querySelectorAll('.hero-dot').forEach((d, j) => d.classList.toggle('active', j === heroIdx));
+      };
+
+      document.getElementById('hero-prev').onclick = () => goHero(heroIdx - 1);
+      document.getElementById('hero-next').onclick = () => goHero(heroIdx + 1);
+      dotsWrap.addEventListener('click', e => {
+        if (e.target.classList.contains('hero-dot')) goHero(+e.target.dataset.i);
+      });
+
+      setInterval(() => goHero(heroIdx + 1), 5000);
+    }
+
+    // ── 2. Featured Property ──
+    const featuredEl = document.getElementById('featured-card');
+    if (featuredEl && props.length) {
+      const p = props[0];
+      const hp = data.homepage || {};
+      featuredEl.innerHTML = `
+        <div class="featured-card-badge">${hp.featuredTag || '🏆 ТОП ЖК недели'}</div>
+        <div class="featured-card-body">
+          <div class="featured-card-name">${p.name}</div>
+          <div class="featured-card-meta">${p.location} · ${p.distance} · Индекс Amber ${p.rating}</div>
+          <div class="featured-card-price">от ${p.priceFrom} ₽</div>
+          <a href="zhk.html" class="featured-card-link">Смотреть →</a>
+        </div>
+      `;
+    }
+
+    // ── 3. Video Reviews ──
+    const videoGrid = document.getElementById('video-grid');
+    if (videoGrid) {
+      const videos = [
+        { title: 'Обзор ЖК «Морской квартал»', meta: 'Недвижимость в КЛД · 2026', dur: '12:45', img: 'zhk-courtyard.png' },
+        { title: 'Переезд в Калининград 2026', meta: 'Жизнь у моря · 524K', dur: '11:22', img: 'kaliningrad-garden.png' }
+      ];
+      videoGrid.innerHTML = videos.map(v => `
+        <div>
+          <div class="video-card">
+            <img src="${v.img}" alt="${v.title}">
+            <div class="video-play"></div>
+            <div class="video-duration">${v.dur}</div>
+          </div>
+          <div class="video-title-bar">${v.title}</div>
+          <div class="video-meta-bar">${v.meta}</div>
+        </div>
+      `).join('');
+    }
+
+    // ── 4. Blog Feed (articles + partner cards + ads) ──
+    const feed = document.getElementById('blog-feed');
+    if (feed && blog.length) {
+      let html = '';
+
+      blog.forEach((article, idx) => {
+        // Article card
+        html += `
+          <div class="article-card" style="flex-direction:column;" onclick="alert('Открытие статьи: ${article.title}')">
+            <div class="article-card-img"><img src="${article.imgSrc}" alt="${article.title}"></div>
+            <div class="article-card-body">
+              <div class="article-tag" style="background:${article.tagBg || '#EFF6FF'}; color:${article.tagColor || '#1E40AF'};">${article.tag}</div>
+              <div class="article-title">${article.title}</div>
+              <div class="article-excerpt">${article.excerpt}</div>
+              <div class="article-meta">
+                <span>📅 ${article.date}</span>
+                <span>👁 ${article.viewsCount} просмотров</span>
+              </div>
+              <a href="#" class="article-read-more">Читать →</a>
+            </div>
+          </div>
+        `;
+
+        // Insert partner card after 1st article
+        if (idx === 0) {
+          html += `
+            <div class="partner-card">
+              <div class="partner-card-img"><img src="amber-crafts.png" alt="Янтарный край"></div>
+              <div class="partner-card-body">
+                <div class="partner-card-badge">💎 Визитная карточка</div>
+                <div class="partner-card-title">Янтарный край: балтийский янтарь</div>
+                <div class="partner-card-desc">90% мирового янтаря. Украшения, музей, мастерские.</div>
+                <a href="#" class="partner-card-link">Магазин →</a>
+              </div>
+            </div>
+          `;
+        }
+
+        // Insert in-feed ad after 2nd article
+        if (idx === 1) {
+          html += `
+            <div class="infeed-ad">
+              <div>
+                <div class="infeed-ad-badge">Спецпредложение</div>
+                <h3>Подобрать квартиру бесплатно</h3>
+                <p>Наши эксперты отлично знают рынок Калининграда и побережья. Оставьте заявку — бесплатно соберём подборку лучших объектов.</p>
+              </div>
+              <button class="infeed-ad-btn" onclick="alert('Консультация')">Получить консультацию</button>
+            </div>
+          `;
+        }
+
+        // Insert developer ad after 3rd article
+        if (idx === 2 && props.length) {
+          const p0 = props[0];
+          html += `
+            <div class="infeed-ad" style="background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);">
+              <div>
+                <div class="infeed-ad-badge">Реклама ЖК</div>
+                <h3>Старт продаж квартир у моря в ${p0.location}</h3>
+                <p>${p0.name}. Цены от ${p0.priceFrom}. Автономное отопление, панорамное остекление, беспроцентная рассрочка.</p>
+              </div>
+              <button class="infeed-ad-btn" onclick="window.location.href='zhk.html'">Смотреть ЖК ↗</button>
+            </div>
+          `;
+        }
+      });
+
+      feed.innerHTML = html;
+    }
+
+    // ── 5. Top-5 Amber ──
+    const top5 = document.getElementById('top5-list');
+    if (top5 && props.length) {
+      const top = props.slice(0, 5);
+      top5.innerHTML = top.map((p, i) => `
+        <div class="top5-row">
+          <div class="top5-rank${i === 0 ? ' gold' : ''}">${i + 1}</div>
+          <div class="top5-info">
+            <div class="top5-name">${p.name}</div>
+            <div class="top5-loc">${p.location}</div>
+          </div>
+          <div class="top5-score">${p.rating}</div>
+        </div>
+      `).join('');
+    }
+
+    // ── 6. News Widget ──
+    const newsList = document.getElementById('news-list');
+    if (newsList && blog.length) {
+      newsList.innerHTML = blog.slice(0, 3).map(a => `
+        <div class="news-row">
+          <div class="news-meta">
+            <span class="news-tag">${a.tag.replace(/[^\p{L}\s]/gu, '').trim()}</span>
+            <span>${a.date}</span>
+          </div>
+          <div class="news-title">${a.title}</div>
+        </div>
+      `).join('');
+    }
+
+    // ── 7. Invest Chart bars ──
+    const chart = document.getElementById('invest-chart');
+    if (chart) {
+      const heights = [20, 25, 30, 28, 38, 42, 50];
+      chart.innerHTML = heights.map(h =>
+        `<div class="invest-chart-bar" style="height:${h}px"></div>`
+      ).join('');
+    }
+
+    // ── 8. Right Banner Ads (5 developer ЖК) ──
+    const bannersCol = document.getElementById('banner-ads');
+    if (bannersCol && props.length) {
+      const bannerData = [
+        { badge: 'Реклама', img: 'zhk-hero.png' },
+        { badge: 'Премиум', img: 'zhk-sea.png' },
+        { badge: 'Выбор покупателей', img: 'zhk-courtyard.png' },
+        { badge: 'Старт продаж', img: 'zhk-construction.png' },
+        { badge: 'Премиум-класс', img: 'zhk-area.png' }
+      ];
+      const bannerProps = props.slice(0, 5);
+      bannersCol.innerHTML = bannerProps.map((p, i) => {
+        const bd = bannerData[i] || bannerData[0];
+        return `
+          <div class="banner-ad" onclick="window.location.href='zhk.html'">
+            <img src="${bd.img}" alt="${p.name}">
+            <div class="banner-ad-overlay">
+              <div class="banner-ad-badge">${bd.badge}</div>
+              <div class="banner-ad-title">ЖК «${p.name.replace('ЖК ', '')}»</div>
+              <div class="banner-ad-desc">от ${p.priceFrom} · ${p.location}<br>${p.delivery ? 'Сдача ' + p.delivery : ''}</div>
+              <span class="banner-ad-btn">Подробнее</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    // ── 8b. Move banners into middle of blog feed on mobile ──
+    const blogFeed = document.getElementById('blog-feed');
+    const gridLayout = document.querySelector('.blog-page-layout');
+    let bannersInFeed = false;
+
+    function applyMobileBannerStyles() {
+      if (!bannersCol) return;
+      // Force inline styles to override all CSS
+      bannersCol.style.cssText = `
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        padding: 6px 0 14px;
+        margin: 20px 0 24px;
+        width: 100%;
+        box-sizing: border-box;
+        position: static;
+        top: auto;
+        align-self: auto;
+        height: auto;
+        min-height: 200px;
+      `;
+      // Style each banner-ad child
+      const ads = bannersCol.querySelectorAll('.banner-ad');
+      ads.forEach(ad => {
+        ad.style.cssText = `
+          flex: 0 0 82%;
+          width: 82%;
+          min-width: 82%;
+          max-width: 82%;
+          height: 185px;
+          scroll-snap-align: start;
+          border-radius: 14px;
+          overflow: hidden;
+          position: relative;
+          background: #0f2440;
+          cursor: pointer;
+          flex-shrink: 0;
+          box-shadow: 0 4px 16px rgba(21,48,91,0.12);
+        `;
+      });
+    }
+
+    function removeMobileBannerStyles() {
+      if (!bannersCol) return;
+      bannersCol.style.cssText = '';
+      const ads = bannersCol.querySelectorAll('.banner-ad');
+      ads.forEach(ad => { ad.style.cssText = ''; });
+    }
+
+    function repositionBanners() {
+      if (!bannersCol || !blogFeed || !gridLayout) return;
+      const isMobile = window.innerWidth <= 1024;
+
+      if (isMobile && !bannersInFeed) {
+        const feedChildren = blogFeed.children;
+        const mid = Math.min(2, feedChildren.length);
+        if (feedChildren.length > mid) {
+          blogFeed.insertBefore(bannersCol, feedChildren[mid]);
+        } else {
+          blogFeed.appendChild(bannersCol);
+        }
+        applyMobileBannerStyles();
+        bannersInFeed = true;
+      } else if (!isMobile && bannersInFeed) {
+        gridLayout.appendChild(bannersCol);
+        removeMobileBannerStyles();
+        bannersInFeed = false;
+      }
+    }
+
+    repositionBanners();
+    window.addEventListener('resize', repositionBanners);
+
+    // ── 9. Calculator ──
+    const priceSlider = document.getElementById('calc-price-slider');
+    const termSlider = document.getElementById('calc-term-slider');
+    const priceLabel = document.getElementById('calc-price');
+    const termLabel = document.getElementById('calc-term');
+    const paymentLabel = document.getElementById('calc-payment');
+
+    function calcPayment() {
+      const price = +priceSlider.value;
+      const term = +termSlider.value;
+      const rate = 0.055 / 12;
+      const n = term * 12;
+      const payment = price * (rate * Math.pow(1 + rate, n)) / (Math.pow(1 + rate, n) - 1);
+      priceLabel.textContent = price.toLocaleString('ru-RU') + ' ₽';
+      termLabel.textContent = term + ' лет';
+      paymentLabel.textContent = '≈ ' + Math.round(payment).toLocaleString('ru-RU') + ' ₽';
+    }
+
+    if (priceSlider && termSlider) {
+      priceSlider.addEventListener('input', calcPayment);
+      termSlider.addEventListener('input', calcPayment);
+      calcPayment();
+    }
+  });
+  </script>
 
 </body>
 </html>

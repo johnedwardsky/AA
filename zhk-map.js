@@ -285,20 +285,31 @@
 
     if (isInitializing) return null;
 
+    let retryCount = 0;
+    const maxRetries = 60; // Up to 6 seconds
+
     function doInit() {
       // Check if ymaps is loaded and has ready function
       if (typeof window.ymaps === 'undefined' || typeof window.ymaps.ready !== 'function') {
-        setTimeout(doInit, 100);
+        retryCount++;
+        if (retryCount < maxRetries) {
+          setTimeout(doInit, 100);
+        } else {
+          isInitializing = false;
+          console.warn('Yandex Maps API load timeout.');
+        }
         return;
       }
 
       window.ymaps.ready(() => {
         if (ymapInstance) {
           try { ymapInstance.container.fitToViewport(); } catch(e) {}
+          isInitializing = false;
           return;
         }
 
         try {
+          container.innerHTML = '';
           ymapInstance = new window.ymaps.Map(containerId, {
             center: [54.7104, 20.4522],
             zoom: 10,
@@ -310,7 +321,7 @@
 
           // Initialize Yandex Clusterer
           ymapClusterer = new window.ymaps.Clusterer({
-            preset: 'islands#nightClusterIcons',
+            preset: 'islands#invertedDarkBlueClusterIcons',
             groupByCoordinates: false,
             clusterDisableClickZoom: false,
             clusterHideIconOnBalloonOpen: false,
@@ -330,6 +341,10 @@
                         ((typeof PROPERTIES !== 'undefined' ? PROPERTIES : []) ||
                          (window.PROPERTIES || (window.AMBER_DATA ? window.AMBER_DATA.properties : [])) || []);
           updateMapMarkers(props);
+
+          setTimeout(() => {
+            try { ymapInstance.container.fitToViewport(); } catch(e) {}
+          }, 80);
         } catch (err) {
           console.warn('Yandex Maps initialization error:', err);
           isInitializing = false;
@@ -487,7 +502,10 @@
     if (targetView === 'map') {
       if (feedEl) feedEl.style.display = 'none';
       if (loadMoreBtn) loadMoreBtn.style.display = 'none';
-      if (mapWrapper) mapWrapper.style.display = 'block';
+      if (mapWrapper) {
+        mapWrapper.style.display = 'block';
+        mapWrapper.classList.add('active');
+      }
 
       if (mapBtn) {
         mapBtn.classList.add('active');
@@ -506,9 +524,8 @@
           try {
             ymapInstance.container.fitToViewport();
           } catch (e) {}
-          const currentProps = (typeof getFilteredProperties === 'function' ? getFilteredProperties() : null) ||
-                               (typeof PROPERTIES !== 'undefined' ? PROPERTIES : []) ||
-                               (window.PROPERTIES || []);
+          const currentProps = (currentProperties && currentProperties.length > 0) ? currentProperties :
+                               ((typeof PROPERTIES !== 'undefined' ? PROPERTIES : []) || (window.PROPERTIES || []));
           updateMapMarkers(currentProps);
         }, 50);
       }
@@ -516,7 +533,10 @@
     } else {
       if (feedEl) feedEl.style.display = 'flex';
       if (loadMoreBtn) loadMoreBtn.style.display = '';
-      if (mapWrapper) mapWrapper.style.display = 'none';
+      if (mapWrapper) {
+        mapWrapper.style.display = 'none';
+        mapWrapper.classList.remove('active');
+      }
 
       if (listBtn) {
         listBtn.classList.add('active');
