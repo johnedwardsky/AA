@@ -34,10 +34,13 @@
       if (listBtn) { listBtn.classList.remove('active'); listBtn.setAttribute('aria-pressed', 'false'); }
 
       if (!yandexMap) {
-        initYandexMap();
+        // Delay ensures container is painted with non-zero dimensions before Yandex Map init
+        setTimeout(function() { initYandexMap(); }, 50);
       } else {
-        yandexMap.container.fitToViewport();
-        updateMapMarkers(getProperties());
+        setTimeout(function() {
+          yandexMap.container.fitToViewport();
+          updateMapMarkers(getProperties());
+        }, 50);
       }
 
     } else {
@@ -297,10 +300,9 @@
   window.currentCatalogView = currentView;
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() { initViewToggle(); injectBasicModalHTML(); });
+    document.addEventListener('DOMContentLoaded', function() { initViewToggle(); });
   } else {
     initViewToggle();
-    injectBasicModalHTML();
   }
 
 })(window, document);
