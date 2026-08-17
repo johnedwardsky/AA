@@ -568,12 +568,94 @@ ul { list-style: none; }
 .tag-it         { background: #F0F9FF; color: #0369A1; border: 1px solid #BAE6FD; }
 
 /* ── Nav Icons Row ─────────────────────────────────────────── */
+.card-nav-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--color-border-light);
+  background: var(--color-surface, #fff);
+  overflow: hidden;
+}
+
 .card-nav {
   display: flex;
-  border-top: 1px solid var(--color-border-light);
-  overflow-x: auto; scrollbar-width: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  flex: 1;
+  border-top: none;
+  -ms-overflow-style: none;
 }
 .card-nav::-webkit-scrollbar { display: none; }
+
+.card-nav-arrow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  width: 36px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.22s ease;
+  color: var(--color-primary);
+  background: transparent;
+  padding: 0;
+}
+
+.card-nav-arrow-left {
+  left: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0.96) 60%, rgba(255,255,255,0) 100%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-6px);
+}
+.card-nav-arrow-left.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.card-nav-arrow-right {
+  right: 0;
+  background: linear-gradient(270deg, rgba(255,255,255,0.96) 60%, rgba(255,255,255,0) 100%);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.card-nav-arrow-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--color-border, #E2E8F0);
+  box-shadow: 0 2px 6px rgba(21, 48, 91, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.22s ease;
+  color: var(--color-primary);
+}
+
+.card-nav-arrow:hover .card-nav-arrow-icon {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+  transform: scale(1.12);
+  box-shadow: 0 4px 10px rgba(21, 48, 91, 0.22);
+}
+
+.card-nav-arrow-right.at-end .card-nav-arrow-icon svg {
+  transform: rotate(180deg);
+}
+
+.card-nav-arrow-right.at-end:hover .card-nav-arrow-icon {
+  background: var(--color-accent);
+  color: var(--color-primary);
+  border-color: var(--color-accent);
+}
 .card-nav-item {
   display: flex; flex-direction: column;
   align-items: center; gap: 3px;
@@ -1818,9 +1900,17 @@ ul { list-style: none; }
   padding: 3px 6px;
   border-radius: 4px;
   width: fit-content;
-  margin-bottom: 8px;
   background: var(--color-bg);
   color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.inline-side-banner .banner-partner-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--color-muted);
 }
 
 .inline-side-banner .banner-title {
@@ -1835,8 +1925,15 @@ ul { list-style: none; }
   font-size: 10px;
   color: var(--color-text-secondary);
   line-height: 1.4;
-  margin: 0 0 14px 0;
+  margin: 0 0 12px 0;
   flex-grow: 1;
+}
+
+.inline-side-banner .banner-actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .inline-side-banner .banner-btn {
@@ -1852,10 +1949,23 @@ ul { list-style: none; }
   text-align: center;
   transition: var(--transition);
   font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .inline-side-banner .banner-btn:hover {
   background: var(--color-primary-dark);
+}
+
+.inline-side-banner .banner-legal-disclosure,
+.inline-side-banner .banner-legal-note {
+  font-size: 8.5px;
+  color: var(--color-muted);
+  line-height: 1.25;
+  text-align: center;
+  letter-spacing: 0.01em;
 }
 
 /* Mobile responsive styles for inline panel banners */
@@ -1866,6 +1976,7 @@ ul { list-style: none; }
   }
   
   .inline-side-banner {
+    align-self: stretch;
     width: 100%;
     min-width: unset;
     flex-direction: row;
@@ -1886,6 +1997,12 @@ ul { list-style: none; }
     margin-top: 2px;
   }
   
+  .inline-side-banner .banner-actions {
+    flex-shrink: 0;
+    width: auto;
+    align-items: flex-end;
+  }
+
   .inline-side-banner .banner-btn {
     width: auto;
     white-space: nowrap;
@@ -1898,6 +2015,11 @@ ul { list-style: none; }
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
+  }
+
+  .inline-side-banner .banner-actions {
+    width: 100%;
+    align-items: stretch;
   }
   
   .inline-side-banner .banner-btn {
@@ -2299,6 +2421,134 @@ ul { list-style: none; }
   border-color: rgba(255,255,255,0.5);
   color: #ffffff;
 }
+
+/* ── Selected ЖК Target Card Highlight ──────────────────────── */
+.target-card-highlight {
+  position: relative;
+  border-radius: 16px;
+  animation: targetCardPulse 2.8s cubic-bezier(0.22, 1, 0.36, 1) 1;
+}
+
+.target-card-highlight .property-card {
+  box-shadow: 0 0 0 2.5px var(--color-accent, #F5A623), 0 16px 36px rgba(27, 60, 110, 0.18) !important;
+  transition: box-shadow 0.4s ease;
+}
+
+@keyframes targetCardPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(245, 166, 35, 0.85);
+  }
+  40% {
+    box-shadow: 0 0 0 10px rgba(245, 166, 35, 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 166, 35, 0);
+  }
+}
+
+/* Card Photo Slider & Mobile Swipe Gallery */
+.card-image-col {
+  position: relative;
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+  min-height: 200px;
+  height: 200px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #1a1a2e;
+  border-radius: var(--radius-card) 0 0 var(--radius-card);
+}
+
+.card-photo-slider {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+}
+.card-photo-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.card-photo-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  cursor: pointer;
+}
+
+.card-photo-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  transition: transform 0.4s ease;
+}
+.property-card:hover .card-photo-slide img {
+  transform: scale(1.03);
+}
+
+.card-photo-dots {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.photo-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  transition: all 0.2s ease;
+}
+.photo-dot.active {
+  width: 14px;
+  border-radius: 3px;
+  background: var(--color-accent, #F5A623);
+}
+
+@media (max-width: 768px) {
+  .card-main {
+    flex-direction: column;
+    width: 100%;
+  }
+  .card-image-col {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: 220px;
+    min-height: 220px;
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+    display: block;
+  }
+  .card-photo-dots {
+    bottom: 10px;
+  }
+}
+
 </style>
   <!-- Preconnect for Google Fonts (already in CSS @import) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2307,6 +2557,7 @@ ul { list-style: none; }
   <script src="data.js"></script>
   <script src="properties-data.js"></script>
   <script src="menu.js"></script>
+  <script src="https://api-maps.yandex.ru/2.1/?apikey=a2dacfa0-5027-4d77-8085-92e462c8017a&lang=ru_RU" type="text/javascript"></script>
 </head>
 <body id="page-zhk-oblast">
 
@@ -2350,6 +2601,7 @@ ul { list-style: none; }
           >
         </div>
 
+        <button class="quiz-header-btn" onclick="openSmartQuiz()" aria-label="Подобрать ЖК квиз">✨ Подобрать ЖК (30 сек)</button>
         <button class="btn-header btn-header-accent" id="btn-expert" aria-label="Связаться с экспертом">
           Консультация
         </button>
@@ -2392,21 +2644,21 @@ ul { list-style: none; }
           <li>Видовые террасы, яхтенный причал в пешей доступности</li>
           <li>Автономное отопление, рассрочка от застройщика, сдача — 2026 г.</li>
         </ul>
-        <a href="#developers" class="bn-cta-btn">Подробнее</a>
+        <a href="developers.html" class="bn-cta-btn">Подробнее</a>
       </div>
       <div class="bn-marketing-label">Реклама. ООО «СЗ „Балтийская Гавань“», ИНН 3901012345, erid: 2VtzqxOblast</div>
     </section>
 
 
 
-  <!-- ══ FILTER BAR ══════════════════════════════════════════ -->
-  <nav class="filter-bar" aria-label="Фильтры">
+    <!-- ══ FILTER BAR ══════════════════════════════════════════ -->
+  <nav class="filter-bar" aria-label="Сортировка">
     <div class="filter-bar-inner">
-      <button class="filter-chip active" data-filter="all">Все <span class="chip-count">63</span></button>
-      <button class="filter-chip" data-filter="standard">Стандарт</button>
-      <button class="filter-chip" data-filter="family">Семейная ипотека</button>
-      <button class="filter-chip" data-filter="partner">Партнёр</button>
-      <button class="filter-chip" data-filter="budget">До 5 млн ₽</button>
+      <button class="filter-chip active" data-sort="rating">По рейтингу Amber</button>
+      <button class="filter-chip" data-sort="price-asc">По цене (возр.)</button>
+      <button class="filter-chip" data-sort="price-desc">По цене (убыв.)</button>
+      <button class="filter-chip" data-sort="delivery">По дате сдачи</button>
+      <button class="filter-chip" data-sort="sea">По расстоянию до моря</button>
     </div>
   </nav>
 
@@ -2418,25 +2670,31 @@ ul { list-style: none; }
         <h1 class="feed-title">ЖК Калининградской области (область)</h1>
         <p class="feed-count" id="feed-count" aria-live="polite">Загрузка...</p>
       </div>
-      <div class="feed-sort">
-        <select id="filter-developer" aria-label="Фильтр по застройщику">
-          <option value="">Все застройщики</option>
-          <option value="ГК «МПК»">ГК «МПК»</option>
-          <option value="ГК «КСК»">ГК «КСК»</option>
-          <option value="КалининградСтройИнвест">КалининградСтройИнвест</option>
-          <option value="ГК «Модуль-Стройград»">ГК «Модуль-Стройград»</option>
-          <option value="ГК «Русская Европа»">ГК «Русская Европа»</option>
-          <option value="КПД-Калининград">КПД-Калининград</option>
-        </select>
-        <label for="sort-select" class="sr-only">Сортировка</label>
-        <select id="sort-select" aria-label="Сортировать по">
-          <option>По рейтингу Amber</option>
-          <option>По цене (возр.)</option>
-          <option>По цене (убыв.)</option>
-          <option>По дате сдачи</option>
-          <option>По расстоянию до моря</option>
-        </select>
+      <div class="view-toggle-group" role="group" aria-label="Вид отображения">
+        <button class="view-toggle-btn active" id="view-toggle-list" data-view="list" aria-pressed="true" onclick="window.switchCatalogView && window.switchCatalogView('list')">
+          <span class="view-toggle-icon">📋</span>
+          <span class="view-toggle-text">Список</span>
+        </button>
+        <button class="view-toggle-btn" id="view-toggle-map" data-view="map" aria-pressed="false" onclick="window.switchCatalogView && window.switchCatalogView('map')">
+          <span class="view-toggle-icon">🗺</span>
+          <span class="view-toggle-text">На карте</span>
+        </button>
       </div>
+    </div>
+
+        <!-- Map Container -->
+    <div class="zhk-map-container-wrapper" id="zhk-map-container-wrapper" style="display: none;">
+      <div class="zhk-map-toolbar">
+        <div class="zhk-map-stats" id="zhk-map-stats">
+          <span class="zhk-map-stat-badge">Объектов на карте: <strong id="zhk-map-count">0</strong></span>
+          <span class="zhk-map-stat-badge partner-badge">Партнёров: <strong id="zhk-map-partner-count">0</strong></span>
+        </div>
+        <div class="zhk-map-legend">
+          <span class="legend-item partner"><span class="legend-dot gold"></span> Оплаченные партнёры</span>
+          <span class="legend-item basic"><span class="legend-dot navy"></span> Базовые ЖК</span>
+        </div>
+      </div>
+      <div class="zhk-map-view" id="zhk-interactive-map"></div>
     </div>
 
     <!-- Listing feed — JS renders cards here -->
@@ -4898,9 +5156,134 @@ function warrantyContentHTML(p) {
   </div>`;
 }
 
+// ── Native Contextual Ad Units ──────────────────────────────
+var CONTEXT_ADS = {
+  prices: {
+    id: 'ad_escrow_sber',
+    badge: 'Банк-партнёр',
+    badgeColor: '#10B981',
+    icon: '💳',
+    partnerName: 'ПАО «Банк Дом.РФ»',
+    partnerInn: '7707083893',
+    erid: '2VtzqxSberEscrowKLD',
+    title: 'Ипотечные программы от 6%',
+    text: 'Рассчитайте ежемесячный платёж и получите персональные условия в аккредитованных банках (Сбер, ВТБ, Дом.РФ).',
+    btnText: 'Рассчитать платёж',
+    cta: 'Рассчитать платёж',
+    ctaUrl: 'https://www.sberbank.ru/ru/person/credits/home?erid=2VtzqxSberEscrowKLD',
+    legal: 'Реклама. ПАО «Банк Дом.РФ». Ген. лиц. ЦБ РФ № 2312',
+    action: "showAvailability('Ипотека и цены')"
+  },
+  mortgage: {
+    id: 'ad_mortgage_domclick',
+    badge: 'Ипотечный брокер',
+    badgeColor: '#2563EB',
+    icon: '🏦',
+    partnerName: 'Ипотечный центр Amber',
+    partnerInn: '7736249247',
+    erid: '2VtzqxDomclickKLD',
+    title: 'Одобрение ипотеки за 2 мин',
+    text: 'Семейная, IT и субсидированная ипотека от застройщика. Подача одной заявки во все банки региона.',
+    btnText: 'Подать заявку',
+    cta: 'Подать заявку',
+    ctaUrl: 'https://domclick.ru/ipoteka?erid=2VtzqxDomclickKLD',
+    legal: 'Реклама. ООО «Амбер Ипотека Сервис», ОГРН 1233900001234',
+    action: "showAvailability('Заявка на ипотеку')"
+  },
+  location: {
+    id: 'ad_transfer_baltic',
+    badge: 'Трансфер & Такси',
+    badgeColor: '#F59E0B',
+    icon: '🚕',
+    partnerName: 'Сервис «Балтик Драйв»',
+    partnerInn: '3906112233',
+    erid: '2VtzqxBalticTransfer',
+    title: 'Трансфер на просмотр ЖК',
+    text: 'Комфортная поездка на объект / трансфер из аэропорта Храброво для покупателей новостроек.',
+    btnText: 'Заказать трансфер',
+    cta: 'Заказать трансфер',
+    ctaUrl: 'partners-promo.html?ref=transfer',
+    legal: 'Реклама. ООО «Балтик Авто Трансфер», ОГРН 1223900005678',
+    action: "showAvailability('Трансфер на просмотр')"
+  },
+  warranty: {
+    id: 'ad_insurance_vsk',
+    badge: 'Страхование',
+    badgeColor: '#8B5CF6',
+    icon: '🛡️',
+    partnerName: 'САО «ВСК»',
+    partnerInn: '7710030411',
+    erid: '2VtzqxVskProperty',
+    title: 'Защита сделки и конструктива',
+    text: 'Комплексное страхование титула, ремонта и отделки со скидкой до 20% от аккредитованных страховых.',
+    btnText: 'Оформить полис',
+    cta: 'Оформить полис',
+    ctaUrl: 'https://sogaz.ru/property?erid=2VtzqxSogazProperty',
+    legal: 'Реклама. САО «ВСК». Лицензии ЦБ РФ СИ № 0621, СЛ № 0621',
+    action: "showAvailability('Страхование')"
+  },
+  docs: {
+    id: 'ad_legal_audit_ddu',
+    badge: 'Юридический аудит',
+    badgeColor: '#EC4899',
+    icon: '⚖️',
+    partnerName: 'ЮК «Право Недвижимости»',
+    partnerInn: '3906334455',
+    erid: '2VtzqxPravo39Audit',
+    title: 'Проверка ДДУ и рисков',
+    text: 'Независимая юридическая проверка договора долевого участия, чистоты эскроу и истории застройщика.',
+    btnText: 'Проверить ДДУ',
+    cta: 'Проверить ДДУ',
+    ctaUrl: 'partners-promo.html?ref=legal_audit',
+    legal: 'Реклама. ООО «Право Недвижимости Эксперт», ОГРН 1213900008910',
+    action: "showAvailability('Юридическая проверка')"
+  }
+};
+
 // ── Wrap inline panels with ad banners ───────────────────────
-function wrapWithBannerHTML(contentHtml, sectionKey) {
-  return contentHtml;
+function wrapWithBannerHTML(contentHtml, sectionKey, p) {
+  var ad = null;
+  if (typeof SmartAdEngine !== 'undefined' && SmartAdEngine.resolveAd) {
+    try {
+      ad = SmartAdEngine.resolveAd(sectionKey, p);
+    } catch(e) {
+      ad = null;
+    }
+  }
+
+  if (!ad) {
+    ad = CONTEXT_ADS[sectionKey];
+  }
+
+  if (!ad) return contentHtml;
+
+  var complexName = (p && p.name) ? String(p.name).replace(/'/g, "\'") : 'ЖК';
+  var customAction = ad.action
+    ? ad.action.replace("')", ` — ${complexName}')`)
+    : `showAvailability('${ad.title} — ${complexName}')`;
+
+  var btnText = ad.btnText || ad.cta || 'Подробнее';
+  var legalText = ad.legal || `Реклама · ${ad.partnerName || 'Партнёр'} · ИНН: ${ad.partnerInn || '3900000000'} · erid: ${ad.erid || '2Vtzqx'}`;
+
+  return `
+    <div class="inline-section-layout">
+      <div class="inline-main-content">
+        ${contentHtml}
+      </div>
+      <aside class="inline-side-banner" data-ad-id="${ad.id || ''}" data-section="${sectionKey}" data-erid="${ad.erid || ''}">
+        <div class="banner-info">
+          <h4 class="banner-title">${ad.title}</h4>
+          <p class="banner-text">${ad.text}</p>
+        </div>
+        <div class="banner-actions" style="margin-top:auto;">
+          <button class="banner-btn" onclick="${customAction}">${btnText}</button>
+          <div class="banner-legal-disclosure" style="margin-top:6px;font-size:8.5px;color:var(--color-muted);line-height:1.25;text-align:center;" title="${ad.partnerName || ''} · ИНН: ${ad.partnerInn || ''} · erid: ${ad.erid || ''}">
+            ${legalText}
+          </div>
+        </div>
+      </aside>
+    </div>
+  `;
 }
 
 // ── Build All Inline Sections ────────────────────────────────
@@ -4909,19 +5292,26 @@ function buildAllInlineSections(p) {
     <div class="price-panel">
       <div class="price-range">${p.priceRange}</div>
       <div class="price-sqm">${p.pricePerSqm}</div>
-      <table class="price-table">${priceTableHTML(p.prices)}</table>
+            <table class="price-table">${priceTableHTML(p.prices)}</table>
+      <div class="lead-magnet-card">
+        <div class="lead-magnet-text">
+          <div class="lead-magnet-title">📥 Скачать закрытую шахматку квартир</div>
+          <div class="lead-magnet-desc">Актуальные планировки, скидки до 5% и расчет ипотеки в PDF</div>
+        </div>
+        <button class="lead-magnet-btn" onclick="openLeadMagnet('${(p.name || \'\').replace(/\'/g, "\\\'")}')">Скачать PDF</button>
+      </div>
     </div>
   `;
 
-  return `
+    return `
     <div class="inline-section" data-section="prices">
-      ${wrapWithBannerHTML(pricesContent, 'prices')}
+      ${wrapWithBannerHTML(pricesContent, 'prices', p)}
     </div>
     <div class="inline-section" data-section="mortgage">
-      ${wrapWithBannerHTML(mortgageContentHTML(), 'mortgage')}
+      ${wrapWithBannerHTML(mortgageContentHTML(), 'mortgage', p)}
     </div>
     <div class="inline-section" data-section="location">
-      ${wrapWithBannerHTML(locationContentHTML(p), 'location')}
+      ${wrapWithBannerHTML(locationContentHTML(p), 'location', p)}
     </div>
     <div class="inline-section" data-section="infra">${infraContentHTML(p)}</div>
     <div class="inline-section" data-section="yard">${yardContentHTML(p)}</div>
@@ -4930,9 +5320,11 @@ function buildAllInlineSections(p) {
     <div class="inline-section" data-section="comfort">${comfortContentHTML(p)}</div>
     <div class="inline-section" data-section="security">${securityContentHTML(p)}</div>
     <div class="inline-section" data-section="management">${managementContentHTML(p)}</div>
-    <div class="inline-section" data-section="warranty">${warrantyContentHTML(p)}</div>
+    <div class="inline-section" data-section="warranty">
+      ${wrapWithBannerHTML(warrantyContentHTML(p), 'warranty', p)}
+    </div>
     <div class="inline-section" data-section="docs">
-      ${wrapWithBannerHTML(docsContentHTML(p), 'docs')}
+      ${wrapWithBannerHTML(docsContentHTML(p), 'docs', p)}
     </div>
     <div class="inline-section" data-section="dev">
       <div style="font-size:13px;font-weight:600;margin-bottom:8px">Застройщик</div>
@@ -5018,15 +5410,27 @@ function buildPropertyCard(p, cardIndex) {
       <div class="property-card" id="${id}-center">
         <div class="card-main">
           <!-- Square Image -->
-          <div class="card-image-col" onclick="openGallery('${id}')">
-            <img src="${p.imgSrc}" alt="${p.name}" loading="${cardIndex < 2 ? 'eager' : 'lazy'}">
+          <!-- Square Image / Mobile Swipe Slider -->
+          <div class="card-image-col" data-card-id="${id}">
+            <div class="card-photo-slider" onscroll="handleCardPhotoScroll(this)">
+              ${((p.thumbs && p.thumbs.length > 0) ? p.thumbs : [p.imgSrc]).map((src, idx) => `
+                <div class="card-photo-slide" onclick="handleCardSlideClick(event, '${id}')">
+                  <img src="${src}" alt="${p.name} - фото ${idx + 1}" loading="${cardIndex < 2 && idx === 0 ? 'eager' : 'lazy'}">
+                </div>
+              `).join('')}
+            </div>
             ${p.partner ? `<div class="card-badge-partner">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M5 0L6.12 3.38H9.51L6.88 5.47L7.94 8.82L5 6.64L2.06 8.82L3.12 5.47L0.49 3.38H3.88L5 0Z"/></svg>
               Официальный партнёр
             </div>` : ''}
+            ${((p.thumbs && p.thumbs.length > 1) ? `
+              <div class="card-photo-dots">
+                ${p.thumbs.map((_, idx) => `<span class="photo-dot ${idx === 0 ? 'active' : ''}"></span>`).join('')}
+              </div>
+            ` : '')}
             <div class="card-photo-count" onclick="event.stopPropagation();openGallery('${id}')">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              +${p.photos} фото
+              <span class="photo-count-text">+${p.photos || (p.thumbs ? p.thumbs.length : 1)} фото</span>
             </div>
           </div>
 
@@ -5059,8 +5463,20 @@ function buildPropertyCard(p, cardIndex) {
           </div>
         </div>
 
-        <!-- Nav Icons -->
-        <nav class="card-nav" aria-label="Разделы ЖК">${inlineNavHTML()}</nav>
+                <!-- Nav Icons -->
+        <div class="card-nav-wrap">
+          <button class="card-nav-arrow card-nav-arrow-left" aria-label="Прокрутить назад" onclick="event.stopPropagation(); scrollCardNav(this, -1)">
+            <span class="card-nav-arrow-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+            </span>
+          </button>
+          <nav class="card-nav" aria-label="Разделы ЖК" onscroll="updateCardNavArrows(this)">${inlineNavHTML()}</nav>
+          <button class="card-nav-arrow card-nav-arrow-right" aria-label="Прокрутить разделы" onclick="event.stopPropagation(); scrollCardNav(this, 1)">
+            <span class="card-nav-arrow-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+          </button>
+        </div>
 
         <!-- Inline Expandable Panel -->
         <div class="card-inline-panel" id="${id}-inline">
@@ -5165,8 +5581,66 @@ document.addEventListener('keydown', function(e) {
 
 
 
+// ── Card Nav Scroll Logic ────────────────────────────────────
+function scrollCardNav(btn, dir) {
+  const wrap = btn.closest('.card-nav-wrap');
+  if (!wrap) return;
+  const nav = wrap.querySelector('.card-nav');
+  if (!nav) return;
+
+  const scrollStep = 240;
+  const maxScroll = nav.scrollWidth - nav.clientWidth;
+
+  if (dir > 0) {
+    if (nav.scrollLeft >= maxScroll - 15) {
+      nav.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      nav.scrollBy({ left: scrollStep, behavior: 'smooth' });
+    }
+  } else {
+    if (nav.scrollLeft <= 15) {
+      nav.scrollTo({ left: maxScroll, behavior: 'smooth' });
+    } else {
+      nav.scrollBy({ left: -scrollStep, behavior: 'smooth' });
+    }
+  }
+}
+
+function updateCardNavArrows(nav) {
+  const wrap = nav.closest('.card-nav-wrap');
+  if (!wrap) return;
+  const leftBtn = wrap.querySelector('.card-nav-arrow-left');
+  const rightBtn = wrap.querySelector('.card-nav-arrow-right');
+  const maxScroll = nav.scrollWidth - nav.clientWidth;
+
+  if (maxScroll <= 5) {
+    if (leftBtn) leftBtn.style.display = 'none';
+    if (rightBtn) rightBtn.style.display = 'none';
+    return;
+  } else {
+    if (leftBtn) leftBtn.style.display = 'flex';
+    if (rightBtn) rightBtn.style.display = 'flex';
+  }
+
+  if (leftBtn) {
+    leftBtn.classList.toggle('visible', nav.scrollLeft > 10);
+  }
+  if (rightBtn) {
+    const isAtEnd = nav.scrollLeft >= maxScroll - 15;
+    rightBtn.classList.toggle('at-end', isAtEnd);
+    rightBtn.setAttribute('title', isAtEnd ? 'Вернуться к началу' : 'Показать следующие разделы');
+  }
+}
+
+function initCardNavArrows() {
+  document.querySelectorAll('.card-nav').forEach(nav => {
+    updateCardNavArrows(nav);
+  });
+}
+
 // ── Nav Click → Inline Panel Toggle ──────────────────────────
 function bindNavItems() {
+  initCardNavArrows();
   document.querySelectorAll('.card-nav-item').forEach(item => {
     item.addEventListener('click', function() {
       const key = this.dataset.key;
@@ -5464,7 +5938,7 @@ const REGIONAL_CUSTOMIZATIONS = {
           <li>Собственный променад и благоустроенная территория</li>
           <li>Автономное отопление, сдача — IV кв. 2025 г.</li>
         </ul>
-        <a href="#developers" class="bn-cta-btn">Подробнее</a>
+        <a href="developers.html" class="bn-cta-btn">Подробнее</a>
       </div>
       <div class="bn-marketing-label">Реклама. ООО «СЗ „Рыбная Деревня“», ИНН 3906987654, erid: 2VtzqxKldCity</div>
     `
@@ -5486,7 +5960,7 @@ const REGIONAL_CUSTOMIZATIONS = {
           <li>Собственный спуск к пляжу</li>
           <li>Сдача объекта — 2026 г.</li>
         </ul>
-        <a href="#developers" class="bn-cta-btn">Подробнее</a>
+        <a href="developers.html" class="bn-cta-btn">Подробнее</a>
       </div>
       <div class="bn-marketing-label">Реклама. ООО «СЗ „Королевский Берег“», ИНН 3906123456, erid: 2Vtzqx4XyZa</div>
     `
@@ -5508,7 +5982,7 @@ const REGIONAL_CUSTOMIZATIONS = {
           <li>Таунхаусы и малоэтажные дома с автономным отоплением</li>
           <li>Готовая семейная инфраструктура, сдача — 2025-2026 гг.</li>
         </ul>
-        <a href="#developers" class="bn-cta-btn">Подробнее</a>
+        <a href="developers.html" class="bn-cta-btn">Подробнее</a>
       </div>
       <div class="bn-marketing-label">Реклама. ООО «СЗ „Ласкино Парк“», ИНН 3915012345, erid: 2VtzqxSuburban</div>
     `
@@ -5530,7 +6004,7 @@ const REGIONAL_CUSTOMIZATIONS = {
           <li>Видовые террасы, яхтенный причал в пешей доступности</li>
           <li>Автономное отопление, рассрочка от застройщика, сдача — 2026 г.</li>
         </ul>
-        <a href="#developers" class="bn-cta-btn">Подробнее</a>
+        <a href="developers.html" class="bn-cta-btn">Подробнее</a>
       </div>
       <div class="bn-marketing-label">Реклама. ООО «СЗ „Балтийская Гавань“», ИНН 3901012345, erid: 2VtzqxOblast</div>
     `
@@ -5706,6 +6180,10 @@ function renderFeed(appendOnly = false) {
   const allCount = document.querySelector('#page-zhk-oblast .filter-chip[data-filter="all"] .chip-count');
   if (allCount) allCount.textContent = PROPERTIES.filter(p => p.direction === 'oblast').length;
 
+  if (typeof updateMapMarkers === 'function') {
+    updateMapMarkers(filtered);
+  }
+
   if (filtered.length === 0) {
     feed.innerHTML = `<div style="padding: 40px; text-align: center; color: var(--color-muted); font-size: 14px; width: 100%;">
       Нет объектов, соответствующих выбранным фильтрами.
@@ -5718,25 +6196,6 @@ function renderFeed(appendOnly = false) {
   // If not appending, reset the feed
   if (!appendOnly) {
     feed.innerHTML = '';
-    if (window.targetZhkId) {
-      const targetProp = PROPERTIES.find(p => p.id === window.targetZhkId);
-      const propName = targetProp ? targetProp.name : 'выбранный ЖК';
-      const devName = targetProp ? targetProp.developer : '';
-      const devText = devName ? ` и другие ЖК застройщика <strong>${devName}</strong>` : '';
-      feed.innerHTML = `
-        <div class="zhk-filter-reset-banner" style="grid-column: 1 / -1; background: rgba(27, 60, 110, 0.05); border: 1px dashed var(--color-primary); padding: 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; width: 100%; box-sizing: border-box;">
-          <span style="font-size: 14px; font-weight: 500; color: var(--color-primary);">Показан ЖК <strong>${propName}</strong>${devText}</span>
-          <button onclick="resetTargetZhkFilter();" class="btn-primary" style="padding: 8px 16px; font-size: 12px; border-radius: 6px; cursor: pointer; background: var(--color-primary); color: white; border: none; font-family: inherit;">Показать все новостройки</button>
-        </div>
-      `;
-    } else if (currentSearchQuery) {
-      feed.innerHTML = `
-        <div class="zhk-filter-reset-banner" style="grid-column: 1 / -1; background: rgba(27, 60, 110, 0.05); border: 1px dashed var(--color-primary); padding: 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; width: 100%; box-sizing: border-box;">
-          <span style="font-size: 14px; font-weight: 500; color: var(--color-primary);">Результаты поиска для: <strong>"${currentSearchQuery}"</strong></span>
-          <button onclick="clearSearchFilter();" class="btn-primary" style="padding: 8px 16px; font-size: 12px; border-radius: 6px; cursor: pointer; background: var(--color-primary); color: white; border: none; font-family: inherit;">Показать все новостройки</button>
-        </div>
-      `;
-    }
     visibleCount = 8;
   }
 
@@ -5745,6 +6204,27 @@ function renderFeed(appendOnly = false) {
   const sliced = filtered.slice(startIndex, endIndex);
 
   let html = '';
+  if (!appendOnly) {
+    if (window.targetZhkId) {
+      const targetProp = PROPERTIES.find(p => p.id === window.targetZhkId);
+      const propName = targetProp ? targetProp.name : 'выбранный ЖК';
+      const devName = targetProp ? targetProp.developer : '';
+      const devText = devName ? ` и другие ЖК застройщика <strong>${devName}</strong>` : '';
+      html += `
+        <div class="zhk-filter-reset-banner" style="grid-column: 1 / -1; background: rgba(27, 60, 110, 0.05); border: 1px dashed var(--color-primary); padding: 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; width: 100%; box-sizing: border-box;">
+          <span style="font-size: 14px; font-weight: 500; color: var(--color-primary);">Показан ЖК <strong>${propName}</strong>${devText}</span>
+          <button onclick="resetTargetZhkFilter();" class="btn-primary" style="padding: 8px 16px; font-size: 12px; border-radius: 6px; cursor: pointer; background: var(--color-primary); color: white; border: none; font-family: inherit;">Показать все новостройки</button>
+        </div>
+      `;
+    } else if (currentSearchQuery) {
+      html += `
+        <div class="zhk-filter-reset-banner" style="grid-column: 1 / -1; background: rgba(27, 60, 110, 0.05); border: 1px dashed var(--color-primary); padding: 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; width: 100%; box-sizing: border-box;">
+          <span style="font-size: 14px; font-weight: 500; color: var(--color-primary);">Результаты поиска для: <strong>\"${currentSearchQuery}\"</strong></span>
+          <button onclick="clearSearchFilter();" class="btn-primary" style="padding: 8px 16px; font-size: 12px; border-radius: 6px; cursor: pointer; background: var(--color-primary); color: white; border: none; font-family: inherit;">Показать все новостройки</button>
+        </div>
+      `;
+    }
+  }
   sliced.forEach((p, idx) => {
     const globalIdx = startIndex + idx;
     if (globalIdx > 0 && globalIdx % BANNER_EVERY === 0) {
@@ -5777,12 +6257,50 @@ function renderFeed(appendOnly = false) {
     const cardWrapper = feed.querySelector(`.property-card-wrapper[data-card-id="${window.targetZhkId}"]`);
     if (cardWrapper) {
       setTimeout(() => {
-        const charsNavItem = cardWrapper.querySelector('.card-nav-item[data-key="chars"]');
-        if (charsNavItem) {
-          charsNavItem.click();
+        // 1. Раскрываем вкладку «Инфраструктура» выбранного ЖК
+        const infraNavItem = cardWrapper.querySelector('.card-nav-item[data-key="infra"]')
+                           || cardWrapper.querySelector('.card-nav-item[data-key="chars"]');
+        const panel = cardWrapper.querySelector('.card-inline-panel');
+        const nav = cardWrapper.querySelector('.card-nav');
+        
+        if (infraNavItem && panel) {
+          if (nav) {
+            nav.querySelectorAll('.card-nav-item').forEach(n => n.classList.remove('active'));
+            infraNavItem.classList.add('active');
+            try {
+              infraNavItem.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
+            } catch(e) {}
+          }
+          panel.querySelectorAll('.inline-section').forEach(s => s.classList.remove('active'));
+          const infraSection = panel.querySelector('[data-section="infra"]')
+                             || panel.querySelector('[data-section="chars"]');
+          if (infraSection) {
+            infraSection.classList.add('active');
+            panel.classList.add('open');
+          }
         }
-        cardWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 100);
+
+        // 2. Добавляем акцентное янтарное выделение карточки
+        cardWrapper.classList.add('target-card-highlight');
+
+        // 3. Позиционируем карточку от середины экрана вниз (сохраняя видимость главного баннера сверху)
+        requestAnimationFrame(() => {
+          const headerWrapper = document.querySelector('.site-header-wrapper') || document.querySelector('.site-header');
+          const headerH = headerWrapper ? headerWrapper.offsetHeight : 60;
+          const viewportH = window.innerHeight;
+          const cardRect = cardWrapper.getBoundingClientRect();
+          const cardAbsoluteTop = window.pageYOffset + cardRect.top;
+
+          // Верх карточки располагается на уровне ~42% экрана, оставляя главный баннер открытым взору
+          const offsetFromTop = Math.max(headerH + 80, Math.floor(viewportH * 0.42));
+          const targetScrollY = Math.max(0, cardAbsoluteTop - offsetFromTop);
+
+          window.scrollTo({
+            top: targetScrollY,
+            behavior: 'smooth'
+          });
+        });
+      }, 150);
     }
   }
 }
@@ -6269,15 +6787,16 @@ document.addEventListener('DOMContentLoaded', function() {
   // Пересчитываем при изменении размеров окна
   window.addEventListener('resize', updateStickyTop);
 
-  // Filter Chips — real filtering
-  document.querySelectorAll('#page-zhk-oblast .filter-chip').forEach(chip => {
+    // Sort Chips in Sticky Bar
+  document.querySelectorAll('.filter-chip').forEach(chip => {
     chip.addEventListener('click', function() {
-      window.targetZhkId = null;
-      document.querySelectorAll('#page-zhk-oblast .filter-chip').forEach(c => c.classList.remove('active'));
-      this.classList.add('active');
-      currentFilter = this.dataset.filter || 'all';
-      visibleCount = 8; // Reset count
-      renderFeed();
+      if (this.dataset.sort) {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        currentSort = this.dataset.sort;
+        visibleCount = 8; // Reset count
+        renderFeed();
+      }
     });
   });
 
@@ -6430,5 +6949,7 @@ document.addEventListener('DOMContentLoaded', function() {
   checkDeveloperSession();
 });
 </script>
+<script src="conversion-boosters.js"></script>
+<script src="zhk-map.js"></script>
 </body>
 </html>
