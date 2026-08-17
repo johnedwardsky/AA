@@ -1,3 +1,52 @@
+// Inject this script into the HTML to display console errors on screen
+(function() {
+    function showErrorOnScreen(msg) {
+        var div = document.createElement('div');
+        div.style.position = 'fixed';
+        div.style.bottom = '10px';
+        div.style.left = '10px';
+        div.style.right = '10px';
+        div.style.background = 'rgba(220, 38, 38, 0.95)';
+        div.style.color = 'white';
+        div.style.padding = '15px';
+        div.style.borderRadius = '8px';
+        div.style.zIndex = '999999';
+        div.style.fontFamily = 'monospace';
+        div.style.fontSize = '12px';
+        div.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+        div.innerHTML = '<strong>Debug Error:</strong><br>' + msg;
+        
+        var closeBtn = document.createElement('button');
+        closeBtn.innerHTML = '✕';
+        closeBtn.style.position = 'absolute';
+        closeBtn.style.top = '5px';
+        closeBtn.style.right = '10px';
+        closeBtn.style.background = 'none';
+        closeBtn.style.border = 'none';
+        closeBtn.style.color = 'white';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.onclick = function() { div.remove(); };
+        div.appendChild(closeBtn);
+        
+        if (document.body) document.body.appendChild(div);
+        else document.addEventListener('DOMContentLoaded', function() { document.body.appendChild(div); });
+    }
+
+    var oldErr = console.error;
+    console.error = function() {
+        var msg = Array.from(arguments).join(' ');
+        showErrorOnScreen('Console: ' + msg);
+        oldErr.apply(console, arguments);
+    };
+
+    window.addEventListener('error', function(e) {
+        showErrorOnScreen('Global: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
+    });
+
+    window.addEventListener('unhandledrejection', function(e) {
+        showErrorOnScreen('Promise: ' + (e.reason ? (e.reason.message || e.reason) : 'Unknown'));
+    });
+})();
 /* ============================================================
    AMBER AVENUE — Yandex Maps Interactive Regional Map
    API Key: a2dacfa0-5027-4d77-8085-92e462c8017a
