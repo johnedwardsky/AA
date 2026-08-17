@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Меню — Amber Avenue</title>
+  <script src="data.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ================================================
+       AMBER AVENUE — MEGA MENU COMPONENT
+       ================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px; color: #1A1A2E;
+      background: #F0F3F8; -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+
+    :root {
+      --cp:    #1B3C6E;
+      --cpd:   #122a52;
+      --ca:    #F5A623;
+      --cah:   #e0911a;
+      --cnl:   #EEF3FB;
+      --ct:    #1A1A2E;
+      --cts:   #4B5563;
+      --cm:    #9CA3AF;
+      --cb:    #E5E7EB;
+      --cbl:   #F3F4F6;
+      --cs:    #FFFFFF;
+      --cbg:   #F0F3F8;
+      --shadow: 0 24px 64px rgba(18,42,82,0.18), 0 4px 16px rgba(18,42,82,0.10);
+      --tr: 0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ── HEADER ─────────────────────────────────────────── */
+    .aa-hdr {
+      position: sticky; top: 0; z-index: 200;
+      background: var(--cp);
+      box-shadow: 0 2px 16px rgba(27,60,110,0.25);
+    }
+    .aa-hdr-in {
+      max-width: 1400px; margin: 0 auto;
+      padding: 0 20px; height: 56px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .aa-logo {
+      display: flex; align-items: center; gap: 10px;
+      flex-shrink: 0; text-decoration: none;
+    }
+    .aa-logo-ic {
+      width: 36px; height: 36px; background: var(--ca);
+      border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; font-size: 18px; font-weight: 800;
+      color: var(--cp); flex-shrink: 0; overflow: hidden;
+    }
+    .aa-logo-ic img { width: 100%; height: 100%; object-fit: contain; }
+    .aa-logo-tx { display: flex; flex-direction: column; line-height: 1.2; }
+    .aa-logo-name { font-size: 15px; font-weight: 700; color: #fff; letter-spacing: 0.02em; }
+    .aa-logo-tag { font-size: 9px; color: rgba(255,255,255,0.55); letter-spacing: 0.06em; font-weight: 500; text-transform: uppercase; }
+
+    .aa-srch { flex: 1; position: relative; max-width: 480px; }
+    .aa-srch input {
+      width: 100%; height: 38px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px; padding: 0 14px 0 38px;
+      color: #fff; font-family: inherit; font-size: 13px; outline: none;
+      transition: var(--tr);
+    }
+    .aa-srch input::placeholder { color: rgba(255,255,255,0.5); }
+    .aa-srch input:focus { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.4); }
+    .aa-srch-ic {
+      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+      color: rgba(255,255,255,0.5); pointer-events: none;
+    }
+
+    .aa-acts { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+    .aa-btn {
+      height: 34px; padding: 0 14px; border-radius: 7px;
+      font-size: 12px; font-weight: 600; transition: var(--tr);
+      display: flex; align-items: center; gap: 5px;
+      white-space: nowrap; cursor: pointer;
+    }
+    .aa-btn-g {
+      color: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .aa-btn-g:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .aa-btn-a { background: var(--ca); color: var(--cp); border: none; }
+    .aa-btn-a:hover { background: var(--cah); }
+
+    .aa-burg {
+      display: flex; flex-direction: column; gap: 5px;
+      width: 36px; height: 36px; align-items: center;
+      justify-content: center; border-radius: 7px;
+      transition: var(--tr); flex-shrink: 0; cursor: pointer;
+    }
+    .aa-burg:hover { background: rgba(255,255,255,0.1); }
+    .aa-burg-l {
+      width: 20px; height: 2px; background: #fff;
+      border-radius: 2px; transition: var(--tr); transform-origin: center;
+    }
+    .aa-burg.open .aa-burg-l:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .aa-burg.open .aa-burg-l:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .aa-burg.open .aa-burg-l:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── DESKTOP MEGA PANEL ──────────────────────────────── */
+    .mg-ov {
+      position: fixed; inset: 0; z-index: 199;
+      background: rgba(12,22,44,0.45); backdrop-filter: blur(2px);
+      opacity: 0; pointer-events: none; transition: opacity 0.28s ease;
+    }
+    .mg-ov.open { opacity: 1; pointer-events: all; }
+
+    .mg-panel {
+      position: fixed; top: 56px; left: 50%;
+      transform: translateX(-50%) translateY(-12px);
+      z-index: 199; width: min(1160px, calc(100vw - 40px));
+      background: var(--cs); border-radius: 0 0 18px 18px;
+      box-shadow: var(--shadow); overflow: hidden;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+    .mg-panel.open { opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0); }
+
+    .mg-body {
+      display: grid; grid-template-columns: 224px 1fr 272px;
+      max-height: calc(100vh - 80px); overflow: hidden;
+    }
+
+    /* Left */
+    .mg-left {
+      background: #F8FAFD;
+      border-right: 1px solid var(--cbl);
+      padding: 20px 0; overflow-y: auto; scrollbar-width: thin;
+    }
+    .mg-sec { padding: 0 16px; margin-bottom: 14px; }
+    .mg-lbl {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--cm); padding: 0 8px; margin-bottom: 4px;
+    }
+    .mg-lnk {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 8px; border-radius: 8px;
+      font-size: 12px; font-weight: 500; color: var(--ct);
+      text-decoration: none; transition: background 0.18s, color 0.18s;
+      margin-bottom: 1px; cursor: pointer;
+    }
+    .mg-lnk:hover { background: var(--cnl); color: var(--cp); }
+    .mg-lnk.active { background: var(--cnl); color: var(--cp); font-weight: 600; }
+    .mg-lnk-ic {
+      width: 28px; height: 28px; border-radius: 7px;
+      background: var(--cnl); display: flex; align-items: center;
+      justify-content: center; font-size: 14px; flex-shrink: 0;
+    }
+    .mg-lnk:hover .mg-lnk-ic { background: rgba(27,60,110,0.12); }
+    .mg-chev { margin-left: auto; color: var(--cm); transition: transform 0.2s; }
+    .mg-lnk.hs.exp .mg-chev { transform: rotate(90deg); }
+
+    .mg-sub { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .mg-sub.exp { max-height: 200px; }
+    .mg-sub-l {
+      display: block; padding: 6px 8px 6px 45px;
+      font-size: 11px; color: var(--cts); border-radius: 6px;
+      text-decoration: none; transition: background 0.15s, color 0.15s;
+      margin-bottom: 1px;
+    }
+    .mg-sub-l:hover { background: var(--cnl); color: var(--cp); }
+
+    .mg-div { height: 1px; background: var(--cbl); margin: 8px 16px 12px; }
+
+    .mg-use-tg {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 8px; margin-bottom: 4px; cursor: pointer;
+    }
+    .mg-use-tg:hover .mg-lbl { color: var(--cp); }
+    .mg-use-ch { font-size: 10px; color: var(--cm); transition: transform 0.2s; }
+    .mg-use-tg.exp .mg-use-ch { transform: rotate(180deg); }
+    .mg-use-lnks { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .mg-use-lnks.exp { max-height: 400px; }
+
+    .mg-obr {
+      margin: 0 16px; background: var(--cnl);
+      border-radius: 10px; padding: 10px 12px;
+      display: flex; align-items: flex-start; gap: 10px;
+      cursor: pointer; transition: background 0.18s;
+    }
+    .mg-obr:hover { background: rgba(27,60,110,0.12); }
+    .mg-obr-t { font-size: 12px; font-weight: 600; color: var(--ct); line-height: 1.3; }
+    .mg-obr-d { font-size: 10px; color: var(--cts); margin-top: 2px; line-height: 1.3; }
+
+    /* Center */
+    .mg-ctr { padding: 20px 20px 0; overflow-y: auto; scrollbar-width: thin; }
+    .mg-ctr-top-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+    .mg-useful-section {
+      margin-bottom: 20px;
+      padding-top: 10px;
+      border-top: 1px solid var(--cbl);
+    }
+    .mg-useful-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 16px;
+    }
+    .mg-col-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--cm); margin-bottom: 8px; padding-left: 8px; }
+
+    .mg-cat-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 10px 8px 8px; border-radius: 8px; cursor: pointer;
+      transition: background 0.18s; text-decoration: none; color: inherit;
+      margin-bottom: 1px;
+    }
+    .mg-cat-row:hover { background: var(--cnl); }
+    .mg-cat-nm { font-size: 13px; font-weight: 500; color: var(--ct); }
+    .mg-cat-cnt {
+      font-size: 11px; font-weight: 600; color: var(--cm);
+      background: var(--cbl); padding: 2px 8px; border-radius: 20px;
+    }
+
+    .mg-reg-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 7px 10px 7px 8px; border-radius: 8px; cursor: pointer;
+      transition: background 0.18s; text-decoration: none; color: inherit;
+      margin-bottom: 1px;
+    }
+    .mg-reg-row:hover { background: var(--cnl); }
+    .mg-reg-nm { font-size: 12px; font-weight: 500; color: var(--ct); }
+    .mg-reg-cnt { font-size: 11px; color: var(--cm); }
+
+    .mg-all {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 600; color: var(--cp);
+      text-decoration: none; margin-bottom: 16px; padding: 4px 8px;
+      transition: color 0.15s;
+    }
+    .mg-all:hover { color: var(--ca); }
+
+    /* Banner Slider */
+    .mg-bs {
+      position: relative; border-radius: 14px; overflow: hidden;
+      height: 180px; background: var(--cpd); margin-bottom: 0;
+    }
+    .mg-bs-tr {
+      display: flex; height: 100%;
+      transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+    }
+    .mg-bs-sl { flex: 0 0 100%; position: relative; overflow: hidden; }
+    .mg-bs-sl img { width: 100%; height: 100%; object-fit: cover; }
+    .mg-bs-ov {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(10,20,40,0.80) 0%, rgba(10,20,40,0.20) 60%);
+      padding: 16px 18px; display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .mg-bs-lbl {
+      font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--ca); background: rgba(245,166,35,0.15); padding: 2px 7px;
+      border-radius: 4px; width: fit-content; margin-bottom: 5px;
+    }
+    .mg-bs-ti { font-size: 17px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 3px; }
+    .mg-bs-lo { font-size: 10px; color: rgba(255,255,255,0.7); margin-bottom: 6px; }
+    .mg-bs-pr { font-size: 14px; font-weight: 800; color: var(--ca); margin-bottom: 10px; }
+    .mg-bs-btn {
+      display: inline-block; padding: 7px 16px;
+      background: var(--ca); color: var(--cpd);
+      border-radius: 7px; font-size: 11px; font-weight: 700;
+      width: fit-content; transition: var(--tr); text-decoration: none;
+    }
+    .mg-bs-btn:hover { background: var(--cah); }
+    .mg-bs-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(255,255,255,0.18); backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff; font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2; transition: background 0.2s;
+    }
+    .mg-bs-nav:hover { background: rgba(255,255,255,0.32); }
+    .mg-bs-pv { left: 8px; } .mg-bs-nx { right: 8px; }
+    .mg-bs-dots {
+      position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 5px; z-index: 2;
+    }
+    .mg-bs-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.35); border: none;
+      cursor: pointer; padding: 0; transition: background 0.2s, transform 0.2s;
+    }
+    .mg-bs-dot.on { background: var(--ca); transform: scale(1.3); }
+
+    /* Right: Топ-застройщики */
+    .mg-right { border-left: 1px solid var(--cbl); padding: 20px 16px 0; overflow-y: auto; scrollbar-width: thin; }
+    .mg-dv-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 8px; border-radius: 8px;
+      cursor: pointer; transition: background 0.18s;
+      text-decoration: none; color: inherit; margin-bottom: 2px;
+    }
+    .mg-dv-row:hover { background: var(--cnl); }
+    .mg-dv-rk {
+      width: 20px; height: 20px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 800; flex-shrink: 0;
+      background: var(--cnl); color: var(--cp);
+    }
+    .mg-dv-rk.t1 { background: var(--ca); color: var(--cpd); }
+    .mg-dv-nm { font-size: 12px; font-weight: 500; color: var(--ct); flex: 1; min-width: 0; line-height: 1.3; }
+    .mg-dv-rt { display: flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 700; color: var(--ct); flex-shrink: 0; }
+    .mg-dv-st { color: var(--ca); font-size: 11px; }
+
+    /* News */
+    .mg-news-list { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+    .mg-news-row {
+      display: block; padding: 8px; border-radius: 8px;
+      transition: background 0.18s; text-decoration: none; color: inherit;
+      margin-bottom: 2px;
+    }
+    .mg-news-row:hover { background: var(--cnl); }
+    .mg-news-meta { display: flex; gap: 8px; font-size: 9px; font-weight: 700; color: var(--cm); text-transform: uppercase; margin-bottom: 4px; }
+    .mg-news-tag { color: var(--cp); }
+    .mg-news-title { font-size: 11.5px; font-weight: 600; color: var(--ct); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* Trust bar */
+    .mg-trust {
+      border-top: 1px solid var(--cbl); padding: 10px 20px;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      background: #FAFBFD;
+    }
+    .mg-trust-it {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-right: 1px solid var(--cbl);
+    }
+    .mg-trust-it:last-child { border-right: none; }
+    .mg-trust-ic { font-size: 16px; flex-shrink: 0; }
+    .mg-trust-t { font-size: 11px; font-weight: 600; color: var(--ct); line-height: 1.3; }
+    .mg-trust-s { font-size: 9px; color: var(--cm); line-height: 1.3; }
+
+    .mg-hint {
+      text-align: center; padding: 6px; font-size: 9px; color: var(--cm);
+      border-top: 1px solid var(--cbl); background: var(--cs);
+    }
+
+    /* ── MOBILE DRAWER ───────────────────────────────────── */
+    .mb-ov {
+      display: none; position: fixed; inset: 0; z-index: 299;
+      background: rgba(12,22,44,0.55); backdrop-filter: blur(2px);
+      opacity: 0; transition: opacity 0.28s ease;
+    }
+    .mb-ov.open { opacity: 1; }
+    .mb-dr {
+      display: none; position: fixed; top: 0; right: 0; bottom: 0;
+      width: min(400px, 100vw); z-index: 300;
+      background: var(--cs); flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); overflow: hidden;
+    }
+    .mb-dr.open { transform: translateX(0); }
+
+    .mb-hdr {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0 16px; height: 60px; background: var(--cp); flex-shrink: 0;
+    }
+    .mb-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; flex: 1; }
+    .mb-logo-ic {
+      width: 32px; height: 32px; background: var(--ca);
+      border-radius: 7px; display: flex; align-items: center;
+      justify-content: center; overflow: hidden; flex-shrink: 0;
+    }
+    .mb-logo-ic img { width: 100%; height: 100%; object-fit: contain; }
+    .mb-logo-nm { font-size: 14px; font-weight: 700; color: #fff; }
+    .mb-logo-tg { font-size: 8px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.06em; }
+    .mb-cls {
+      width: 34px; height: 34px; display: flex; align-items: center;
+      justify-content: center; border-radius: 8px;
+      color: rgba(255,255,255,0.75); font-size: 16px; transition: var(--tr); flex-shrink: 0;
+    }
+    .mb-cls:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+    .mb-srch { padding: 10px 16px; background: var(--cpd); flex-shrink: 0; }
+    .mb-srch-w { position: relative; }
+    .mb-srch-w input {
+      width: 100%; height: 38px;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px; padding: 0 14px 0 38px;
+      color: #fff; font-family: inherit; font-size: 13px; outline: none;
+    }
+    .mb-srch-w input::placeholder { color: rgba(255,255,255,0.45); }
+    .mb-srch-ic {
+      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+      color: rgba(255,255,255,0.45); pointer-events: none;
+    }
+
+    .mb-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 0 16px; }
+
+    .mb-ni {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; font-size: 14px; font-weight: 500; color: var(--ct);
+      border-bottom: 1px solid var(--cbl); cursor: pointer;
+      text-decoration: none; transition: background 0.15s;
+    }
+    .mb-ni:hover { background: var(--cnl); }
+    .mb-ni-ic {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--cnl); display: flex; align-items: center;
+      justify-content: center; font-size: 15px; flex-shrink: 0;
+    }
+    .mb-ni-lb { flex: 1; }
+    .mb-ni-ch { color: var(--cm); font-size: 12px; transition: transform 0.22s; }
+    .mb-ni.exp .mb-ni-ch { transform: rotate(90deg); }
+
+    .mb-sub { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; background: #F8FAFD; }
+    .mb-sub.exp { max-height: 300px; }
+    .mb-sub-l {
+      display: block; padding: 11px 16px 11px 60px;
+      font-size: 13px; color: var(--cts);
+      border-bottom: 1px solid var(--cbl);
+      text-decoration: none; transition: background 0.15s, color 0.15s;
+    }
+    .mb-sub-l:last-child { border-bottom: none; }
+    .mb-sub-l:hover { background: var(--cnl); color: var(--cp); }
+
+    .mb-sec-lbl {
+      padding: 14px 16px 6px; font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--cm);
+    }
+    .mb-div { height: 1px; background: var(--cbl); margin: 8px 0 0; }
+
+    .mb-use-tg {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; border-bottom: 1px solid var(--cbl);
+      cursor: pointer; background: var(--cs); transition: background 0.15s;
+    }
+    .mb-use-tg:hover { background: var(--cnl); }
+    .mb-use-t { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--cm); }
+    .mb-use-ch { font-size: 12px; color: var(--cm); transition: transform 0.22s; }
+    .mb-use-tg.exp .mb-use-ch { transform: rotate(180deg); }
+    .mb-use-cnt { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; background: #F8FAFD; }
+    .mb-use-cnt.exp { max-height: 500px; }
+
+    .mb-ban-w { padding: 14px 16px; }
+    .mb-ban { position: relative; border-radius: 12px; overflow: hidden; height: 150px; background: var(--cpd); }
+    .mb-ban-tr { display: flex; height: 100%; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); }
+    .mb-ban-sl { flex: 0 0 100%; position: relative; overflow: hidden; }
+    .mb-ban-sl img { width: 100%; height: 100%; object-fit: cover; }
+    .mb-ban-ov {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(10,20,40,0.82) 0%, rgba(10,20,40,0.22) 60%);
+      padding: 12px 14px; display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .mb-ban-ti { font-size: 14px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 2px; }
+    .mb-ban-lo { font-size: 10px; color: rgba(255,255,255,0.65); margin-bottom: 4px; }
+    .mb-ban-pr { font-size: 12px; font-weight: 700; color: var(--ca); margin-bottom: 8px; }
+    .mb-ban-btn {
+      display: inline-block; padding: 6px 14px;
+      background: var(--ca); color: var(--cpd);
+      border-radius: 6px; font-size: 10px; font-weight: 700;
+      width: fit-content; text-decoration: none;
+    }
+    .mb-ban-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff; font-size: 13px; display: flex; align-items: center;
+      justify-content: center; z-index: 2; cursor: pointer;
+    }
+    .mb-ban-pv { left: 6px; } .mb-ban-nx { right: 6px; }
+    .mb-ban-dots {
+      position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 4px; z-index: 2;
+    }
+    .mb-ban-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(255,255,255,0.35); border: none;
+      cursor: pointer; padding: 0; transition: background 0.2s, transform 0.2s;
+    }
+    .mb-ban-dot.on { background: var(--ca); transform: scale(1.3); }
+
+    .mb-ct-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; border-bottom: 1px solid var(--cbl);
+      font-size: 13px; color: var(--ct);
+      text-decoration: none; transition: background 0.15s;
+    }
+    .mb-ct-row:hover { background: var(--cnl); }
+    .mb-ct-ic { color: var(--cp); font-size: 14px; }
+    .mb-ct-ph { font-weight: 700; font-size: 14px; }
+
+    .mb-cta {
+      margin: 14px 16px 0; padding: 13px 18px;
+      background: linear-gradient(135deg, var(--cp), #2a5298);
+      border-radius: 12px; display: flex; align-items: center;
+      justify-content: space-between; gap: 10px;
+      cursor: pointer; text-decoration: none; transition: box-shadow 0.2s;
+    }
+    .mb-cta:hover { box-shadow: 0 8px 24px rgba(27,60,110,0.25); }
+    .mb-cta-t { font-size: 13px; font-weight: 700; color: #fff; line-height: 1.3; }
+    .mb-cta-s { font-size: 10px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+    .mb-cta-b {
+      padding: 8px 14px; background: var(--ca); color: var(--cpd);
+      border-radius: 8px; font-size: 11px; font-weight: 700;
+      white-space: nowrap; flex-shrink: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .mg-ov, .mg-panel { display: none !important; }
+      .aa-srch { display: none; }
+      .aa-acts .aa-btn-g { display: none; }
+      .mb-ov, .mb-dr { display: flex; }
+    }
+    @media (min-width: 901px) {
+      .mb-ov, .mb-dr { display: none !important; }
+    }
+
+    /* Demo page */
+    .demo { max-width: 960px; margin: 0 auto; padding: 40px 20px; }
+    .demo h1 { font-size: 24px; font-weight: 800; color: var(--cp); margin-bottom: 12px; }
+    .demo p { font-size: 14px; color: var(--cts); line-height: 1.65; margin-bottom: 10px; }
+    .demo code { background: var(--cnl); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+    .demo .hint {
+      background: #fff; border: 1px solid var(--cbl);
+      border-radius: 12px; padding: 20px 24px; margin-top: 24px;
+    }
+    .demo .hint h2 { font-size: 16px; font-weight: 700; color: var(--cp); margin-bottom: 8px; }
+    .demo .hint ul { padding-left: 18px; list-style: disc; }
+    .demo .hint li { font-size: 13px; color: var(--cts); line-height: 1.65; }
+
+    /* Toast */
+    .aa-tc { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+    .aa-t {
+      background: var(--cp); color: #fff; padding: 12px 18px;
+      border-radius: 10px; font-size: 13px; font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      transform: translateY(12px); opacity: 0; transition: all 0.3s ease;
+    }
+    .aa-t.show { transform: translateY(0); opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ════════════════════════════════════════════════ -->
+<header class="aa-hdr" id="aa-hdr" role="banner">
+  <div class="aa-hdr-in">
+    <a href="index.html" class="aa-logo" aria-label="Янтарный проспект">
+      <div class="aa-logo-ic">
+        <img src="AA.svg" alt="Янтарный проспект" onerror="this.parentNode.textContent='Я'">
+      </div>
+      <div class="aa-logo-tx">
+        <span class="aa-logo-name">Янтарный проспект</span>
+        <span class="aa-logo-tag">Amber Avenue</span>
+      </div>
+    </a>
+
+    <div class="aa-srch" role="search">
+      <svg class="aa-srch-ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="search" placeholder="ЖК, застройщик, район..." aria-label="Поиск" autocomplete="off">
+    </div>
+
+    <div class="aa-acts">
+      <a href="b2b-promo.html" class="aa-btn aa-btn-g">Для застройщиков</a>
+      <button class="aa-btn aa-btn-a" id="btn-consult">Консультация</button>
+    </div>
+
+    <button class="aa-burg" id="aa-burg" aria-label="Открыть меню" aria-expanded="false">
+      <span class="aa-burg-l"></span>
+      <span class="aa-burg-l"></span>
+      <span class="aa-burg-l"></span>
+    </button>
+  </div>
+</header>
+
+<!-- ═══ DESKTOP MEGA PANEL ════════════════════════════════════ -->
+<div class="mg-ov" id="mg-ov" aria-hidden="true"></div>
+<div class="mg-panel" id="mg-panel" role="dialog" aria-label="Меню" aria-hidden="true">
+
+  <div class="mg-body">
+
+    <!-- LEFT -->
+    <aside class="mg-left">
+      <div class="mg-sec">
+        <div class="mg-lbl">Каталог</div>
+        <a href="zhk.html" class="mg-lnk active">
+          <span class="mg-lnk-ic">🏠</span>
+          Все новостройки
+          <svg class="mg-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+        <a href="zhk-umory.html" class="mg-lnk">
+          <span class="mg-lnk-ic">🌊</span>
+          ЖК у моря
+          <svg class="mg-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+        <div class="mg-lnk hs" id="mg-kld-tg">
+          <span class="mg-lnk-ic">🏢</span>
+          ЖК Калининграда
+          <svg class="mg-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div class="mg-sub" id="mg-kld-sub">
+          <a href="zhk-kaliningrad.html" class="mg-sub-l">Все районы</a>
+          <a href="zhk.html" class="mg-sub-l">Центральный район</a>
+          <a href="zhk.html" class="mg-sub-l">Московский район</a>
+          <a href="zhk.html" class="mg-sub-l">Ленинградский район</a>
+        </div>
+        <a href="zhk-prigorod.html" class="mg-lnk">
+          <span class="mg-lnk-ic">🌲</span>
+          ЖК Пригород
+          <svg class="mg-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+        <a href="zhk-oblast.html" class="mg-lnk">
+          <span class="mg-lnk-ic">🗺</span>
+          ЖК Область
+          <svg class="mg-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+      </div>
+
+      <div class="mg-div"></div>
+
+      <div class="mg-sec">
+        <div class="mg-lbl">Компания</div>
+        <a href="#" class="mg-lnk"><span class="mg-lnk-ic">ℹ️</span>О сервисе</a>
+        <a href="#" class="mg-lnk"><span class="mg-lnk-ic">📊</span>Методология рейтинга</a>
+        <a href="b2b-promo.html" class="mg-lnk"><span class="mg-lnk-ic">🏗</span>Для застройщиков</a>
+        <a href="partners-promo.html" class="mg-lnk"><span class="mg-lnk-ic">📢</span>Для рекламодателей</a>
+        <a href="blog.html" class="mg-lnk"><span class="mg-lnk-ic">📰</span>Блог</a>
+      </div>
+
+      <div class="mg-div"></div>
+
+      <div class="mg-sec">
+        <div class="mg-obr" id="mg-obr" style="margin: 0;">
+          <span style="font-size:18px">💬</span>
+          <div>
+            <div class="mg-obr-t">Обращение</div>
+            <div class="mg-obr-d">Обращения от жителей<br>уже заселенных ЖК</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER -->
+    <section class="mg-ctr">
+      <div class="mg-ctr-top-grid">
+        <div>
+          <div class="mg-col-lbl">Новостройки</div>
+          <div id="mg-cats"></div>
+        </div>
+        <div>
+          <div class="mg-col-lbl">Популярные города области</div>
+          <div id="mg-regs"></div>
+        </div>
+      </div>
+
+      <div class="mg-useful-section">
+        <div class="mg-col-lbl">Полезное</div>
+        <div class="mg-useful-grid">
+          <a href="#" class="mg-lnk"><span class="mg-lnk-ic">💳</span>Ипотека от 5.5%
+            <svg class="mg-chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+          <a href="#" class="mg-lnk"><span class="mg-lnk-ic">🏷</span>Акции и скидки
+            <span style="margin-left:auto;background:#EF4444;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;">12</span>
+          </a>
+          <a href="#" class="mg-lnk"><span class="mg-lnk-ic">🔄</span>Trade-In</a>
+          <a href="#" class="mg-lnk"><span class="mg-lnk-ic">📅</span>Рассрочка</a>
+          <a href="#" class="mg-lnk"><span class="mg-lnk-ic">🎖</span>Военная ипотека</a>
+          <a href="#" class="mg-lnk"><span class="mg-lnk-ic">👨‍👩‍👧</span>Материнский капитал</a>
+        </div>
+      </div>
+
+      <div class="mg-bs" style="margin-bottom: 20px;">
+        <div class="mg-bs-tr" id="mg-bs-tr"></div>
+        <button class="mg-bs-nav mg-bs-pv" id="mg-bs-pv" aria-label="Назад">‹</button>
+        <button class="mg-bs-nav mg-bs-nx" id="mg-bs-nx" aria-label="Вперёд">›</button>
+        <div class="mg-bs-dots" id="mg-bs-dots"></div>
+      </div>
+    </section>
+
+    <!-- RIGHT: ТОП Индекс - Застройщики -->
+    <aside class="mg-right">
+      <div class="mg-col-lbl">ТОП Индекс - Застройщики</div>
+      <div id="mg-devs"></div>
+      <a href="developers.html" class="mg-all" style="margin-bottom: 16px;">Все застройщики →</a>
+
+      <div class="mg-div" style="margin: 12px 0 16px; width: auto; height: 1px; background: var(--cbl);"></div>
+
+      <div class="mg-col-lbl">Актуальные новости</div>
+      <div id="mg-news" class="mg-news-list"></div>
+      <a href="blog.html" class="mg-all">Все новости →</a>
+    </aside>
+  </div>
+
+  <!-- Trust bar -->
+  <div class="mg-trust">
+    <div class="mg-trust-it"><span class="mg-trust-ic">✓</span><div><div class="mg-trust-t">Актуальные цены</div><div class="mg-trust-s">от застройщиков</div></div></div>
+    <div class="mg-trust-it"><span class="mg-trust-ic">🔍</span><div><div class="mg-trust-t">Проверенные объекты</div><div class="mg-trust-s">и застройщики</div></div></div>
+    <div class="mg-trust-it"><span class="mg-trust-ic">🏦</span><div><div class="mg-trust-t">Ипотека онлайн</div><div class="mg-trust-s">за 5 минут</div></div></div>
+    <div class="mg-trust-it"><span class="mg-trust-ic">💬</span><div><div class="mg-trust-t">Экспертная поддержка</div><div class="mg-trust-s">на всех этапах</div></div></div>
+  </div>
+  <div class="mg-hint">Нажмите ESC или кликните вне меню для закрытия</div>
+</div>
+
+<!-- ═══ MOBILE DRAWER ═════════════════════════════════════════ -->
+<div class="mb-ov" id="mb-ov" aria-hidden="true"></div>
+<aside class="mb-dr" id="mb-dr" role="dialog" aria-label="Мобильное меню" aria-modal="true">
+
+  <div class="mb-hdr">
+    <a href="index.html" class="mb-logo" aria-label="Янтарный проспект">
+      <div class="mb-logo-ic">
+        <img src="AA.svg" alt="AA" onerror="this.parentNode.textContent='Я'">
+      </div>
+      <div>
+        <div class="mb-logo-nm">Янтарный проспект</div>
+        <div class="mb-logo-tg">Amber Avenue</div>
+      </div>
+    </a>
+    <button class="mb-cls" id="mb-cls" aria-label="Закрыть меню">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="mb-srch">
+    <div class="mb-srch-w">
+      <svg class="mb-srch-ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="search" placeholder="ЖК, застройщик, район..." aria-label="Поиск" autocomplete="off">
+    </div>
+  </div>
+
+  <div class="mb-body">
+    <a href="zhk.html" class="mb-ni">
+      <span class="mb-ni-ic">🏠</span><span class="mb-ni-lb">Все новостройки</span>
+      <svg class="mb-ni-ch" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+    </a>
+    <a href="zhk-umory.html" class="mb-ni">
+      <span class="mb-ni-ic">🌊</span><span class="mb-ni-lb">ЖК у моря</span>
+      <svg class="mb-ni-ch" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+    </a>
+    <div class="mb-ni" id="mb-kld-tg">
+      <span class="mb-ni-ic">🏢</span><span class="mb-ni-lb">ЖК Калининграда</span>
+      <svg class="mb-ni-ch" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+    </div>
+    <div class="mb-sub" id="mb-kld-sub">
+      <a href="zhk-kaliningrad.html" class="mb-sub-l">Все районы Калининграда</a>
+      <a href="zhk.html" class="mb-sub-l">Центральный район</a>
+      <a href="zhk.html" class="mb-sub-l">Московский район</a>
+      <a href="zhk.html" class="mb-sub-l">Ленинградский район</a>
+    </div>
+    <a href="zhk-prigorod.html" class="mb-ni">
+      <span class="mb-ni-ic">🌲</span><span class="mb-ni-lb">ЖК Пригород</span>
+      <svg class="mb-ni-ch" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+    </a>
+    <a href="zhk-oblast.html" class="mb-ni">
+      <span class="mb-ni-ic">🗺</span><span class="mb-ni-lb">ЖК Область</span>
+      <svg class="mb-ni-ch" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+    </a>
+
+    <div class="mb-div"></div>
+
+    <a href="#" class="mb-ni"><span class="mb-ni-ic">ℹ️</span><span class="mb-ni-lb">О сервисе</span></a>
+    <a href="#" class="mb-ni"><span class="mb-ni-ic">📊</span><span class="mb-ni-lb">Методология рейтинга</span></a>
+    <a href="b2b-promo.html" class="mb-ni"><span class="mb-ni-ic">🏗</span><span class="mb-ni-lb">Для застройщиков</span></a>
+    <a href="partners-promo.html" class="mb-ni"><span class="mb-ni-ic">📢</span><span class="mb-ni-lb">Для рекламодателей</span></a>
+    <a href="blog.html" class="mb-ni"><span class="mb-ni-ic">📰</span><span class="mb-ni-lb">Блог</span></a>
+
+    <div class="mb-use-tg" id="mb-use-tg">
+      <span class="mb-use-t">Полезное</span>
+      <svg class="mb-use-ch" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+    </div>
+    <div class="mb-use-cnt" id="mb-use-cnt">
+      <a href="#" class="mb-sub-l" style="padding-left:16px">💳 Ипотека от 5.5%</a>
+      <a href="#" class="mb-sub-l" style="padding-left:16px">🏷 Акции и скидки</a>
+      <a href="#" class="mb-sub-l" style="padding-left:16px">🔄 Trade-In</a>
+      <a href="#" class="mb-sub-l" style="padding-left:16px">📅 Рассрочка</a>
+      <a href="#" class="mb-sub-l" style="padding-left:16px">🎖 Военная ипотека</a>
+      <a href="#" class="mb-sub-l" style="padding-left:16px">👨‍👩‍👧 Материнский капитал</a>
+    </div>
+
+    <div class="mb-ban-w">
+      <div class="mb-ban">
+        <div class="mb-ban-tr" id="mb-ban-tr"></div>
+        <button class="mb-ban-nav mb-ban-pv" id="mb-ban-pv" aria-label="Назад">‹</button>
+        <button class="mb-ban-nav mb-ban-nx" id="mb-ban-nx" aria-label="Вперёд">›</button>
+        <div class="mb-ban-dots" id="mb-ban-dots"></div>
+      </div>
+    </div>
+
+    <a href="tel:+74012123456" class="mb-ct-row">
+      <span class="mb-ct-ic">📞</span>
+      <span class="mb-ct-ph">+7 (4012) 12-34-56</span>
+    </a>
+    <a href="mailto:info@amberavenue.ru" class="mb-ct-row">
+      <span class="mb-ct-ic">✉</span>
+      info@amberavenue.ru
+    </a>
+
+    <a href="#" class="mb-cta" id="mb-cta">
+      <div>
+        <div class="mb-cta-t">Бесплатная консультация</div>
+        <div class="mb-cta-s">Ответим за 5 минут</div>
+      </div>
+      <span class="mb-cta-b">Написать</span>
+    </a>
+  </div>
+</aside>
+
+<!-- ═══ DEMO CONTENT ══════════════════════════════════════════ -->
+<div class="demo">
+  <h1>Amber Avenue — Компонент меню</h1>
+  <p>Нажмите кнопку <strong>☰</strong> в правой части хедера чтобы открыть меню.</p>
+  <p>На <strong>десктопе</strong> (≥ 901px) откроется мега-панель с тремя колонками.<br>
+     На <strong>мобильном</strong> (≤ 900px) откроется полноэкранный ящик без нижних иконок и кнопки сравнения.</p>
+
+  <div class="hint">
+    <h2>Что входит в компонент</h2>
+    <ul>
+      <li><strong>Топ-застройщики</strong> — автоматически сортируются по рейтингу из <code>AMBER_DATA.developers</code></li>
+      <li><strong>Банеры</strong> — слайдер загружается из <code>AMBER_DATA.menuBanners</code> (или fallback на <code>heroSlides</code>)</li>
+      <li><strong>Счётчики ЖК</strong> — рассчитываются из <code>AMBER_DATA.properties</code></li>
+      <li><strong>Районы</strong> — группируются по полю <code>location</code> в данных</li>
+      <li>Аккордеон для <em>ЖК Калининграда</em> и <em>Полезное</em></li>
+      <li>Закрытие по ESC, клику вне панели и кнопке ✕</li>
+      <li>На мобиле: нет нижней навигации, нет кнопки сравнения</li>
+    </ul>
+  </div>
+</div>
+
+<div class="aa-tc" id="aa-tc"></div>
+
+<script>
+'use strict';
+
+function showToast(msg) {
+  const c = document.getElementById('aa-tc');
+  const t = document.createElement('div');
+  t.className = 'aa-t'; t.textContent = msg;
+  c.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3200);
+}
+
+/* Slider factory */
+function makeSlider(trackId, dotsId, prevId, nextId) {
+  const tr = document.getElementById(trackId);
+  const dt = document.getElementById(dotsId);
+  const pv = document.getElementById(prevId);
+  const nx = document.getElementById(nextId);
+  if (!tr || !dt) return;
+  let s = 0, timer;
+  const n = () => tr.querySelectorAll('[data-s]').length;
+  function go(i) {
+    const nn = n(); if (!nn) return;
+    s = ((i % nn) + nn) % nn;
+    tr.style.transform = `translateX(-${s * 100}%)`;
+    dt.querySelectorAll('button').forEach((d, j) => d.classList.toggle('on', j === s));
+  }
+  function ra() { clearInterval(timer); timer = setInterval(() => go(s + 1), 5000); }
+  pv && pv.addEventListener('click', () => { go(s - 1); ra(); });
+  nx && nx.addEventListener('click', () => { go(s + 1); ra(); });
+  dt.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (b) { go(+b.dataset.i); ra(); }
+  });
+  ra();
+}
+
+/* Render banners */
+function renderBanners(trackId, dotsId, slideClass, ovClass, tiClass, loClass, prClass, btnClass) {
+  const tr = document.getElementById(trackId);
+  const dt = document.getElementById(dotsId);
+  if (!tr || !dt) return;
+  const d = window.AMBER_DATA;
+  const banners = (d && (d.menuBanners || d.heroSlides)) || [];
+  if (!banners.length) return;
+  tr.innerHTML = banners.map((b, i) => `
+    <div data-s style="flex:0 0 100%;position:relative;overflow:hidden;">
+      <img src="${b.image||b.imgSrc||''}" alt="${b.title||''}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.opacity=0">
+      <div class="${ovClass}">
+        <div class="${tiClass}">${b.title||''}</div>
+        <div class="${loClass}">${b.location||b.desc||''}</div>
+        ${b.price ? `<div class="${prClass}">${b.price}</div>` : ''}
+        <a href="${b.link||'zhk.html'}" class="${btnClass}">Подробнее</a>
+      </div>
+    </div>
+  `).join('');
+  dt.innerHTML = banners.map((_,i) =>
+    `<button class="${i===0?'on':''}" data-i="${i}" aria-label="Слайд ${i+1}"></button>`
+  ).join('');
+}
+
+/* Render top devs */
+function renderDevs() {
+  const el = document.getElementById('mg-devs');
+  const d = window.AMBER_DATA;
+  if (!el || !d || !d.developers) return;
+  const sorted = [...d.developers].sort((a,b) => b.rating - a.rating).slice(0, 5);
+  el.innerHTML = sorted.map((dv, i) => `
+    <a href="developers.html" class="mg-dv-row">
+      <span class="mg-dv-rk ${i===0?'t1':''}">${i+1}</span>
+      <span class="mg-dv-nm">${dv.name}</span>
+      <span class="mg-dv-rt"><span class="mg-dv-st">★</span>${dv.rating.toFixed(1)}</span>
+    </a>
+  `).join('');
+}
+
+/* Render news */
+function renderNews() {
+  const el = document.getElementById('mg-news');
+  const d = window.AMBER_DATA;
+  if (!el || !d || !d.blog) return;
+  const items = d.blog.slice(0, 3);
+  el.innerHTML = items.map(article => `
+    <a href="blog.html" class="mg-news-row">
+      <div class="mg-news-meta">
+        <span class="mg-news-tag">${article.tag || ''}</span>
+        <span>${article.date || ''}</span>
+      </div>
+      <div class="mg-news-title">${article.title || ''}</div>
+    </a>
+  `).join('');
+}
+
+/* Render catalog counts */
+function renderCats() {
+  const el = document.getElementById('mg-cats');
+  const d = window.AMBER_DATA;
+  const props = (d && d.properties) || [];
+  const total = props.length || 90;
+  const items = [
+    {n:'Все ЖК', c: total},
+    {n:'Строящиеся', c: Math.round(total * 0.71) || 64},
+    {n:'Сданные', c: Math.round(total * 0.29) || 26},
+    {n:'Скоро в продаже', c: 12},
+  ];
+  if (!el) return;
+  el.innerHTML = items.map(it => `
+    <a href="zhk.html" class="mg-cat-row">
+      <span class="mg-cat-nm">${it.n}</span>
+      <span class="mg-cat-cnt">${it.c}</span>
+    </a>
+  `).join('');
+}
+
+/* Render regions */
+function renderRegs() {
+  const el = document.getElementById('mg-regs');
+  const d = window.AMBER_DATA;
+  if (!el) return;
+  const props = (d && d.properties) || [];
+  const mp = {};
+  props.forEach(p => { const l = p.location || 'Другое'; mp[l] = (mp[l]||0)+1; });
+  const regs = Object.keys(mp).length >= 3
+    ? Object.entries(mp).sort((a,b)=>b[1]-a[1]).slice(0,5)
+    : [['Калининград',45],['Зеленоградск',18],['Светлогорск',12],['Пионерский',8],['Гурьевск',7]];
+  el.innerHTML = regs.map(([nm, cnt]) => `
+    <a href="zhk.html" class="mg-reg-row">
+      <span class="mg-reg-nm">${nm}</span>
+      <span class="mg-reg-cnt">${cnt} ЖК</span>
+    </a>
+  `).join('');
+}
+
+/* Desktop open/close */
+const mgOv    = document.getElementById('mg-ov');
+const mgPanel = document.getElementById('mg-panel');
+const burg    = document.getElementById('aa-burg');
+const closeBtn = document.getElementById('btn-mg-close');
+let mgOpen = false;
+
+function openMg() {
+  mgOpen = true;
+  mgOv.classList.add('open'); mgPanel.classList.add('open');
+  mgPanel.setAttribute('aria-hidden','false');
+  burg.classList.add('open'); burg.setAttribute('aria-expanded','true');
+  closeBtn.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeMg() {
+  mgOpen = false;
+  mgOv.classList.remove('open'); mgPanel.classList.remove('open');
+  mgPanel.setAttribute('aria-hidden','true');
+  burg.classList.remove('open'); burg.setAttribute('aria-expanded','false');
+  closeBtn.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+/* Mobile open/close */
+const mbOv = document.getElementById('mb-ov');
+const mbDr = document.getElementById('mb-dr');
+const mbCls = document.getElementById('mb-cls');
+let mbOpen = false;
+
+function openMb() {
+  mbOpen = true;
+  mbOv.classList.add('open'); mbDr.classList.add('open');
+  mbDr.setAttribute('aria-hidden','false');
+  burg.classList.add('open'); burg.setAttribute('aria-expanded','true');
+  document.body.style.overflow = 'hidden';
+}
+function closeMb() {
+  mbOpen = false;
+  mbOv.classList.remove('open'); mbDr.classList.remove('open');
+  mbDr.setAttribute('aria-hidden','true');
+  burg.classList.remove('open'); burg.setAttribute('aria-expanded','false');
+  document.body.style.overflow = '';
+}
+
+burg.addEventListener('click', () => {
+  if (window.innerWidth <= 900) { mbOpen ? closeMb() : openMb(); }
+  else { mgOpen ? closeMg() : openMg(); }
+});
+mgOv.addEventListener('click', closeMg);
+closeBtn.addEventListener('click', closeMg);
+mbOv.addEventListener('click', closeMb);
+mbCls.addEventListener('click', closeMb);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if (mgOpen) closeMg(); if (mbOpen) closeMb(); }
+});
+
+/* Accordions — desktop */
+const mgKldTg = document.getElementById('mg-kld-tg');
+const mgKldSb = document.getElementById('mg-kld-sub');
+mgKldTg && mgKldTg.addEventListener('click', () => {
+  mgKldTg.classList.toggle('exp'); mgKldSb.classList.toggle('exp');
+});
+
+const mgUseTg = document.getElementById('mg-use-tg');
+const mgUseLk = document.getElementById('mg-use-lnks');
+mgUseTg && mgUseTg.addEventListener('click', () => {
+  mgUseTg.classList.toggle('exp'); mgUseLk.classList.toggle('exp');
+});
+
+/* Accordions — mobile */
+const mbKldTg = document.getElementById('mb-kld-tg');
+const mbKldSb = document.getElementById('mb-kld-sub');
+mbKldTg && mbKldTg.addEventListener('click', () => {
+  mbKldTg.classList.toggle('exp'); mbKldSb.classList.toggle('exp');
+});
+
+const mbUseTg = document.getElementById('mb-use-tg');
+const mbUseCt = document.getElementById('mb-use-cnt');
+mbUseTg && mbUseTg.addEventListener('click', () => {
+  mbUseTg.classList.toggle('exp'); mbUseCt.classList.toggle('exp');
+});
+
+/* CTA buttons */
+document.getElementById('btn-consult').addEventListener('click', () => {
+  showToast('Заявка на консультацию отправлена! Свяжемся за 5 минут.');
+});
+document.getElementById('mb-cta').addEventListener('click', e => {
+  e.preventDefault(); closeMb();
+  showToast('Заявка на консультацию отправлена! Свяжемся за 5 минут.');
+});
+document.getElementById('mg-obr').addEventListener('click', () => {
+  showToast('Раздел "Обращения" — скоро!');
+});
+
+/* Init */
+function init() {
+  renderDevs();
+  renderNews();
+  renderCats();
+  renderRegs();
+
+  /* Desktop banner slider */
+  const d = window.AMBER_DATA;
+  const banners = (d && (d.menuBanners || d.heroSlides)) || [];
+  const mgTr = document.getElementById('mg-bs-tr');
+  const mgDt = document.getElementById('mg-bs-dots');
+  if (mgTr && mgDt && banners.length) {
+    mgTr.innerHTML = banners.map((b,i) => `
+      <div data-s style="flex:0 0 100%;position:relative;overflow:hidden;">
+        <img src="${b.image||b.imgSrc||''}" alt="${b.title||''}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.opacity=0">
+        <div class="mg-bs-ov">
+          <div class="mg-bs-lbl">${b.label||'Рекомендуем'}</div>
+          <div class="mg-bs-ti">${b.title||''}</div>
+          <div class="mg-bs-lo">${b.location||b.desc||''}</div>
+          ${b.price?`<div class="mg-bs-pr">${b.price}</div>`:''}
+          <a href="${b.link||'zhk.html'}" class="mg-bs-btn">Подробнее</a>
+        </div>
+      </div>
+    `).join('');
+    mgDt.innerHTML = banners.map((_,i) =>
+      `<button class="mg-bs-dot ${i===0?'on':''}" data-i="${i}" aria-label="Слайд ${i+1}"></button>`
+    ).join('');
+    makeSlider('mg-bs-tr','mg-bs-dots','mg-bs-pv','mg-bs-nx');
+  }
+
+  /* Mobile banner slider */
+  const mbTr = document.getElementById('mb-ban-tr');
+  const mbDt = document.getElementById('mb-ban-dots');
+  if (mbTr && mbDt && banners.length) {
+    mbTr.innerHTML = banners.map((b,i) => `
+      <div data-s style="flex:0 0 100%;position:relative;overflow:hidden;">
+        <img src="${b.image||b.imgSrc||''}" alt="${b.title||''}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.opacity=0">
+        <div class="mb-ban-ov">
+          <div class="mb-ban-ti">${b.title||''}</div>
+          <div class="mb-ban-lo">${b.location||b.desc||''}</div>
+          ${b.price?`<div class="mb-ban-pr">${b.price}</div>`:''}
+          <a href="${b.link||'zhk.html'}" class="mb-ban-btn">Подробнее</a>
+        </div>
+      </div>
+    `).join('');
+    mbDt.innerHTML = banners.map((_,i) =>
+      `<button class="mb-ban-dot ${i===0?'on':''}" data-i="${i}" aria-label="Слайд ${i+1}"></button>`
+    ).join('');
+    makeSlider('mb-ban-tr','mb-ban-dots','mb-ban-pv','mb-ban-nx');
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>

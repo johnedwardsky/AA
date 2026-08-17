@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Amber Avenue — Комплексный Мастер-Регламент, SEO, Рекламные Места и B2B Продажи</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 15mm;
+            @bottom-right {
+                content: counter(page);
+                font-size: 8pt;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                color: #555;
+            }
+            @bottom-left {
+                content: "Amber Avenue · Конфиденциально для руководства и партнеров";
+                font-size: 8pt;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                color: #777;
+            }
+        }
+
+        *, *:before, *:after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 9.5pt;
+            line-height: 1.45;
+            color: #111111;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page-break {
+            page-break-after: always;
+            break-after: page;
+        }
+
+        .avoid-break {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* ------------------ COVER PAGE ------------------ */
+        .cover-page {
+            height: 250mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 2px solid #000000;
+            padding: 18mm 14mm;
+            margin-bottom: 20mm;
+            page-break-after: always;
+        }
+
+        .cover-header {
+            border-bottom: 3px solid #000000;
+            padding-bottom: 8mm;
+        }
+
+        .cover-tagline {
+            font-size: 10pt;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #333333;
+            margin-bottom: 3mm;
+        }
+
+        .cover-title {
+            font-size: 24pt;
+            font-weight: 900;
+            line-height: 1.15;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            color: #000000;
+            margin: 0 0 4mm 0;
+        }
+
+        .cover-subtitle {
+            font-size: 12pt;
+            font-weight: 500;
+            line-height: 1.35;
+            color: #222222;
+            margin: 0;
+        }
+
+        .cover-meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6mm;
+            border-top: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+            padding: 6mm 0;
+            margin: 8mm 0;
+        }
+
+        .cover-meta-item {
+            font-size: 8.5pt;
+        }
+
+        .cover-meta-label {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 7.5pt;
+            color: #555555;
+            letter-spacing: 0.5px;
+            margin-bottom: 1mm;
+        }
+
+        .cover-meta-value {
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .cover-summary-box {
+            background-color: #f7f7f7;
+            border-left: 4px solid #000000;
+            padding: 5mm 6mm;
+            font-size: 9pt;
+            line-height: 1.4;
+            color: #111111;
+        }
+
+        .cover-footer {
+            border-top: 1px solid #cccccc;
+            padding-top: 4mm;
+            display: flex;
+            justify-content: space-between;
+            font-size: 8pt;
+            color: #555555;
+        }
+
+        /* ------------------ TYPOGRAPHY & SECTIONS ------------------ */
+        h1 {
+            font-size: 15pt;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #000000;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 2mm;
+            margin-top: 8mm;
+            margin-bottom: 4mm;
+            page-break-after: avoid;
+        }
+
+        h2 {
+            font-size: 12pt;
+            font-weight: 750;
+            color: #000000;
+            border-bottom: 1px solid #888888;
+            padding-bottom: 1.5mm;
+            margin-top: 6mm;
+            margin-bottom: 3mm;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            font-size: 10.5pt;
+            font-weight: 700;
+            color: #111111;
+            margin-top: 4mm;
+            margin-bottom: 2mm;
+            page-break-after: avoid;
+        }
+
+        h4 {
+            font-size: 9.5pt;
+            font-weight: 700;
+            color: #222222;
+            margin-top: 3mm;
+            margin-bottom: 1.5mm;
+            page-break-after: avoid;
+        }
+
+        p {
+            margin: 0 0 2.5mm 0;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin: 0 0 3mm 0;
+            padding-left: 5mm;
+        }
+
+        li {
+            margin-bottom: 1mm;
+        }
+
+        strong {
+            font-weight: 700;
+            color: #000000;
+        }
+
+        em {
+            font-style: italic;
+        }
+
+        /* ------------------ TABLES ------------------ */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 3mm 0 4mm 0;
+            font-size: 8pt;
+            line-height: 1.25;
+            page-break-inside: avoid;
+        }
+
+        th, td {
+            border: 1px solid #444444;
+            padding: 1.8mm 2.2mm;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #000000;
+            color: #ffffff;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 7.5pt;
+            letter-spacing: 0.3px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* ------------------ CALLOUT BOXES & CARDS ------------------ */
+        .callout {
+            border: 1px solid #333333;
+            border-left: 4px solid #000000;
+            background-color: #fafafa;
+            padding: 3mm 4mm;
+            margin: 3mm 0 4mm 0;
+            font-size: 8.5pt;
+            line-height: 1.35;
+            page-break-inside: avoid;
+        }
+
+        .callout-title {
+            font-weight: 800;
+            font-size: 8.5pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1.5mm;
+            color: #000000;
+            border-bottom: 1px solid #cccccc;
+            padding-bottom: 1mm;
+        }
+
+        .metric-box {
+            display: inline-block;
+            border: 1px solid #000000;
+            padding: 2mm 3mm;
+            margin: 1mm 1mm 2mm 0;
+            background-color: #ffffff;
+            vertical-align: top;
+            font-size: 8pt;
+        }
+
+        .metric-number {
+            font-size: 11pt;
+            font-weight: 800;
+            color: #000000;
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: 7pt;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #555555;
+            margin-top: 1mm;
+        }
+
+        .dossier-card {
+            border: 1.5px solid #000000;
+            padding: 3.5mm 4.5mm;
+            margin-bottom: 4mm;
+            background-color: #ffffff;
+            page-break-inside: avoid;
+        }
+
+        .dossier-header {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 1.5mm 3mm;
+            margin: -3.5mm -4.5mm 3mm -4.5mm;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dossier-header h3 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 10pt;
+        }
+
+        .dossier-status {
+            font-size: 7.5pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+
+        .script-box {
+            background-color: #f2f2f2;
+            border-left: 3px solid #333333;
+            padding: 2.5mm 3.5mm;
+            margin: 2mm 0;
+            font-size: 8.5pt;
+            font-family: inherit;
+        }
+
+        .formula-box {
+            border: 1px dashed #000000;
+            padding: 2.5mm 3.5mm;
+            background-color: #fafafa;
+            margin: 2.5mm 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 9pt;
+        }
+
+        /* ------------------ TABLE OF CONTENTS ------------------ */
+        .toc-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 4mm 0;
+        }
+
+        .toc-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1.5mm;
+            font-size: 9pt;
+            border-bottom: 1px dotted #aaaaaa;
+            padding-bottom: 0.5mm;
+        }
+
+        .toc-item.level-1 {
+            font-weight: 700;
+            font-size: 9.5pt;
+            margin-top: 2.5mm;
+            border-bottom: 1px solid #444444;
+        }
+
+        .toc-item.level-2 {
+            padding-left: 4mm;
+            font-size: 8.5pt;
+        }
+
+        .toc-title {
+            background-color: #ffffff;
+            padding-right: 2mm;
+        }
+
+        .toc-page {
+            background-color: #ffffff;
+            padding-left: 2mm;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========================================================================= -->
+<!-- COVER PAGE -->
+<!-- ========================================================================= -->
+<div class="cover-page">
+    <div class="cover-header">
+        <div class="cover-tagline">PropTech-Экосистема Первичной Недвижимости Калининградской Области</div>
+        <h1 class="cover-title">AMBER AVENUE</h1>
+        <div class="cover-subtitle">Комплексный Мастер-Регламент, Архитектура SEO, Сетка Рекламных Мест, Паспорта Девелоперов и B2B Sales Playbook</div>
+    </div>
+
+    <div>
+        <div class="cover-meta-grid">
+            <div class="cover-meta-item">
+                <div class="cover-meta-label">Статус Документа</div>
+                <div class="cover-meta-value">Официальный Генеральный Регламент (Master Edition)</div>
+            </div>
+            <div class="cover-meta-item">
+                <div class="cover-meta-label">Дата Ревизии</div>
+                <div class="cover-meta-value">Август 2026 года</div>
+            </div>
+            <div class="cover-meta-item">
+                <div class="cover-meta-label">Каталожная База</div>
+                <div class="cover-meta-value">369 верифицированных ЖК · 54 СЗ · 4 макро-направления</div>
+            </div>
+            <div class="cover-meta-item">
+                <div class="cover-meta-label">Финансовый Норматив</div>
+                <div class="cover-meta-value">Закрытый Media Investment Pool на 1 500 000 ₽</div>
+            </div>
+            <div class="cover-meta-item">
+                <div class="cover-meta-label">Ключевая Экономика</div>
+                <div class="cover-meta-value">Time-to-Deal 14–25 дн · Окупаемость 1 ДДУ · ROI 1 000%+</div>
+            </div>
+            <div class="cover-meta-item">
+                <div class="cover-meta-label">Целевая Аудитория</div>
+                <div class="cover-meta-value">Инвесторы, Руководство, РОП, Коммерческий департамент</div>
+            </div>
+        </div>
+
+        <div class="cover-summary-box">
+            <strong>ИСПОЛНИТЕЛЬНОЕ РЕЗЮМЕ ДОКУМЕНТА:</strong><br>
+            Настоящий документ является единым всеобъемлющим стратегическим, техническим и коммерческим руководством проекта Amber Avenue. Включает сплошной макроэкономический аудит рынка Калининградской области, глубокую семантическую таксономию Яндекс Wordstat (9 кластеров), спецификацию технического SEO и микроразметки Schema.org, детальную сетку рекламного инвентаря Fast-Track Pool, полный операционный B2B Sales Playbook по сбору 1 500 000 ₽ предоплаты от 10 якорных застройщиков, досье ТОП-10 девелоперов, матрицу 12 возражений и 10-слайдовый Pitch Deck.
+        </div>
+    </div>
+
+    <div class="cover-footer">
+        <div>Amber Avenue PropTech Hub · Калининград, 2026</div>
+        <div>Строго Конфиденциально · Коммерческая Тайна</div>
+    </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- TABLE OF CONTENTS -->
+<!-- ========================================================================= -->
+<div class="avoid-break">
+    <h1>Оглавление Мастер-Регламента</h1>
+    <ul class="toc-list">
+        <li class="toc-item level-1"><span class="toc-title">Раздел 1. Исполнительное резюме, макроэкономика и инвестиционная модель</span><span class="toc-page">Стр. 3</span></li>
+        <li class="toc-item level-2"><span class="toc-title">1.1. Стратегическая цель коммерческого спринта и Media Investment Pool (1.5M ₽)</span><span class="toc-page">Стр. 3</span></li>
+        <li class="toc-item level-2"><span class="toc-title">1.2. Верифицированная база данных рынка (369 ЖК, 54 СЗ, 4 географических кластера)</span><span class="toc-page">Стр. 3</span></li>
+        <li class="toc-item level-2"><span class="toc-title">1.3. Фактор времени (Time-to-Deal) и скрытые издержки традиционных каналов</span><span class="toc-page">Стр. 4</span></li>
+        <li class="toc-item level-2"><span class="toc-title">1.4. Математика оптимизации процентов по проектному эскроу-кредиту</span><span class="toc-page">Стр. 4</span></li>
+        <li class="toc-item level-2"><span class="toc-title">1.5. Устранение 50–70% расходов на полиграфию и шоурумы</span><span class="toc-page">Стр. 4</span></li>
+        <li class="toc-item level-2"><span class="toc-title">1.6. Сводная модель совокупного экономического эффекта (TEV: 2.05M–3.72M ₽)</span><span class="toc-page">Стр. 5</span></li>
+
+        <li class="toc-item level-1"><span class="toc-title">Раздел 2. Анализ поисковых запросов (Яндекс Wordstat) и семантическое ядро</span><span class="toc-page">Стр. 6</span></li>
+        <li class="toc-item level-2"><span class="toc-title">2.1. Структура регионального и межрегионального покупательского спроса</span><span class="toc-page">Стр. 6</span></li>
+        <li class="toc-item level-2"><span class="toc-title">2.2. Детальная семантическая таксономия 9 кластеров запросов</span><span class="toc-page">Стр. 6</span></li>
+        <li class="toc-item level-2"><span class="toc-title">2.3. Матрица интентов, частотности и приоритизации трафика</span><span class="toc-page">Стр. 8</span></li>
+
+        <li class="toc-item level-1"><span class="toc-title">Раздел 3. SEO-стратегия и техническая архитектура платформы</span><span class="toc-page">Стр. 9</span></li>
+        <li class="toc-item level-2"><span class="toc-title">3.1. Архитектура портала и хабово-кластерная структура страниц</span><span class="toc-page">Стр. 9</span></li>
+        <li class="toc-item level-2"><span class="toc-title">3.2. Формулы On-Page мета-тегов и заголовков (Title, Description, H1-H3)</span><span class="toc-page">Стр. 9</span></li>
+        <li class="toc-item level-2"><span class="toc-title">3.3. Спецификация структурированных данных Schema.org (JSON-LD)</span><span class="toc-page">Стр. 10</span></li>
+        <li class="toc-item level-2"><span class="toc-title">3.4. Внутренняя перелинковка, краулинговый бюджет и индексация CSR</span><span class="toc-page">Стр. 11</span></li>
+        <li class="toc-item level-2"><span class="toc-title">3.5. Стратегия победы над классифайдами (Циан, Авито, Домклик)</span><span class="toc-page">Стр. 11</span></li>
+        <li class="toc-item level-2"><span class="toc-title">3.6. Дорожная карта внедрения на 90 дней и панель KPI</span><span class="toc-page">Стр. 12</span></li>
+
+        <li class="toc-item level-1"><span class="toc-title">Раздел 4. Сетка рекламных мест и инвентарь монетизации</span><span class="toc-page">Стр. 13</span></li>
+        <li class="toc-item level-2"><span class="toc-title">4.1. Концепция Fast-Track Ad Grid: Платный контакт при бесплатных фактах</span><span class="toc-page">Стр. 13</span></li>
+        <li class="toc-item level-2"><span class="toc-title">4.2. Спецификация 6 типов рекламных форматов и мест размещения</span><span class="toc-page">Стр. 13</span></li>
+        <li class="toc-item level-2"><span class="toc-title">4.3. Технические требования, адаптивность и сквозная аналитика (CRM Webhooks)</span><span class="toc-page">Стр. 14</span></li>
+        <li class="toc-item level-2"><span class="toc-title">4.4. Юридическое соответствие Федеральному закону № 347-ФЗ (ЕРИР / ОРД)</span><span class="toc-page">Стр. 14</span></li>
+
+        <li class="toc-item level-1"><span class="toc-title">Раздел 5. B2B Sales Playbook: Руководство по закрытию пула 1 500 000 ₽</span><span class="toc-page">Стр. 15</span></li>
+        <li class="toc-item level-2"><span class="toc-title">5.1. Позиционирование платформы: Fast-Track Direct Sales Engine</span><span class="toc-page">Стр. 15</span></li>
+        <li class="toc-item level-2"><span class="toc-title">5.2. Пакетные офферы и финансовая архитектура закрытия 10 контрактов</span><span class="toc-page">Стр. 15</span></li>
+        <li class="toc-item level-2"><span class="toc-title">5.3. Сравнительная стоимость привлечения контакта (CPL / CAC / Скорость)</span><span class="toc-page">Стр. 16</span></li>
+        <li class="toc-item level-2"><span class="toc-title">5.4. Многоканальная воронка касаний и боевые скрипты звонков РОПам</span><span class="toc-page">Стр. 17</span></li>
+
+        <li class="toc-item level-1"><span class="toc-title">Раздел 6. Универсальная матрица отработки 12 ключевых возражений</span><span class="toc-page">Стр. 19</span></li>
+        <li class="toc-item level-2"><span class="toc-title">6.1. Быстрые элевейтор-питчи (15, 30 и 60 секунд)</span><span class="toc-page">Стр. 19</span></li>
+        <li class="toc-item level-2"><span class="toc-title">6.2. Детальные сценарии нейтрализации возражений (Карточки 1–12)</span><span class="toc-page">Стр. 19</span></li>
+
+        <li class="toc-item level-1"><span class="toc-title">Раздел 7. Паспорта ТОП-10 региональных девелоперов и стратегии захода</span><span class="toc-page">Стр. 23</span></li>
+        <li class="toc-item level-2"><span class="toc-title">7.1. Сводный реестр ТОП-10 строительных холдингов Калининградской области</span><span class="toc-page">Стр. 23</span></li>
+        <li class="toc-item level-2"><span class="toc-title">7.2. Индивидуальные досье №1–10 (КСИ, К8, Расцвет, Модуль, КПД, ФЖСС, WestDream, Лидер Групп, МПК, Русская Европа)</span><span class="toc-page">Стр. 24</span></li>
+
+        <li class="toc-item level-1"><span class="toc-title">Раздел 8. Структура Pitch Deck (10 слайдов) и One-Pager коммерческого предложения</span><span class="toc-page">Стр. 30</span></li>
+        <li class="toc-item level-2"><span class="toc-title">8.1. Послайдовая архитектура презентации для личных встреч и Zoom</span><span class="toc-page">Стр. 30</span></li>
+        <li class="toc-item level-2"><span class="toc-title">8.2. Шаблон одностраничного коммерческого предложения (One-Pager)</span><span class="toc-page">Стр. 32</span></li>
+
+        <li class="toc-item level-1"><span class="toc-title">Раздел 9. Операционный план и регламент 14-дневного спринта продаж</span><span class="toc-page">Стр. 33</span></li>
+        <li class="toc-item level-2"><span class="toc-title">9.1. Посуточный календарный график выполнения спринта (Дни 1–14)</span><span class="toc-page">Стр. 33</span></li>
+        <li class="toc-item level-2"><span class="toc-title">9.2. KPI, нормативы конверсий и регламент фиксации партнерских пулов</span><span class="toc-page">Стр. 34</span></li>
+    </ul>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ========================================================================= -->
+<!-- SECTION 1 -->
+<!-- ========================================================================= -->
+<h1>Раздел 1. Исполнительное резюме, макроэкономика и инвестиционная модель</h1>
+
+<h2>1.1. Стратегическая цель коммерческого спринта</h2>
+<p>
+Целью коммерческого департамента Amber Avenue является заключение <strong>10 партнерских соглашений</strong> с ведущими девелоперскими холдингами Калининградской области и формирование консолидированного <strong>Media Investment Pool в объеме 1 500 000 ₽ (10 партнеров × 150 000 ₽)</strong> за 14 рабочих дней.
+</p>
+<p>
+Диалог с застройщиками строится исключительно на языке <strong>инвестиционной рентабельности и оптимизации финансовых потоков (CFO / CEO level)</strong>: 150 000 ₽ — это не операционные затраты на «рекламу в каталоге», а со-инвестиция в изолированный трафиковый фонд с гарантированной окупаемостью <strong>с первой же закрытой сделки</strong>.
+</p>
+
+<div class="formula-box">
+Совокупный экономический эффект (TEV с 1 ДДУ) = Маржа ДДУ (1.5–3.0M ₽) + Экономия комиссии (352k ₽) + Экономия эскроу (113.9k ₽) + Экономия полиграфии (90k ₽) = 2 055 918 – 3 722 000 ₽
+</div>
+
+<h2>1.2. Верифицированная база данных рынка (Ревизия 2026 г.)</h2>
+<p>
+Платформа Amber Avenue опирается на результаты сплошного аналитического аудита первичного рынка Калининградской области:
+</p>
+<ul>
+    <li><strong>369 реально строящихся и сданных жилых комплексов</strong>, прошедших 5 контуров верификации (ЕИСЖС наш.дом.рф, ЕРЗ.РФ, Росреестр, спутниковые снимки, выездной аудит);</li>
+    <li><strong>54 девелоперские холдинговые структуры</strong>, контролирующие 100% рынка по 214-ФЗ;</li>
+    <li><strong>4 географических макро-кластера:</strong>
+        <ol>
+            <li><em>Калининград Город (city):</em> 102 ЖК (чек от 3,8 млн до 45 млн ₽, средний чек 8,8 млн ₽, 110–240+ тыс. ₽/м²);</li>
+            <li><em>Побережье Балтийского моря (sea):</em> 96 ЖК (Зеленоградск, Светлогорск, Пионерский, Янтарный; средний чек 7,88–12,50 млн ₽, 110–320+ тыс. ₽/м²);</li>
+            <li><em>Пригородный пояс (prigorod):</em> 108 ЖК (Гурьевск, Васильково, Ласкино, Холмогоровка; средний чек 5,29–7,50 млн ₽, 90–194 тыс. ₽/м²);</li>
+            <li><em>Региональные центры области (oblast):</em> 63 ЖК (Балтийск, Черняховск, Советск, Гвардейск; средний чек 3,20–5,50 млн ₽, 65–140 тыс. ₽/м²).</li>
+        </ol>
+    </li>
+    <li><strong>Инженерный стандарт региона:</strong> 352 ЖК (<strong>95,4%</strong>) оснащены автономным поквартирным газовым отоплением (АГО), что снижает коммунальные расходы в 2,5–3,5 раза и выступает ключевым фильтром для иногородних покупателей.</li>
+</ul>
+
+<h2>1.3. Фактор времени (Time-to-Deal) и скрытые издержки традиционных каналов</h2>
+<p>
+Традиционные каналы продаж (федеральные классифайды Авито/Циан и внешние риелторские агентства) создают для застройщика критические финансовые потери:
+</p>
+<div class="callout">
+    <div class="callout-title">Традиционная цепочка трения (Time-to-Deal = 45–90 дней)</div>
+    Поиск на классифайдах (15 дн) + Риелторский торг и переориентация на конкурентов (20 дн) + Офлайн-показы и трансферы (25 дн) + Оформление сделки (15 дн) = <strong>45–90 дней</strong>.<br>
+    <em>В модели Amber Avenue Fast-Track Direct Sales:</em> 9 табов карточки ЖК закрывают 80% барьеров онлайн ДО первого контакта $	o$ покупатель обращается напрямую в штатный ОП $	o$ <strong>Time-to-Deal сжимается до 14–25 дней</strong>.
+</div>
+
+<h2>1.4. Математика оптимизации процентов по проектному эскроу-кредиту</h2>
+<p>
+В рамках 214-ФЗ процентная ставка банка по проектному финансированию девелопера жестко зависит от коэффициента покрытия кредита средствами на счетах эскроу ($K_{	ext{покр}} = 	ext{Остаток эскроу} / 	ext{Сумма долга}$):
+</p>
+<ul>
+    <li>При слабом покрытии ($K < 40\%$) ставка банка составляет <strong>14.0% – 16.5% годовых</strong>;</li>
+    <li>При полном покрытии ($K \ge 100\%$) специальная ставка падает до <strong>3.5% – 5.5% годовых</strong>;</li>
+    <li>Эффективная разница процентной ставки: $\Delta r = 15.0\% - 4.5\% = \mathbf{10.5\% 	ext{ годовых}}$.</li>
+</ul>
+<div class="formula-box">
+Экономия процентов на 1 лот при ускорении сделки на 45 дней:<br>
+S_escrow = 8 800 000 ₽ × 10.5% × (45 / 365) = 113 918 ₽ с каждого ДДУ
+</div>
+<p>
+<em>Масштаб эффекта:</em> При продаже пула из 10–40 квартир ускоренное наполнение счетов эскроу экономит застройщику <strong>от 1 200 000 до 5 000 000 ₽ в квартал</strong> на банковских процентах!
+</p>
+
+<h2>1.5. Устранение 50–70% расходов на полиграфию и шоурумы</h2>
+<p>
+Традиционные расходы девелопера на привлечение и сопровождение иногороднего покупателя:
+</p>
+<ul>
+    <li><strong>Премиальная полиграфия и буклеты:</strong> разработка, печать и авиа-доставка буклетов в Москву/СПб — от 180 000 до 350 000 ₽/мес на объект (<strong>18 000 – 35 000 ₽ на 1 сделку</strong>);</li>
+    <li><strong>Офлайн-презентации, трансферы из Храброво, показы:</strong> <strong>30 000 – 60 000 ₽ на сделку</strong>;</li>
+    <li><strong>ФОТ менеджеров на обработку «холодных» звонков:</strong> до 60% времени уходит на базовые консультации по газу, потолкам и 214-ФЗ — <strong>15 000 – 25 000 ₽ на сделку</strong>.</li>
+</ul>
+<p>
+<strong>Суммарные скрытые затраты:</strong> 25 000 + 45 000 + 20 000 = <strong>90 000 ₽ на сделку</strong>. Amber Avenue оцифровывает весь этот путь в 9 табах карточки ЖК, ликвидируя до 70% данных издержек.
+</p>
+
+<h2>1.6. Сводная модель совокупного экономического эффекта (Total Economic Value, TEV)</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Финансовый компонент</th>
+            <th>Традиционный канал (Авито / Риелторы)</th>
+            <th>Прямой канал Amber Avenue Fast-Track</th>
+            <th>Чистая финансовая выгода девелопера</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Маржинальный доход с 1 ДДУ</strong></td>
+            <td>1 500 000 – 3 000 000 ₽</td>
+            <td>1 500 000 – 3 000 000 ₽</td>
+            <td><strong>1 500 000 – 3 000 000 ₽</strong> (сохранение маржи)</td>
+        </tr>
+        <tr>
+            <td><strong>Комиссия внешним агентствам (4%)</strong></td>
+            <td>-352 000 ₽ (с чека 8.8 млн ₽)</td>
+            <td>0 ₽ (прямой контакт с ОП)</td>
+            <td><strong>+352 000 ₽ чистой экономии</strong></td>
+        </tr>
+        <tr>
+            <td><strong>Проценты по эскроу-кредиту</strong></td>
+            <td>Переплата за 60–90 дней цикла</td>
+            <td>Сжатие цикла до 14–25 дней</td>
+            <td><strong>+113 918 ₽ экономии на процентах</strong></td>
+        </tr>
+        <tr>
+            <td><strong>Полиграфия, трансферы, шоурумы</strong></td>
+            <td>-90 000 ₽ на сделку</td>
+            <td>Цифровой прогрев в 9 табах</td>
+            <td><strong>+65 000 – 90 000 ₽ экономии</strong></td>
+        </tr>
+        <tr>
+            <td><strong>Стоимость размещения / взнос</strong></td>
+            <td>300k–600k ₽ / полгода</td>
+            <td>150 000 ₽ (Media Pool на 10 мес)</td>
+            <td>Фиксация оптовой цены (-87%)</td>
+        </tr>
+        <tr>
+            <td><strong>ИТОГОВЫЙ TEV С 1 СДЕЛКИ</strong></td>
+            <td>Базовый уровень</td>
+            <td><strong>2 055 918 – 3 722 000 ₽</strong></td>
+            <td><strong>ОКУПАЕМОСТЬ В 13–25 РАЗ С 1 ДДУ!</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<!-- ========================================================================= -->
+<!-- SECTION 2 -->
+<!-- ========================================================================= -->
+<h1>Раздел 2. Анализ поисковых запросов (Яндекс Wordstat) и семантическое ядро</h1>
+
+<h2>2.1. Структура регионального и межрегионального покупательского спроса</h2>
+<p>
+Поисковый спрос в сегменте новостроек Калининградской области имеет выраженную межрегиональную структуру:
+</p>
+<ul>
+    <li><strong>65–75% поисковых сессий</strong> генерируются пользователями за пределами региона: Москва и Московская область (32%), Санкт-Петербург и Ленобласть (22%), Нефтегазовый Север и Сибирь (ХМАО, ЯНАО, Тюмень, Сургут, Норильск, Красноярск — 21%);</li>
+    <li><strong>25–35% спроса</strong> приходится на внутренний рынок Калининградской области (улучшение жилищных условий, разъезд семей, переезд из области в Калининград).</li>
+</ul>
+
+<h2>2.2. Детальная семантическая таксономия 9 кластеров запросов</h2>
+
+<h3>Кластер 1: Высокочастотные общерегиональные гео-запросы (Master Hub & Каталог)</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Поисковый запрос</th>
+            <th>Частотность (Wordstat рег. 39 + РФ)</th>
+            <th>Конкуренция</th>
+            <th>Целевой URL</th>
+            <th>Релевантный элемент страницы</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>новостройки калининград</td><td>40 500</td><td>Высокая</td><td>/hub.html, /zhk.html</td><td>H1, Title, Листинг 369 ЖК</td></tr>
+        <tr><td>купить квартиру в новостройке калининград</td><td>22 100</td><td>Высокая</td><td>/zhk.html</td><td>Фильтр цен, H1, Каталог</td></tr>
+        <tr><td>новостройки калининграда от застройщика</td><td>18 400</td><td>Высокая</td><td>/zhk.html</td><td>Блок «Напрямую от застройщиков»</td></tr>
+        <tr><td>купить новостройку в калининграде</td><td>16 200</td><td>Высокая</td><td>/hub.html</td><td>Витрина 4 направлений</td></tr>
+        <tr><td>жилые комплексы калининграда каталог</td><td>8 900</td><td>Средняя</td><td>/zhk.html</td><td>Сетка карточек ЖК</td></tr>
+        <tr><td>новостройки калининградской области</td><td>7 400</td><td>Средняя</td><td>/hub.html</td><td>Инфографика 4 направлений</td></tr>
+        <tr><td>рейтинг новостроек калининграда 2026</td><td>3 200</td><td>Низкая</td><td>/hub.html, /methodology.html</td><td>Рейтинг Amber Index</td></tr>
+        <tr><td>все новостройки калининграда официальный сайт</td><td>5 100</td><td>Средняя</td><td>/zhk.html</td><td>Реестр 369 объектов</td></tr>
+        <tr><td>новостройки калининград цены за квадратный метр</td><td>4 600</td><td>Средняя</td><td>/hub.html</td><td>Аналитический блок цен за м²</td></tr>
+    </tbody>
+</table>
+
+<h3>Кластер 2: Районы и микрорайоны Калининграда (City Hub — 97 ЖК)</h3>
+<ul>
+    <li><strong>Ленинградский район (40 ЖК):</strong> <em>новостройки ленинградский район калининград</em> (3 800), <em>купить квартиру в ленинградском районе новостройка</em> (2 400), <em>жк на сельме / новостройки сельма</em> (3 100), <em>новостройки верхнее озеро</em> (1 950), <em>новостройки на невского</em> (1 400), <em>жк на артиллерийской от застройщика</em> (1 650), <em>новостройки суздальская / восточный</em> (1 200).</li>
+    <li><strong>Центральный район (26 ЖК):</strong> <em>новостройки центральный район калининград</em> (2 900), <em>купить новостройку в историческом центре</em> (1 850), <em>жк амалиенау / новостройки амалиенау</em> (1 700), <em>новостройки на советском проспекте</em> (1 350), <em>элитные новостройки центр</em> (1 450).</li>
+    <li><strong>Московский район (31 ЖК):</strong> <em>новостройки московский район калининград</em> (3 400), <em>купить новостройку московский район недорого</em> (2 100), <em>жк на карамзина / новостройки ульяны громовой</em> (2 600), <em>новостройки аллея смелых</em> (1 500), <em>новостройки понарт / летнее озеро</em> (1 300).</li>
+</ul>
+
+<h3>Кластер 3: Побережье Балтийского моря (Coastal Hub — 75 ЖК)</h3>
+<ul>
+    <li><strong>Зеленоградск (34 ЖК):</strong> <em>новостройки зеленоградск / купить квартиру в зеленоградске</em> (6 800), <em>жк зеленоградск у моря от застройщика</em> (3 400), <em>апартаменты в зеленоградске на первой линии</em> (2 900), <em>новостройки зеленоградск под аренду</em> (1 800).</li>
+    <li><strong>Светлогорск и Отрадное (19 ЖК):</strong> <em>новостройки светлогорск / купить новостройку в светлогорске</em> (4 900), <em>элитные жк светлогорск 2 в сосновом бору</em> (2 200), <em>квартиры у моря с автономным отоплением</em> (1 950).</li>
+    <li><strong>Пионерский (19 ЖК) и Янтарный (3 ЖК):</strong> <em>новостройки пионерский калининградская область</em> (3 200), <em>купить квартиру в пионерском у моря недорого</em> (2 300), <em>новостройки янтарный у пляжа</em> (1 600).</li>
+</ul>
+
+<h3>Кластер 4: Пригородный пояс (Suburban Hub — 139 ЖК)</h3>
+<ul>
+    <li><em>новостройки гурьевск калининград / купить квартиру в гурьевске</em> (7 200);</li>
+    <li><em>жк в гурьевске с автономным отоплением от застройщика</em> (3 800);</li>
+    <li><em>новостройки васильково калининград</em> (2 600);</li>
+    <li><em>новостройки большое исаково / жк у школы будущего</em> (2 100);</li>
+    <li><em>новостройки ласкино / квартал ласкино парк</em> (2 800);</li>
+    <li><em>новостройки холмогоровка / жк новая холмогоровка</em> (1 900);</li>
+    <li><em>малоэтажные новостройки в пригороде калининграда</em> (2 200).</li>
+</ul>
+
+<h3>Кластер 5: Города и районные центры области (Regional Hub — 58 ЖК)</h3>
+<ul>
+    <li><strong>Балтийск (23 ЖК):</strong> <em>новостройки балтийск калининградская область</em> (2 900), <em>купить новостройку в балтийске от застройщика</em> (1 800);</li>
+    <li><strong>Черняховск, Советск, Гвардейск (35 ЖК):</strong> <em>новостройки черняховск</em> (1 400), <em>новостройки советск</em> (1 250), <em>купить дешевую новостройку в области до 3 млн</em> (2 400).</li>
+</ul>
+
+<h3>Кластер 6: Коммерческие транзакционные лонгтейлы (Спецификации и УТП)</h3>
+<ul>
+    <li><strong>По комнатности:</strong> <em>купить студию в новостройке калининград</em> (4 300), <em>купить 1-комнатную квартиру новостройка</em> (6 100), <em>2-комнатные квартиры у моря</em> (4 800), <em>3-комнатная квартира для семьи</em> (3 200), <em>евродвушки с кухней-гостиной</em> (2 700).</li>
+    <li><strong>По Автономному газовому отоплению (АГО):</strong> <em>квартиры с автономным отоплением калининград новостройки</em> (<strong>8 400</strong> — ключевой драйвер!), <em>жк с автономным газовым отоплением каталог</em> (3 900), <em>новостройки у моря с двухконтурным котлом</em> (2 100).</li>
+    <li><strong>По отделке:</strong> <em>новостройки серый ключ</em> (2 800), <em>новостройки с ремонтом под ключ</em> (3 600), <em>готовые сданные новостройки</em> (4 200).</li>
+</ul>
+
+<h3>Кластер 7: Финансовые и ипотечные программы</h3>
+<ul>
+    <li><em>семейная ипотека новостройки калининград 6%</em> (5 400);</li>
+    <li><em>льготная ипотека на новостройки в калининграде</em> (4 800);</li>
+    <li><em>новостройки калининград рассрочка от застройщика без банка</em> (3 100);</li>
+    <li><em>купить квартиру в калининграде новостройка субсидия / маткапитал</em> (2 600);</li>
+    <li><em>военная ипотека новостройки калининград</em> (1 900).</li>
+</ul>
+
+<h3>Кластер 8: Брендовые запросы 369 жилых комплексов</h3>
+<p>
+Суммарный объем брендового спроса по 369 объектам составляет <strong>более 85 000 запросов в месяц</strong>. Примеры: <em>жк русская европа калининград официальный сайт</em> (8 200), <em>жк рыбная деревня 2 цены</em> (3 400), <em>жк легенды девау калининград</em> (2 800), <em>жк кранц парк зеленоградск</em> (2 400), <em>жк альпы калининград планировки</em> (2 100).
+</p>
+
+<h3>Кластер 9: Брендовые запросы 54 застройщиков региона</h3>
+<p>
+Суммарный объем брендового спроса по девелоперам — <strong>более 35 000 запросов в месяц</strong>: <em>застройщик калининградстройинвест</em> (4 100), <em>гк к8 калининград официальный сайт</em> (3 800), <em>модуль стройград новостройки</em> (3 200), <em>гк расцвет калининград</em> (2 700), <em>кпд калининград квартиры от застройщика</em> (2 500), <em>ск мпк зеленоградск</em> (2 100).
+</p>
+
+<h2>2.3. Матрица интентов, частотности и приоритизации трафика</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Семантический кластер</th>
+            <th>Суммарный спрос (мес)</th>
+            <th>Уровень конверсии в лид</th>
+            <th>Потенциал сделок (ДДУ)</th>
+            <th>Приоритет продвижения</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>1. Общерегиональные ВЧ-гео</strong></td><td>125 000+</td><td>Высокий (1.5–2.5%)</td><td>Высокий (Охватный)</td><td>P1 (Критический)</td></tr>
+        <tr><td><strong>2. Районы Калининграда</strong></td><td>38 000+</td><td>Очень высокий (3.0–4.5%)</td><td>Максимальный (Город)</td><td>P1 (Критический)</td></tr>
+        <tr><td><strong>3. Побережье Балтики</strong></td><td>42 000+</td><td>Максимальный (4.0–6.0%)</td><td>Высокий (Премиум/Инвест)</td><td>P1 (Критический)</td></tr>
+        <tr><td><strong>4. Пригородный пояс</strong></td><td>32 000+</td><td>Высокий (3.0–4.0%)</td><td>Высокий (Семейный)</td><td>P1 (Критический)</td></tr>
+        <tr><td><strong>5. Города области</strong></td><td>14 000+</td><td>Средний (2.0–3.0%)</td><td>Средний (Бюджет)</td><td>P2 (Базовый)</td></tr>
+        <tr><td><strong>6. Лонгтейлы & АГО (>95.4%)</strong></td><td>48 000+</td><td>Максимальный (5.0–7.5%)</td><td>Максимальный (Целевой)</td><td>P1 (Критический)</td></tr>
+        <tr><td><strong>7. Ипотечные программы</strong></td><td>22 000+</td><td>Очень высокий (4.0–5.5%)</td><td>Высокий (Финансовый)</td><td>P2 (Базовый)</td></tr>
+        <tr><td><strong>8. Бренды 369 ЖК</strong></td><td>85 000+</td><td>Максимальный (6.0–9.0%)</td><td>Прямой перехват ДДУ</td><td>P1 (Абсолютный)</td></tr>
+        <tr><td><strong>9. Бренды 54 застройщиков</strong></td><td>35 000+</td><td>Максимальный (5.5–8.0%)</td><td>Прямой контакт ОП</td><td>P1 (Абсолютный)</td></tr>
+        <tr><td><strong>ИТОГО ПО СЕМАНТИКЕ</strong></td><td><strong>441 000+</strong></td><td><strong>Средняя: 4.2%</strong></td><td><strong>100% Охват рынка КО</strong></td><td><strong>Полный охват ядра</strong></td></tr>
+    </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<!-- ========================================================================= -->
+<!-- SECTION 3 -->
+<!-- ========================================================================= -->
+<h1>Раздел 3. SEO-стратегия и техническая архитектура платформы</h1>
+
+<h2>3.1. Архитектура портала и хабово-кластерная структура страниц</h2>
+<p>
+Платформа Amber Avenue спроектирована по модели <strong>Hub-and-Spoke (Хабы и Кластеры)</strong>, обеспечивающей распределение статического и динамического веса:
+</p>
+<ul>
+    <li><strong>Master Hub (<code>hub.html</code> / <code>zhk.html</code>):</strong> Центральный портал с реестром 369 ЖК, интерактивной картой и аналитикой рынка;</li>
+    <li><strong>City Hub (<code>zhk-kaliningrad.html</code>):</strong> 97 ЖК, фильтрация по 3 административным районам и микрорайонам (Сельма, Амалиенау, Верхнее озеро, Понарт);</li>
+    <li><strong>Coastal Hub (<code>zhk-umory.html</code>):</strong> 75 ЖК, курортная недвижимость (Зеленоградск, Светлогорск, Пионерский, Янтарный);</li>
+    <li><strong>Suburban Hub (<code>zhk-prigorod.html</code>):</strong> 139 ЖК, пригородные малоэтажные кварталы и спутники (Гурьевск, Васильково, Ласкино, Холмогоровка);</li>
+    <li><strong>Regional Hub (<code>zhk-oblast.html</code>):</strong> 58 ЖК, районные центры области (Балтийск, Черняховск, Советск, Гвардейск);</li>
+    <li><strong>Developer Hub (<code>developers.html</code>):</strong> 54 официальных профиля строительных компаний с рейтингами надежности ЕИСЖС;</li>
+    <li><strong>Dynamic Property Modals & URLs (<code>/zhk/{id}</code>):</strong> 369 карточек ЖК с 9 табами и прямой маршрутизацией звонков.</li>
+</ul>
+
+<h2>3.2. Формулы On-Page мета-тегов и заголовков (Title, Description, H1-H3)</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Страница / URL</th>
+            <th>Шаблон Title (55–65 симв.)</th>
+            <th>Шаблон Meta Description (140–160 симв.)</th>
+            <th>Тег H1</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Главный Каталог</strong><br><code>/zhk.html</code></td>
+            <td>Новостройки Калининграда и области 2026 — Каталог 369 ЖК от застройщиков</td>
+            <td>Полный каталог 369 новостроек Калининграда и области. Цены от застройщиков, 95% с автономным отоплением, проверка 214-ФЗ, интерактивная карта.</td>
+            <td>Все новостройки Калининграда и области: Каталог 369 жилых комплексов</td>
+        </tr>
+        <tr>
+            <td><strong>Калининград (Город)</strong><br><code>/zhk-kaliningrad.html</code></td>
+            <td>Новостройки Калининграда — Купить квартиру в 97 ЖК города от застройщика</td>
+            <td>Каталог 97 новостроек в Калининграде. Ленинградский, Центральный и Московский районы. Цены от 3.8 млн ₽, автономное отопление, планировки и ипотека.</td>
+            <td>Новостройки Калининграда: 97 жилых комплексов в 3 районах города</td>
+        </tr>
+        <tr>
+            <td><strong>Побережье (У моря)</strong><br><code>/zhk-umory.html</code></td>
+            <td>Новостройки у моря в Калининградской области — 75 ЖК в Зеленоградске и Светлогорске</td>
+            <td>Квартиры и апартаменты на побережье Балтийского моря: 75 ЖК в Зеленоградске, Светлогорске, Пионерском. Первая линия, цены от застройщика, 214-ФЗ.</td>
+            <td>Новостройки на побережье Балтийского моря: 75 ЖК у пляжей и променадов</td>
+        </tr>
+        <tr>
+            <td><strong>Пригородный пояс</strong><br><code>/zhk-prigorod.html</code></td>
+            <td>Новостройки в пригороде Калининграда — 139 ЖК в Гурьевске, Васильково, Ласкино</td>
+            <td>139 жилых комплексов в пригородном поясе Калининграда. Малоэтажные кварталы Гурьевска, Ласкино, Холмогоровки. Автономный газ, парковки, цены от застройщиков.</td>
+            <td>Новостройки в пригороде Калининграда: 139 малоэтажных и семейных ЖК</td>
+        </tr>
+        <tr>
+            <td><strong>Города области</strong><br><code>/zhk-oblast.html</code></td>
+            <td>Новостройки в городах Калининградской области — 58 ЖК в Балтийске, Черняховске</td>
+            <td>Каталог 58 новостроек в городах Калининградской области: Балтийск, Советск, Черняховск, Гвардейск. Доступное жилье от застройщиков с поквартирным АГО.</td>
+            <td>Новостройки в городах Калининградской области: 58 жилых комплексов</td>
+        </tr>
+        <tr>
+            <td><strong>Карточка ЖК (Динамическая)</strong><br><code>/zhk/{slug}</code></td>
+            <td>ЖК {Название} Калининград — Цены, Планировки, Отзывы | Amber Avenue</td>
+            <td>ЖК {Название} в {Локация} от СЗ «{Застройщик}». Цены от {МинЦена} млн ₽, {ТипОтопления}, срок сдачи {Срок}. Проверка 214-ФЗ и прямой контакт ОП.</td>
+            <td>ЖК «{Название}» в {Локация}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>3.3. Спецификация структурированных данных Schema.org (JSON-LD)</h2>
+<p>
+Для формирования расширенных сниппетов (Rich Snippets) со звездами рейтинга Amber Index, диапазонами цен и интерактивными хлебными крошками на всех страницах внедряется валидная микроразметка JSON-LD:
+</p>
+<ul>
+    <li><code>Organization</code> & <code>WebSite</code> (поиск по сайту Sitelinks Searchbox);</li>
+    <li><code>BreadcrumbList</code> (иерархические хлебные крошки: Главная $	o$ Направление $	o$ Район $	o$ ЖК);</li>
+    <li><code>ApartmentComplex</code> & <code>RealEstateListing</code> (для всех 369 ЖК: гео-координаты, диапазон цен <code>priceRange</code>, количество корпусов, девелопер, эскроу-банк, рейтинг Amber Index в виде <code>AggregateRating</code>);</li>
+    <li><code>FAQPage</code> (аккордеон частых вопросов по покупке, ипотеке и АГО);</li>
+    <li><code>Article</code> / <code>BlogPosting</code> (экспертные аналитические материалы блога).</li>
+</ul>
+
+<div class="callout">
+    <div class="callout-title">Пример JSON-LD сущности ApartmentComplex для ЖК «Легенды Девау»</div>
+    <code>
+    {<br>
+    &nbsp;&nbsp;"@context": "https://schema.org",<br>
+    &nbsp;&nbsp;"@type": "ApartmentComplex",<br>
+    &nbsp;&nbsp;"name": "ЖК «Легенды Девау»",<br>
+    &nbsp;&nbsp;"description": "Жилой комплекс комфорт-плюс класса на ул. Суздальской с автономным газовым отоплением и подземным паркингом.",<br>
+    &nbsp;&nbsp;"address": {"@type": "PostalAddress", "addressLocality": "Калининград", "streetAddress": "ул. Суздальская"},<br>
+    &nbsp;&nbsp;"geo": {"@type": "GeoCoordinates", "latitude": 54.7185, "longitude": 20.5721},<br>
+    &nbsp;&nbsp;"priceRange": "от 5 200 000 ₽ до 12 500 000 ₽",<br>
+    &nbsp;&nbsp;"aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "42"}<br>
+    }
+    </code>
+</div>
+
+<h2>3.4. Внутренняя перелинковка, краулинговый бюджет и индексация CSR</h2>
+<ul>
+    <li><strong>Двусторонняя матричная перелинковка:</strong> Карточка ЖК $\leftrightarrow$ Карточка Застройщика $\leftrightarrow$ Хаб Направления $\leftrightarrow$ Тематические статьи блога;</li>
+    <li><strong>Sitemap.xml & Robots.txt:</strong> Генерация динамической карты сайта со всеми 369 каноническими URL объектов с директивой <code>lastmod</code> и приоритетами <code>priority: 0.9</code> для ЖК и <code>priority: 1.0</code> для региональных хабов;</li>
+    <li><strong>Client-Side Rendering (CSR) Optimization:</strong> Инъекция мета-тегов и Schema.org в момент инициализации DOM, пре-рендеринг критического HTML-каркаса для поисковых ботов YandexBot и Googlebot.</li>
+</ul>
+
+<h2>3.5. Стратегия победы над классифайдами (Циан, Авито, Домклик)</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Параметр сравнения</th>
+            <th>Циан / Авито / Домклик</th>
+            <th>Платформа Amber Avenue</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Качество каталога</strong></td><td>До 40% «фонарей», дублей и фейковых объявлений</td><td><strong>100% верифицированный реестр 369 ЖК по 214-ФЗ</strong></td></tr>
+        <tr><td><strong>Региональный фокус</strong></td><td>Федеральный усредненный шаблон без специфики</td><td><strong>100% калининградская специфика (АГО 95.4%, «Ласточка»)</strong></td></tr>
+        <tr><td><strong>Маршрутизация звонка</strong></td><td>В 80% случаев перехват частными маклерами</td><td><strong>100% прямой контакт со штатным ОП застройщика</strong></td></tr>
+        <tr><td><strong>Поведенческие факторы</strong></td><td>Короткие сессии (1–1.5 мин), высокий Bounce (45%)</td><td><strong>Глубокие сессии (3.5–5.5 мин), 9 табов, Bounce &lt; 22%</strong></td></tr>
+        <tr><td><strong>Факторы E-E-A-T</strong></td><td>Анонимные доски объявлений</td><td><strong>Методология Amber Index, экспертные профили СЗ</strong></td></tr>
+    </tbody>
+</table>
+
+<h2>3.6. Дорожная карта внедрения на 90 дней и панель KPI</h2>
+<ul>
+    <li><strong>Этап 1 (Дни 1–15):</strong> Устранение дубликатов Title/Description, внедрение Schema.org JSON-LD на всех хабах, генерация динамического sitemap.xml.</li>
+    <li><strong>Этап 2 (Дни 16–45):</strong> Развертывание 369 статических посадочных страниц ЖК (SSR/Prerender), микролокационные посадочные страницы (Сельма, Амалиенау, Променад Зеленоградска).</li>
+    <li><strong>Этап 3 (Дни 46–75):</strong> Запуск контент-кластера блога (25 экспертных лонгридов по АГО, переезду, налогам и инвестициям), сквозная внутренняя перелинковка.</li>
+    <li><strong>Этап 4 (Дни 76–90):</strong> Выход в ТОП-3 Яндекса и Google по 80%+ брендовых запросов ЖК и застройщиков, достижение органического трафика 50 000+ уник/мес.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<!-- ========================================================================= -->
+<!-- SECTION 4 -->
+<!-- ========================================================================= -->
+<h1>Раздел 4. Сетка рекламных мест и инвентарь монетизации</h1>
+
+<h2>4.1. Концепция Fast-Track Ad Grid: Платный контакт при бесплатных фактах</h2>
+<p>
+Экосистема Amber Avenue реализует гибридную бизнес-модель:
+</p>
+<ul>
+    <li><strong>Бесплатный слой (доверие аудитории):</strong> Все 369 ЖК региона и 54 девелопера размещены в каталоге бесплатно с объективными техническими характеристиками, документами 214-ФЗ и рейтингом Amber Index. Это формирует абсолютное доверие покупателей.</li>
+    <li><strong>Коммерческий слой (Fast-Track конверсия):</strong> Прямой номер телефона ОП, ссылка на официальный сайт девелопера, кнопка моментального бронирования лота, премиальные Hero-баннеры и приоритетная выдача на карте активируются только в партнерских пакетах.</li>
+</ul>
+
+<h2>4.2. Спецификация 6 типов рекламных форматов и мест размещения</h2>
+<table>
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>Рекламная позиция</th>
+            <th>Локация на сайте</th>
+            <th>Формат & Разрешение</th>
+            <th>Розничный тариф</th>
+            <th>Статус в пакете Амбассадора</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>1</strong></td>
+            <td><strong>Hero-баннер Направления</strong></td>
+            <td>Первый экран страниц <code>city</code>, <code>sea</code>, <code>prigorod</code>, <code>oblast</code></td>
+            <td>1920×450 px (Desktop)<br>750×400 px (Mobile)</td>
+            <td>45 000 ₽ / мес</td>
+            <td><strong>Включено монопольно (Позиция №1)</strong></td>
+        </tr>
+        <tr>
+            <td><strong>2</strong></td>
+            <td><strong>Приоритет в Каталоге (ТОП-3)</strong></td>
+            <td>Первые 3 карточки в выдаче соответствующего направления</td>
+            <td>Карточка ЖК с золотой рамкой и плашкой «Выбор Amber Index»</td>
+            <td>30 000 ₽ / мес за ЖК</td>
+            <td><strong>Включено для 2 флагманских ЖК</strong></td>
+        </tr>
+        <tr>
+            <td><strong>3</strong></td>
+            <td><strong>Золотая Метка на Карте</strong></td>
+            <td>Интерактивная карта новостроек (десктоп и мобильная)</td>
+            <td>Увеличенный золотой пин с логотипом СЗ и пульсацией</td>
+            <td>15 000 ₽ / мес</td>
+            <td><strong>Включено (VIP-статус метки)</strong></td>
+        </tr>
+        <tr>
+            <td><strong>4</strong></td>
+            <td><strong>Нативный блок перехвата</strong></td>
+            <td>Блок «Похожие комплексы» в карточках прямых конкурентов</td>
+            <td>Нативная карточка с плашкой «Альтернатива в локации»</td>
+            <td>25 000 ₽ / мес</td>
+            <td><strong>Включено в целевом районе</strong></td>
+        </tr>
+        <tr>
+            <td><strong>5</strong></td>
+            <td><strong>Брендирование страницы ЖК</strong></td>
+            <td>Фон и шапка карточки объекта (9 табов)</td>
+            <td>Брендовый фон, фирменные шрифты, прямые 3D-туры</td>
+            <td>20 000 ₽ / мес</td>
+            <td><strong>Включено для ключевых лотов</strong></td>
+        </tr>
+        <tr>
+            <td><strong>6</strong></td>
+            <td><strong>Fast-Track Webhook CRM</strong></td>
+            <td>Сквозной шлюз прямых лидов в CRM застройщика</td>
+            <td>API-интеграция с Битрикс24, AmoCRM, Profitbase</td>
+            <td>10 000 ₽ / мес</td>
+            <td><strong>Включено (0 ₽ доплаты за лид)</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>4.3. Технические требования, адаптивность и сквозная аналитика</h2>
+<ul>
+    <li><strong>Форматы графики:</strong> WebP, SVG, PNG, Retina-ready (2x плотность пикселей), оптимизация размера файлов (&lt; 150 Кб) для мгновенной загрузки;</li>
+    <li><strong>Адаптивность:</strong> 100% Fluid Responsive дизайн для всех типов экранов (Desktop 1920px, Laptop 1366px, Tablet 768px, Mobile 375–414px);</li>
+    <li><strong>Сквозная аналитика и трекинг:</strong> Каждая ссылка маркируется динамическими UTM-метками (<code>utm_source=amber_avenue&utm_medium=cpc&utm_campaign=fast_track_{zhk_id}</code>), интеграция с динамическим коллтрекингом девелопера (CoMagic, Calltouch, Mango-Office).</li>
+</ul>
+
+<h2>4.4. Юридическое соответствие Федеральному закону № 347-ФЗ (ЕРИР / ОРД)</h2>
+<p>
+Все коммерческие интеграции на платформе Amber Avenue полностью соответствуют законодательству РФ:
+</p>
+<ul>
+    <li>Официальная регистрация каждого рекламного креатива в <strong>Операторе Рекламных Данных (ОРД)</strong> до начала показов;</li>
+    <li>Присвоение уникального числового токена (<code>erid: XXXX-XXXX-XXXX</code>) и маркировка баннеров текстовой плашкой «Реклама. ООО СЗ «...», ИНН ...»;</li>
+    <li>Автоматическая ежемесячная передача актов и статистических отчетов в <strong>Единый Реестр Интернет-Рекламы (ЕРИР) Роскомнадзора</strong>.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<!-- ========================================================================= -->
+<!-- SECTION 5 -->
+<!-- ========================================================================= -->
+<h1>Раздел 5. B2B Sales Playbook: Руководство по закрытию пула 1 500 000 ₽</h1>
+
+<h2>5.1. Позиционирование платформы: Fast-Track Direct Sales Engine</h2>
+<p>
+Amber Avenue позиционируется как <strong>региональная навигационная PropTech-экосистема прямого действия</strong>, устраняющая посредников и сжимающая цикл сделки в 2–3 раза.
+</p>
+
+<h2>5.2. Пакетные офферы и финансовая архитектура закрытия 10 контрактов</h2>
+
+<div class="callout">
+    <div class="callout-title">Базовый оффер спринта: «Пре-лонч Амбассадор» (Media Investment Pool — 150 000 ₽)</div>
+    <ul>
+        <li><strong>Размещение 2 флагманских ЖК:</strong> 10 месяцев коммерческого пакета (вместо розничных 600 000 ₽);</li>
+        <li><strong>Hero-баннер Направления:</strong> 6 месяцев монопольного размещения (розничная стоимость 270 000 ₽);</li>
+        <li><strong>Приоритет на интерактивной карте:</strong> Золотая метка Amber Index (розничная стоимость 90 000 ₽);</li>
+        <li><strong>«Дедушкина оговорка» (Grandfathering):</strong> Пожизненная фиксация абонентской платы 15 000 ₽/мес вместо 30 000 ₽/мес на 12 месяцев (экономия 180 000 ₽/год);</li>
+        <li><strong>Fast-Track Webhook интеграция в CRM:</strong> 0 ₽ комиссии за переданные лиды.</li>
+    </ul>
+    <strong>Суммарная розничная ценность: 1 140 000 ₽ · Стоимость в инвест-пуле: 150 000 ₽ · Экономия застройщика: 87%!</strong>
+</div>
+
+<h3>Гибкая матрица закрытия пула 1 500 000 ₽ (Сценарий B)</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Пакет размещения</th>
+            <th>Стоимость и период</th>
+            <th>Целевые девелоперы</th>
+            <th>План сделок</th>
+            <th>Сумма сбора</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>1. Главный Партнер</strong></td>
+            <td>270 000 ₽ / кв (90k/мес)</td>
+            <td>Крупные монополисты (ГК «К8», СК «МПК»)</td>
+            <td>2 сделки</td>
+            <td>540 000 ₽</td>
+        </tr>
+        <tr>
+            <td><strong>2. Полугодовой Эксклюзив</strong></td>
+            <td>150 000 ₽ / 10 мес (15k/мес)</td>
+            <td>Ядро девелоперов (КСИ, Модуль, Расцвет, КПД, WestDream)</td>
+            <td>5 сделок</td>
+            <td>750 000 ₽</td>
+        </tr>
+        <tr>
+            <td><strong>3. Квартальный Пре-лонч</strong></td>
+            <td>75 000 ₽ / квартал (25k/мес)</td>
+            <td>Быстрые контракты (ФЖСС КО, Лидер Групп, Русская Европа)</td>
+            <td>3 сделки</td>
+            <td>225 000 ₽</td>
+        </tr>
+        <tr>
+            <td><strong>ИТОГО ПО СПРИНТУ</strong></td>
+            <td><strong>10 Якорных Партнеров</strong></td>
+            <td><strong>100% охват ключевых застройщиков КО</strong></td>
+            <td><strong>10 контрактов</strong></td>
+            <td><strong>1 515 000 ₽</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>5.3. Сравнительная стоимость привлечения контакта (CPL / CAC / Скорость)</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Метрика эффективности</th>
+            <th>Яндекс.Директ (Поиск/РСЯ)</th>
+            <th>Авито Недвижимость</th>
+            <th>Циан.Премиум</th>
+            <th>Amber Avenue Fast-Track Pool</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>Бюджет на 6–10 мес</strong></td><td>450 000 – 900 000 ₽</td><td>300 000 – 600 000 ₽</td><td>350 000 – 700 000 ₽</td><td><strong>150 000 ₽ total (10 мес)</strong></td></tr>
+        <tr><td><strong>Лидов в месяц</strong></td><td>20–40 лидов</td><td>15–35 лидов</td><td>15–30 лидов</td><td><strong>20–35 прогретых лидов</strong></td></tr>
+        <tr><td><strong>Стоимость лида (CPL)</strong></td><td>3 750 – 5 000 ₽</td><td>2 800 – 4 200 ₽</td><td>3 500 – 4 800 ₽</td><td><strong>714 – 1 250 ₽ (в 3–4 раза ниже!)</strong></td></tr>
+        <tr><td><strong>Стоимость сделки (CAC)</strong></td><td>180 000 – 250 000 ₽</td><td>200 000 – 300 000 ₽</td><td>220 000 – 350 000 ₽</td><td><strong>37 500 – 75 000 ₽</strong></td></tr>
+        <tr><td><strong>Time-to-Deal (длительность)</strong></td><td>45–60 дней</td><td>60–90 дней</td><td>45–75 дней</td><td><strong>14–25 дней (в 2.5–3x быстрее)</strong></td></tr>
+        <tr><td><strong>Срок окупаемости взноса</strong></td><td>60–90 дней</td><td>90–120 дней</td><td>90–120 дней</td><td><strong>14–30 дней (с 1-й же сделки!)</strong></td></tr>
+        <tr><td><strong>Чистый ROI канала</strong></td><td>150% – 250%</td><td>120% – 200%</td><td>120% – 200%</td><td><strong>1 000%+ (Покрытие в 13–25x)</strong></td></tr>
+    </tbody>
+</table>
+
+<h2>5.4. Многоканальная воронка касаний и боевые скрипты звонков РОПам</h2>
+
+<h3>Архитектура 14-дневного спринта касаний</h3>
+<div class="callout">
+    <strong>День 1 (09:30):</strong> Персонализированный Email со ссылкой на закрытый листинг ЖК и расчетом TEV.<br>
+    <strong>День 1 (15:00):</strong> Сообщение в WhatsApp/Telegram ЛПР («Направили инвест-меморандум и расчет эскроу»).<br>
+    <strong>День 2 (10:30–12:30):</strong> Звонок РОПу / Коммерческому директору по Fast-Track скрипту.<br>
+    <strong>День 4–6:</strong> 15-минутная Zoom-демонстрация (показ живой карточки ЖК, 9 табов и эскроу-калькулятора).<br>
+    <strong>День 7–10:</strong> Drip-цепочка в мессенджерах (Аналитика спроса + TEV 2.05M–3.72M ₽ + Расчет эскроу для CFO).<br>
+    <strong>День 11–14:</strong> Закрытие договора пула, выставление счета и активация якорного слота.
+</div>
+
+<h3>Дословный скрипт звонка Коммерческому директору / РОПу</h3>
+<div class="script-box">
+    <strong>[Блок 1. Проход секретаря (Gatekeeper Bypass)]</strong><br>
+    <em>Менеджер:</em> «Добрый день! Соедините, пожалуйста, с коммерческим директором [Имя Отчество / "руководителем департамента продаж"]. Звонит [Имя Фамилия], аналитическая группа Amber Avenue по формированию межрегионального медиа-пула застройщиков Калининградской области.»<br>
+    <em>Секретарь:</em> «По какому вопросу?»<br>
+    <em>Менеджер:</em> «Мы формируем закрытый трафиковый пул на 1,5 млн ₽ под покупателей из Москвы и Санкт-Петербурга. Объекты вашей компании уже внесены в реестр 369 ЖК. Мне нужно лично с [Имя] сверить прямой номер отдела продаж, на который будут направляться 80% прогретые обращения без комиссии риелторам и с сокращением цикла сделки до 14–25 дней. Соедините с его прямым номером, пожалуйста.»
+</div>
+
+<div class="script-box">
+    <strong>[Блок 2. Крючок и захват внимания ЛПР (Первые 15 секунд)]</strong><br>
+    <em>Менеджер:</em> «[Имя ЛПР], здравствуйте! Меня зовут [Имя], платформа Amber Avenue. Звоню коротко и на языке инвестора: мы открываем специализированную витрину калининградских новостроек для покупателей из Москвы, Петербурга и Севера и формируем закрытый трафиковый пул на 1,5 млн ₽. Ваши комплексы — [Назвать 1–2 объекта, например: «Альпы» и «Легенды Девау»] — уже внесены в реестр 369 ЖК. Звоню согласовать подключение прямых контактов вашего ОП: наша интерактивная витрина с 9 табами прогревает покупателя на 80% ДО звонка и сокращает цикл сделки с 60 до 14–25 дней без переплаты 2–4% комиссии брокерам. Есть полторы минуты обсудить инвестиционный формат?»
+</div>
+
+<div class="script-box">
+    <strong>[Блок 3. Экспресс-квалификация (4 вопроса)]</strong><br>
+    1. <em>«[Имя], подскажите, у вас сейчас по объектам доля покупателей из других регионов РФ составляет порядка 65–75%?»</em><br>
+    2. <em>«Сколько вы сегодня закладываете в бюджет на комиссию внешних агентств за закрытие иногороднего клиента — стандартные 2–4% (от 200 до 352 тысяч рублей за ДДУ)?»</em><br>
+    3. <em>«Насколько для вас критично перехватывать покупателя в тот момент, когда он на карте сравнивает ваш ЖК с объектами [Назвать конкурента: например, «К8» или «Модуль-Стройград»], пока его не увели на фейковые "фонари" на Авито?»</em><br>
+    4. <em>«Насколько для вас чувствительно затягивание сделок агентствами на 60–90 дней, учитывая стоимость процентов по проектному эскроу-кредиту банка (более 113 900 ₽ потерь на процентах с каждого ДДУ)?»</em>
+</div>
+
+<div class="script-box">
+    <strong>[Блок 4. Инвестиционный Elevator Pitch & Закрытие на 15-минутный Zoom]</strong><br>
+    <em>Менеджер:</em> «Смотрите, на Авито и Циане до 40% выдачи забито фейками черных маклеров, которые перехватывают ваших покупателей и перепродают их вам же с комиссией в 352 000 ₽. Риелторский цикл тянется 45–90 дней, накручивая проценты по кредиту проектного финансирования.<br>
+    На Amber Avenue 100% верифицированный каталог и прямой лифт в ваш отдел продаж. Наш 9-табовый интерфейс снимает 80% вопросов покупателя онлайн еще до звонка. Мы формируем закрытый пул из 10 якорных девелоперов: со-инвестиция 150 000 ₽ окупается с первой же закрытой квартиры, экономит 113 900 ₽ на банковских процентах и дает свыше 1 000% ROI.<br>
+    Предлагаю открыть экран на 15 минут в Zoom: я покажу, как выглядит ваша карточка ЖК, как работает маршрутизация лидов и точный расчет экономии эскроу для вашего финансового директора. Завтра в 11:00 или в 15:30 будет удобнее?»
+</div>
+
+<div class="page-break"></div>
+
+<!-- ========================================================================= -->
+<!-- SECTION 6 -->
+<!-- ========================================================================= -->
+<h1>Раздел 6. Универсальная матрица отработки 12 ключевых возражений</h1>
+
+<h2>6.1. Быстрые элевейтор-питчи (Emergency Pitches)</h2>
+<ul>
+    <li><strong>15-секундный хук:</strong> <em>«[Имя], Amber Avenue формирует медиа-инвест пул на 1,5 млн ₽ под покупателей из Москвы и СПб. Ваши ЖК уже внесены в базу 369 объектов. Мы прогреваем покупателя на 80% в 9 табах и сокращаем цикл сделки с 60 до 14–25 дней без 4% комиссии брокерам. Есть полторы минуты обсудить прямое подключение ОП?»</em></li>
+    <li><strong>30-секундный питч:</strong> <em>«Amber Avenue — независимая PropTech-экосистема КО. В отличие от Авито с 40% фейков, у нас покупатель изучает 9 табов (цены, ипотеку, локацию, АГО >95.4%) и приходит в ваш ОП готовым на 80%. Со-инвестиция 150 000 ₽ в пул 1.5M ₽ окупается на 1 000%+ с первой же сделки за счет маржи 1.5–3.0 млн ₽ и экономии 113k ₽ на процентах эскроу-кредита.»</em></li>
+    <li><strong>60-секундный питч:</strong> <em>«Традиционные каналы генерируют две скрытые дыры: фейки перепродают вам ваших же клиентов за 352k ₽ комиссии, а цикл в 90 дней перегружает процентами проектное финансирование. Amber Avenue дает прямой лифт в ОП за 14–25 дней. За 150 000 ₽ вы получаете 10 месяцев размещения 2 ЖК, Hero-баннер №1 и фиксацию тарифа 15k/мес. Совокупный эффект с 1 ДДУ — свыше 2.05 млн ₽ (покрытие в 13+ раз).»</em></li>
+</ul>
+
+<h2>6.2. Детальные сценарии нейтрализации возражений (Карточки 1–12)</h2>
+
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>Карточка 1. «У вас пока нет миллионного трафика, запуститесь — тогда поговорим»</h3>
+        <span class="dossier-status">Тип: Инвест-логика</span>
+    </div>
+    <p><strong>Присоединение:</strong> «Справедливое замечание, [Имя]. Если бы мы предлагали оплатить прошлые показы или пустой баннер, я бы сам рекомендовал подождать.»</p>
+    <p><strong>Рефрейминг & Расчет:</strong> «Но мы говорим на языке инвесторов: 150 000 ₽ — это со-инвестиция в закрытый <strong>Media Investment Pool на 1 500 000 ₽</strong>. 100% средств пула идут на выкуп горячего спроса в Москве, Петербурге и Сибири под 10 партнеров. 9 табов прогревают покупателя на 80% ДО звонка, конвертируя обращения в бронь на уровне 18–28% и сокращая цикл до 14–25 дней. Всего 1 ДДУ с чеком 8.8 млн ₽ дает 1 000%+ ROI и экономит 113k ₽ эскроу-процентов. После релиза вход будет стоить от 30 000 ₽/мес без Hero-привилегий.»</p>
+    <p><strong>Закрытие:</strong> «Давайте зафиксируем участие в пуле сейчас, а срок пойдет строго со старта федерального трафика. Отправить проект соглашения?»</p>
+</div>
+
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>Карточка 2. «Мы уже тратим весь бюджет на Авито, Циан и Яндекс Директ»</h3>
+        <span class="dossier-status">Тип: Анти-классифайд</span>
+    </div>
+    <p><strong>Присоединение:</strong> «Прекрасно понимаю вас, [Имя]. Директ и классифайды — привычная база, и мы не предлагаем их отключать.»</p>
+    <p><strong>Рефрейминг & Расчет:</strong> «Но на Авито и Циан около 40% выдачи забито "фонарями" черных риелторов. Они перехватывают ваших покупателей и перепродают их вам же с комиссией 2–4% (352 000 ₽). Лид оттуда холодный, цикл тянется 60–90 дней. Amber Avenue — 100% верифицированная экосистема 369 ЖК. Мы даем 80% предварительную квалификацию, сокращая цикл в 2–3 раза и сберегая до 90k ₽ на полиграфии и показах. За 150 000 ₽ вы получаете 10 месяцев прямого трафика без комиссии.»</p>
+    <p><strong>Закрытие:</strong> «Зачем платить маклерам за перехват своих же клиентов? Давайте подключим прямой шлюз. На какую почту выслать договор?»</p>
+</div>
+
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>Карточка 3. «У нас есть свои риелторы и агентства, они приводят клиентов»</h3>
+        <span class="dossier-status">Тип: Unit-экономика</span>
+    </div>
+    <p><strong>Присоединение:</strong> «Партнерская сеть агентств — важный канал, и мы ценим профессиональных брокеров.»</p>
+    <p><strong>Рефрейминг & Расчет:</strong> «Но посчитайте скрытые потери: при чеке 8.8 млн ₽ вы платите 4% комиссии — это <strong>352 000 ₽ с одной сделки</strong>. Риелтор водит покупателя по конкурентам и затягивает цикл на 45–90 дней. Amber Avenue закрывает сделку за 14–25 дней, сберегая 352k ₽ комиссии, 113.9k ₽ эскроу-процентов и 90k ₽ презентационных костов. Суммарный TEV превышает 2.05 млн ₽, окупая взнос в 13+ раз.»</p>
+    <p><strong>Закрытие:</strong> «Зачем отдавать 352 000 ₽ посреднику за клиента, которого вы можете принять напрямую за 15 000 ₽/мес? На какой номер настроить шлюз?»</p>
+</div>
+
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>Карточка 4. «Дайте нам тест бесплатно, а мы посмотрим»</h3>
+        <span class="dossier-status">Тип: Ценностный барьер</span>
+    </div>
+    <p><strong>Присоединение:</strong> «Желание протестировать площадку абсолютно логично.»</p>
+    <p><strong>Рефрейминг & Расчет:</strong> «Именно поэтому все 369 ЖК уже размещены бесплатно. Но бесплатный тест не формирует рекламный бюджет. 150 000 ₽ идут на 100% в закупку целевого трафика в Москве и СПб. Делая со-инвестицию, вы получаете прямой лифт в ОП, Hero-баннер и золотую метку. При среднем чеке 8.8 млн ₽ одна закрытая квартира за первые 30 дней дает 1 000%+ ROI и закрывает затраты в 13–25 раз.»</p>
+    <p><strong>Закрытие:</strong> «Пул ограничен 10 местами. Давайте закрепим условия за вами. Направить форму счета?»</p>
+</div>
+
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>Карточка 5. «Почему именно 150 000 руб. предоплаты?»</h3>
+        <span class="dossier-status">Тип: Обоснование цены</span>
+    </div>
+    <p><strong>Присоединение:</strong> «Отличный вопрос, прозрачность бюджета — наш главный приоритет.»</p>
+    <p><strong>Рефрейминг & Расчет:</strong> «150 000 ₽ × 10 девелоперов формируют минимально эффективный трафиковый фонд 1,5 млн ₽ для выкупа горячего спроса в Москве и СПб. Розничная стоимость пакета составляет 1 140 000 ₽ (скидка 87%). При среднем чеке 8.8 млн ₽ один ДДУ генерирует от 2.05 до 3.72 млн ₽ совокупного эффекта (TEV), покрывая инвестицию в 13–25 раз.»</p>
+    <p><strong>Закрытие:</strong> «Давайте зафиксируем максимальный пакет по себестоимости. Оформим партнерство?»</p>
+</div>
+
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>Карточка 6. «Мы продаем через эксклюзивные агентства (Инвент, Этажи)»</h3>
+        <span class="dossier-status">Тип: Интеграция с эксклюзивом</span>
+    </div>
+    <p><strong>Присоединение:</strong> «Работа с эксклюзивным брокером — проверенная модель структурирования сбыта.»</p>
+    <p><strong>Рефрейминг & Расчет:</strong> «Amber Avenue не подменяет агентство, а усиливает его: мы можем направить поток звонков прямо в выделенный отдел продаж вашего эксклюзивного партнера. 9 табов карточки ЖК ускоряют цикл брокера с 60 до 20 дней, защищают ваш бренд от 40% фейков на классифайдах и экономят бюджет агентства на полиграфию и офлайн-показы.»</p>
+    <p><strong>Закрытие:</strong> «Давайте согласуем интеграцию шлюза с руководителем вашего эксклюзивного ОП. Направить презентацию?»</p>
+</div>
+
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>Карточка 7. «Рынок стоит, ключевая ставка 18–20%+, не время для новых площадок»</h3>
+        <span class="dossier-status">Тип: Макроэкономика</span>
+    </div>
+    <p><strong>Присоединение:</strong> «Вы абсолютно правы, ипотечный рынок проходит период жесткой трансформации.»</p>
+    <p><strong>Рефрейминг & Расчет:</strong> «Именно при высокой ставке цена затягивания сделки максимальна: каждый день простоя проектного кредита начисляет 15% годовых. Наш трафик ориентирован на 65–75% покупателей из Москвы, СПб и Севера с живыми деньгами от продажи вторички в своих регионах. Сжатие цикла до 14–25 дней ускоряет наполнение эскроу и снижает ставку проектного кредита с 15% до 4.5%, экономя 1.2–5.0 млн ₽ в квартал.»</p>
+    <p><strong>Закрытие:</strong> «В кризис выигрывает тот, кто забирает столичный кэш быстрее конкурентов. Закрепим слот?»</p>
+</div>
+
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>Карточка 8. «Мы подождем, пока зайдут другие застройщики»</h3>
+        <span class="dossier-status">Тип: Триггер FOMO</span>
+    </div>
+    <p><strong>Присоединение:</strong> «Позиция понятна — оценить динамику со стороны кажется безопасным.»</p>
+    <p><strong>Рефрейминг & Расчет:</strong> «Но в пуле строго 10 мест и ровно по 1 Hero-баннеру на направление. Если ваш конкурент по району ([Назвать ЖК]) заберет слот, вы потеряете приоритет на 10 месяцев. Кроме того, после пре-лонча тариф вырастет вдвое (до 30 000 ₽/мес) без Hero-привилегий и Grandfathering-скидки.»</p>
+    <p><strong>Закрытие:</strong> «Зачем отдавать лидерство конкурентам? Давайте забронируем ваше направление сегодня.»</p>
+</div>
+
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>Карточка 9. «У нас сложный юротдел / покажите гарантии выполнения обязательств»</h3>
+        <span class="dossier-status">Тип: Юридическая чистота</span>
+    </div>
+    <p><strong>Присоединение:</strong> «Юридическая безопасность — основа надежного девелопмента по 214-ФЗ.»</p>
+    <p><strong>Рефрейминг & Расчет:</strong> «У нас полностью прозрачный белый договор оказания услуг с фиксацией состава пула, маркировкой рекламы в ЕРИР по 347-ФЗ и актами через ЭДО. Срок оказания услуг по договору исчисляется строго с даты официального старта рекламного трафика.»</p>
+    <p><strong>Закрытие:</strong> «На какую почту направить типовой договор и карточку предприятия для согласования юристами?»</p>
+</div>
+
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>Карточка 10. «У нас известный бренд, нас и так все знают в Калининграде»</h3>
+        <span class="dossier-status">Тип: Межрегиональный охват</span>
+    </div>
+    <p><strong>Присоединение:</strong> «Ваша репутация в Калининграде действительно безупречна и заслужена годами.»</p>
+    <p><strong>Рефрейминг & Расчет:</strong> «Однако 65–75% покупателей первичного жилья — это приезжие из Москвы, Тюмени и Сибири. Они не знают локальных брендов и выбирают новостройки по интерактивной карте, фильтрам АГО и близости к морю. Если на карте нет прямой кнопки вашего ОП, столичный покупатель уходит к риелторам или конкурентам.»</p>
+    <p><strong>Закрытие:</strong> «Давайте представим ваш бренд столичным инвесторам на высшем уровне. Подключим прямой шлюз?»</p>
+</div>
+
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>Карточка 11. «У нас длинный цикл сделки (60–90 дней), никакая площадка не ускорит покупку»</h3>
+        <span class="dossier-status">Тип: Оцифровка пути</span>
+    </div>
+    <p><strong>Присоединение:</strong> «Покупка недвижимости за 1 000 км действительно требует глубокого анализа.»</p>
+    <p><strong>Рефрейминг & Расчет:</strong> «Именно поэтому традиционный цикл тянется 90 дней: клиент тратит недели на сбор разрозненных PDF и поездки. 9 табов Amber Avenue закрывают все вопросы онлайн (цены, 214-ФЗ, поквартирный газ, школы, ипотека). Клиент обращается к вам уже на 80% готовым, сжимая сделку до 14–25 дней и сберегая 113.9k ₽ эскроу-процентов.»</p>
+    <p><strong>Закрытие:</strong> «Давайте протестируем поток прогретых обращений. Согласуем условия?»</p>
+</div>
+
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>Карточка 12. «Мы тратим огромные бюджеты на полиграфию и шоурумы — зачем еще площадка?»</h3>
+        <span class="dossier-status">Тип: Цифровой шоурум</span>
+    </div>
+    <p><strong>Присоединение:</strong> «Качественная полиграфия и шоурумы создают превосходное визуальное впечатление.»</p>
+    <p><strong>Рефрейминг & Расчет:</strong> «Но столичный покупатель находится за 1 000+ км и не может зайти в ваш офис на ул. Генделя. Затраты на печать и доставку буклетов достигают 350k ₽/мес (90k ₽ на сделку). Amber Avenue работает как круглосуточный цифровой шоурум с 9 табами, экономя 50–70% полиграфических затрат и доводя клиента до договора онлайн.»</p>
+    <p><strong>Закрытие:</strong> «Оцифруйте презентацию ваших ЖК на всю Россию. Подключим партнерский пакет?»</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ========================================================================= -->
+<!-- SECTION 7 -->
+<!-- ========================================================================= -->
+<h1>Раздел 7. Паспорта ТОП-10 региональных девелоперов и стратегии захода</h1>
+
+<h2>7.1. Сводный реестр ТОП-10 строительных холдингов Калининградской области</h2>
+<table>
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>Девелоперская группа</th>
+            <th>Специализированные застройщики / ИНН</th>
+            <th>Объем стройки / Эскроу</th>
+            <th>Сжатие Time-to-Deal</th>
+            <th>Пакет / Чек</th>
+            <th>Ключевые ЛПР</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>1</strong></td><td><strong>ГК «КалининградСтройИнвест» (КСИ)</strong></td><td>ООО СЗ «Маршала Борзова», «Монолит»<br>ИНН: 3906351980</td><td>~112 000 м²<br>~7.5 млрд ₽ (Сбер)</td><td>60–75 дн $	o$ <strong>18 дней</strong></td><td>150 000 ₽ / Media Pool (Anchor City)</td><td>Макаров В.М. (Председатель СД)<br>Макаров П.В. (Гендиректор)</td></tr>
+        <tr><td><strong>2</strong></td><td><strong>ГК «К8 Комплексный девелопмент»</strong></td><td>ООО СЗ «К8», ООО СЗ «Остров»<br>ИНН: 3906385154</td><td>~146 400 м² (ТОП-3)<br>~12.0 млрд ₽ (ВТБ/Сбер)</td><td>90–120 дн $	o$ <strong>20 дней</strong></td><td>270 000 ₽ / Главный Партнер (Hero Остров)</td><td>Качанович А. (Основатель)<br>Директор по маркетингу</td></tr>
+        <tr><td><strong>3</strong></td><td><strong>ГК «Расцвет»</strong></td><td>ООО СЗ «Октарин», «Балтийский берег»<br>ИНН: 3906391200</td><td>~74 500 м²<br>~5.0 млрд ₽ (ДОМ.РФ)</td><td>50–70 дн $	o$ <strong>16 дней</strong></td><td>150 000 ₽ / Media Pool (Anchor Архитектура)</td><td>Генеральный директор<br>Коммерческий директор / РОП</td></tr>
+        <tr><td><strong>4</strong></td><td><strong>ГК «Модуль-Стройград»</strong></td><td>АО СЗ «Регистр», «Модуль-Запад»<br>ИНН: 3906054810</td><td>~98 500 м²<br>~6.5 млрд ₽ (ДОМ.РФ)</td><td>45–65 дн $	o$ <strong>14 дней</strong></td><td>150 000 ₽ / Media Pool (Anchor Кирпич/Семья)</td><td>Верхолаз Е.М. (Бенефициар)<br>Руководитель отдела продаж</td></tr>
+        <tr><td><strong>5</strong></td><td><strong>ООО «КПД-Калининград»</strong></td><td>ООО СЗ «Альпенштадт», «КПД РИЭЛТ»<br>ИНН: 3906234019</td><td>~71 000 м²<br>~4.5 млрд ₽ (Сбербанк)</td><td>60–90 дн $	o$ <strong>18 дней</strong></td><td>150 000 ₽ / Media Pool (Агломерация/Область)</td><td>Тарчуткин С. (Гендиректор)<br>Коммерческий директор</td></tr>
+        <tr><td><strong>6</strong></td><td><strong>Фонд ЖСС Калининградской области</strong></td><td>НО «Фонд ЖСС КО»<br>ИНН: 3906069940</td><td>~45 000 м²<br>~3.0 млрд ₽ (Госпрограммы)</td><td>45–60 дн $	o$ <strong>14 дней</strong></td><td>150 000 ₽ / Media Pool (Гарант надежности)</td><td>Олейник И.А. (Директор)<br>Начальник отдела реализации</td></tr>
+        <tr><td><strong>7</strong></td><td><strong>ООО СЗ «Кранц-Парк» / WestDream</strong></td><td>ООО СЗ «Кранц-Парк»<br>ИНН: 3918014520</td><td>~34 000 м²<br>~3.2 млрд ₽ (Банк СПб)</td><td>60–90 дн $	o$ <strong>15 дней</strong></td><td>150 000 ₽ / Media Pool (Anchor Курорт Sea)</td><td>Руководство WestDream<br>Коммерческий директор</td></tr>
+        <tr><td><strong>8</strong></td><td><strong>ГК «Лидер Групп» / СЗ «Смоленское»</strong></td><td>ООО СЗ «Смоленское» (Лидер Групп)<br>ИНН: 3906398810</td><td>~40 000 м²<br>~3.0 млрд ₽ (Сбербанк)</td><td>60–75 дн $	o$ <strong>15 дней</strong></td><td>150 000 ₽ / Media Pool (Федеральный мост СПб)</td><td>Директор филиала в КО<br>Директор по фед. маркетингу</td></tr>
+        <tr><td><strong>9</strong></td><td><strong>СК «МПК» (МПК-Инвест)</strong></td><td>ООО СЗ «СИК ДОМ», «Калининградстрой»<br>ИНН: 3918012890</td><td>~187 000 м² (№1 в КО)<br>~14.0 млрд ₽ (ВТБ/Сбер)</td><td>60–90 дн $	o$ <strong>18 дней</strong></td><td>270 000 ₽ / Главный Партнер (Hero Побережье)</td><td>Руководство холдинга МПК<br>Коммерческий директор / РОП</td></tr>
+        <tr><td><strong>10</strong></td><td><strong>Холдинг «Русская Европа» / КОРТРОС</strong></td><td>ООО СЗ «ИК «Авангардинвестпроект»<br>ИНН: 3906214534</td><td>~78 000 м²<br>~6.8 млрд ₽ (ДОМ.РФ)</td><td>75–90 дн $	o$ <strong>21 день</strong></td><td>150 000 ₽ / Media Pool (Инновационный Экоквартал)</td><td>Иванюк В.О. (Президент)<br>Топ-менеджмент КОРТРОС</td></tr>
+    </tbody>
+</table>
+
+<h2>7.2. Индивидуальные досье №1–10</h2>
+
+<!-- DOSSIER 1 -->
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>ДОСЬЕ №1: ГК «КалининградСтройИнвест» (КСИ)</h3>
+        <span class="dossier-status">Рейтинг ЕРЗ: 4.8★ · Объем: ~112 000 м²</span>
+    </div>
+    <p><strong>Юрлица и контакты:</strong> ООО СЗ «Маршала Борзова», ООО СЗ «Монолит» (ИНН 3906351980) · <code>stroinvest39.ru</code> · ул. Генделя, 5 · Тел: +7 (4012) 61-55-07.</p>
+    <p><strong>ЛПР:</strong> Валерий Михайлович Макаров (Председатель СД), Павел Валерьевич Макаров (Гендиректор СЗ), РОП.</p>
+    <p><strong>Флагманские ЖК:</strong> ЖК «Легенды Девау» (Суздальская, чек 5.2–12.5 млн ₽), ЖК «Альпы» (Борзова, чек до 16.5 млн ₽), ЖК «Солнечный квартал» (Автомобильная).</p>
+    <p><strong>Боли и Time-to-Deal:</strong> Затягивание цикла до 60–75 дней брокерами на Суздальской. Кредит эскроу Сбера ~7.5 млрд ₽ — переплата 1.2–2.0 млн ₽ в квартал на процентах. 40% «фонарей» на Авито перехватывают клиентов «Легенд Девау» (352k ₽ комиссии).</p>
+    <p><strong>Инвест-хук:</strong> <em>«Павел Валерьевич, 70% покупателей "Легенд Девау" — из Москвы и Сибири. Через агентства путь к ДДУ тянется 75 дней, перегружая эскроу Сбера. Amber Avenue прогревает покупателя на 80% в 9 табах и сжимает цикл до 18 дней. Взнос 150 000 ₽ окупается с 1 квартиры, дает 1 000%+ ROI и экономит до 2 млн ₽ на процентах кредита в квартал.»</em></p>
+    <p><strong>Пакет:</strong> «Пре-лонч Амбассадор» (150 000 ₽) — 2 ЖК на 10 мес, Hero-баннер <code>city</code>, золотая метка, пожизненный тариф 15k/мес.</p>
+</div>
+
+<!-- DOSSIER 2 -->
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>ДОСЬЕ №2: ГК «К8 Комплексный девелопмент»</h3>
+        <span class="dossier-status">Рейтинг ЕРЗ: 4.9★ · Объем: ~146 400 м² (ТОП-3)</span>
+    </div>
+    <p><strong>Юрлица и контакты:</strong> ООО СЗ «К8», ООО СЗ «Остров» (ИНН 3906385154) · <code>k8.su</code> · Октябрьский остров · Тел: +7 (4012) 77-77-71.</p>
+    <p><strong>ЛПР:</strong> Александр Качанович (Основатель/бенефициар), Директор по маркетингу и продажам.</p>
+    <p><strong>Флагманские ЖК:</strong> ЖК «Рыбная деревня-2» & Остров Октябрьский (элит, 15–45 млн ₽), ЖК «Фридланд» (пр-т Калинина, 11.5 млн ₽).</p>
+    <p><strong>Боли и Time-to-Deal:</strong> Цикл в элит-сегменте 90–120 дней. VIP-брокеры берут 4% (600k–1.5M ₽ с ДДУ). Кредит эскроу ~12.0 млрд ₽ (ВТБ/Сбер). Дорогая полиграфия (кожаные альбомы, роуд-шоу в Москве).</p>
+    <p><strong>Инвест-хук:</strong> <em>«Александр, брокеры тянут сделки по 4 месяца и забирают до 1.5 млн ₽ комиссии. Amber Avenue дает столичным инвесторам исчерпывающий цифровой анализ Острова в 9 табах, сокращая цикл до 20 дней. Пакет Главного Партнера за 270 000 ₽ окупается в 15 раз с первой же квартиры в "Рыбной деревне-2" и ускоряет наполнение эскроу на 12 млрд ₽.»</em></p>
+    <p><strong>Пакет:</strong> «Главный Партнер City / Остров» (270 000 ₽ / кв) — монопольный Hero-баннер Острова, золотая метка 4.9★, шлюз CRM.</p>
+</div>
+
+<!-- DOSSIER 3 -->
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>ДОСЬЕ №3: ГК «Расцвет»</h3>
+        <span class="dossier-status">Рейтинг ЕРЗ: 4.7★ · Объем: ~74 500 м²</span>
+    </div>
+    <p><strong>Юрлица и контакты:</strong> ООО СЗ «Октарин», ООО СЗ «Балтийский берег» (ИНН 3906391200) · <code>rascvet.ru</code> · Тел: +7 (4012) 99-44-00.</p>
+    <p><strong>ЛПР:</strong> Генеральный директор холдинга, Коммерческий директор, РОП.</p>
+    <p><strong>Флагманские ЖК:</strong> ЖК «Расцвет на Советском» (Центральный р-н, 6.5–14.0 млн ₽), ЖК «Расцвет у Моря» (Зеленоградск, 8.5–18.0 млн ₽).</p>
+    <p><strong>Боли и Time-to-Deal:</strong> Цикл 50–70 дней. Покупатели не считывают архитектурную ценность по плоским рендерам классифайдов. Кредит эскроу ДОМ.РФ ~5.0 млрд ₽ (потери 900k–1.4M ₽ в квартал на ставке).</p>
+    <p><strong>Инвест-хук:</strong> <em>«Ваш авторский европейский стиль теряется в общей массе Авито. В 9 табах Amber Avenue архитектурная концепция "Расцвета" раскрывается в деталях. Мы сжимаем цикл до 16 дней, экономим 352k ₽ комиссии и 113k ₽ эскроу-процентов с каждой продажи. Взнос 150 000 ₽ окупается с 1 сделки.»</em></p>
+    <p><strong>Пакет:</strong> «Пре-лонч Амбассадор» (150 000 ₽) — 2 ЖК (город + море), приоритет в фильтрах «Архитектура/Бизнес-класс».</p>
+</div>
+
+<!-- DOSSIER 4 -->
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>ДОСЬЕ №4: ГК «Модуль-Стройград»</h3>
+        <span class="dossier-status">Рейтинг ЕРЗ: 4.6★ · Объем: ~98 500 м² (Лидер кирпича)</span>
+    </div>
+    <p><strong>Юрлица и контакты:</strong> АО СЗ «Регистр», ООО СЗ «Модуль-Запад» (ИНН 3906054810) · <code>modul-stroygrad.ru</code> · Тел: +7 (4012) 55-55-55.</p>
+    <p><strong>ЛПР:</strong> Евгений Михайлович Верхолаз (Основатель/бенефициар), Руководитель отдела продаж.</p>
+    <p><strong>Флагманские ЖК:</strong> ЖК «Южный бульвар» (Московский р-н, 4.8–9.5 млн ₽), ЖК «Квартал на Суздальской», ЖК «Гагаринский» (чистый керамический кирпич + АГО).</p>
+    <p><strong>Боли и Time-to-Deal:</strong> Масс-маркет затягивается до 45–65 дней. Маклеры сталкивают покупателей лбами с монолитными ЖК. Кредит эскроу ~6.5 млрд ₽ (ДОМ.РФ). Переплата 1.5 млн ₽/мес на процентах.</p>
+    <p><strong>Инвест-хук:</strong> <em>«Евгений Михайлович, столичные семьи ищут экологичный керамический кирпич и АГО. На классифайдах маклеры уводят их в монолит. Amber Avenue выводит ваши кирпичные дома на 1 место по фильтру конструктива, сокращая сделку до 14 дней. Взнос 150 000 ₽ окупается с первой же квартиры.»</em></p>
+    <p><strong>Пакет:</strong> «Пре-лонч Амбассадор» (150 000 ₽) — Hero-позиция в фильтре «Керамический кирпич + АГО», 2 ЖК на 10 мес.</p>
+</div>
+
+<!-- DOSSIER 5 -->
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>ДОСЬЕ №5: ООО «КПД-Калининград»</h3>
+        <span class="dossier-status">Рейтинг ЕРЗ: 4.5★ · Объем: ~71 000 м²</span>
+    </div>
+    <p><strong>Юрлица и контакты:</strong> ООО СЗ «Альпенштадт», ООО СЗ «КПД РИЭЛТ» (ИНН 3906234019) · <code>kpd-kaliningrad.ru</code> · Тел: +7 (4012) 76-00-00.</p>
+    <p><strong>ЛПР:</strong> Сергей Тарчуткин (Генеральный директор), Коммерческий директор.</p>
+    <p><strong>Флагманские ЖК:</strong> ЖК «Альпенштадт» (Московский р-н, 4.2–8.5 млн ₽), ЖК «Новое Васильково» (Пригород, 3.8–6.8 млн ₽).</p>
+    <p><strong>Боли и Time-to-Deal:</strong> Цикл 60–90 дней. Покупатели боятся панельного домостроения, не зная о современной немецкой технологии Vollert и АГО. Огромные затраты на наружные биллборды.</p>
+    <p><strong>Инвест-хук:</strong> <em>«Таб "Характеристики" на Amber Avenue показывает энергоэффективность ваших немецких панелей и поквартирный газ. Столичный клиент с чеком 4.5 млн ₽ покупает без сомнений за 18 дней. 0 ₽ затрат на щиты и окупаемость 150 000 ₽ с первой же сделки.»</em></p>
+    <p><strong>Пакет:</strong> «Пре-лонч Амбассадор» (150 000 ₽) — фокус на доступное жилье и пригородный пояс.</p>
+</div>
+
+<!-- DOSSIER 6 -->
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>ДОСЬЕ №6: Фонд ЖСС Калининградской области</h3>
+        <span class="dossier-status">Государственный оператор жилья · Объем: ~45 000 м²</span>
+    </div>
+    <p><strong>Юрлица и контакты:</strong> Некоммерческая организация «ФЖСС КО» (ИНН 3906069940) · <code>fondjss.ru</code> · Тел: +7 (4012) 30-33-30.</p>
+    <p><strong>ЛПР:</strong> Игорь Анатольевич Олейник (Директор Фонда), Начальник отдела реализации жилья.</p>
+    <p><strong>Флагманские ЖК:</strong> ЖК «На Летней» (Московский р-н, 3.9–7.2 млн ₽), ЖК «В Зеленоградске» (курортные спецпрограммы, 5.5–11.0 млн ₽).</p>
+    <p><strong>Боли и Time-to-Deal:</strong> Ограниченный госбюджет на коммерческую рекламу. Строгий аудит расходов. Необходимость выполнения показателей ввода жилья по госпрограммам.</p>
+    <p><strong>Инвест-хук:</strong> <em>«Игорь Анатольевич, для Фонда ЖСС статус Амбассадора на Amber Avenue — это способ получить прямой поток покупателей со всей РФ с 87% скидкой от коммерческого прайса. Знак "Государственная надежность" в табе документов привлекает семьи с маткапиталом и сертификатами, закрывая сделки за 14 дней.»</em></p>
+    <p><strong>Пакет:</strong> «Пре-лонч Амбассадор» (150 000 ₽) — статус «Государственный гарант надежности».</p>
+</div>
+
+<!-- DOSSIER 7 -->
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>ДОСЬЕ №7: ООО СЗ «Кранц-Парк» / WestDream</h3>
+        <span class="dossier-status">Премиальный курортный девелопмент · Объем: ~34 000 м²</span>
+    </div>
+    <p><strong>Юрлица и контакты:</strong> ООО СЗ «Кранц-Парк» (ИНН 3918014520) · <code>westdream.ru</code> · Зеленоградск · Тел: +7 (4012) 77-00-77.</p>
+    <p><strong>ЛПР:</strong> Руководство холдинга WestDream, Коммерческий директор.</p>
+    <p><strong>Флагманские ЖК:</strong> ЖК «Кранц-Парк» (Зеленоградск, 7.8–22.0 млн ₽), клубные малоэтажные резиденции у парка.</p>
+    <p><strong>Боли и Time-to-Deal:</strong> 85% покупателей — Москва и Петербург. Цикл 60–90 дней. Колоссальные расходы на организацию индивидуальных трансферов и просмотров в Зеленоградске (400k+ ₽/мес).</p>
+    <p><strong>Инвест-хук:</strong> <em>«Amber Avenue оцифровывает локацию Зеленоградска в 9 табах (GPS до променада, парки, АГО), заменяя офлайн-показы. Столичный клиент бронирует лот онлайн. Сжатие цикла до 15 дней экономит 400k ₽ на трансферах и окупает 150 000 ₽ со-инвестиции в 15+ раз с первого же курортного лота.»</em></p>
+    <p><strong>Пакет:</strong> «Пре-лонч Амбассадор» (150 000 ₽) — Anchor курортного направления <code>sea</code>.</p>
+</div>
+
+<!-- DOSSIER 8 -->
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>ДОСЬЕ №8: ГК «Лидер Групп» / СЗ «Смоленское»</h3>
+        <span class="dossier-status">Федеральный девелопер (СПб / Москва) · Объем в КО: ~40 000 м²</span>
+    </div>
+    <p><strong>Юрлица и контакты:</strong> ООО СЗ «Смоленское» (ИНН 3906398810) · <code>lidgroup.ru</code> · Тел: +7 (4012) 65-88-88.</p>
+    <p><strong>ЛПР:</strong> Руководитель филиала в Калининграде, Директор по региональному маркетингу (СПб).</p>
+    <p><strong>Флагманские ЖК:</strong> ЖК «Смоленский квартал» (Ленинградский р-н, 5.5–11.0 млн ₽, комплексное освоение территорий).</p>
+    <p><strong>Боли и Time-to-Deal:</strong> Федеральный маркетинг из Санкт-Петербурга плохо чувствует специфику Калининграда (не акцентирует АГО и локальные микрорайоны). Огромные затраты на ярмарки недвижимости в СПб.</p>
+    <p><strong>Инвест-хук:</strong> <em>«Коллеги, ваш отдел маркетинга в СПб тратит миллионы на выставки. Amber Avenue перехватывает петербуржцев в момент выбора жилья в Калининграде через региональный гид. Сжатие цикла до 15 дней и прямая интеграция в вашу CRM окупает 150 000 ₽ с первой же сделки.»</em></p>
+    <p><strong>Пакет:</strong> «Пре-лонч Амбассадор» (150 000 ₽) — мост «Санкт-Петербург $	o$ Калининград».</p>
+</div>
+
+<!-- DOSSIER 9 -->
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>ДОСЬЕ №9: СК «МПК» (МПК-Инвест)</h3>
+        <span class="dossier-status">Лидер строительства на побережье (№1 в КО) · Объем: ~187 000 м²</span>
+    </div>
+    <p><strong>Юрлица и контакты:</strong> ООО СЗ «СИК ДОМ», ООО СЗ «Калининградстрой» (ИНН 3918012890) · <code>mpk-invest.ru</code> · Тел: +7 (4012) 31-00-00.</p>
+    <p><strong>ЛПР:</strong> Руководство холдинга МПК, Коммерческий директор, РОП.</p>
+    <p><strong>Флагманские ЖК:</strong> ЖК «Байкал» (Зеленоградск), ЖК «Морской» (Пионерский), ЖК «Созвездие» (масштабные курортные кварталы, 5.8–16.0 млн ₽).</p>
+    <p><strong>Боли и Time-to-Deal:</strong> Крупнейший кредитный портфель эскроу в регионе (~14.0 млрд ₽, ВТБ/Сбер). Переплата 3–5 млн ₽ в квартал на процентах при затягивании сделок курортными брокерами (60–90 дней).</p>
+    <p><strong>Инвест-хук:</strong> <em>«МПК строит 187 000 м² на Балтике. Каждый день задержки на 14-миллиардном кредите стоит сотни тысяч рублей. Amber Avenue дает 80% прогретый поток покупателей со всей РФ, сжимая сделку до 18 дней. Пакет Главного Партнера за 270 000 ₽ окупается многократно и экономит миллионы на ставке эскроу.»</em></p>
+    <p><strong>Пакет:</strong> «Главный Партнер Побережья» (270 000 ₽ / кв) — монопольный Hero-баннер <code>sea</code>, приоритет №1 по Зеленоградску и Пионерскому.</p>
+</div>
+
+<!-- DOSSIER 10 -->
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>ДОСЬЕ №10: Холдинг «Русская Европа» / ГК «КОРТРОС»</h3>
+        <span class="dossier-status">Флагманский инновационный экоквартал · Объем: ~78 000 м²</span>
+    </div>
+    <p><strong>Юрлица и контакты:</strong> ООО СЗ «ИК «Авангардинвестпроект» (ИНН 3906214534) · <code>r-eu.ru</code> · ул. Молодой Гвардии · Тел: +7 (4012) 60-50-00.</p>
+    <p><strong>ЛПР:</strong> Виктор Олегович Иванюк (Президент холдинга), Топ-менеджмент ГК «КОРТРОС».</p>
+    <p><strong>Флагманские ЖК:</strong> ЖК «Адрес Счастья», ЖК «Вдохновение» (экоквартал «Русская Европа», 8.5–28.0 млн ₽, дворы без машин, террасы, эксплуатируемые кровли).</p>
+    <p><strong>Боли и Time-to-Deal:</strong> Сложный высокотехнологичный продукт (концепция медленного города, СПА, эксплуатируемые кровли), который невозможно объяснить через банальные объявления на Авито. Цикл сделки 75–90 дней. Огромные затраты на офлайн-экскурсии.</p>
+    <p><strong>Инвест-хук:</strong> <em>«Виктор Олегович, экоквартал "Русская Европа" — это уникальный манифест девелопмента. На классифайдах его приравнивают к типовой застройке. В 9 табах Amber Avenue архитектурная экосистема проекта раскрывается как виртуальный музей. Инвестор из Москвы покупает философию за 21 день. Взнос 150 000 ₽ окупается с первой же террасы на 1 000%+.»</em></p>
+    <p><strong>Пакет:</strong> «Пре-лонч Амбассадор» (150 000 ₽) — статус «Инновационный Экоквартал Региона», спецтаб «Экосистема проекта».</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ========================================================================= -->
+<!-- SECTION 8 -->
+<!-- ========================================================================= -->
+<h1>Раздел 8. Структура Pitch Deck (10 слайдов) и One-Pager коммерческого предложения</h1>
+
+<h2>8.1. Послайдовая архитектура презентации для личных встреч и Zoom</h2>
+
+<div class="callout">
+    <strong>Хронометраж встречи:</strong> 12–15 минут презентация + 10 минут Q&A и закрытие счета.<br>
+    <strong>Ключевая цель:</strong> Закрытие договора на 150 000 ₽ (или 270 000 ₽) для формирования Media Investment Pool 1.5M ₽.
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Слайд</th>
+            <th>Название и фокус</th>
+            <th>Содержание и верифицированные метрики</th>
+            <th>Психологический вектор закрытия</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Слайд 1</strong></td>
+            <td><strong>Титул: Fast-Track & Инвест-пул</strong></td>
+            <td>369 ЖК, 54 девелопера, пул 1.5M ₽, Time-to-Deal 14–25 дней, окупаемость с 1 ДДУ.</td>
+            <td>Захват внимания статусом инвест-пула, а не рекламы.</td>
+        </tr>
+        <tr>
+            <td><strong>Слайд 2</strong></td>
+            <td><strong>Рыночный спрос & Дистанция</strong></td>
+            <td>65–75% спроса — Москва, СПб, Сибирь. Чек 8.8 млн ₽. Барьер дистанции затягивает сделки на 90 дней.</td>
+            <td>Осознание потерь от простоя капитала на эскроу.</td>
+        </tr>
+        <tr>
+            <td><strong>Слайд 3</strong></td>
+            <td><strong>Кризис классифайдов & Фейки</strong></td>
+            <td>40% «фонарей» на Авито/Циан. Перепродажа своих же клиентов с комиссией 4% (352k ₽).</td>
+            <td>Вскрытие скрытых утечек маржи и агентских комиссий.</td>
+        </tr>
+        <tr>
+            <td><strong>Слайд 4</strong></td>
+            <td><strong>Анатомия 9 табов & 80% прогрев</strong></td>
+            <td>Интерактивная карта, цены, 214-ФЗ, АГО (>95.4%), ипотека. Снятие барьеров онлайн.</td>
+            <td>Демонстрация готовности лида к брони ДО звонка.</td>
+        </tr>
+        <tr>
+            <td><strong>Слайд 5</strong></td>
+            <td><strong>Механика перехвата трафика</strong></td>
+            <td>Прямой лифт в штатный ОП. Сжатие цикла с 60–90 до 14–25 дней.</td>
+            <td>Убеждение в технологическом превосходстве Fast-Track.</td>
+        </tr>
+        <tr>
+            <td><strong>Слайд 6</strong></td>
+            <td><strong>Сетка рекламных мест</strong></td>
+            <td>Hero-баннеры, золотая метка на карте, приоритет ТОП-3, CRM Webhook.</td>
+            <td>Наглядность статуса монопольного лидера локации.</td>
+        </tr>
+        <tr>
+            <td><strong>Слайд 7</strong></td>
+            <td><strong>Unit-экономика & Расчет TEV</strong></td>
+            <td>Формула TEV: Маржа + 352k ₽ комиссия + 113.9k ₽ эскроу + 90k ₽ полиграфия. ROI 1 000%+.</td>
+            <td>Железное финансовое обоснование для CFO и CEO.</td>
+        </tr>
+        <tr>
+            <td><strong>Слайд 8</strong></td>
+            <td><strong>Оффер «Пре-лонч Амбассадор»</strong></td>
+            <td>150 000 ₽ за 10 мес (ценность 1 140 000 ₽, скидка 87%). Grandfathering 15k/мес.</td>
+            <td>Острое желание забрать максимальную выгоду пре-лонча.</td>
+        </tr>
+        <tr>
+            <td><strong>Слайд 9</strong></td>
+            <td><strong>Дефицит слотов (FOMO)</strong></td>
+            <td>Строго 10 мест в регионе (1 Hero на направление). Бронь по времени входящей заявки.</td>
+            <td>Триггер срочности: страх уступить первенство конкуренту.</td>
+        </tr>
+        <tr>
+            <td><strong>Слайд 10</strong></td>
+            <td><strong>Регламент запуска & Договор</strong></td>
+            <td>Белый договор, ЕРИР (347-ФЗ), старт за 48 часов, первый ДДУ за 14–25 дней.</td>
+            <td>Бесшовный переход к подписанию договора и оплате счета.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>8.2. Шаблон одностраничного коммерческого предложения (One-Pager)</h2>
+
+<div class="dossier-card">
+    <div class="dossier-header">
+        <h3>AMBER AVENUE | КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ ДЛЯ ДЕВЕЛОПЕРОВ</h3>
+        <span class="dossier-status">Формат: One-Pager Executive Summary</span>
+    </div>
+    <p><strong>Кому:</strong> Руководству и Коммерческой дирекции застройщика<br>
+    <strong>От кого:</strong> Дирекция развития PropTech-платформы Amber Avenue (Калининград)</p>
+    
+    <hr style="border: 0; border-top: 1px solid #ccc; margin: 2mm 0;">
+    
+    <p><strong>1. Суть предложения:</strong> Вхождение в закрытый Media Investment Pool из 10 якорных застройщиков Калининградской области с со-инвестицией <strong>150 000 ₽</strong> для формирования фонда федерального трафика в <strong>1 500 000 ₽</strong>.</p>
+    
+    <p><strong>2. Ключевая выгода для девелопера:</strong></p>
+    <ul>
+        <li><strong>Сжатие цикла сделки (Time-to-Deal):</strong> с 45–90 до <strong>14–25 дней</strong> за счет 80% предварительного прогрева покупателя в 9 табах карточки ЖК;</li>
+        <li><strong>Экономия на комиссии риелторов:</strong> <strong>352 000 ₽ с каждого ДДУ</strong> (прямой лифт в ваш отдел продаж);</li>
+        <li><strong>Экономия на процентах по эскроу-кредиту:</strong> <strong>113 918 ₽ на каждый лот</strong> за счет ускоренного притока средств на счета эскроу;</li>
+        <li><strong>Экономия на полиграфии и показах:</strong> <strong>до 90 000 ₽ на сделку</strong> (цифровой шоурум).</li>
+    </ul>
+
+    <p><strong>3. Состав пакета «Пре-лонч Амбассадор» (150 000 ₽ единоразово):</strong></p>
+    <ul>
+        <li>Размещение 2 флагманских ЖК на 10 месяцев (розничная стоимость 600 000 ₽);</li>
+        <li>Hero-баннер Направления на 6 месяцев (розничная стоимость 270 000 ₽);</li>
+        <li>Золотая метка Amber Index на интерактивной карте (розничная стоимость 90 000 ₽);</li>
+        <li>Пожизненный Grandfathering тарифа 15 000 ₽/мес на 12 месяцев (экономия 180 000 ₽);</li>
+        <li>Прямой Webhook-шлюз в CRM (0 ₽ комиссии за переданные лиды).</li>
+    </ul>
+    
+    <p><strong>4. Инвестиционная окупаемость:</strong> При среднем чеке 8,8 млн ₽ <strong>всего 1 закрытая сделка</strong> приносит девелоперу совокупный экономический эффект <strong>2 055 918 – 3 722 000 ₽</strong>, окупая инвестицию 150 000 ₽ на <strong>1 000%+</strong> в первые 30 дней!</p>
+
+    <div style="background-color: #f5f5f5; padding: 2mm 3mm; border: 1px solid #000; font-weight: 700; text-align: center; font-size: 8.5pt;">
+        КОНТАКТ ДЛЯ БРОНИРОВАНИЯ СЛОТА: sales@amberavenue.ru · +7 (4012) 00-00-00 · amberavenue.ru
+    </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- ========================================================================= -->
+<!-- SECTION 9 -->
+<!-- ========================================================================= -->
+<h1>Раздел 9. Операционный план и регламент 14-дневного спринта продаж</h1>
+
+<h2>9.1. Посуточный календарный график выполнения спринта (Дни 1–14)</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Рабочий день</th>
+            <th>Операционные задачи спринта</th>
+            <th>Ключевой результат дня</th>
+            <th>Ответственные</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>День 1</strong></td>
+            <td>Отправка персонализированных писем и One-Pager по базе ТОП-20 СЗ. Сообщения в мессенджерах ЛПР.</td>
+            <td>20 доставленных пакетов, фиксация прочтений</td>
+            <td>Менеджеры B2B, РОП</td>
+        </tr>
+        <tr>
+            <td><strong>День 2</strong></td>
+            <td>Первый раунд телефонных звонков РОПам и коммерческим директорам по Fast-Track скрипту.</td>
+            <td>12 квалифицированных ЛПР, 8 назначенных Zoom</td>
+            <td>Менеджеры B2B</td>
+        </tr>
+        <tr>
+            <td><strong>День 3</strong></td>
+            <td>Дожим неответивших через альтернативные каналы (секретариат, Telegram, личные контакты).</td>
+            <td>100% охват ТОП-10 девелоперов базы</td>
+            <td>Менеджеры B2B, РОП</td>
+        </tr>
+        <tr>
+            <td><strong>Дни 4–5</strong></td>
+            <td>Проведение 15-минутных Zoom-демонстраций с показом живой карточки ЖК, 9 табов и эскроу-модели.</td>
+            <td>8 проведенных Zoom, 6 переходов на договор</td>
+            <td>РОП, Коммерческий директор</td>
+        </tr>
+        <tr>
+            <td><strong>День 6</strong></td>
+            <td>Отправка проектов договоров, счетов и спецификаций рекламных мест первым согласованным СЗ.</td>
+            <td>6 выставленных счетов на 900 000 ₽</td>
+            <td>Юротдел, РОП</td>
+        </tr>
+        <tr>
+            <td><strong>Дни 7–8</strong></td>
+            <td>Отработка юридических и бухгалтерских протоколов разногласий, согласование актов по ЭДО.</td>
+            <td>3 подписанных договора, 3 первых оплаты (450k ₽)</td>
+            <td>Юрист, Бухгалтерия, РОП</td>
+        </tr>
+        <tr>
+            <td><strong>Дни 9–10</strong></td>
+            <td>Второй раунд переговоров с сомневающимися застройщиками через включение триггера FOMO (дефицит слотов).</td>
+            <td>4 дополнительных согласования договоров</td>
+            <td>Коммерческий директор</td>
+        </tr>
+        <tr>
+            <td><strong>Дни 11–12</strong></td>
+            <td>Сбор входящих оплат, подписание дополнительных соглашений по Grandfathering и интеграция CRM.</td>
+            <td>8 оплаченных пулов (1 200 000 ₽ собрано)</td>
+            <td>Бухгалтерия, IT-отдел</td>
+        </tr>
+        <tr>
+            <td><strong>Дни 13–14</strong></td>
+            <td>Финальное закрытие 9-го и 10-го партнерских договоров. Полный аудит поступлений 1 500 000 ₽.</td>
+            <td><strong>10 оплаченных пулов (1 500 000 ₽ на спецсчете)</strong></td>
+            <td>РОП, CEO Amber Avenue</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>9.2. KPI, нормативы конверсий и регламент фиксации партнерских пулов</h2>
+<ul>
+    <li><strong>Норматив базы:</strong> 20 квалифицированных контактов девелоперов (ТОП-10 основных + 10 резервных);</li>
+    <li><strong>Норматив конверсии воронки:</strong> 20 отправок $	o$ 14 телефонных контактов $	o$ 10 Zoom-презентаций $	o$ <strong>10 закрытых оплаченных сделок (конверсия 50%)</strong>;</li>
+    <li><strong>Фиксация слота:</strong> Рекламный слот направления и статус «Пре-лонч Амбассадор» закрепляется за девелопером на 48 часов с момента выставления счета. При отсутствии оплаты слот передается резервному застройщику;</li>
+    <li><strong>Активация услуг:</strong> Техническая интеграция карточек ЖК и настройка шлюза в CRM выполняется в течение 24 часов после поступления оплаты. Официальный срок действия пакета (10 месяцев) исчисляется со дня публичного релиза федерального трафика.</li>
+</ul>
+
+<div class="callout" style="text-align: center; font-weight: 800; font-size: 10pt; margin-top: 6mm;">
+    РЕГЛАМЕНТ УТВЕРЖДЕН И ВВЕДЕН В ДЕЙСТВИЕ ДИРЕКЦИЕЙ AMBER AVENUE PROPTECH HUB.<br>
+    ВСЕ ДАННЫЕ ВЕРИФИЦИРОВАНЫ В СООТВЕТСТВИИ С 214-ФЗ И СТАНДАРТОМ ЕИСЖС РФ.
+</div>
+
+</body>
+</html>

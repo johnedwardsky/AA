@@ -1,0 +1,3302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Amber Avenue — премиальный навигатор по недвижимости в Калининградской области. Честные отзывы, сравнение ЖК, ипотечный калькулятор.">
+  <meta name="theme-color" content="#1B3C6E">
+  <title>Amber Avenue — Новостройки Калининградской области</title>
+  <style>/* ============================================================
+   AMBER AVENUE — Real Estate Navigator
+   Design System & Component Styles
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ── Design Tokens ─────────────────────────────────────────── */
+:root {
+  --color-primary:       #1B3C6E;
+  --color-primary-dark:  #122a52;
+  --color-accent:        #F5A623;
+  --color-accent-hover:  #e0911a;
+  --color-accent-light:  #FFF8EC;
+  --color-accent-border: #F5C870;
+  --color-navy-light:    #EEF3FB;
+  --color-text:          #1A1A2E;
+  --color-text-secondary:#4B5563;
+  --color-muted:         #9CA3AF;
+  --color-border:        #E5E7EB;
+  --color-border-light:  #F3F4F6;
+  --color-surface:       #FFFFFF;
+  --color-bg:            #F0F3F8;
+  --color-success:       #10B981;
+  --color-warning:       #F59E0B;
+  --color-info:          #3B82F6;
+  --color-green:         #22C55E;
+  --color-tag-family:    #FEF3C7;
+  --color-tag-family-text:#92400E;
+  --color-tag-comfort:   #EFF6FF;
+  --color-tag-comfort-text:#1D4ED8;
+  --color-tag-mortgage:  #F0FDF4;
+  --color-tag-mortgage-text:#166534;
+
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   14px;
+  --radius-xl:   18px;
+  --radius-card: 14px;
+
+  --shadow-xs:   0 1px 3px rgba(0,0,0,0.06);
+  --shadow-sm:   0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg:   0 8px 32px rgba(0,0,0,0.12);
+  --shadow-card: 0 2px 12px rgba(27,60,110,0.08);
+
+  --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --connector-color: #F5A623;
+  --connector-width: 2px;
+
+  --feed-max-width: 960px;
+}
+
+/* ── Reset & Base ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+img { display: block; max-width: 100%; }
+ul { list-style: none; }
+
+/* ── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+/* ── Header ────────────────────────────────────────────────── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-primary);
+  box-shadow: 0 2px 16px rgba(27,60,110,0.25);
+}
+
+.header-inner {
+  max-width: var(--feed-max-width);
+  margin: 0 auto;
+  padding: 0 16px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--color-accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.logo-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.logo-tagline {
+  font-size: 9px;
+  color: rgba(255,255,255,0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+}
+
+.header-search {
+  flex: 1;
+  position: relative;
+  max-width: 520px;
+}
+
+.header-search input {
+  width: 100%;
+  height: 38px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  padding: 0 14px 0 38px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.header-search input::placeholder { color: rgba(255,255,255,0.5); }
+.header-search input:focus {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.4);
+}
+
+.header-search .search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,0.5);
+  pointer-events: none;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.btn-header {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.btn-header-ghost {
+  color: rgba(255,255,255,0.85);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.btn-header-ghost:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.btn-header-accent {
+  background: var(--color-accent);
+  color: var(--color-primary);
+}
+.btn-header-accent:hover {
+  background: var(--color-accent-hover);
+}
+
+/* ── Filter Bar ────────────────────────────────────────────── */
+.filter-bar {
+  background: #fff;
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 60px;
+  z-index: 90;
+  box-shadow: var(--shadow-xs);
+}
+
+.filter-bar-inner {
+  max-width: var(--feed-max-width);
+  margin: 0 auto;
+  padding: 0 16px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.filter-bar-inner::-webkit-scrollbar { display: none; }
+
+.filter-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+
+.filter-chip {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: var(--transition);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.filter-chip:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.filter-chip.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.filter-chip .chip-count {
+  background: rgba(0,0,0,0.12);
+  border-radius: 10px;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.filter-chip.active .chip-count {
+  background: rgba(27,60,110,0.15);
+}
+
+/* ── Page Layout ───────────────────────────────────────────── */
+.page-content {
+  max-width: var(--feed-max-width);
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+.feed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.feed-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.feed-count {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.feed-sort {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.feed-sort select {
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--color-text);
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+}
+
+/* ── Feed Container ────────────────────────────────────────── */
+.listing-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Property Card Wrapper ─────────────────────────────────── */
+.property-card-wrapper {
+  position: relative;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+.property-card-wrapper:last-child { border-bottom: none; }
+
+/* Card row: main card + optional promo */
+.card-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+/* ── Property Card ─────────────────────────────────────────── */
+.property-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: box-shadow var(--transition);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.property-card:hover {
+  box-shadow: 0 6px 24px rgba(27,60,110,0.13);
+}
+
+/* ── Card Main Body (image left + content right) ── */
+.card-main {
+  display: flex;
+  flex-direction: row;
+  min-height: 0;
+}
+
+/* ── Card Image Column — SQUARE ── */
+.card-image-col {
+  position: relative;
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #1a1a2e;
+  cursor: pointer;
+}
+.card-image-col img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.property-card:hover .card-image-col img {
+  transform: scale(1.04);
+}
+
+/* Partner badge */
+.card-badge-partner {
+  position: absolute;
+  top: 8px; left: 8px;
+  background: rgba(18,42,82,0.90);
+  color: var(--color-accent);
+  font-size: 9px; font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 5px;
+  display: flex; align-items: center; gap: 4px;
+  backdrop-filter: blur(6px);
+  z-index: 2;
+}
+
+/* Photo count badge */
+.card-photo-count {
+  position: absolute;
+  bottom: 8px; left: 8px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 10px; font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 16px;
+  display: flex; align-items: center; gap: 4px;
+  backdrop-filter: blur(4px);
+  cursor: pointer; z-index: 2;
+  transition: background var(--transition);
+}
+.card-photo-count:hover { background: rgba(0,0,0,0.75); }
+
+/* ── Card Content Column ── */
+.card-content-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px 10px 18px;
+}
+
+/* Top row: title + save + rating */
+.card-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
+}
+.card-title-group {
+  display: flex; align-items: center; gap: 6px;
+  min-width: 0; flex: 1;
+}
+.card-title {
+  font-size: 16px; font-weight: 700;
+  color: var(--color-text); line-height: 1.25;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.card-save {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: var(--transition);
+  border: none; background: transparent;
+  flex-shrink: 0; color: var(--color-muted);
+}
+.card-save:hover { color: #EF4444; transform: scale(1.15); }
+.card-save.saved { color: #EF4444; }
+
+/* Rating block */
+.card-rating {
+  display: flex; flex-direction: column;
+  align-items: flex-end; flex-shrink: 0; gap: 1px;
+}
+.amber-index-label {
+  font-size: 9px; color: var(--color-muted);
+  display: flex; align-items: center; gap: 3px; white-space: nowrap;
+}
+.rating-score {
+  display: flex; align-items: baseline; gap: 3px;
+}
+.rating-star { color: var(--color-accent); font-size: 18px; line-height: 1; }
+.rating-num { font-size: 20px; font-weight: 800; color: var(--color-primary); line-height: 1; }
+.rating-max { font-size: 11px; color: var(--color-muted); font-weight: 500; }
+.rating-reviews {
+  font-size: 9px; color: var(--color-muted);
+  text-align: right; line-height: 1.3;
+}
+
+/* Location */
+.card-location {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11px; color: var(--color-text-secondary);
+  margin-bottom: 1px;
+}
+.card-location svg { color: var(--color-primary); flex-shrink: 0; }
+.loc-dot { color: var(--color-muted); }
+.card-map-link {
+  font-size: 10px; font-weight: 500; color: #2563EB;
+  cursor: pointer; margin-bottom: 8px;
+  display: inline-block; line-height: 1;
+  letter-spacing: 0.01em;
+}
+.card-map-link:hover { text-decoration: underline; }
+
+/* Meta info row */
+.card-meta-row {
+  display: flex; align-items: center;
+  flex-wrap: wrap; gap: 0;
+  margin-bottom: 0; row-gap: 4px;
+  background: color-mix(in srgb, var(--color-primary) 3%, var(--color-surface));
+  margin-left: -18px; margin-right: -18px;
+  padding: 7px 18px;
+  border-top: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+}
+.card-price-block {
+  display: flex; flex-direction: column;
+  padding-right: 10px; margin-right: 10px;
+  border-right: 1px solid var(--color-border);
+}
+.price-main { font-size: 12px; font-weight: 700; color: var(--color-text); line-height: 1.2; }
+.price-secondary { font-size: 10px; color: var(--color-muted); line-height: 1.2; }
+.card-delivery-block {
+  display: flex; flex-direction: column;
+  padding-right: 10px; margin-right: 10px;
+  border-right: 1px solid var(--color-border);
+}
+.card-delivery-label { font-size: 9px; color: var(--color-muted); line-height: 1.2; }
+.card-delivery-value { font-size: 12px; font-weight: 700; color: var(--color-text); line-height: 1.2; }
+.card-meta-tags { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+
+/* Description */
+.card-description {
+  font-size: 11px; color: var(--color-text-secondary);
+  line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+  margin: 0; flex: 1;
+  padding-top: 8px;
+}
+
+/* Tags */
+.tag {
+  display: inline-flex; align-items: center;
+  padding: 3px 8px; border-radius: 5px;
+  font-size: 10px; font-weight: 500;
+  white-space: nowrap; line-height: 1;
+}
+.tag-class { background: transparent; border: 1px solid var(--color-border); color: var(--color-text-secondary); }
+.tag-comfort    { background: #F0F4FF; color: #3B4FA8; border: 1px solid #D0DAFF; }
+.tag-family     { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+.tag-mortgage   { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+.tag-author     { background: #F5F3FF; color: #5B21B6; border: 1px solid #DDD6FE; }
+.tag-autonomous { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+.tag-it         { background: #F0F9FF; color: #0369A1; border: 1px solid #BAE6FD; }
+
+/* ── Nav Icons Row ─────────────────────────────────────────── */
+.card-nav {
+  display: flex;
+  border-top: 1px solid var(--color-border-light);
+  overflow-x: auto; scrollbar-width: none;
+}
+.card-nav::-webkit-scrollbar { display: none; }
+.card-nav-item {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 3px;
+  padding: 8px 10px; cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: var(--transition);
+  flex-shrink: 0; min-width: 56px;
+  white-space: nowrap; position: relative;
+  filter: grayscale(1); opacity: 0.55;
+}
+.card-nav-item:hover {
+  background: var(--color-bg);
+  filter: grayscale(0); opacity: 1;
+}
+.card-nav-item.active {
+  border-bottom-color: var(--color-accent);
+  filter: grayscale(0); opacity: 1;
+}
+.card-nav-item.active .nav-icon { color: var(--color-primary); }
+.card-nav-item.active .nav-label { color: var(--color-primary); font-weight: 600; }
+.nav-icon {
+  color: var(--color-text-secondary); transition: color var(--transition);
+  font-size: 16px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px;
+}
+.nav-label {
+  font-size: 9px; color: var(--color-text-secondary);
+  text-align: center; line-height: 1.2;
+}
+
+/* ── Inline Expandable Panel (below nav) ── */
+.card-inline-panel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
+  border-top: none;
+  background: var(--color-surface);
+}
+.card-inline-panel.open {
+  max-height: 800px;
+  border-top: 1px solid var(--color-border-light);
+}
+.card-inline-panel-content {
+  padding: 14px 18px;
+}
+
+/* Map services panel (Location tab) */
+.map-services-panel { }
+.map-address-line {
+  font-size: 12px; color: var(--color-text-secondary);
+  line-height: 1.5; margin-bottom: 12px;
+}
+.map-services-list {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.map-service-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-decoration: none; color: var(--color-text);
+  font-size: 13px; font-weight: 600;
+  transition: var(--transition);
+}
+.map-service-link:hover {
+  border-color: var(--color-primary);
+  background: var(--color-navy-light);
+}
+.map-service-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+
+/* Inline panel content sections (hidden by default) */
+.inline-section { display: none; }
+.inline-section.active { display: block; }
+
+/* Price table in inline panel */
+.price-panel .price-range {
+  font-size: 13px; font-weight: 700;
+  color: var(--color-primary); margin-bottom: 2px;
+}
+.price-panel .price-sqm {
+  font-size: 11px; color: var(--color-muted); margin-bottom: 8px;
+}
+.price-table { width: 100%; border-collapse: collapse; }
+.price-table tr { border-bottom: 1px solid var(--color-border-light); }
+.price-table tr:last-child { border-bottom: none; }
+.price-table td { padding: 5px 0; font-size: 11px; vertical-align: top; }
+.price-table td:first-child { color: var(--color-text); font-weight: 500; width: 100px; }
+.price-table td:nth-child(2) { color: var(--color-primary); font-weight: 600; padding-left: 8px; }
+.price-table td:last-child { color: var(--color-muted); text-align: right; font-size: 10px; }
+
+/* Mortgage in inline panel */
+.mortgage-tabs {
+  display: flex; gap: 2px;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 10px; overflow-x: auto; scrollbar-width: none;
+}
+.mortgage-tabs::-webkit-scrollbar { display: none; }
+.mtab {
+  padding: 6px 10px; font-size: 11px; font-weight: 600;
+  color: var(--color-muted); cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap; transition: var(--transition);
+  background: none; border-top: none; border-left: none; border-right: none;
+  margin-bottom: -1px;
+}
+.mtab:hover { color: var(--color-primary); }
+.mtab.active { color: var(--color-primary); border-bottom-color: var(--color-accent); }
+.mortgage-content { display: none; }
+.mortgage-content.active { display: block; }
+.mortgage-bank-label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  color: var(--color-muted); letter-spacing: 0.06em; margin-bottom: 6px;
+}
+.bank-logos { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+.bank-logo {
+  height: 22px; padding: 0 8px;
+  border: 1px solid var(--color-border); border-radius: 5px;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; white-space: nowrap; background: #fff;
+}
+.bank-logo.sber { color: #21A038; border-color: #21A038; }
+.bank-logo.vtb { color: #003D9D; border-color: #003D9D; }
+.bank-logo.domrf { color: #0060AA; border-color: #0060AA; }
+.bank-logo.rshb { color: #007A33; border-color: #007A33; }
+.bank-logo.more { color: var(--color-muted); }
+.mortgage-stat {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 5px 0; border-bottom: 1px solid var(--color-border-light); font-size: 11px;
+}
+.mortgage-stat:last-of-type { border-bottom: none; }
+.mortgage-stat .label { color: var(--color-text-secondary); }
+.mortgage-stat .value { font-weight: 700; color: var(--color-primary); }
+.mortgage-note { font-size: 10px; color: var(--color-muted); margin-top: 6px; line-height: 1.4; }
+
+/* Characteristics grid */
+.chars-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.char-item {
+  padding: 8px; background: var(--color-bg);
+  border-radius: var(--radius-sm);
+}
+.char-label { font-size: 10px; color: var(--color-text); font-weight: 700; line-height: 1.2; margin-bottom: 2px; }
+.char-value { font-size: 11px; font-weight: 600; color: var(--color-text); }
+
+/* Location grid */
+.location-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+}
+.location-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px; background: var(--color-bg);
+  border-radius: var(--radius-sm);
+}
+.location-icon { font-size: 16px; flex-shrink: 0; }
+.location-text { display: flex; flex-direction: column; }
+.location-name { font-size: 11px; font-weight: 600; color: var(--color-text); }
+.location-dist { font-size: 10px; color: var(--color-muted); }
+
+/* Infrastructure grid */
+.infra-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+}
+.infra-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px; background: var(--color-bg);
+  border-radius: var(--radius-sm);
+}
+.infra-icon {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.infra-name { font-size: 11px; font-weight: 600; color: var(--color-text); }
+.infra-desc { font-size: 10px; color: var(--color-muted); }
+
+/* Documents list */
+.doc-list { display: flex; flex-direction: column; gap: 4px; }
+.doc-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm); cursor: pointer;
+  transition: var(--transition);
+}
+.doc-item:hover { border-color: var(--color-primary); background: var(--color-navy-light); }
+.doc-icon { font-size: 16px; flex-shrink: 0; }
+.doc-name { font-size: 11px; font-weight: 600; color: var(--color-text); }
+.doc-meta { font-size: 10px; color: var(--color-muted); }
+
+/* ── CTA Buttons ───────────────────────────────────────────── */
+.card-actions {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 18px;
+  border-top: 1px solid var(--color-border-light);
+  background: var(--color-surface);
+  overflow-x: auto; scrollbar-width: none;
+}
+.card-actions::-webkit-scrollbar { display: none; }
+.btn {
+  height: 34px; border-radius: 8px;
+  font-size: 11px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  gap: 5px; transition: var(--transition);
+  white-space: nowrap; cursor: pointer;
+  border: none; font-family: inherit; flex-shrink: 0;
+}
+.btn-primary {
+  background: var(--color-primary); color: #fff; padding: 0 16px;
+}
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(27,60,110,0.32);
+}
+.btn-outline {
+  background: #fff; color: var(--color-text);
+  border: 1px solid var(--color-border); padding: 0 12px;
+}
+.btn-outline:hover {
+  border-color: var(--color-primary); color: var(--color-primary);
+  background: var(--color-navy-light);
+}
+.btn-expert { flex: 1; min-width: 0; }
+
+/* ── Special Offer Promo Card ──────────────────────────────── */
+.card-promo {
+  width: 220px; min-width: 220px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #2a5298 100%);
+  border-radius: var(--radius-card);
+  padding: 18px 16px;
+  color: #fff;
+  display: flex; flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--shadow-md);
+  align-self: stretch;
+}
+.promo-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(245,166,35,0.2);
+  border: 1px solid rgba(245,166,35,0.4);
+  color: var(--color-accent);
+  font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: 4px;
+  width: fit-content; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.promo-title {
+  font-size: 15px; font-weight: 700; line-height: 1.3;
+}
+.promo-text {
+  font-size: 11px; color: rgba(255,255,255,0.75);
+  line-height: 1.5; flex: 1;
+}
+.promo-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 10px 14px;
+  background: var(--color-accent);
+  color: var(--color-primary-dark);
+  border: none; border-radius: 8px;
+  font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: var(--transition);
+  font-family: inherit;
+}
+.promo-btn:hover { background: var(--color-accent-hover); transform: translateY(-1px); }
+.promo-discount {
+  font-size: 28px; font-weight: 800; line-height: 1;
+  color: var(--color-accent);
+}
+
+/* ── Gallery Popup (Full Screen) ───────────────────────────── */
+.gallery-popup-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 1000;
+  display: none; /* shown via JS */
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(8px);
+}
+.gallery-popup-overlay.open { display: flex; }
+.gallery-popup {
+  position: relative;
+  width: 90vw; max-width: 1000px;
+  max-height: 90vh;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 12px;
+}
+.gallery-popup-close {
+  position: absolute; top: -40px; right: 0;
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.15); border: none;
+  border-radius: 50%; color: #fff;
+  font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.gallery-popup-close:hover { background: rgba(255,255,255,0.3); }
+.gallery-popup-main {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+.gallery-popup-main img {
+  width: 100%; height: 100%;
+  object-fit: contain; display: block;
+}
+.gallery-popup-arrow {
+  position: absolute; top: 50%;
+  transform: translateY(-50%);
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,0.15);
+  border: none; border-radius: 50%;
+  color: #fff; font-size: 22px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.gallery-popup-arrow:hover { background: rgba(255,255,255,0.3); }
+.gallery-popup-arrow.prev { left: -60px; }
+.gallery-popup-arrow.next { right: -60px; }
+.gallery-popup-thumbs {
+  display: flex; gap: 6px;
+  overflow-x: auto; scrollbar-width: none;
+  padding: 4px 0;
+}
+.gallery-popup-thumbs::-webkit-scrollbar { display: none; }
+.gallery-popup-thumb {
+  flex-shrink: 0; width: 64px; height: 48px;
+  border-radius: 6px; overflow: hidden;
+  cursor: pointer; border: 2px solid transparent;
+  transition: var(--transition); opacity: 0.6;
+}
+.gallery-popup-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-popup-thumb.active { border-color: var(--color-accent); opacity: 1; }
+.gallery-popup-thumb:hover { opacity: 1; }
+.gallery-popup-counter {
+  font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 500;
+}
+.gallery-popup-title {
+  font-size: 15px; color: #fff; font-weight: 600;
+}
+
+/* ── Banner Card ───────────────────────────────────────────── */
+.banner-card {
+  display: flex; align-items: center; gap: 24px;
+  background: linear-gradient(135deg, #1B3C6E 0%, #2a5298 60%, #3b6cc5 100%);
+  border-radius: var(--radius-card);
+  padding: 24px 28px;
+  color: #fff;
+  min-height: 120px;
+  position: relative; overflow: hidden;
+}
+.banner-card::before {
+  content: ''; position: absolute; top: -30%; right: -10%;
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%);
+  border-radius: 50%; pointer-events: none;
+}
+.banner-icon {
+  font-size: 38px; flex-shrink: 0; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
+}
+.banner-body { flex: 1; z-index: 1; }
+.banner-headline {
+  font-size: 18px; font-weight: 800; line-height: 1.3; margin-bottom: 4px;
+}
+.banner-sub { font-size: 12px; color: rgba(255,255,255,0.75); line-height: 1.5; }
+.banner-cta {
+  margin-top: 10px;
+  padding: 8px 18px; background: var(--color-accent);
+  color: var(--color-primary-dark); border: none; border-radius: 8px;
+  font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;
+  transition: var(--transition);
+}
+.banner-cta:hover { background: var(--color-accent-hover); transform: translateY(-1px); }
+.banner-stats {
+  display: flex; flex-direction: column; gap: 10px; z-index: 1; flex-shrink: 0;
+}
+.banner-stat { text-align: center; }
+.banner-stat .num { font-size: 20px; font-weight: 800; display: block; }
+.banner-stat .label { font-size: 10px; color: rgba(255,255,255,0.6); }
+
+/* ── Load More Button ──────────────────────────────────────── */
+.load-more-wrapper {
+  display: flex; justify-content: center;
+  padding: 24px 0 32px;
+}
+.btn-load-more {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 48px;
+  font-size: 14px; font-weight: 700; font-family: inherit;
+  color: var(--color-primary);
+  background: var(--color-surface);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  letter-spacing: 0.02em;
+}
+.btn-load-more:hover {
+  background: var(--color-primary);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(27,60,110,0.25);
+}
+.btn-load-more svg { transition: transform 0.2s ease; }
+.btn-load-more:hover svg { transform: translateY(2px); }
+
+/* ── Site Footer ───────────────────────────────────────────── */
+.site-footer { background: var(--color-surface); }
+.footer-inner {
+  max-width: var(--feed-max-width);
+  margin: 0 auto; padding: 0 16px;
+}
+
+/* Trust Bar */
+.footer-trust-bar {
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: 18px 0;
+}
+.footer-trust-bar .trust-items {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; flex-wrap: wrap;
+}
+.trust-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 18px;
+  border-right: 1px solid var(--color-border);
+}
+.trust-item:last-child { border-right: none; }
+.trust-icon { font-size: 18px; flex-shrink: 0; color: var(--color-accent); }
+.trust-text { display: flex; flex-direction: column; }
+.trust-title { font-size: 12px; font-weight: 600; color: var(--color-text); line-height: 1.3; }
+.trust-sub { font-size: 10px; color: var(--color-muted); line-height: 1.3; }
+
+/* Main Footer Grid */
+.footer-main { padding: 36px 0 28px; }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: 32px;
+}
+.footer-col { }
+.footer-col-title {
+  font-size: 13px; font-weight: 700; color: var(--color-text);
+  margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.04em;
+}
+
+/* Footer Logo */
+.footer-logo {
+  display: flex; align-items: center; gap: 8px;
+  text-decoration: none; margin-bottom: 14px;
+}
+.footer-logo-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--color-primary), #2a5298);
+  color: #fff; font-weight: 800; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+.footer-logo-name {
+  font-size: 15px; font-weight: 800; color: var(--color-primary); line-height: 1.2;
+}
+.footer-logo-tagline {
+  font-size: 10px; color: var(--color-muted); line-height: 1.2;
+}
+.footer-brand-desc {
+  font-size: 11px; color: var(--color-text-secondary);
+  line-height: 1.6; margin-bottom: 16px;
+}
+
+/* Social Links */
+.footer-socials { display: flex; gap: 8px; }
+.social-link {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: var(--color-bg);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-text-secondary);
+  transition: var(--transition); text-decoration: none;
+}
+.social-link:hover {
+  background: var(--color-primary); color: #fff;
+  transform: translateY(-2px);
+}
+
+/* Footer Nav Links */
+.footer-links {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.footer-links a {
+  font-size: 12px; color: var(--color-text-secondary);
+  text-decoration: none; transition: var(--transition);
+  line-height: 1.4;
+}
+.footer-links a:hover { color: var(--color-primary); }
+
+/* Footer Contacts */
+.footer-contacts {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.footer-contacts li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12px; color: var(--color-text-secondary); line-height: 1.4;
+}
+.footer-contacts svg {
+  color: var(--color-primary); flex-shrink: 0; margin-top: 1px;
+}
+.footer-contacts a {
+  color: var(--color-text-secondary); text-decoration: none;
+  transition: var(--transition);
+}
+.footer-contacts a:hover { color: var(--color-primary); }
+.contact-phone {
+  font-size: 14px; font-weight: 700; color: var(--color-text) !important;
+  display: block;
+}
+.contact-hours {
+  font-size: 10px; color: var(--color-muted); display: block;
+}
+
+/* Newsletter */
+.footer-newsletter { margin-top: 18px; }
+.newsletter-title {
+  font-size: 12px; font-weight: 600; color: var(--color-text);
+  margin-bottom: 8px;
+}
+.newsletter-form {
+  display: flex; border-radius: 8px; overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+.newsletter-input {
+  flex: 1; padding: 8px 12px; border: none; outline: none;
+  font-size: 12px; font-family: inherit;
+  background: var(--color-bg); color: var(--color-text);
+  min-width: 0;
+}
+.newsletter-input::placeholder { color: var(--color-muted); }
+.newsletter-btn {
+  padding: 8px 14px; border: none;
+  background: var(--color-primary); color: #fff;
+  font-size: 16px; font-weight: 700; cursor: pointer;
+  transition: var(--transition); font-family: inherit;
+}
+.newsletter-btn:hover { background: var(--color-primary-dark); }
+
+.footer-bottom {
+  border-top: 1px solid var(--color-border);
+  padding: 10px 0;
+  background: var(--color-bg);
+}
+.footer-bottom-inner {
+  display: flex; align-items: center;
+  justify-content: space-between; flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-copyright {
+  font-size: 10px; color: var(--color-muted); white-space: nowrap;
+}
+.footer-legal {
+  display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+}
+.footer-legal a {
+  font-size: 10px; color: var(--color-text-secondary);
+  text-decoration: none; transition: var(--transition); white-space: nowrap;
+}
+.footer-legal a:hover { color: var(--color-primary); }
+.legal-dot { color: var(--color-muted); font-size: 8px; }
+.footer-disclaimer {
+  font-size: 9px; color: var(--color-muted);
+}
+
+/* ── Burger Button (mobile only) ───────────────────────────── */
+.burger-btn {
+  display: none; /* shown via media query */
+  flex-direction: column; justify-content: center;
+  gap: 4px; width: 36px; height: 36px;
+  padding: 7px; border-radius: 8px;
+  background: rgba(255,255,255,0.1);
+  flex-shrink: 0; cursor: pointer;
+  transition: background 0.2s ease;
+}
+.burger-btn:hover { background: rgba(255,255,255,0.2); }
+.burger-line {
+  display: block; width: 100%; height: 2px;
+  background: #fff; border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.2s ease;
+}
+.burger-btn.open .burger-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.burger-btn.open .burger-line:nth-child(2) { opacity: 0; }
+.burger-btn.open .burger-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* ── Mobile Drawer ────────────────────────────────────────── */
+.drawer-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 299;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.drawer-overlay.open { opacity: 1; pointer-events: auto; }
+
+.mobile-drawer {
+  position: fixed; top: 0; right: 0;
+  width: 300px; max-width: 85vw;
+  height: 100%; z-index: 300;
+  background: var(--color-surface);
+  box-shadow: -8px 0 30px rgba(0,0,0,0.2);
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+}
+.mobile-drawer.open { transform: translateX(0); }
+
+.drawer-header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-primary);
+  flex-shrink: 0;
+}
+.drawer-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+.drawer-close {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.15); border: none;
+  color: #fff; font-size: 16px; cursor: pointer;
+  transition: background 0.2s ease;
+}
+.drawer-close:hover { background: rgba(255,255,255,0.3); }
+
+.drawer-body {
+  flex: 1; padding: 12px 0;
+  overflow-y: auto;
+}
+
+.drawer-section {
+  padding: 8px 20px 12px;
+}
+.drawer-section + .drawer-section {
+  border-top: 1px solid var(--color-border-light);
+}
+.drawer-section-title {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+  margin-bottom: 6px;
+}
+.drawer-link {
+  display: block;
+  padding: 9px 0;
+  font-size: 14px; font-weight: 500;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color 0.15s ease;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 40%, transparent);
+}
+.drawer-link:last-child { border-bottom: none; }
+.drawer-link:hover { color: var(--color-primary); }
+
+.drawer-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+.drawer-cta {
+  width: 100%; padding: 12px;
+  background: var(--color-primary);
+  color: #fff; border: none; border-radius: 10px;
+  font-size: 14px; font-weight: 600;
+  font-family: inherit; cursor: pointer;
+  transition: background 0.2s ease;
+  box-shadow: 0 2px 8px rgba(27,60,110,0.25);
+}
+.drawer-cta:hover { background: var(--color-primary-dark); }
+
+/* ── Toast ─────────────────────────────────────────────────── */
+.toast-container {
+  position: fixed; bottom: 90px; left: 50%;
+  transform: translateX(-50%); z-index: 500;
+  display: flex; flex-direction: column; gap: 8px;
+  align-items: center;
+}
+.toast {
+  background: var(--color-primary);
+  color: #fff; padding: 10px 20px;
+  border-radius: 10px; font-size: 12px; font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  opacity: 0; transform: translateY(10px);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .card-promo { width: 180px; min-width: 180px; }
+  .chars-grid { grid-template-columns: 1fr 1fr; }
+  .location-grid { grid-template-columns: 1fr 1fr; }
+  .infra-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .header-search { display: none; }
+  .btn-header-ghost { display: none; }
+  .filter-bar-inner { height: 46px; }
+
+  /* Promo tucks under card on mobile */
+  .card-row { flex-direction: column; gap: 0; }
+  .card-promo {
+    width: 100%; min-width: 100%;
+    margin-top: -14px;
+    border-radius: 0 0 14px 14px;
+    padding: 24px 16px 16px;
+    flex-direction: row; flex-wrap: wrap;
+    align-items: center; gap: 10px;
+    position: relative; z-index: 0;
+  }
+  .card-promo .promo-discount { font-size: 22px; }
+  .card-promo .promo-title { font-size: 13px; flex: 1; min-width: 120px; }
+  .card-promo .promo-text { display: none; }
+  .card-promo .promo-btn { flex: 0 0 auto; }
+  .property-card { position: relative; z-index: 1; }
+
+  /* Stack card image on top */
+  .card-main { flex-direction: column; }
+  .card-image-col {
+    width: 100%; min-width: 100%; max-width: 100%;
+    height: 180px; aspect-ratio: auto;
+  }
+  .card-content-col { padding: 10px 12px 6px; }
+  .card-title { font-size: 14px; }
+
+  /* CTA wraps */
+  .card-actions { flex-wrap: wrap; gap: 6px; padding: 8px 10px; }
+  .btn-primary { flex: 1 1 100%; }
+  .btn-outline { flex: 1 1 calc(50% - 3px); }
+  .btn-expert { flex: 1 1 100%; }
+
+  /* Inline panel full width */
+  .chars-grid { grid-template-columns: 1fr 1fr; }
+  .location-grid { grid-template-columns: 1fr; }
+  .infra-grid { grid-template-columns: 1fr; }
+
+  /* Feed header mobile */
+  .feed-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .feed-sort {
+    width: 100%;
+    gap: 8px;
+  }
+  .feed-sort select {
+    flex: 1;
+    min-width: 0;
+    height: 34px;
+    font-size: 11px;
+  }
+
+  /* Footer mobile */
+  .footer-trust-bar .trust-items {
+    flex-direction: column; gap: 10px;
+  }
+  .trust-item {
+    border-right: none; border-bottom: 1px solid var(--color-border);
+    padding: 8px 0; width: 100%;
+  }
+  .trust-item:last-child { border-bottom: none; }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .footer-bottom-inner {
+    flex-direction: column; text-align: center;
+  }
+  .footer-legal {
+    justify-content: center;
+  }
+  .footer-bottom { padding-bottom: 16px; }
+
+  /* Burger menu */
+  .burger-btn { display: flex; }
+  .banner-card {
+    flex-direction: column; align-items: flex-start;
+    min-height: auto; padding: 20px 18px;
+  }
+  .banner-stats { flex-direction: row; gap: 20px; margin-top: 8px; }
+
+  /* Gallery popup mobile */
+  .gallery-popup-arrow.prev { left: 10px; }
+  .gallery-popup-arrow.next { right: 10px; }
+  .gallery-popup { width: 95vw; }
+
+}
+
+@media (max-width: 480px) {
+  .card-title { font-size: 13px; }
+  .banner-headline { font-size: 16px; }
+  .card-meta-row { gap: 5px; margin-left: -12px; margin-right: -12px; padding: 7px 12px; }
+  .card-delivery-block { display: none; }
+}
+
+/* ── Animations ────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.property-card-wrapper { animation: fadeInUp 0.4s ease both; }
+.property-card-wrapper:nth-child(1) { animation-delay: 0.05s; }
+.property-card-wrapper:nth-child(2) { animation-delay: 0.10s; }
+.property-card-wrapper:nth-child(3) { animation-delay: 0.15s; }
+.property-card-wrapper:nth-child(4) { animation-delay: 0.20s; }
+.property-card-wrapper:nth-child(5) { animation-delay: 0.25s; }
+.property-card-wrapper:nth-child(n+6) { animation-delay: 0.30s; }
+
+@keyframes galleryFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.gallery-popup-overlay.open .gallery-popup {
+  animation: galleryFadeIn 0.25s ease both;
+}
+
+/* ── Availability Modal ────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(6px);
+  z-index: 1100;
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 16px;
+}
+.modal-overlay.open { display: flex; }
+.modal-overlay.open .modal-card {
+  animation: modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-card {
+  background: var(--color-surface);
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.06);
+  width: 100%; max-width: 440px;
+  overflow: hidden;
+  position: relative;
+}
+
+.modal-header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between;
+  padding: 22px 24px 0;
+}
+.modal-header-text { flex: 1; }
+.modal-title {
+  font-size: 18px; font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.3; margin: 0;
+}
+.modal-subtitle {
+  font-size: 12px; color: var(--color-muted);
+  margin-top: 4px; line-height: 1.4;
+}
+.modal-close {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; border: none;
+  color: var(--color-muted); font-size: 18px;
+  cursor: pointer; transition: var(--transition);
+  flex-shrink: 0; margin: -4px -6px 0 8px;
+}
+.modal-close:hover {
+  background: var(--color-bg); color: var(--color-text);
+}
+
+.modal-body { padding: 18px 24px 24px; }
+
+.modal-field {
+  margin-bottom: 14px;
+}
+.modal-field:last-of-type { margin-bottom: 18px; }
+
+.modal-label {
+  display: block; font-size: 11px; font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 5px; letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.modal-input,
+.modal-select {
+  width: 100%; padding: 10px 12px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 10px;
+  font-size: 13px; font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+.modal-input::placeholder { color: var(--color-muted); }
+.modal-input:focus,
+.modal-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+.modal-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  cursor: pointer;
+}
+
+.modal-row {
+  display: flex; gap: 10px;
+}
+.modal-row .modal-field { flex: 1; min-width: 0; }
+
+.modal-submit {
+  width: 100%; padding: 12px;
+  background: var(--color-primary);
+  color: #fff; border: none; border-radius: 10px;
+  font-size: 14px; font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(27,60,110,0.25);
+}
+.modal-submit:hover {
+  background: var(--color-primary-dark);
+  box-shadow: 0 4px 16px rgba(27,60,110,0.35);
+}
+.modal-submit:active { transform: scale(0.98); }
+
+.modal-consent {
+  font-size: 10px; color: var(--color-muted);
+  text-align: center; margin-top: 12px;
+  line-height: 1.5;
+}
+.modal-consent a {
+  color: var(--color-primary); text-decoration: none;
+}
+.modal-consent a:hover { text-decoration: underline; }
+
+/* ── Utility ───────────────────────────────────────────────── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+.text-accent { color: var(--color-accent); }
+.text-primary { color: var(--color-primary); }
+.text-muted { color: var(--color-muted); }
+.fw-700 { font-weight: 700; }
+.fw-600 { font-weight: 600; }
+
+/* ── Inline Panel Banners ───────────────────────────────────── */
+.inline-section-layout {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.inline-main-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.inline-side-banner {
+  width: 220px;
+  min-width: 220px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
+  background: var(--color-surface);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  justify-content: space-between;
+}
+
+.inline-side-banner:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--color-primary);
+}
+
+.inline-side-banner .banner-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.inline-side-banner .banner-badge {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 6px;
+  border-radius: 4px;
+  width: fit-content;
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.inline-side-banner .banner-partner-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.inline-side-banner .banner-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 6px 0;
+  line-height: 1.3;
+}
+
+.inline-side-banner .banner-text {
+  font-size: 10px;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+  margin: 0 0 12px 0;
+  flex-grow: 1;
+}
+
+.inline-side-banner .banner-actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inline-side-banner .banner-btn {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #FFFFFF;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: var(--transition);
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.inline-side-banner .banner-btn:hover {
+  background: var(--color-primary-dark);
+}
+
+.inline-side-banner .banner-legal-disclosure,
+.inline-side-banner .banner-legal-note {
+  font-size: 8.5px;
+  color: var(--color-muted);
+  line-height: 1.25;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+/* Mobile responsive styles for inline panel banners */
+@media (max-width: 768px) {
+  .inline-section-layout {
+    flex-direction: column;
+    gap: 14px;
+  }
+  
+  .inline-side-banner {
+    align-self: stretch;
+    width: 100%;
+    min-width: unset;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border: 1px solid var(--color-border-light);
+  }
+  
+  .inline-side-banner .banner-info {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .inline-side-banner .banner-text {
+    margin-bottom: 0;
+    margin-top: 2px;
+  }
+  
+  .inline-side-banner .banner-actions {
+    flex-shrink: 0;
+    width: auto;
+    align-items: flex-end;
+  }
+
+  .inline-side-banner .banner-btn {
+    width: auto;
+    white-space: nowrap;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .inline-side-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .inline-side-banner .banner-actions {
+    width: 100%;
+    align-items: stretch;
+  }
+  
+  .inline-side-banner .banner-btn {
+    width: 100%;
+  }
+}
+</style>
+  <!-- Preconnect for Google Fonts (already in CSS @import) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <script src="data.js"></script>
+  <script src="menu.js"></script>
+</head>
+<body>
+
+  <!-- ══ SITE HEADER ════════════════════════════════════════ -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="/" class="logo" aria-label="Янтарный проспект — на главную">
+        <img src="AA.svg" class="logo-icon" alt="Янтарный проспект">
+        <div class="logo-text">
+          <span class="logo-name">Янтарный проспект</span>
+          <span class="logo-tagline">Amber avenue</span>
+        </div>
+      </a>
+
+      <div class="header-search">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          type="search"
+          id="main-search"
+          placeholder="ЖК, адрес, застройщик..."
+          aria-label="Поиск жилых комплексов"
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="header-actions">
+        <button class="btn-header btn-header-ghost" id="btn-compare" aria-label="Сравнить объекты">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          Сравнение
+        </button>
+        <button class="btn-header btn-header-ghost" id="btn-favorites" aria-label="Избранное">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          Избранное
+        </button>
+        <button class="btn-header btn-header-accent" id="btn-expert" aria-label="Связаться с экспертом">
+          Консультация
+        </button>
+      </div>
+
+      <!-- Burger (mobile only) -->
+      <button class="burger-btn" id="burger-btn" aria-label="Открыть меню" aria-expanded="false">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ══ FILTER BAR ══════════════════════════════════════════ -->
+  <nav class="filter-bar" aria-label="Фильтры">
+    <div class="filter-bar-inner">
+      <span class="filter-label">Фильтр:</span>
+      <button class="filter-chip active" data-filter="all">Все <span class="chip-count">8</span></button>
+      <button class="filter-chip" data-filter="sea">У моря</button>
+      <button class="filter-chip" data-filter="comfort">Комфорт</button>
+      <button class="filter-chip" data-filter="business">Бизнес</button>
+      <button class="filter-chip" data-filter="premium">Премиум</button>
+      <button class="filter-chip" data-filter="family">Семейная ипотека</button>
+      <button class="filter-chip" data-filter="it">IT-ипотека</button>
+      <button class="filter-chip" data-filter="2025">Сдача 2025</button>
+      <button class="filter-chip" data-filter="partner">Партнёр</button>
+      <button class="filter-chip" data-filter="budget">До 5 млн ₽</button>
+    </div>
+  </nav>
+
+  <!-- ══ MAIN CONTENT ════════════════════════════════════════ -->
+  <main class="page-content" id="main-content">
+
+    <div class="feed-header" role="region" aria-label="Заголовок ленты">
+      <div>
+        <h1 class="feed-title">Новостройки Калининградской области</h1>
+        <p class="feed-count" id="feed-count" aria-live="polite">Загрузка...</p>
+      </div>
+      <div class="feed-sort">
+        <select id="filter-developer" aria-label="Фильтр по застройщику">
+          <option value="">Все застройщики</option>
+          <option value="ГК «МПК»">ГК «МПК»</option>
+          <option value="ГК «КСК»">ГК «КСК»</option>
+          <option value="КалининградСтройИнвест">КалининградСтройИнвест</option>
+          <option value="ГК «Модуль-Стройград»">ГК «Модуль-Стройград»</option>
+          <option value="ГК «Русская Европа»">ГК «Русская Европа»</option>
+          <option value="КПД-Калининград">КПД-Калининград</option>
+        </select>
+        <label for="sort-select" class="sr-only">Сортировка</label>
+        <select id="sort-select" aria-label="Сортировать по">
+          <option>По рейтингу Amber</option>
+          <option>По цене (возр.)</option>
+          <option>По цене (убыв.)</option>
+          <option>По дате сдачи</option>
+          <option>По расстоянию до моря</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Listing feed — JS renders cards here -->
+    <div class="listing-feed" id="listing-feed" role="feed" aria-label="Список жилых комплексов">
+      <!-- Cards are injected by app.js -->
+      <div style="text-align:center;padding:60px 0;color:#9CA3AF">
+        <div style="font-size:32px;margin-bottom:12px">🏗</div>
+        <p style="font-size:14px">Загружаем объекты...</p>
+      </div>
+    </div>
+
+    <!-- Load More -->
+    <div class="load-more-wrapper">
+      <button class="btn-load-more" id="btn-load-more" aria-label="Показать ещё объекты">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        Показать ещё объекты
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ══ SITE FOOTER ═══════════════════════════════════════════ -->
+  <footer class="site-footer" role="contentinfo">
+
+    <!-- Trust Bar -->
+    <div class="footer-trust-bar">
+      <div class="footer-inner">
+        <div class="trust-items">
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">✓</div>
+            <div class="trust-text">
+              <p class="trust-title">Проверяем каждый объект</p>
+              <p class="trust-sub">Ручная верификация</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">⚖</div>
+            <div class="trust-text">
+              <p class="trust-title">Независимый рейтинг</p>
+              <p class="trust-sub">Без предвзятости</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">★</div>
+            <div class="trust-text">
+              <p class="trust-title">Честные отзывы</p>
+              <p class="trust-sub">Без купленных рецензий</p>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon" aria-hidden="true">🔒</div>
+            <div class="trust-text">
+              <p class="trust-title">Без скрытых комиссий</p>
+              <p class="trust-sub">Бесплатно для покупателей</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Footer -->
+    <div class="footer-main">
+      <div class="footer-inner">
+        <div class="footer-grid">
+
+          <!-- Brand -->
+          <div class="footer-col footer-brand-col">
+            <a href="/" class="footer-logo">
+              <img src="AA.svg" class="logo-icon" alt="Янтарный проспект">
+              <div>
+                <div class="footer-logo-name">Янтарный проспект</div>
+                <div class="footer-logo-tagline">Amber avenue</div>
+              </div>
+            </a>
+            <div class="footer-socials">
+              <a href="#" class="social-link" aria-label="Telegram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+              <a href="#" class="social-link" aria-label="WhatsApp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></a>
+              <a href="#" class="social-link" aria-label="VK"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.391 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4.03 8.57 4.03 8.096c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.372 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.27-1.422 2.168-3.608 2.168-3.608.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z"/></svg></a>
+              <a href="#" class="social-link" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+            </div>
+          </div>
+
+          <!-- Покупателям -->
+          <div class="footer-col">
+            <h3 class="footer-col-title">Покупателям</h3>
+            <ul class="footer-links">
+              <li><a href="#">Все новостройки</a></li>
+              <li><a href="#">Комфорт-класс</a></li>
+              <li><a href="#">Бизнес-класс</a></li>
+              <li><a href="#">Премиум</a></li>
+              <li><a href="#">У моря</a></li>
+              <li><a href="#">Ипотечный калькулятор</a></li>
+            </ul>
+          </div>
+
+          <!-- Компания -->
+          <div class="footer-col">
+            <h3 class="footer-col-title">Компания</h3>
+            <ul class="footer-links">
+              <li><a href="#">О сервисе</a></li>
+              <li><a href="#">Методология рейтинга</a></li>
+              <li><a href="#">Для застройщиков</a></li>
+              <li><a href="#">Блог</a></li>
+              <li><a href="#">Карьера</a></li>
+            </ul>
+          </div>
+
+          <!-- Контакты -->
+          <div class="footer-col">
+            <h3 class="footer-col-title">Контакты</h3>
+            <ul class="footer-contacts">
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.36 11.37a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <div><a href="tel:+74012123456" class="contact-phone">+7 (4012) 12-34-56</a><span class="contact-hours">Пн–Пт: 9:00–20:00</span></div>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <a href="mailto:info@amberavenue.ru">info@amberavenue.ru</a>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>г. Калининград, Ленинский пр., 83</span>
+              </li>
+            </ul>
+            <div class="footer-newsletter">
+              <h4 class="newsletter-title">Подписка на новые ЖК</h4>
+              <div class="newsletter-form">
+                <input type="email" placeholder="Ваш email" class="newsletter-input" aria-label="Email">
+                <button class="newsletter-btn" aria-label="Подписаться">→</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-inner">
+        <div class="footer-bottom-inner">
+          <p class="footer-copyright">© 2024 Amber Avenue</p>
+          <div class="footer-legal">
+            <a href="#">Конфиденциальность</a>
+            <span class="legal-dot">·</span>
+            <a href="#">Пользовательское соглашение</a>
+            <span class="legal-dot">·</span>
+            <a href="#">Cookies</a>
+            <span class="legal-dot">·</span>
+            <span class="footer-disclaimer">Информация на сайте не является публичной офертой. Цены и условия могут отличаться.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- ══ MOBILE DRAWER ═══════════════════════════════════════ -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Главное меню">
+    <div class="drawer-header">
+      <a href="/" class="drawer-logo">
+        <img src="AA.svg" class="logo-icon" alt="Янтарный проспект" aria-hidden="true">
+        <div class="logo-text">
+          <span class="logo-name">Янтарный проспект</span>
+          <span class="logo-tagline">Amber avenue</span>
+        </div>
+      </a>
+      <button class="drawer-close" id="drawer-close" aria-label="Закрыть меню">✕</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4 class="drawer-section-title">Каталог</h4>
+        <a href="#" class="drawer-link">🏠 Все новостройки</a>
+        <a href="#" class="drawer-link">🌊 У моря</a>
+        <a href="#" class="drawer-link">🏢 Комфорт-класс</a>
+        <a href="#" class="drawer-link">💎 Бизнес-класс</a>
+        <a href="#" class="drawer-link">👑 Премиум</a>
+      </div>
+      <div class="drawer-section">
+        <h4 class="drawer-section-title">Покупателям</h4>
+        <a href="#" class="drawer-link">📊 Сравнение объектов</a>
+        <a href="#" class="drawer-link">♡ Избранное</a>
+        <a href="#" class="drawer-link">🗺 Карта новостроек</a>
+        <a href="#" class="drawer-link">🔍 Поиск</a>
+        <a href="#" class="drawer-link">💰 Ипотечный калькулятор</a>
+      </div>
+      <div class="drawer-section">
+        <h4 class="drawer-section-title">Компания</h4>
+        <a href="#" class="drawer-link">О сервисе</a>
+        <a href="#" class="drawer-link">Методология рейтинга</a>
+        <a href="#" class="drawer-link">Для застройщиков</a>
+        <a href="#" class="drawer-link">Блог</a>
+      </div>
+      <div class="drawer-section">
+        <h4 class="drawer-section-title">Контакты</h4>
+        <a href="tel:+74012123456" class="drawer-link">📞 +7 (4012) 12-34-56</a>
+        <a href="mailto:info@amberavenue.ru" class="drawer-link">✉ info@amberavenue.ru</a>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <button class="drawer-cta" onclick="document.getElementById('burger-btn').click(); showToast('Заявка отправлена!');">💬 Задать вопрос эксперту</button>
+    </div>
+  </aside>
+
+
+
+
+  <script>/* ============================================================
+   AMBER AVENUE — App Logic
+   Property Listing Feed with Expandable Panels
+   ============================================================ */
+
+'use strict';
+
+// ── Sample Data ─────────────────────────────────────────────
+const PROPERTIES = [
+  {
+    id: 1,
+    name: 'ЖК Морской квартал',
+    partner: true,
+    developer: 'ГК «МПК»',
+    location: 'Зеленоградск',
+    distance: '12 мин до моря пешком',
+    address: 'Калининградская обл., г. Зеленоградск, ул. Морская, 3',
+    rating: 4.3,
+    reviews: 287,
+    priceFrom: '4.8 млн ₽',
+    pricePerSqm: '155–230 тыс. ₽/м²',
+    priceRange: 'от 4.8 до 12.6 млн ₽',
+    delivery: '4 кв. 2026',
+    class: 'комфорт-класс',
+    tags: ['комфорт-класс', 'семейная ипотека', 'автономное отопление'],
+    description: 'Подходит для жизни у моря и посуточной аренды. Есть нюансы с транспортом и сезонной нагрузкой.',
+    photos: 12,
+    imgSrc: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80',
+    thumbs: [
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=200&q=60',
+      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=200&q=60',
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=200&q=60',
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=200&q=60',
+    ],
+    prices: [
+      { type: 'Студии',    from: 'от 4.8 млн ₽', area: '24–33 м²' },
+      { type: '1-комнатные', from: 'от 6.2 млн ₽', area: '32–45 м²' },
+      { type: '2-комнатные', from: 'от 8.3 млн ₽', area: '52–68 м²' },
+      { type: '3-комнатные', from: 'от 11.5 млн ₽', area: '74–95 м²' },
+    ],
+    chars: {
+      class: 'комфорт',
+      type: 'монолит-каркас',
+      floors: '5–9 этажей',
+      corpus: '4 корпуса',
+      apartments: '586',
+      ceiling: '2.7 м',
+      apArea: '24–95 м²',
+      kitArea: 'от 8 м²',
+      finishing: 'авторская',
+      finishType: 'чистовая',
+      walls: 'кер. кирпич',
+      heating: 'автономное',
+    },
+  },
+  {
+    id: 2,
+    name: 'ЖК Балтийские огни',
+    partner: false,
+    developer: 'ГК «Русская Европа»',
+    location: 'Светлогорск',
+    distance: '8 мин до моря пешком',
+    address: 'Калининградская обл., г. Светлогорск, ул. Набережная, 12',
+    rating: 4.7,
+    reviews: 412,
+    priceFrom: '5.2 млн ₽',
+    pricePerSqm: '170–260 тыс. ₽/м²',
+    priceRange: 'от 5.2 до 18.4 млн ₽',
+    delivery: '2 кв. 2025',
+    class: 'бизнес-класс',
+    tags: ['бизнес-класс', 'балтийская ипотека', 'IT-ипотека'],
+    description: 'Премиальный жилой комплекс с видом на Балтийское море. Закрытая территория, подземный паркинг, авторская отделка.',
+    photos: 24,
+    imgSrc: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80',
+    thumbs: [
+      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=200&q=60',
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=200&q=60',
+      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=200&q=60',
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=200&q=60',
+    ],
+    prices: [
+      { type: 'Студии',    from: 'от 5.2 млн ₽', area: '28–36 м²' },
+      { type: '1-комнатные', from: 'от 7.8 млн ₽', area: '38–52 м²' },
+      { type: '2-комнатные', from: 'от 11.2 млн ₽', area: '60–78 м²' },
+      { type: '3-комнатные', from: 'от 15.0 млн ₽', area: '82–110 м²' },
+    ],
+    chars: {
+      class: 'бизнес',
+      type: 'монолит',
+      floors: '10–16 этажей',
+      corpus: '2 корпуса',
+      apartments: '348',
+      ceiling: '3.0 м',
+      apArea: '28–110 м²',
+      kitArea: 'от 12 м²',
+      finishing: 'авторская',
+      finishType: 'чистовая',
+      walls: 'монолит',
+      heating: 'центральное',
+    },
+  },
+  {
+    id: 3,
+    name: 'ЖК Янтарный берег',
+    partner: true,
+    developer: 'ГК «КСК»',
+    location: 'Калининград',
+    distance: '5 мин до центра',
+    address: 'г. Калининград, ул. Победы, 87',
+    rating: 4.1,
+    reviews: 156,
+    priceFrom: '3.6 млн ₽',
+    pricePerSqm: '120–180 тыс. ₽/м²',
+    priceRange: 'от 3.6 до 9.8 млн ₽',
+    delivery: '1 кв. 2027',
+    class: 'комфорт-класс',
+    tags: ['комфорт-класс', 'семейная ипотека', 'сельская ипотека'],
+    description: 'Современный жилой квартал в центре Калининграда с развитой инфраструктурой. Дворы без машин, детские площадки, своя школа.',
+    photos: 18,
+    imgSrc: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
+    thumbs: [
+      'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=200&q=60',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=200&q=60',
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=200&q=60',
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=200&q=60',
+    ],
+    prices: [
+      { type: 'Студии',    from: 'от 3.6 млн ₽', area: '20–28 м²' },
+      { type: '1-комнатные', from: 'от 5.0 млн ₽', area: '30–42 м²' },
+      { type: '2-комнатные', from: 'от 6.8 млн ₽', area: '48–65 м²' },
+      { type: '3-комнатные', from: 'от 8.5 млн ₽', area: '68–88 м²' },
+    ],
+    chars: {
+      class: 'комфорт',
+      type: 'панель',
+      floors: '12–22 этажа',
+      corpus: '6 корпусов',
+      apartments: '1240',
+      ceiling: '2.7 м',
+      apArea: '20–88 м²',
+      kitArea: 'от 7 м²',
+      finishing: 'стандартная',
+      finishType: 'чистовая',
+      walls: 'панель',
+      heating: 'центральное',
+    },
+  },
+  {
+    id: 4,
+    name: 'ЖК Приморский парк',
+    partner: false,
+    developer: 'ГК «Русская Европа»',
+    location: 'Пионерский',
+    distance: '3 мин до моря пешком',
+    address: 'Калининградская обл., г. Пионерский, ул. Флотская, 4',
+    rating: 4.5,
+    reviews: 98,
+    priceFrom: '4.4 млн ₽',
+    pricePerSqm: '140–210 тыс. ₽/м²',
+    priceRange: 'от 4.4 до 14.0 млн ₽',
+    delivery: '3 кв. 2026',
+    class: 'комфорт-класс',
+    tags: ['комфорт-класс', 'семейная ипотека'],
+    description: 'Малоэтажный комплекс у моря в тихом курортном городе. Кирпичные дома, паркинг, огороженная территория.',
+    photos: 15,
+    imgSrc: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&q=80',
+    thumbs: [
+      'https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=200&q=60',
+      'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=200&q=60',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=200&q=60',
+      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=200&q=60',
+    ],
+    prices: [
+      { type: 'Студии',    from: 'от 4.4 млн ₽', area: '26–32 м²' },
+      { type: '1-комнатные', from: 'от 6.5 млн ₽', area: '34–46 м²' },
+      { type: '2-комнатные', from: 'от 9.2 млн ₽', area: '54–72 м²' },
+      { type: '3-комнатные', from: 'от 12.0 млн ₽', area: '76–98 м²' },
+    ],
+    chars: {
+      class: 'комфорт',
+      type: 'кирпич',
+      floors: '4–5 этажей',
+      corpus: '8 корпусов',
+      apartments: '420',
+      ceiling: '2.8 м',
+      apArea: '26–98 м²',
+      kitArea: 'от 9 м²',
+      finishing: 'стандартная',
+      finishType: 'чистовая',
+      walls: 'кирпич',
+      heating: 'газовое',
+    },
+  },
+  {
+    id: 5,
+    name: 'ЖК Королевская гавань',
+    partner: true,
+    developer: 'КалининградСтройИнвест',
+    location: 'Калининград',
+    distance: '10 мин до центра',
+    address: 'г. Калининград, Портовая, 21',
+    rating: 4.6,
+    reviews: 203,
+    priceFrom: '6.8 млн ₽',
+    pricePerSqm: '195–310 тыс. ₽/м²',
+    priceRange: 'от 6.8 до 28 млн ₽',
+    delivery: '4 кв. 2025',
+    class: 'премиум',
+    tags: ['премиум', 'IT-ипотека', 'авторская отделка'],
+    description: 'Видовые квартиры с панорамой на исторический центр и реку Преголя. Премиальная отделка, частная набережная, консьерж-сервис.',
+    photos: 32,
+    imgSrc: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=80',
+    thumbs: [
+      'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=200&q=60',
+      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=200&q=60',
+      'https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=200&q=60',
+      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=200&q=60',
+    ],
+    prices: [
+      { type: 'Студии',    from: 'от 6.8 млн ₽', area: '32–40 м²' },
+      { type: '1-комнатные', from: 'от 9.5 млн ₽', area: '46–62 м²' },
+      { type: '2-комнатные', from: 'от 15.0 млн ₽', area: '74–96 м²' },
+      { type: '3-комнатные', from: 'от 22.0 млн ₽', area: '110–160 м²' },
+    ],
+    chars: {
+      class: 'премиум',
+      type: 'монолит',
+      floors: '18–24 этажа',
+      corpus: '3 корпуса',
+      apartments: '284',
+      ceiling: '3.2 м',
+      apArea: '32–160 м²',
+      kitArea: 'от 14 м²',
+      finishing: 'авторская',
+      finishType: 'чистовая',
+      walls: 'монолит',
+      heating: 'центральное',
+    },
+  },
+  {
+    id: 6,
+    name: 'ЖК Зеленоград Нью',
+    partner: false,
+    developer: 'КПД-Калининград',
+    location: 'Зеленоградск',
+    distance: '15 мин до моря пешком',
+    address: 'Калининградская обл., г. Зеленоградск, ул. Ленина, 45',
+    rating: 3.9,
+    reviews: 67,
+    priceFrom: '3.2 млн ₽',
+    pricePerSqm: '105–160 тыс. ₽/м²',
+    priceRange: 'от 3.2 до 8.4 млн ₽',
+    delivery: '2 кв. 2028',
+    class: 'стандарт-класс',
+    tags: ['стандарт-класс', 'семейная ипотека'],
+    description: 'Доступное жильё в курортном городе. Инвестиционный потенциал благодаря близости к морю и популярности среди туристов.',
+    photos: 9,
+    imgSrc: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80',
+    thumbs: [
+      'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=200&q=60',
+      'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=200&q=60',
+      'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=200&q=60',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=200&q=60',
+    ],
+    prices: [
+      { type: 'Студии',    from: 'от 3.2 млн ₽', area: '22–30 м²' },
+      { type: '1-комнатные', from: 'от 4.5 млн ₽', area: '32–44 м²' },
+      { type: '2-комнатные', from: 'от 6.0 млн ₽', area: '50–66 м²' },
+      { type: '3-комнатные', from: 'от 7.5 млн ₽', area: '70–90 м²' },
+    ],
+    chars: {
+      class: 'стандарт',
+      type: 'панель',
+      floors: '9–12 этажей',
+      corpus: '5 корпусов',
+      apartments: '860',
+      ceiling: '2.7 м',
+      apArea: '22–90 м²',
+      kitArea: 'от 6 м²',
+      finishing: 'черновая',
+      finishType: 'черновая',
+      walls: 'панель',
+      heating: 'центральное',
+    },
+  },
+  {
+    id: 7,
+    name: 'ЖК Светлый',
+    partner: false,
+    developer: 'ГК «Модуль-Стройград»',
+    location: 'Светлый',
+    distance: '20 мин до Калининграда',
+    address: 'г. Светлый, ул. Советская, 12',
+    rating: 4.2,
+    reviews: 44,
+    priceFrom: '2.8 млн ₽',
+    pricePerSqm: '90–140 тыс. ₽/м²',
+    priceRange: 'от 2.8 до 7.0 млн ₽',
+    delivery: '1 кв. 2026',
+    class: 'стандарт-класс',
+    tags: ['стандарт-класс', 'сельская ипотека'],
+    description: 'Доступное жильё в тихом городе вблизи Калининграда. Хорошая транспортная доступность, школы и детские сады рядом.',
+    photos: 7,
+    imgSrc: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80',
+    thumbs: [
+      'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=200&q=60',
+      'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=200&q=60',
+      'https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=200&q=60',
+      'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=200&q=60',
+    ],
+    prices: [
+      { type: 'Студии',    from: 'от 2.8 млн ₽', area: '20–26 м²' },
+      { type: '1-комнатные', from: 'от 3.8 млн ₽', area: '30–40 м²' },
+      { type: '2-комнатные', from: 'от 5.0 млн ₽', area: '48–62 м²' },
+      { type: '3-комнатные', from: 'от 6.2 млн ₽', area: '66–84 м²' },
+    ],
+    chars: {
+      class: 'стандарт',
+      type: 'панель',
+      floors: '5–9 этажей',
+      corpus: '3 корпуса',
+      apartments: '490',
+      ceiling: '2.7 м',
+      apArea: '20–84 м²',
+      kitArea: 'от 6 м²',
+      finishing: 'черновая',
+      finishType: 'черновая',
+      walls: 'панель',
+      heating: 'центральное',
+    },
+  },
+  {
+    id: 8,
+    name: 'ЖК Калининград Сити',
+    partner: true,
+    developer: 'ГК «МПК»',
+    location: 'Калининград',
+    distance: 'Центр города',
+    address: 'г. Калининград, пр. Мира, 38',
+    rating: 4.8,
+    reviews: 534,
+    priceFrom: '7.5 млн ₽',
+    pricePerSqm: '220–380 тыс. ₽/м²',
+    priceRange: 'от 7.5 до 45 млн ₽',
+    delivery: '4 кв. 2024',
+    class: 'бизнес-класс',
+    tags: ['бизнес-класс', 'IT-ипотека', 'военная ипотека', 'авторская отделка'],
+    description: 'Элитный комплекс в самом сердце Калининграда. Сданный дом, панорамные виды, частный фитнес-клуб и spa-центр.',
+    photos: 41,
+    imgSrc: 'https://images.unsplash.com/photo-1606402179428-a57976d71fa4?w=800&q=80',
+    thumbs: [
+      'https://images.unsplash.com/photo-1606402179428-a57976d71fa4?w=200&q=60',
+      'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=200&q=60',
+      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=200&q=60',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=200&q=60',
+    ],
+    prices: [
+      { type: 'Студии',    from: 'от 7.5 млн ₽', area: '34–42 м²' },
+      { type: '1-комнатные', from: 'от 11.0 млн ₽', area: '50–68 м²' },
+      { type: '2-комнатные', from: 'от 18.0 млн ₽', area: '80–105 м²' },
+      { type: '3-комнатные', from: 'от 28.0 млн ₽', area: '120–180 м²' },
+    ],
+    chars: {
+      class: 'бизнес',
+      type: 'монолит',
+      floors: '22–30 этажей',
+      corpus: '2 корпуса',
+      apartments: '198',
+      ceiling: '3.1 м',
+      apArea: '34–180 м²',
+      kitArea: 'от 16 м²',
+      finishing: 'авторская',
+      finishType: 'чистовая',
+      walls: 'монолит',
+      heating: 'центральное',
+    },
+  },
+];
+
+// Banners config
+const BANNER_EVERY = 5; // Insert banner after every N cards
+
+const BANNERS = [
+  {
+    icon: '🤝',
+    headline: 'Разместите ваш баннер на этом месте',
+    sub: 'Горизонтальный рекламный баннер в листинге ЖК с высокой видимостью. Стоимость — 69 000 ₽/мес с заморозкой цены на 3 месяца.',
+    cta: 'Стать партнером',
+    ctaLink: 'b2b-promo.html',
+    stats: [{ num: '69 000 ₽', label: 'стоимость места' }, { num: '3 месяца', label: 'заморозка цены' }, { num: '100%', label: 'видят все' }],
+  },
+  {
+    icon: '💼',
+    headline: 'Разместите ваш баннер на этом месте',
+    sub: 'Второй горизонтальный рекламный баннер в листинге ЖК с высокой видимостью. Стоимость — 45 000 ₽/мес с заморозкой цены на 3 месяца.',
+    cta: 'Стать партнером',
+    ctaLink: 'b2b-promo.html',
+    stats: [{ num: '45 000 ₽', label: 'стоимость места' }, { num: '3 месяца', label: 'заморозка цены' }, { num: '100%', label: 'видят все' }],
+  },
+];
+
+// ── Tag Styles Map ───────────────────────────────────────────
+const TAG_CLASS = {
+  'семейная ипотека':   'tag-family',
+  'балтийская ипотека': 'tag-mortgage',
+  'сельская ипотека':   'tag-mortgage',
+  'IT-ипотека':         'tag-it',
+  'военная ипотека':    'tag-author',
+  'авторская отделка':  'tag-author',
+  'автономное отопление': 'tag-autonomous',
+  'бизнес-класс':       'tag-comfort',
+  'комфорт-класс':      'tag-comfort',
+  'стандарт-класс':     'tag-comfort',
+  'премиум':            'tag-author',
+};
+
+// ── Nav Items Config ─────────────────────────────────────────
+const NAV_ITEMS = [
+  { key: 'prices',   label: 'Цены',        icon: '₽',  panel: 'left' },
+  { key: 'mortgage', label: 'Ипотека',      icon: '🏦', panel: 'right' },
+  { key: 'index',    label: 'Индекс',       icon: '★',  panel: null },
+  { key: 'location', label: 'Локация',      icon: '📍', panel: 'bottom' },
+  { key: 'infra',    label: 'Инфраструктура', icon: '🏪', panel: 'bottom' },
+  { key: 'chars',    label: 'Характеристики', icon: '📋', panel: 'bottom' },
+  { key: 'docs',     label: 'Документы',    icon: '📄', panel: 'bottom' },
+  { key: 'dev',      label: 'Застройщик',   icon: '🏗',  panel: null },
+  { key: 'reviews',  label: 'Отзывы',       icon: '💬', panel: null },
+  { key: 'compare',  label: 'Кому подходит', icon: '👥', panel: null },
+];
+
+// ── Render Helpers ───────────────────────────────────────────
+function tagHTML(tags) {
+  return tags.map(t => `<span class="tag ${TAG_CLASS[t] || 'tag-comfort'}">${t}</span>`).join('');
+}
+
+function priceTableHTML(prices) {
+  return prices.map(p => `
+    <tr>
+      <td>${p.type}</td>
+      <td>${p.from}</td>
+      <td>${p.area}</td>
+    </tr>
+  `).join('');
+}
+
+function thumbsHTML(thumbs) {
+  return thumbs.map((src, i) => `
+    <div class="gallery-thumb ${i === 0 ? 'active' : ''}" data-idx="${i}">
+      <img src="${src}" alt="Фото ${i+1}" loading="lazy">
+    </div>
+  `).join('');
+}
+
+function navItemsHTML() {
+  return NAV_ITEMS.map(n => `
+    <div class="card-nav-item" data-key="${n.key}" title="${n.label}">
+      <span class="nav-icon">${n.icon}</span>
+      <span class="nav-label">${n.label}</span>
+    </div>
+  `).join('');
+}
+
+// ── NAV CONFIG (updated) ─────────────────────────────────────
+const INLINE_NAV = [
+  { key: 'prices',   label: 'Цены',           icon: '₽'  },
+  { key: 'mortgage', label: 'Ипотека',         icon: '🏦' },
+  { key: 'location', label: 'Локация',         icon: '📍' },
+  { key: 'infra',    label: 'Инфраструктура',  icon: '🏪' },
+  { key: 'chars',    label: 'Характеристики',  icon: '📋' },
+  { key: 'docs',     label: 'Документы',       icon: '📄' },
+  { key: 'dev',      label: 'Застройщик',      icon: '🏗'  },
+  { key: 'pros',     label: 'Плюсы/минусы',    icon: '⚖'  },
+  { key: 'whom',     label: 'Кому подходит',   icon: '👥' },
+];
+
+function inlineNavHTML() {
+  return INLINE_NAV.map(n =>
+    `<div class="card-nav-item" data-key="${n.key}" title="${n.label}">
+      <span class="nav-icon">${n.icon}</span>
+      <span class="nav-label">${n.label}</span>
+    </div>`
+  ).join('');
+}
+
+// ── Content Generators ───────────────────────────────────────
+function mortgageContentHTML() {
+  return `<div>
+    <div class="mortgage-bank-label">Банки-партнёры</div>
+    <div class="bank-logos">
+      <span class="bank-logo sber">Сбер</span>
+      <span class="bank-logo vtb">ВТБ</span>
+      <span class="bank-logo domrf">Дом.РФ</span>
+      <span class="bank-logo rshb">РСХБ</span>
+      <span class="bank-logo more">+12</span>
+    </div>
+    <div class="mortgage-stat"><span class="label">Семейная</span><span class="value">от 5.6%</span></div>
+    <div class="mortgage-stat"><span class="label">IT-ипотека</span><span class="value">от 4.7%</span></div>
+    <div class="mortgage-stat"><span class="label">Военная</span><span class="value">от 6.75%</span></div>
+    <div class="mortgage-stat"><span class="label">Сельская</span><span class="value">от 3%</span></div>
+    <div class="mortgage-stat"><span class="label">Первоначальный взнос</span><span class="value">от 10%</span></div>
+    <p class="mortgage-note">Ставки актуальны на май 2024. Одобрение за 1 день.</p>
+  </div>`;
+}
+
+function locationContentHTML(p) {
+  const addr = encodeURIComponent(p.address);
+  return `<div class="map-services-panel">
+    <div class="map-address-line">${p.address}</div>
+    <div class="map-services-list">
+      <a class="map-service-link" href="https://yandex.ru/maps/?text=${addr}" target="_blank" rel="noopener">
+        <div class="map-service-icon" style="background:#FFF3DC">📍</div>
+        <span>Яндекс Карты</span>
+      </a>
+      <a class="map-service-link" href="https://maps.google.com/?q=${addr}" target="_blank" rel="noopener">
+        <div class="map-service-icon" style="background:#E8F5E9">🌍</div>
+        <span>Google Maps</span>
+      </a>
+      <a class="map-service-link" href="https://2gis.ru/search/${addr}" target="_blank" rel="noopener">
+        <div class="map-service-icon" style="background:#E3F2FD">📡</div>
+        <span>2ГИС</span>
+      </a>
+    </div>
+  </div>`;
+}
+
+function infraContentHTML(p) {
+  return `<div class="infra-grid">
+    <div class="infra-item"><div class="infra-icon" style="background:#E0F7FA">🏖</div><div><div class="infra-name">Море</div><div class="infra-desc">${p.distance}</div></div></div>
+    <div class="infra-item"><div class="infra-icon" style="background:#FFF3DC">🏪</div><div><div class="infra-name">Магазины</div><div class="infra-desc">Магнит, Пятёрочка · 150 м</div></div></div>
+    <div class="infra-item"><div class="infra-icon" style="background:#E8F5E9">🏫</div><div><div class="infra-name">Школы</div><div class="infra-desc">Школа №3 · 400 м</div></div></div>
+    <div class="infra-item"><div class="infra-icon" style="background:#E3F2FD">👶</div><div><div class="infra-name">Детские сады</div><div class="infra-desc">3 садика · 500 м</div></div></div>
+    <div class="infra-item"><div class="infra-icon" style="background:#FCE4EC">🏥</div><div><div class="infra-name">Поликлиника</div><div class="infra-desc">Городская · 700 м</div></div></div>
+    <div class="infra-item"><div class="infra-icon" style="background:#FFF8E1">🚌</div><div><div class="infra-name">Остановка</div><div class="infra-desc">Автобус · 200 м</div></div></div>
+    <div class="infra-item"><div class="infra-icon" style="background:#F3E8FF">💪</div><div><div class="infra-name">Спорт</div><div class="infra-desc">Фитнес-клуб · 600 м</div></div></div>
+    <div class="infra-item"><div class="infra-icon" style="background:#E0F2F1">🌳</div><div><div class="infra-name">Парк</div><div class="infra-desc">Городской парк · 300 м</div></div></div>
+    <div class="infra-item"><div class="infra-icon" style="background:#FBE9E7">🍽</div><div><div class="infra-name">Рестораны</div><div class="infra-desc">Кафе, рестораны · 250 м</div></div></div>
+  </div>`;
+}
+
+function charsContentHTML(chars) {
+  const items = [
+    ['Класс', chars.class], ['Тип дома', chars.type], ['Этажность', chars.floors],
+    ['Корпуса', chars.corpus], ['Квартир', chars.apartments], ['Потолки', chars.ceiling],
+    ['Площади', chars.apArea], ['Кухня', chars.kitArea], ['Отделка', chars.finishing],
+    ['Тип отделки', chars.finishType], ['Стены', chars.walls], ['Отопление', chars.heating],
+    ['Срок эксплуатации', chars.lifespan || '50 лет'],
+  ];
+  return `<div class="chars-grid">${items.map(([l,v]) =>
+    `<div class="char-item"><div class="char-label">${l}</div><div class="char-value">${v}</div></div>`
+  ).join('')}</div>`;
+}
+
+function docsContentHTML() {
+  return `<div class="doc-list">
+    <div class="doc-item doc-present"><span class="doc-status-badge status-present" style="color:#10B981;background:#E6F4EA;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;margin-right:8px;flex-shrink:0;">✓</span><div><div class="doc-name">Проектная декларация</div><div class="doc-meta">PDF · 2.4 МБ</div></div></div>
+    <div class="doc-item doc-present"><span class="doc-status-badge status-present" style="color:#10B981;background:#E6F4EA;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;margin-right:8px;flex-shrink:0;">✓</span><div><div class="doc-name">Разрешение на строительство</div><div class="doc-meta">PDF · 1.1 МБ</div></div></div>
+    <div class="doc-item doc-present"><span class="doc-status-badge status-present" style="color:#10B981;background:#E6F4EA;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;margin-right:8px;flex-shrink:0;">✓</span><div><div class="doc-name">Заключение экспертизы</div><div class="doc-meta">PDF · 3.8 МБ</div></div></div>
+    <div class="doc-item doc-present"><span class="doc-status-badge status-present" style="color:#10B981;background:#E6F4EA;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;margin-right:8px;flex-shrink:0;">✓</span><div><div class="doc-name">Выписка ЕГРН</div><div class="doc-meta">PDF · 0.5 МБ</div></div></div>
+  </div>`;
+}
+
+// ── Native Contextual Ad Units ──────────────────────────────
+var CONTEXT_ADS = {
+  prices: {
+    id: 'ad_escrow_sber',
+    badge: 'Банк-партнёр',
+    badgeColor: '#10B981',
+    icon: '💳',
+    partnerName: 'ПАО «Банк Дом.РФ»',
+    partnerInn: '7707083893',
+    erid: '2VtzqxSberEscrowKLD',
+    title: 'Ипотечные программы от 6%',
+    text: 'Рассчитайте ежемесячный платёж и получите персональные условия в аккредитованных банках (Сбер, ВТБ, Дом.РФ).',
+    btnText: 'Рассчитать платёж',
+    cta: 'Рассчитать платёж',
+    ctaUrl: 'https://www.sberbank.ru/ru/person/credits/home?erid=2VtzqxSberEscrowKLD',
+    legal: 'Реклама. ПАО «Банк Дом.РФ». Ген. лиц. ЦБ РФ № 2312',
+    action: "showAvailability('Ипотека и цены')"
+  },
+  mortgage: {
+    id: 'ad_mortgage_domclick',
+    badge: 'Ипотечный брокер',
+    badgeColor: '#2563EB',
+    icon: '🏦',
+    partnerName: 'Ипотечный центр Amber',
+    partnerInn: '7736249247',
+    erid: '2VtzqxDomclickKLD',
+    title: 'Одобрение ипотеки за 2 мин',
+    text: 'Семейная, IT и субсидированная ипотека от застройщика. Подача одной заявки во все банки региона.',
+    btnText: 'Подать заявку',
+    cta: 'Подать заявку',
+    ctaUrl: 'https://domclick.ru/ipoteka?erid=2VtzqxDomclickKLD',
+    legal: 'Реклама. ООО «Амбер Ипотека Сервис», ОГРН 1233900001234',
+    action: "showAvailability('Заявка на ипотеку')"
+  },
+  location: {
+    id: 'ad_transfer_baltic',
+    badge: 'Трансфер & Такси',
+    badgeColor: '#F59E0B',
+    icon: '🚕',
+    partnerName: 'Сервис «Балтик Драйв»',
+    partnerInn: '3906112233',
+    erid: '2VtzqxBalticTransfer',
+    title: 'Трансфер на просмотр ЖК',
+    text: 'Комфортная поездка на объект / трансфер из аэропорта Храброво для покупателей новостроек.',
+    btnText: 'Заказать трансфер',
+    cta: 'Заказать трансфер',
+    ctaUrl: 'partners-promo.html?ref=transfer',
+    legal: 'Реклама. ООО «Балтик Авто Трансфер», ОГРН 1223900005678',
+    action: "showAvailability('Трансфер на просмотр')"
+  },
+  warranty: {
+    id: 'ad_insurance_vsk',
+    badge: 'Страхование',
+    badgeColor: '#8B5CF6',
+    icon: '🛡️',
+    partnerName: 'САО «ВСК»',
+    partnerInn: '7710030411',
+    erid: '2VtzqxVskProperty',
+    title: 'Защита сделки и конструктива',
+    text: 'Комплексное страхование титула, ремонта и отделки со скидкой до 20% от аккредитованных страховых.',
+    btnText: 'Оформить полис',
+    cta: 'Оформить полис',
+    ctaUrl: 'https://sogaz.ru/property?erid=2VtzqxSogazProperty',
+    legal: 'Реклама. САО «ВСК». Лицензии ЦБ РФ СИ № 0621, СЛ № 0621',
+    action: "showAvailability('Страхование')"
+  },
+  docs: {
+    id: 'ad_legal_audit_ddu',
+    badge: 'Юридический аудит',
+    badgeColor: '#EC4899',
+    icon: '⚖️',
+    partnerName: 'ЮК «Право Недвижимости»',
+    partnerInn: '3906334455',
+    erid: '2VtzqxPravo39Audit',
+    title: 'Проверка ДДУ и рисков',
+    text: 'Независимая юридическая проверка договора долевого участия, чистоты эскроу и истории застройщика.',
+    btnText: 'Проверить ДДУ',
+    cta: 'Проверить ДДУ',
+    ctaUrl: 'partners-promo.html?ref=legal_audit',
+    legal: 'Реклама. ООО «Право Недвижимости Эксперт», ОГРН 1213900008910',
+    action: "showAvailability('Юридическая проверка')"
+  }
+};
+
+// ── Wrap inline panels with ad banners ───────────────────────
+function wrapWithBannerHTML(contentHtml, sectionKey, p) {
+  var ad = null;
+  if (typeof SmartAdEngine !== 'undefined' && SmartAdEngine.resolveAd) {
+    try {
+      ad = SmartAdEngine.resolveAd(sectionKey, p);
+    } catch(e) {
+      ad = null;
+    }
+  }
+
+  if (!ad) {
+    ad = CONTEXT_ADS[sectionKey];
+  }
+
+  if (!ad) return contentHtml;
+
+  var complexName = (p && p.name) ? String(p.name).replace(/'/g, "\'") : 'ЖК';
+  var customAction = ad.action
+    ? ad.action.replace("')", ` — ${complexName}')`)
+    : `showAvailability('${ad.title} — ${complexName}')`;
+
+  var btnText = ad.btnText || ad.cta || 'Подробнее';
+  var legalText = ad.legal || `Реклама · ${ad.partnerName || 'Партнёр'} · ИНН: ${ad.partnerInn || '3900000000'} · erid: ${ad.erid || '2Vtzqx'}`;
+
+  return `
+    <div class="inline-section-layout">
+      <div class="inline-main-content">
+        ${contentHtml}
+      </div>
+      <aside class="inline-side-banner" data-ad-id="${ad.id || ''}" data-section="${sectionKey}" data-erid="${ad.erid || ''}">
+        <div class="banner-info">
+          <h4 class="banner-title">${ad.title}</h4>
+          <p class="banner-text">${ad.text}</p>
+        </div>
+        <div class="banner-actions" style="margin-top:auto;">
+          <button class="banner-btn" onclick="${customAction}">${btnText}</button>
+          <div class="banner-legal-disclosure" style="margin-top:6px;font-size:8.5px;color:var(--color-muted);line-height:1.25;text-align:center;" title="${ad.partnerName || ''} · ИНН: ${ad.partnerInn || ''} · erid: ${ad.erid || ''}">
+            ${legalText}
+          </div>
+        </div>
+      </aside>
+    </div>
+  `;
+}
+
+// ── Build All Inline Sections ────────────────────────────────
+function buildAllInlineSections(p) {
+  const pricesContent = `
+    <div class="price-panel">
+      <div class="price-range">${p.priceRange}</div>
+      <div class="price-sqm">${p.pricePerSqm}</div>
+      <table class="price-table">${priceTableHTML(p.prices)}</table>
+    </div>
+  `;
+
+    return `
+    <div class="inline-section" data-section="prices">
+      ${wrapWithBannerHTML(pricesContent, 'prices', p)}
+    </div>
+    <div class="inline-section" data-section="mortgage">
+      ${wrapWithBannerHTML(mortgageContentHTML(), 'mortgage', p)}
+    </div>
+    <div class="inline-section" data-section="location">
+      ${wrapWithBannerHTML(locationContentHTML(p), 'location', p)}
+    </div>
+    <div class="inline-section" data-section="infra">${infraContentHTML(p)}</div>
+    <div class="inline-section" data-section="yard">${yardContentHTML(p)}</div>
+    <div class="inline-section" data-section="chars">${charsContentHTML(p.chars)}</div>
+    <div class="inline-section" data-section="engineering">${engineeringContentHTML(p)}</div>
+    <div class="inline-section" data-section="comfort">${comfortContentHTML(p)}</div>
+    <div class="inline-section" data-section="security">${securityContentHTML(p)}</div>
+    <div class="inline-section" data-section="management">${managementContentHTML(p)}</div>
+    <div class="inline-section" data-section="warranty">
+      ${wrapWithBannerHTML(warrantyContentHTML(p), 'warranty', p)}
+    </div>
+    <div class="inline-section" data-section="docs">
+      ${wrapWithBannerHTML(docsContentHTML(p), 'docs', p)}
+    </div>
+    <div class="inline-section" data-section="dev">
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px">Застройщик</div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--color-bg);border-radius:8px">
+        <div style="width:40px;height:40px;background:var(--color-primary);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px">A</div>
+        <div><div style="font-size:12px;font-weight:600">АмберГрупп</div><div style="font-size:10px;color:var(--color-muted)">8 сданных проектов · 12 лет на рынке</div></div>
+      </div>
+    </div>
+    <div class="inline-section" data-section="pros">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><div style="font-size:12px;font-weight:600;color:#10B981;margin-bottom:6px">✓ Плюсы</div>
+          <ul style="font-size:11px;color:var(--color-text-secondary);line-height:1.7;list-style:disc;padding-left:16px"><li>Близость к морю</li><li>Развитая инфраструктура</li><li>Качественная отделка</li></ul></div>
+        <div><div style="font-size:12px;font-weight:600;color:#EF4444;margin-bottom:6px">✗ Минусы</div>
+          <ul style="font-size:11px;color:var(--color-text-secondary);line-height:1.7;list-style:disc;padding-left:16px"><li>Сезонная нагрузка</li><li>Транспорт ограничен</li></ul></div>
+      </div>
+    </div>
+    <div class="inline-section" data-section="whom">
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px">Кому подходит</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <span class="tag tag-family" style="padding:6px 12px;font-size:11px">👨‍👩‍👧 Семьи с детьми</span>
+        <span class="tag tag-mortgage" style="padding:6px 12px;font-size:11px">💼 Инвесторы</span>
+        <span class="tag tag-comfort" style="padding:6px 12px;font-size:11px">🏖 Для отдыха</span>
+        <span class="tag tag-author" style="padding:6px 12px;font-size:11px">👴 Пенсионеры</span>
+      </div>
+    </div>`;
+}
+
+// ── Promo Card ───────────────────────────────────────────────
+function buildPromoCard(p, cardIndex) {
+  if (cardIndex === 1) {
+    return `<div class="card-promo" style="background: linear-gradient(135deg, #15305B 0%, #1e4682 100%);">
+      <div class="promo-badge" style="background: rgba(245, 166, 35, 0.2); border-color: rgba(245, 166, 35, 0.4); color: var(--color-accent);">★ Индекс Amber</div>
+      <div class="promo-discount" style="color: var(--color-accent); font-size: 24px; font-weight: 900; margin: 4px 0 8px 0;">Индекс ${p.rating}</div>
+      <div class="promo-title" style="font-size: 14px; margin-bottom: 6px;">Независимая оценка ЖК</div>
+      <div class="promo-text" style="font-size: 11px; opacity: 0.85; margin-bottom: 12px;">Индекс рассчитывается автоматически на основе 10 параметров: от документов до качества материалов.</div>
+      <a class="promo-btn" href="methodology.html" style="text-align: center; text-decoration: none; display: block; width: 100%; box-sizing: border-box;">Методология →</a>
+    </div>`;
+  }
+  if (cardIndex === 3) {
+    return `<div class="card-promo" style="background: linear-gradient(135deg, #15305B 0%, #1e4682 100%);">
+      <div class="promo-badge" style="background: rgba(245, 166, 35, 0.2); border-color: rgba(245, 166, 35, 0.4); color: var(--color-accent);">★ Свободный слот</div>
+      <div class="promo-discount" style="color: var(--color-accent); font-size: 24px; font-weight: 900; margin: 4px 0 8px 0;">8 500 ₽ / мес</div>
+      <div class="promo-title" style="font-size: 14px; margin-bottom: 6px;">Промо-баннер ЖК</div>
+      <div class="promo-text" style="font-size: 11px; opacity: 0.85; margin-bottom: 12px;">Разместите спецпредложение вашего проекта. Цена до запуска — 8 500 руб/мес с сохранением цены на 3 месяца.</div>
+      <button class="promo-btn" style="text-align: center; display: block; width: 100%; box-sizing: border-box;">Подробнее →</button>
+    </div>`;
+  }
+  const discount = (p.specialOffer && p.specialOffer.discount) || '−15%';
+  const text = (p.specialOffer && p.specialOffer.text) || 'Действует до конца месяца при бронировании через Amber Avenue. Ограниченное количество.';
+  return `<div class="card-promo">
+    <div class="promo-badge">★ Спецпредложение</div>
+    <div class="promo-discount">${discount}</div>
+    <div class="promo-title">Скидка на квартиры в ${p.name}</div>
+    <div class="promo-text">${text}</div>
+    <button class="promo-btn" onclick="showAvailability('${p.name.replace(/'/g,"\'")}')">Подробнее →</button>
+  </div>`;
+}
+
+// ── Build Property Card (NO satellite panels) ────────────────
+function buildPropertyCard(p, cardIndex) {
+  const id = `card-${p.id}`;
+  const classTag = `<span class="tag tag-class">${p.class}</span>`;
+  const otherTags = p.tags
+    .filter(t => t !== p.class)
+    .map(t => `<span class="tag ${TAG_CLASS[t] || 'tag-comfort'}">${t}</span>`)
+    .join('');
+
+  return `
+  <div class="property-card-wrapper" data-card-id="${p.id}">
+    <div class="card-row">
+      <div class="property-card" id="${id}-center">
+        <div class="card-main">
+          <!-- Square Image -->
+          <div class="card-image-col" onclick="openGallery('${id}')">
+            <img src="${p.imgSrc}" alt="${p.name}" loading="${cardIndex < 2 ? 'eager' : 'lazy'}">
+            ${p.partner ? `<div class="card-badge-partner">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M5 0L6.12 3.38H9.51L6.88 5.47L7.94 8.82L5 6.64L2.06 8.82L3.12 5.47L0.49 3.38H3.88L5 0Z"/></svg>
+              Официальный партнёр
+            </div>` : ''}
+            <div class="card-photo-count" onclick="event.stopPropagation();openGallery('${id}')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              +${p.photos} фото
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="card-content-col">
+            <div class="card-top-row">
+              <div class="card-title-group">
+                <h2 class="card-title">${p.name}</h2>
+                <button class="card-save" onclick="toggleSave(this)" aria-label="Сохранить">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+              </div>
+              <div class="card-rating">
+                <div class="amber-index-label">Индекс Amber <i title="Рейтинг">ⓘ</i></div>
+                <div class="rating-score"><span class="rating-star">★</span><span class="rating-num">${p.rating}</span><span class="rating-max">/ 5</span></div>
+                <div class="rating-reviews">на основе отзывов<br>и проверки Amber</div>
+              </div>
+            </div>
+            <div class="card-location">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>${p.location}</span><span class="loc-dot">·</span><span>${p.distance}</span>
+            </div>
+            <a class="card-map-link" href="#">Смотреть на карте</a>
+            <div class="card-meta-row">
+              <div class="card-price-block"><span class="price-main">от ${p.priceFrom}</span><span class="price-secondary">${p.pricePerSqm}</span></div>
+              <div class="card-delivery-block"><span class="card-delivery-label">сдача</span><span class="card-delivery-value">${p.delivery}</span></div>
+              <div class="card-meta-tags">${classTag}${otherTags}</div>
+            </div>
+            <p class="card-description">${p.description}</p>
+          </div>
+        </div>
+
+        <!-- Nav Icons -->
+        <nav class="card-nav" aria-label="Разделы ЖК">${inlineNavHTML()}</nav>
+
+        <!-- Inline Expandable Panel -->
+        <div class="card-inline-panel" id="${id}-inline">
+          <div class="card-inline-panel-content">${buildAllInlineSections(p)}</div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="card-actions">
+          <button class="btn btn-primary" onclick="showAvailability('${p.name.replace(/'/g,"\\'")}')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Узнать наличие
+          </button>
+          <button class="btn btn-outline"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.36 11.37a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Позвонить</button>
+          <button class="btn btn-outline"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Сайт ↗</button>
+          <button class="btn btn-outline"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Сравнить</button>
+          <button class="btn btn-outline btn-expert"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Задать вопрос эксперту</button>
+        </div>
+      </div>
+      ${p.partner ? buildPromoCard(p, cardIndex) : ''}
+    </div>
+  </div>`;
+}
+
+// ── Build Banner ─────────────────────────────────────────────
+function buildBanner(b) {
+  return `<div class="property-card-wrapper">
+    <div class="banner-card">
+      <div class="banner-icon">${b.icon}</div>
+      <div class="banner-body">
+        <div class="banner-headline">${b.headline}</div>
+        <p class="banner-sub">${b.sub}</p>
+        <button class="banner-cta" onclick="${b.ctaLink ? `window.location='${b.ctaLink}'` : `showToast('Заявка отправлена! Свяжемся за 5 минут.')`}">${b.cta}</button>
+      </div>
+      <div class="banner-stats">
+        ${b.stats.map(s => `<div class="banner-stat"><span class="num">${s.num}</span><span class="label">${s.label}</span></div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Gallery Popup ────────────────────────────────────────────
+let galleryState = { open: false, cardId: null, index: 0, images: [], name: '' };
+
+function openGallery(cardId) {
+  const p = PROPERTIES.find(x => 'card-' + x.id === cardId);
+  if (!p) return;
+  galleryState = { open: true, cardId, index: 0, images: [p.imgSrc, ...p.thumbs.slice(1)], name: p.name };
+  renderGalleryPopup();
+}
+
+function closeGallery() {
+  galleryState.open = false;
+  const ov = document.getElementById('gallery-popup-overlay');
+  if (ov) ov.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function galleryNav(dir) {
+  const gs = galleryState;
+  gs.index = (gs.index + dir + gs.images.length) % gs.images.length;
+  renderGalleryPopup();
+}
+
+function galleryGoTo(idx) {
+  galleryState.index = idx;
+  renderGalleryPopup();
+}
+
+function renderGalleryPopup() {
+  let ov = document.getElementById('gallery-popup-overlay');
+  if (!ov) {
+    ov = document.createElement('div');
+    ov.id = 'gallery-popup-overlay';
+    ov.className = 'gallery-popup-overlay';
+    ov.onclick = function(e) { if (e.target === ov) closeGallery(); };
+    document.body.appendChild(ov);
+  }
+  const gs = galleryState;
+  ov.innerHTML = `
+    <div class="gallery-popup">
+      <button class="gallery-popup-close" onclick="closeGallery()">✕</button>
+      <div class="gallery-popup-title">${gs.name}</div>
+      <div class="gallery-popup-main"><img src="${gs.images[gs.index]}" alt="Фото"></div>
+      <button class="gallery-popup-arrow prev" onclick="galleryNav(-1)">‹</button>
+      <button class="gallery-popup-arrow next" onclick="galleryNav(1)">›</button>
+      <div class="gallery-popup-counter">${gs.index + 1} / ${gs.images.length}</div>
+      <div class="gallery-popup-thumbs">
+        ${gs.images.map((img, i) =>
+          `<div class="gallery-popup-thumb${i === gs.index ? ' active' : ''}" onclick="galleryGoTo(${i})"><img src="${img}" alt=""></div>`
+        ).join('')}
+      </div>
+    </div>`;
+  ov.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (!galleryState.open) return;
+  if (e.key === 'Escape') closeGallery();
+  if (e.key === 'ArrowRight') galleryNav(1);
+  if (e.key === 'ArrowLeft') galleryNav(-1);
+});
+
+
+
+// ── Nav Click → Inline Panel Toggle ──────────────────────────
+function bindNavItems() {
+  document.querySelectorAll('.card-nav-item').forEach(item => {
+    item.addEventListener('click', function() {
+      const key = this.dataset.key;
+      const card = this.closest('.property-card');
+      const panel = card.querySelector('.card-inline-panel');
+      const nav = card.querySelector('.card-nav');
+      const wasActive = this.classList.contains('active');
+
+      // Deactivate all
+      nav.querySelectorAll('.card-nav-item').forEach(n => n.classList.remove('active'));
+      panel.querySelectorAll('.inline-section').forEach(s => s.classList.remove('active'));
+
+      if (wasActive) {
+        panel.classList.remove('open');
+      } else {
+        this.classList.add('active');
+        const section = panel.querySelector('[data-section="' + key + '"]');
+        if (section) {
+          section.classList.add('active');
+          panel.classList.add('open');
+        }
+      }
+    });
+  });
+}
+
+// ── State & Filtering ──────────────────────────────────────────
+let currentFilter = 'all';
+let currentDeveloper = '';
+
+function renderFeed() {
+  const feed = document.getElementById('listing-feed');
+  if (!feed) return;
+
+  // Filter properties
+  let filtered = PROPERTIES.filter(p => {
+    // Developer filter
+    if (currentDeveloper && p.developer !== currentDeveloper) return false;
+
+    // Chip filter
+    if (currentFilter === 'all') return true;
+    if (currentFilter === 'partner') return p.partner;
+    if (currentFilter === 'budget') return parseFloat(p.priceFrom.replace(/[^\d.]/g, '')) <= 5.0;
+    if (currentFilter === 'sea') return p.location === 'Зеленоградск' || p.location === 'Светлогорск' || p.location === 'Пионерский';
+    if (currentFilter === '2025') return p.delivery.includes('2025');
+
+    // Tags & Class match
+    if (currentFilter === 'comfort') return p.class === 'комфорт-класс';
+    if (currentFilter === 'business') return p.class === 'бизнес-класс';
+    if (currentFilter === 'premium') return p.class === 'премиум';
+    if (currentFilter === 'family') return p.tags.includes('семейная ипотека');
+    if (currentFilter === 'it') return p.tags.includes('IT-ипотека');
+
+    return true;
+  });
+
+  let html = '';
+  if (filtered.length === 0) {
+    html = `<div style="padding: 40px; text-align: center; color: var(--color-muted); font-size: 14px; width: 100%;">
+      Нет объектов, соответствующих выбранным фильтрами.
+    </div>`;
+  } else {
+    filtered.forEach((p, i) => {
+      if (i > 0 && i % BANNER_EVERY === 0) {
+        html += buildBanner(BANNERS[Math.floor((i / BANNER_EVERY - 1) % BANNERS.length)]);
+      }
+      html += buildPropertyCard(p, i);
+    });
+  }
+
+  feed.innerHTML = html;
+
+  const countEl = document.querySelector('.feed-count');
+  if (countEl) countEl.textContent = filtered.length + ' объектов';
+
+  // Update total count on "All" chip
+  const allCount = document.querySelector('.filter-chip[data-filter="all"] .chip-count');
+  if (allCount) allCount.textContent = PROPERTIES.length;
+
+  bindNavItems();
+}
+
+// ── Helpers ──────────────────────────────────────────────────
+function toggleSave(btn) {
+  btn.classList.toggle('saved');
+  showToast(btn.classList.contains('saved') ? 'Добавлено в избранное' : 'Удалено из избранного');
+}
+
+function showAvailability(name) {
+  // Remove existing modal if any
+  let existing = document.getElementById('availability-modal');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'availability-modal';
+  overlay.innerHTML = `
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-header-text">
+          <h3 class="modal-title">Узнать наличие квартир</h3>
+          <p class="modal-subtitle">${name} — оставьте заявку, и мы свяжемся с вами</p>
+        </div>
+        <button class="modal-close" onclick="closeModal()" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-field">
+          <label class="modal-label" for="modal-name">Ваше имя</label>
+          <input class="modal-input" type="text" id="modal-name" placeholder="Александр" autocomplete="given-name">
+        </div>
+        <div class="modal-row">
+          <div class="modal-field">
+            <label class="modal-label" for="modal-phone">Телефон</label>
+            <input class="modal-input" type="tel" id="modal-phone" placeholder="+7 (___) ___-__-__" autocomplete="tel">
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="modal-email">Email</label>
+            <input class="modal-input" type="email" id="modal-email" placeholder="mail@example.com" autocomplete="email">
+          </div>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label" for="modal-city">Откуда вы?</label>
+          <select class="modal-select" id="modal-city">
+            <option value="" disabled selected>Выберите город или регион</option>
+            <optgroup label="Калининградская область">
+              <option>Калининград</option>
+              <option>Зеленоградск</option>
+              <option>Светлогорск</option>
+              <option>Балтийск</option>
+              <option>Гурьевск</option>
+              <option>Черняховск</option>
+            </optgroup>
+            <optgroup label="Города-миллионники">
+              <option>Москва</option>
+              <option>Санкт-Петербург</option>
+              <option>Новосибирск</option>
+              <option>Екатеринбург</option>
+              <option>Казань</option>
+              <option>Нижний Новгород</option>
+              <option>Челябинск</option>
+              <option>Самара</option>
+              <option>Омск</option>
+              <option>Ростов-на-Дону</option>
+              <option>Уфа</option>
+              <option>Красноярск</option>
+              <option>Воронеж</option>
+              <option>Пермь</option>
+              <option>Волгоград</option>
+              <option>Краснодар</option>
+            </optgroup>
+            <optgroup label="Крупные города России">
+              <option>Тюмень</option>
+              <option>Саратов</option>
+              <option>Тольятти</option>
+              <option>Ижевск</option>
+              <option>Барнаул</option>
+              <option>Иркутск</option>
+              <option>Хабаровск</option>
+              <option>Ярославль</option>
+              <option>Владивосток</option>
+              <option>Махачкала</option>
+              <option>Томск</option>
+              <option>Оренбург</option>
+              <option>Кемерово</option>
+              <option>Новокузнецк</option>
+              <option>Рязань</option>
+              <option>Астрахань</option>
+              <option>Набережные Челны</option>
+              <option>Пенза</option>
+              <option>Липецк</option>
+              <option>Киров</option>
+              <option>Тула</option>
+              <option>Чебоксары</option>
+              <option>Калуга</option>
+              <option>Курск</option>
+              <option>Ставрополь</option>
+              <option>Сочи</option>
+              <option>Белгород</option>
+              <option>Брянск</option>
+              <option>Иваново</option>
+              <option>Владимир</option>
+              <option>Архангельск</option>
+              <option>Симферополь</option>
+              <option>Мурманск</option>
+              <option>Смоленск</option>
+              <option>Тверь</option>
+              <option>Псков</option>
+              <option>Великий Новгород</option>
+              <option>Вологда</option>
+              <option>Петрозаводск</option>
+              <option>Сыктывкар</option>
+            </optgroup>
+            <optgroup label="За рубежом">
+              <option>Европа</option>
+              <option>Страны СНГ</option>
+              <option>Азия</option>
+              <option>Африка</option>
+            </optgroup>
+          </select>
+        </div>
+        <button class="modal-submit" onclick="submitAvailability('${name.replace(/'/g, "\\'")}')">Отправить заявку</button>
+        <p class="modal-consent">Нажимая кнопку, вы соглашаетесь с <a href="#">политикой конфиденциальности</a> и <a href="#">условиями обработки данных</a></p>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+
+  // Animate in
+  requestAnimationFrame(() => overlay.classList.add('open'));
+
+  // Close on overlay click
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) closeModal();
+  });
+
+  // Close on Escape
+  const escHandler = function(e) {
+    if (e.key === 'Escape') { closeModal(); document.removeEventListener('keydown', escHandler); }
+  };
+  document.addEventListener('keydown', escHandler);
+
+  // Focus first field
+  setTimeout(() => {
+    const nameInput = document.getElementById('modal-name');
+    if (nameInput) nameInput.focus();
+  }, 100);
+}
+
+function closeModal() {
+  const overlay = document.getElementById('availability-modal');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => overlay.remove(), 200);
+}
+
+function submitAvailability(name) {
+  const nameVal = document.getElementById('modal-name').value.trim();
+  const phone = document.getElementById('modal-phone').value.trim();
+  const email = document.getElementById('modal-email').value.trim();
+  const city = document.getElementById('modal-city').value;
+
+  if (!nameVal) { document.getElementById('modal-name').focus(); return; }
+  if (!phone) { document.getElementById('modal-phone').focus(); return; }
+
+  closeModal();
+  showToast('Заявка на «' + name + '» отправлена! Свяжемся с вами в ближайшее время.');
+}
+
+function showToast(msg) {
+  let c = document.querySelector('.toast-container');
+  if (!c) { c = document.createElement('div'); c.className = 'toast-container'; document.body.appendChild(c); }
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  c.appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3000);
+}
+
+// ── Init ─────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  renderFeed();
+
+  // Filter Chips — real filtering
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      currentFilter = this.dataset.filter || 'all';
+      renderFeed();
+    });
+  });
+
+  // Developer Dropdown
+  const devSelect = document.getElementById('filter-developer');
+  if (devSelect) {
+    devSelect.addEventListener('change', function() {
+      currentDeveloper = this.value;
+      renderFeed();
+    });
+  }
+
+  // Burger / Drawer toggle
+  const burger = document.getElementById('burger-btn');
+  const drawer = document.getElementById('mobile-drawer');
+  const overlay = document.getElementById('drawer-overlay');
+  const drawerClose = document.getElementById('drawer-close');
+
+  function toggleDrawer() {
+    const isOpen = drawer.classList.contains('open');
+    drawer.classList.toggle('open');
+    overlay.classList.toggle('open');
+    burger.classList.toggle('open');
+    burger.setAttribute('aria-expanded', !isOpen);
+    document.body.style.overflow = isOpen ? '' : 'hidden';
+  }
+
+  if (burger) burger.addEventListener('click', toggleDrawer);
+  if (drawerClose) drawerClose.addEventListener('click', toggleDrawer);
+  if (overlay) overlay.addEventListener('click', toggleDrawer);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && drawer && drawer.classList.contains('open')) {
+      toggleDrawer();
+    }
+  });
+});
+</script>
+</body>
+</html>
