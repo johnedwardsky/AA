@@ -1,7 +1,6 @@
 /* ============================================================
-   AMBER AVENUE — High-Performance Dual-Engine Interactive Regional Map
-   Primary: Yandex Maps 2.1 API with Clustering & Custom Balloons
-   Resilient Fallback: Leaflet + OpenStreetMap for Adblock / Offline / CDN
+   AMBER AVENUE — High-Performance Instant Interactive Regional Map
+   Zero-latency Leaflet + CartoDB/OpenStreetMap High-Definition Engine
    Differentiated Placemarks (Gold Star Partners vs Navy Basic ЖК),
    Tooltips, Modals, Dynamic Filters, and Deep Linking.
    ============================================================ */
@@ -9,34 +8,14 @@
 (function(window, document) {
   'use strict';
 
-  let ymapInstance = null;
-  let ymapClusterer = null;
   let leafletMapInstance = null;
   let leafletMarkersGroup = null;
-  let placemarksMap = {};
   let currentView = 'list'; // 'list' | 'map'
   let currentProperties = [];
   let isInitializing = false;
-  let activeEngine = null; // 'yandex' | 'leaflet'
 
-  // Auto-inject Yandex Maps API if not present
-  function ensureYandexMapsScript() {
-    if (typeof window.ymaps !== 'undefined') return;
-    if (document.querySelector('script[src*="api-maps.yandex.ru"]')) return;
-
-    try {
-      const s = document.createElement('script');
-      s.src = 'https://api-maps.yandex.ru/2.1/?apikey=a2dacfa0-5027-4d77-8085-92e462c8017a&lang=ru_RU';
-      s.type = 'text/javascript';
-      s.async = true;
-      document.head.appendChild(s);
-    } catch (e) {
-      console.warn('Could not inject Yandex Maps script:', e);
-    }
-  }
-
-  // Auto-inject Leaflet CSS & JS for resilient fallback
-  function loadLeaflet(callback) {
+  // Pre-load Leaflet assets dynamically if not already in document
+  function ensureLeafletAssets(callback) {
     if (window.L && typeof window.L.map === 'function') {
       if (callback) callback();
       return;
@@ -57,9 +36,6 @@
       s.onload = () => {
         if (callback) callback();
       };
-      s.onerror = () => {
-        console.warn('Leaflet failed to load.');
-      };
       document.head.appendChild(s);
     } else {
       let attempts = 0;
@@ -70,8 +46,9 @@
           if (callback) callback();
         } else if (attempts > 30) {
           clearInterval(poll);
+          if (callback) callback();
         }
-      }, 100);
+      }, 50);
     }
   }
 
@@ -159,7 +136,7 @@
 
     if (cardWrapper) {
       setTimeout(() => {
-        // 1. Expand infrastructure / characteristics tab
+        // 1. Expand infrastructure tab
         const infraNavItem = cardWrapper.querySelector('.card-nav-item[data-key="infra"]') ||
                               cardWrapper.querySelector('.card-nav-item[data-key="chars"]');
         const panel = cardWrapper.querySelector('.card-inline-panel');
@@ -211,6 +188,7 @@
                   (window.PROPERTIES || (window.AMBER_DATA ? window.AMBER_DATA.properties : [])) || [];
     const p = props.find(item => item.id === zhkId) || { id: zhkId, name: 'Жилой комплекс' };
 
+    injectBasicModalHTML();
     const modal = document.getElementById('zhk-basic-modal');
     if (!modal) return;
 
@@ -299,345 +277,157 @@
     document.body.insertAdjacentHTML('beforeend', modalHtml);
   }
 
-  // ----------------------------------------------------
-  // PRIMARY ENGINE: YANDEX MAPS 2.1
-  // ----------------------------------------------------
-  function tryInitYandexMap(containerId, onSuccess, onError) {
-    if (typeof window.ymaps === 'undefined' || typeof window.ymaps.ready !== 'function') {
-      ensureYandexMapsScript();
-      let attempts = 0;
-      const checker = setInterval(() => {
-        attempts++;
-        if (typeof window.ymaps !== 'undefined' && typeof window.ymaps.ready === 'function') {
-          clearInterval(checker);
-          doYandexInit();
-        } else if (attempts > 25) { // 2.5s timeout
-          clearInterval(checker);
-          onError('Yandex Maps script load timeout');
-        }
-      }, 100);
-      return;
-    }
-
-    doYandexInit();
-
-    function doYandexInit() {
-      window.ymaps.ready(() => {
-        try {
-          const container = document.getElementById(containerId);
-          if (!container) return;
-          container.innerHTML = '';
-
-          ymapInstance = new window.ymaps.Map(containerId, {
-            center: [54.7104, 20.4522],
-            zoom: 10,
-            controls: ['zoomControl', 'fullscreenControl', 'typeSelector', 'geolocationControl']
-          }, {
-            searchControlProvider: 'yandex#search',
-            suppressMapOpenBlock: true
-          });
-
-          ymapClusterer = new window.ymaps.Clusterer({
-            preset: 'islands#invertedDarkBlueClusterIcons',
-            groupByCoordinates: false,
-            clusterDisableClickZoom: false,
-            clusterHideIconOnBalloonOpen: false,
-            geoObjectHideIconOnBalloonOpen: false,
-            maxZoom: 15,
-            clusterBalloonContentLayout: 'cluster#balloonCarousel',
-            clusterBalloonPagerType: 'marker'
-          });
-
-          ymapInstance.geoObjects.add(ymapClusterer);
-          window.ymapInstance = ymapInstance;
-          window.ymapClusterer = ymapClusterer;
-          activeEngine = 'yandex';
-
-          setTimeout(() => {
-            try { ymapInstance.container.fitToViewport(); } catch(e) {}
-          }, 80);
-
-          onSuccess();
-        } catch (err) {
-          onError(err);
-        }
-      });
-    }
-  }
-
-  // ----------------------------------------------------
-  // FALLBACK ENGINE: LEAFLET + OPENSTREETMAP
-  // ----------------------------------------------------
-  function initLeafletMap(containerId, onSuccess) {
-    loadLeaflet(() => {
-      try {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        container.innerHTML = '';
-
-        leafletMapInstance = window.L.map(containerId, {
-          center: [54.7104, 20.4522],
-          zoom: 10,
-          zoomControl: true
-        });
-
-        // Crisp OpenStreetMap standard tiles
-        window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-          attribution: '© OpenStreetMap contributors, Amber Avenue'
-        }).addTo(leafletMapInstance);
-
-        leafletMarkersGroup = window.L.layerGroup().addTo(leafletMapInstance);
-        activeEngine = 'leaflet';
-        window.leafletMapInstance = leafletMapInstance;
-
-        setTimeout(() => {
-          try { leafletMapInstance.invalidateSize(); } catch(e) {}
-        }, 100);
-
-        if (onSuccess) onSuccess();
-      } catch (e) {
-        console.error('Leaflet initialization failed:', e);
-      }
-    });
-  }
-
-  // Main Map Init Entry Point
+  // Initialize High-Performance Map
   function initZhkMap(containerId = 'zhk-interactive-map') {
     const container = document.getElementById(containerId);
     if (!container) return null;
 
     injectBasicModalHTML();
 
-    if (activeEngine === 'yandex' && ymapInstance) {
-      try { ymapInstance.container.fitToViewport(); } catch (e) {}
-      return ymapInstance;
-    }
-    if (activeEngine === 'leaflet' && leafletMapInstance) {
-      try { leafletMapInstance.invalidateSize(); } catch (e) {}
+    if (leafletMapInstance) {
+      setTimeout(() => {
+        try { leafletMapInstance.invalidateSize(); } catch (e) {}
+      }, 50);
       return leafletMapInstance;
     }
 
     if (isInitializing) return null;
     isInitializing = true;
 
-    // Show clean loader
-    container.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:center;height:100%;min-height:400px;background:#F8FAFC;color:var(--color-primary);font-family:inherit;">
-        <div style="text-align:center;">
-          <div style="font-size:32px;margin-bottom:10px;">🗺️</div>
-          <div style="font-size:15px;font-weight:700;margin-bottom:4px;">Загрузка интерактивной карты Amber Avenue...</div>
-          <div style="font-size:12px;color:var(--color-text-secondary);">369 жилых комплексов Калининградской области</div>
-        </div>
-      </div>
-    `;
+    ensureLeafletAssets(() => {
+      try {
+        if (!window.L || typeof window.L.map !== 'function') {
+          console.error('Leaflet is not available.');
+          isInitializing = false;
+          return;
+        }
 
-    // Try Yandex first, fallback to Leaflet
-    tryInitYandexMap(containerId, () => {
-      isInitializing = false;
-      const props = (currentProperties && currentProperties.length > 0) ? currentProperties :
-                    ((typeof PROPERTIES !== 'undefined' ? PROPERTIES : []) || (window.PROPERTIES || []));
-      updateMapMarkers(props);
-    }, (err) => {
-      console.warn('Yandex Maps unavailable, switching to OpenStreetMap / Leaflet engine:', err);
-      initLeafletMap(containerId, () => {
+        // Clean container and reset if previously initialized
+        if (container._leaflet_id) {
+          container._leaflet_id = null;
+        }
+        container.innerHTML = '';
+
+        // Default regional center: Kaliningrad region
+        leafletMapInstance = window.L.map(containerId, {
+          center: [54.7104, 20.4522],
+          zoom: 10,
+          zoomControl: true,
+          scrollWheelZoom: true
+        });
+
+        // Crisp High-Definition CartoDB Voyager Map with Russian Labels
+        window.L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+          maxZoom: 19,
+          subdomains: 'abcd',
+          attribution: '© OpenStreetMap, © CARTO, Amber Avenue'
+        }).addTo(leafletMapInstance);
+
+        leafletMarkersGroup = window.L.layerGroup().addTo(leafletMapInstance);
+        window.leafletMapInstance = leafletMapInstance;
         isInitializing = false;
+
+        // Populate markers
         const props = (currentProperties && currentProperties.length > 0) ? currentProperties :
                       ((typeof PROPERTIES !== 'undefined' ? PROPERTIES : []) || (window.PROPERTIES || []));
         updateMapMarkers(props);
-      });
+
+        // Force viewport update
+        setTimeout(() => {
+          try { leafletMapInstance.invalidateSize(); } catch (e) {}
+        }, 50);
+        setTimeout(() => {
+          try { leafletMapInstance.invalidateSize(); } catch (e) {}
+        }, 200);
+
+      } catch (err) {
+        console.error('Map init error:', err);
+        isInitializing = false;
+      }
     });
 
-    return null;
+    return leafletMapInstance;
   }
 
-  // Update Placemarks on the Map across Active Engine
+  // Update Placemarks on the Map
   function updateMapMarkers(props) {
     currentProperties = props || [];
 
-    // Update stats bar
+    // Update statistics toolbar
     const countEl = document.getElementById('zhk-map-count');
     const partnerCountEl = document.getElementById('zhk-map-partner-count');
     const partners = currentProperties.filter(p => !!p.partner);
     if (countEl) countEl.textContent = currentProperties.length;
     if (partnerCountEl) partnerCountEl.textContent = partners.length;
 
-    // Render on Yandex Maps
-    if (activeEngine === 'yandex' && ymapClusterer && ymapInstance && typeof window.ymaps !== 'undefined') {
-      ymapClusterer.removeAll();
-      placemarksMap = {};
+    if (!leafletMapInstance || !leafletMarkersGroup || !window.L) return;
 
-      const geoObjects = [];
-      const validCoordsList = [];
+    leafletMarkersGroup.clearLayers();
+    const bounds = [];
 
-      currentProperties.forEach(p => {
-        if (!p.coords || !Array.isArray(p.coords) || p.coords.length !== 2) return;
-        const [lat, lng] = p.coords;
-        validCoordsList.push([lat, lng]);
+    currentProperties.forEach(p => {
+      if (!p.coords || !Array.isArray(p.coords) || p.coords.length !== 2) return;
+      const [lat, lng] = p.coords;
+      bounds.push([lat, lng]);
 
-        const isPartner = !!p.partner;
-        let placemark;
+      const isPartner = !!p.partner;
+      const iconHtml = isPartner ? `
+        <div style="background:linear-gradient(135deg, #F5A623 0%, #D97706 100%);color:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(245,166,35,0.65);border:2px solid #FFFFFF;font-size:15px;cursor:pointer;transition:transform 0.2s;" title="${p.name}">
+          ★
+        </div>
+      ` : `
+        <div style="background:linear-gradient(135deg, #15305B 0%, #0E1F3D 100%);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(21,48,91,0.45);border:2px solid #FFFFFF;font-size:11px;cursor:pointer;transition:transform 0.2s;" title="${p.name}">
+          🏢
+        </div>
+      `;
 
-        if (isPartner) {
-          const priceText = p.priceFrom ? p.priceFrom.replace('от ', '').replace(' млн ₽', 'M ₽') : 'ЖК';
-          const partnerBalloonHtml = `
-            <div class="zhk-ymap-balloon">
-              <div class="zhk-balloon-hero">
-                <img src="${p.imgSrc}" alt="${p.name}" class="zhk-balloon-img" onerror="this.src='baltic_banner.jpg'" />
-                <span class="zhk-balloon-partner-badge">Партнёр</span>
-                <span class="zhk-balloon-rating">★ ${p.rating || '4.8'}</span>
-              </div>
-              <div class="zhk-balloon-body">
-                <h4 class="zhk-balloon-title">${p.name}</h4>
-                <div class="zhk-balloon-price">${p.priceRange || p.priceFrom || 'Цена по запросу'}</div>
-                <div class="zhk-balloon-meta">
-                  <div>🏗 <strong>Застройщик:</strong> ${p.developer || 'Уточняется'}</div>
-                  <div>📍 <strong>Локация:</strong> ${p.location || 'Калининград'}${p.district ? ' (' + p.district + ')' : ''}</div>
-                  <div>📅 <strong>Срок сдачи:</strong> ${p.deliveryShort || p.delivery || 'Уточняется'}</div>
-                  <div>💎 <strong>Класс:</strong> ${p.class || 'Комфорт-класс'}</div>
-                </div>
-                <button class="btn btn-primary zhk-balloon-action-btn" onclick="window.navigateToZhkCard(${p.id})">
-                  Посмотреть карточку объекта →
-                </button>
-              </div>
-            </div>
-          `;
-
-          const partnerHintHtml = `
-            <div class="zhk-ymap-hint">
-              <strong>⭐ ${p.name}</strong><br>
-              <span style="color:#F5A623;font-weight:700;">${p.priceFrom || ''}</span> · ${p.location || ''}
-            </div>
-          `;
-
-          placemark = new window.ymaps.Placemark([lat, lng], {
-            id: p.id,
-            name: p.name,
-            priceText: priceText,
-            balloonContentHeader: '',
-            balloonContentBody: partnerBalloonHtml,
-            hintContent: partnerHintHtml,
-            clusterCaption: `⭐ ${p.name} (${p.priceFrom || ''})`
-          }, {
-            preset: 'islands#yellowStarIcon',
-            iconColor: '#F5A623',
-            hideIconOnBalloonOpen: false,
-            balloonMaxWidth: 300,
-            balloonMaxHeight: 450,
-            balloonPanelMaxMapArea: 0,
-            openBalloonOnClick: true
-          });
-
-        } else {
-          const basicHintHtml = `
-            <div class="zhk-ymap-hint-basic">
-              <strong>${p.name}</strong><br>
-              <span style="color:#94A3B8;font-size:11px;">${p.location || 'Калининград'}${p.district ? ' · ' + p.district : ''}</span>
-            </div>
-          `;
-
-          placemark = new window.ymaps.Placemark([lat, lng], {
-            id: p.id,
-            name: p.name,
-            hintContent: basicHintHtml,
-            clusterCaption: `${p.name}`
-          }, {
-            preset: 'islands#darkBlueHomeIcon',
-            iconColor: '#15305B',
-            hideIconOnBalloonOpen: false,
-            openBalloonOnClick: false
-          });
-
-          placemark.events.add('click', (e) => {
-            e.preventDefault();
-            openBasicZhkModal(p.id);
-          });
-        }
-
-        placemarksMap[p.id] = placemark;
-        geoObjects.push(placemark);
+      const customIcon = window.L.divIcon({
+        html: iconHtml,
+        className: 'custom-zhk-pin',
+        iconSize: isPartner ? [32, 32] : [24, 24],
+        iconAnchor: isPartner ? [16, 16] : [12, 12]
       });
 
-      ymapClusterer.add(geoObjects);
+      const marker = window.L.marker([lat, lng], { icon: customIcon });
 
-      if (validCoordsList.length > 0) {
-        setTimeout(() => {
-          try {
-            if (validCoordsList.length === 1) {
-              ymapInstance.setCenter(validCoordsList[0], 14, { checkZoomRange: true });
-            } else {
-              const bounds = ymapClusterer.getBounds();
-              if (bounds) {
-                ymapInstance.setBounds(bounds, { checkZoomRange: true, zoomMargin: 40 });
-              }
-            }
-          } catch (e) {}
-        }, 100);
-      }
-      return;
-    }
-
-    // Render on Leaflet
-    if (activeEngine === 'leaflet' && leafletMapInstance && leafletMarkersGroup && window.L) {
-      leafletMarkersGroup.clearLayers();
-      const bounds = [];
-
-      currentProperties.forEach(p => {
-        if (!p.coords || !Array.isArray(p.coords) || p.coords.length !== 2) return;
-        const [lat, lng] = p.coords;
-        bounds.push([lat, lng]);
-
-        const isPartner = !!p.partner;
-        const iconHtml = isPartner ? `
-          <div style="background:#F5A623;color:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(245,166,35,0.6);border:2px solid #fff;font-size:14px;cursor:pointer;">
-            ★
-          </div>
-        ` : `
-          <div style="background:#15305B;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(21,48,91,0.4);border:2px solid #fff;font-size:11px;cursor:pointer;">
-            🏢
+      if (isPartner) {
+        const popupHtml = `
+          <div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:6px;width:240px;color:#1A1A2E;">
+            <img src="${p.imgSrc}" alt="${p.name}" style="width:100%;height:115px;object-fit:cover;border-radius:8px;margin-bottom:8px;" onerror="this.src='baltic_banner.jpg'" />
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+              <span style="font-size:10px;color:#D97706;font-weight:800;background:#FEF3C7;padding:2px 6px;border-radius:4px;text-transform:uppercase;">★ Партнёр</span>
+              <span style="font-size:11px;font-weight:800;color:#F5A623;">★ ${p.rating || '4.8'}</span>
+            </div>
+            <div style="font-size:15px;font-weight:800;color:#15305B;margin:2px 0 4px;line-height:1.2;">${p.name}</div>
+            <div style="font-size:13px;font-weight:700;color:#10B981;margin-bottom:6px;">${p.priceRange || p.priceFrom || 'По запросу'}</div>
+            <div style="font-size:11px;color:#64748B;line-height:1.45;margin-bottom:10px;">
+              <div>🏗 <strong>Застройщик:</strong> ${p.developer || 'Уточняется'}</div>
+              <div>📍 <strong>Локация:</strong> ${p.location || 'Калининград'}</div>
+              <div>📅 <strong>Срок сдачи:</strong> ${p.deliveryShort || p.delivery || 'Сдан'}</div>
+              <div>💎 <strong>Класс:</strong> ${p.class || 'Комфорт-класс'}</div>
+            </div>
+            <button onclick="window.navigateToZhkCard(${p.id})" style="width:100%;background:#15305B;color:#fff;border:none;padding:9px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;transition:background 0.2s;">
+              Посмотреть карточку объекта →
+            </button>
           </div>
         `;
-
-        const customIcon = window.L.divIcon({
-          html: iconHtml,
-          className: 'custom-zhk-pin',
-          iconSize: isPartner ? [30, 30] : [24, 24],
-          iconAnchor: isPartner ? [15, 15] : [12, 12]
-        });
-
-        const marker = window.L.marker([lat, lng], { icon: customIcon });
-
-        if (isPartner) {
-          const popupHtml = `
-            <div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:6px;width:240px;">
-              <img src="${p.imgSrc}" alt="${p.name}" style="width:100%;height:110px;object-fit:cover;border-radius:8px;margin-bottom:8px;" onerror="this.src='baltic_banner.jpg'" />
-              <div style="font-size:11px;color:#F5A623;font-weight:700;text-transform:uppercase;">⭐ Партнёрский ЖК</div>
-              <div style="font-size:15px;font-weight:800;color:#15305B;margin:2px 0 4px;">${p.name}</div>
-              <div style="font-size:13px;font-weight:700;color:#10B981;margin-bottom:6px;">${p.priceRange || p.priceFrom || 'По запросу'}</div>
-              <div style="font-size:11px;color:#64748B;line-height:1.4;margin-bottom:10px;">
-                <div>🏗 ${p.developer || 'Застройщик'}</div>
-                <div>📍 ${p.location || 'Калининград'}</div>
-                <div>📅 ${p.deliveryShort || p.delivery || 'Сдан'}</div>
-              </div>
-              <button onclick="window.navigateToZhkCard(${p.id})" style="width:100%;background:#15305B;color:#fff;border:none;padding:8px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;">
-                Смотреть карточку →
-              </button>
-            </div>
-          `;
-          marker.bindPopup(popupHtml, { maxWidth: 280 });
-        } else {
-          marker.on('click', () => openBasicZhkModal(p.id));
-          marker.bindTooltip(`<strong>${p.name}</strong><br><span style="color:#64748B;">${p.location || ''}</span>`, { direction: 'top' });
-        }
-
-        leafletMarkersGroup.addLayer(marker);
-      });
-
-      if (bounds.length > 0) {
-        try {
-          leafletMapInstance.fitBounds(bounds, { padding: [30, 30], maxZoom: 14 });
-        } catch (e) {}
+        marker.bindPopup(popupHtml, { maxWidth: 280 });
+      } else {
+        marker.on('click', () => openBasicZhkModal(p.id));
+        marker.bindTooltip(`<strong>${p.name}</strong><br><span style="color:#64748B;font-size:11px;">${p.location || ''}</span>`, { direction: 'top' });
       }
+
+      leafletMarkersGroup.addLayer(marker);
+    });
+
+    if (bounds.length > 0) {
+      try {
+        if (bounds.length === 1) {
+          leafletMapInstance.setView(bounds[0], 14);
+        } else {
+          leafletMapInstance.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+        }
+      } catch (e) {}
     }
   }
 
@@ -669,20 +459,19 @@
         listBtn.setAttribute('aria-pressed', 'false');
       }
 
-      // Initialize map or resize
-      if (!ymapInstance && !leafletMapInstance) {
+      // Initialize or resize map
+      if (!leafletMapInstance) {
         initZhkMap();
       } else {
         setTimeout(() => {
-          if (activeEngine === 'yandex' && ymapInstance) {
-            try { ymapInstance.container.fitToViewport(); } catch (e) {}
-          } else if (activeEngine === 'leaflet' && leafletMapInstance) {
-            try { leafletMapInstance.invalidateSize(); } catch (e) {}
-          }
+          try { leafletMapInstance.invalidateSize(); } catch (e) {}
           const currentProps = (currentProperties && currentProperties.length > 0) ? currentProperties :
                                ((typeof PROPERTIES !== 'undefined' ? PROPERTIES : []) || (window.PROPERTIES || []));
           updateMapMarkers(currentProps);
-        }, 60);
+        }, 50);
+        setTimeout(() => {
+          try { leafletMapInstance.invalidateSize(); } catch (e) {}
+        }, 200);
       }
 
     } else {
@@ -719,7 +508,7 @@
     }
   }
 
-  // Export to window
+  // Export functions globally immediately
   window.initZhkMap = initZhkMap;
   window.updateMapMarkers = updateMapMarkers;
   window.switchCatalogView = switchCatalogView;
@@ -731,17 +520,17 @@
   window.getZhkDirectionUrl = getZhkDirectionUrl;
   window.currentCatalogView = currentView;
 
-  // Auto init
+  // Auto-init bindings on ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       initViewToggle();
       injectBasicModalHTML();
-      ensureYandexMapsScript();
+      ensureLeafletAssets();
     });
   } else {
     initViewToggle();
     injectBasicModalHTML();
-    ensureYandexMapsScript();
+    ensureLeafletAssets();
   }
 
 })(window, document);
