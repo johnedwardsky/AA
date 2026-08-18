@@ -834,7 +834,6 @@
             <div class="mg-lbl">Компания</div>
             <a href="about.html" class="mg-lnk"><span class="mg-lnk-ic">ℹ️</span>О сервисе</a>
             <a href="methodology.html" class="mg-lnk"><span class="mg-lnk-ic">📊</span>Методология рейтинга</a>
-            <a href="whitepaper.html" class="mg-lnk"><span class="mg-lnk-ic">📄</span>Whitepaper инвестора</a>
             <a href="b2b-promo.html" class="mg-lnk"><span class="mg-lnk-ic">🏗</span>Для застройщиков</a>
             <a href="partners-promo.html" class="mg-lnk"><span class="mg-lnk-ic">📢</span>Для рекламодателей</a>
           </div>
@@ -980,7 +979,6 @@
 
         <a href="about.html" class="mb-ni"><span class="mb-ni-ic">ℹ️</span><span class="mb-ni-lb">О сервисе</span></a>
         <a href="methodology.html" class="mb-ni"><span class="mb-ni-ic">📊</span><span class="mb-ni-lb">Методология рейтинга</span></a>
-        <a href="whitepaper.html" class="mb-ni"><span class="mb-ni-ic">📄</span><span class="mb-ni-lb">Whitepaper инвестора</span></a>
         <a href="b2b-promo.html" class="mb-ni"><span class="mb-ni-ic">🏗</span><span class="mb-ni-lb">Для застройщиков</span></a>
         <a href="partners-promo.html" class="mb-ni"><span class="mb-ni-ic">📢</span><span class="mb-ni-lb">Для рекламодателей</span></a>
 
