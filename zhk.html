@@ -2031,7 +2031,7 @@ ul { list-style: none; }
 .welcome-section {
   background: url("kaliningrad_welcome_bg.jpg") no-repeat center center;
   background-size: cover;
-  padding: 0 0 680px 0; /* 2× taller photo area */
+  padding: 0 0 578px 0; /* raised by 15% (from 680px) */
   position: relative;
   overflow: hidden;
 }
@@ -2085,7 +2085,7 @@ ul { list-style: none; }
 .main-content-overlay {
   background: #FFFFFF;
   max-width: 960px;
-  margin: -160px auto 0 auto; /* raised higher */
+  margin: -184px auto 0 auto; /* raised higher by 15% (from -160px) */
   border-radius: 24px;
   position: relative;
   z-index: 5;
@@ -4386,51 +4386,14 @@ function renderFeed(appendOnly = false) {
   if (window.targetZhkId) {
     const cardWrapper = feed.querySelector(`.property-card-wrapper[data-card-id="${window.targetZhkId}"]`);
     if (cardWrapper) {
-      setTimeout(() => {
-        // 1. Раскрываем вкладку «Инфраструктура» выбранного ЖК
-        const infraNavItem = cardWrapper.querySelector('.card-nav-item[data-key="infra"]')
-                           || cardWrapper.querySelector('.card-nav-item[data-key="chars"]');
-        const panel = cardWrapper.querySelector('.card-inline-panel');
-        const nav = cardWrapper.querySelector('.card-nav');
-        
-        if (infraNavItem && panel) {
-          if (nav) {
-            nav.querySelectorAll('.card-nav-item').forEach(n => n.classList.remove('active'));
-            infraNavItem.classList.add('active');
-            try {
-              infraNavItem.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
-            } catch(e) {}
-          }
-          panel.querySelectorAll('.inline-section').forEach(s => s.classList.remove('active'));
-          const infraSection = panel.querySelector('[data-section="infra"]')
-                             || panel.querySelector('[data-section="chars"]');
-          if (infraSection) {
-            infraSection.classList.add('active');
-            panel.classList.add('open');
-          }
-        }
+      // Акцентное выделение карточки
+      cardWrapper.classList.add('target-card-highlight');
 
-        // 2. Добавляем акцентное янтарное выделение карточки
-        cardWrapper.classList.add('target-card-highlight');
-
-        // 3. Позиционируем карточку от середины экрана вниз (сохраняя видимость главного баннера сверху)
-        requestAnimationFrame(() => {
-          const headerWrapper = document.querySelector('.site-header-wrapper') || document.querySelector('.site-header');
-          const headerH = headerWrapper ? headerWrapper.offsetHeight : 60;
-          const viewportH = window.innerHeight;
-          const cardRect = cardWrapper.getBoundingClientRect();
-          const cardAbsoluteTop = window.pageYOffset + cardRect.top;
-
-          // Верх карточки располагается на уровне ~42% экрана, оставляя главный баннер открытым взору
-          const offsetFromTop = Math.max(headerH + 80, Math.floor(viewportH * 0.42));
-          const targetScrollY = Math.max(0, cardAbsoluteTop - offsetFromTop);
-
-          window.scrollTo({
-            top: targetScrollY,
-            behavior: 'smooth'
-          });
-        });
-      }, 150);
+      // На десктопе сохраняем видимость главного баннера сверху (как на референсе)
+      window.scrollTo({
+        top: 0,
+        behavior: 'instant'
+      });
     }
   }
 }
