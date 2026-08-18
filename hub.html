@@ -269,7 +269,24 @@
 
     @media (max-width: 580px) {
       .hub-magazines-grid {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: visible;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        padding-bottom: 12px;
+        /* hide scrollbar */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .hub-magazines-grid::-webkit-scrollbar { display: none; }
+      .hub-magazines-grid .hub-mag-banner {
+        flex: 0 0 78vw;
+        max-width: 300px;
+        scroll-snap-align: start;
+        min-height: 180px;
       }
     }
 
@@ -406,6 +423,27 @@
       margin-bottom: 32px;
     }
 
+    @media (max-width: 580px) {
+      .hub-metrics-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: visible;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        padding-bottom: 12px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .hub-metrics-grid::-webkit-scrollbar { display: none; }
+      .hub-metrics-grid .hub-metric-card {
+        flex: 0 0 68vw;
+        max-width: 260px;
+        scroll-snap-align: start;
+      }
+    }
+
     .hub-metric-card {
       background: rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(12px);
@@ -538,7 +576,22 @@
 
     @media (max-width: 580px) {
       .hub-atlas-banners-grid {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: visible;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        padding-bottom: 12px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .hub-atlas-banners-grid::-webkit-scrollbar { display: none; }
+      .hub-atlas-banners-grid .hub-atlas-banner-card {
+        flex: 0 0 78vw;
+        max-width: 300px;
+        scroll-snap-align: start;
       }
     }
 
@@ -876,6 +929,14 @@
       padding: 24px 32px 32px;
       background: #F8FAFC;
       border-top: 1px solid var(--hub-border-subtle);
+      overflow: visible;
+    }
+
+    @media (max-width: 860px) {
+      .hub-dir-cards-wrap {
+        padding: 20px 16px 24px;
+        overflow: visible;
+      }
     }
 
     .hub-dir-cards-title {
@@ -898,7 +959,22 @@
 
     @media (max-width: 860px) {
       .hub-cards-grid {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: visible;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        padding-bottom: 12px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .hub-cards-grid::-webkit-scrollbar { display: none; }
+      .hub-cards-grid .hub-mini-card {
+        flex: 0 0 72vw;
+        max-width: 260px;
+        scroll-snap-align: start;
       }
     }
 
