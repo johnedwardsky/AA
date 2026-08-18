@@ -1415,103 +1415,7 @@ ul { list-style: none; }
 .menu-btn.open .burger-line:nth-child(2) { opacity: 0; }
 .menu-btn.open .burger-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
-/* ── Mobile Drawer ────────────────────────────────────────── */
-.drawer-overlay {
-  position: fixed; inset: 0;
-  background: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(4px);
-  z-index: 299;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-.drawer-overlay.open { opacity: 1; pointer-events: auto; }
-
-.mobile-drawer {
-  position: fixed; top: 0; right: 0; bottom: 0;
-  width: 300px; max-width: 85vw;
-  z-index: 300;
-  background: var(--color-surface);
-  box-shadow: -8px 0 30px rgba(0,0,0,0.2);
-  display: flex; flex-direction: column;
-  transform: translateX(100%);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
-}
-.mobile-drawer.open { transform: translateX(0); }
-
-.drawer-header {
-  display: flex; align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-primary);
-  flex-shrink: 0;
-}
-.drawer-logo {
-  display: flex; align-items: center; gap: 10px;
-  text-decoration: none;
-}
-.drawer-close {
-  width: 32px; height: 32px; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.15); border: none;
-  color: #fff; font-size: 16px; cursor: pointer;
-  transition: background 0.2s ease;
-}
-.drawer-close:hover { background: rgba(255,255,255,0.3); }
-
-.drawer-body {
-  flex: 1; padding: 12px 0;
-  overflow-y: auto;
-}
-
-.drawer-section {
-  padding: 8px 20px 12px;
-}
-.drawer-section + .drawer-section {
-  border-top: 1px solid var(--color-border-light);
-}
-.drawer-section-title {
-  font-size: 10px; font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-muted);
-  margin-bottom: 6px;
-}
-.drawer-link {
-  display: block;
-  padding: 9px 0;
-  font-size: 14px; font-weight: 500;
-  color: var(--color-text);
-  text-decoration: none;
-  transition: color 0.15s ease;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 40%, transparent);
-}
-.drawer-link:last-child { border-bottom: none; }
-.drawer-link:hover { color: var(--color-primary); }
-
-.drawer-footer {
-  padding: 16px 20px;
-  border-top: 1px solid var(--color-border);
-  flex-shrink: 0;
-}
-@media (max-width: 768px) {
-  .drawer-footer {
-    padding: 16px 20px calc(60px + env(safe-area-inset-bottom));
-  }
-}
-.drawer-cta {
-  width: 100%; padding: 12px;
-  background: var(--color-primary);
-  color: #fff; border: none; border-radius: 10px;
-  font-size: 14px; font-weight: 600;
-  font-family: inherit; cursor: pointer;
-  transition: background 0.2s ease;
-  box-shadow: 0 2px 8px rgba(21,48,91,0.25);
-}
-.drawer-cta:hover { background: var(--color-primary-dark); }
-
-/* ── Toast ─────────────────────────────────────────────────── */
+/* ── Mobile Drawer ────────────────────────────────────────── *//* ── Toast ─────────────────────────────────────────────────── */
 .toast-container {
   position: fixed; bottom: 90px; left: 50%;
   transform: translateX(-50%); z-index: 500;
@@ -2836,46 +2740,7 @@ ul { list-style: none; }
   </footer>
 
   <!-- ══ MOBILE DRAWER ═══════════════════════════════════════ -->
-  <div class="drawer-overlay" id="drawer-overlay"></div>
-  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Главное меню">
-    <div class="drawer-header">
-      <a href="/" class="drawer-logo">
-        <img src="AA.svg" class="logo-icon" alt="Янтарный проспект" aria-hidden="true">
-        <div class="logo-text">
-          <span class="logo-name">Янтарный проспект</span>
-          <span class="logo-tagline">Amber avenue</span>
-        </div>
-      </a>
-      <button class="drawer-close" id="drawer-close" aria-label="Закрыть меню">✕</button>
-    </div>
-
-        <div class="drawer-body">
-      <div class="drawer-section">
-        <h4 class="drawer-section-title">Каталог</h4>
-        <a href="zhk.html" class="drawer-link">🏠 Все новостройки</a>
-        <a href="zhk-umory.html" class="drawer-link">🌊 ЖК у моря</a>
-        <a href="zhk-kaliningrad.html" class="drawer-link">🏢 ЖК Калининграда</a>
-        <a href="zhk-prigorod.html" class="drawer-link">🌲 ЖК Пригород</a>
-        <a href="zhk-oblast.html" class="drawer-link">🗺 ЖК Область</a>
-      </div>
-
-      <div class="drawer-section">
-        <h4 class="drawer-section-title">Компания</h4>
-        <a href="index.html" class="drawer-link">🏠 Главная</a>
-        <a href="developers.html" class="drawer-link">🏗 Застройщики</a>
-        <a href="about.html" class="drawer-link">ℹ️ О сервисе</a>
-        <a href="methodology.html" class="drawer-link">📊 Методология</a>
-        <a href="b2b-promo.html" class="drawer-link">🤝 Для застройщиков</a>
-        <a href="partners-promo.html" class="drawer-link">📢 Для рекламодателей</a>
-      </div>
-    </div>
-
-    <div class="drawer-footer">
-      <button class="drawer-cta" onclick="document.getElementById('burger-btn').click(); showToast('Заявка отправлена!');">💬 Задать вопрос эксперту</button>
-    </div>
-  </aside>
-
-  <script>
+  <div class="drawer-overlay" id="drawer-overlay"></div><script>
 'use strict';
 
 var PROPERTIES = window.PROPERTIES || (window.AMBER_DATA ? window.AMBER_DATA.properties : []);
@@ -4950,30 +4815,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Burger / Drawer toggle
-  const burger = document.getElementById('burger-btn');
-  const drawer = document.getElementById('mobile-drawer');
-  const overlay = document.getElementById('drawer-overlay');
-  const drawerClose = document.getElementById('drawer-close');
-
-  function toggleDrawer() {
-    const isOpen = drawer.classList.contains('open');
-    drawer.classList.toggle('open');
-    overlay.classList.toggle('open');
-    burger.classList.toggle('open');
-    burger.setAttribute('aria-expanded', !isOpen);
-    document.body.style.overflow = isOpen ? '' : 'hidden';
-  }
-
-  if (burger) burger.addEventListener('click', toggleDrawer);
-  if (drawerClose) drawerClose.addEventListener('click', toggleDrawer);
-  if (overlay) overlay.addEventListener('click', toggleDrawer);
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && drawer && drawer.classList.contains('open')) {
-      toggleDrawer();
-    }
-  });
 
   // Map Modal Overlay HTML and JS helpers
   const mapOverlayHTML = `
@@ -5017,7 +4858,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalBody = document.getElementById('map-modal-body');
     if (overlay) overlay.classList.remove('active');
     if (modalBody) modalBody.innerHTML = '';
-    const drawer = document.getElementById('mobile-drawer');
+    const drawer = document.getElementById('mb-dr');
     if (!drawer || !drawer.classList.contains('open')) {
       document.body.style.overflow = '';
     }
