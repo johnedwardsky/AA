@@ -4386,10 +4386,33 @@ function renderFeed(appendOnly = false) {
   if (window.targetZhkId) {
     const cardWrapper = feed.querySelector(`.property-card-wrapper[data-card-id="${window.targetZhkId}"]`);
     if (cardWrapper) {
-      // Акцентное выделение карточки
+      // 1. Раскрываем вкладку «Инфраструктура» выбранного ЖК
+      const infraNavItem = cardWrapper.querySelector('.card-nav-item[data-key="infra"]')
+                         || cardWrapper.querySelector('.card-nav-item[data-key="chars"]');
+      const panel = cardWrapper.querySelector('.card-inline-panel');
+      const nav = cardWrapper.querySelector('.card-nav');
+      
+      if (infraNavItem && panel) {
+        if (nav) {
+          nav.querySelectorAll('.card-nav-item').forEach(n => n.classList.remove('active'));
+          infraNavItem.classList.add('active');
+          try {
+            infraNavItem.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
+          } catch(e) {}
+        }
+        panel.querySelectorAll('.inline-section').forEach(s => s.classList.remove('active'));
+        const infraSection = panel.querySelector('[data-section="infra"]')
+                           || panel.querySelector('[data-section="chars"]');
+        if (infraSection) {
+          infraSection.classList.add('active');
+          panel.classList.add('open');
+        }
+      }
+
+      // 2. Акцентное выделение карточки
       cardWrapper.classList.add('target-card-highlight');
 
-      // На десктопе сохраняем видимость главного баннера сверху (как на референсе)
+      // 3. На десктопе сохраняем видимость главного баннера сверху (как на референсе)
       window.scrollTo({
         top: 0,
         behavior: 'instant'
