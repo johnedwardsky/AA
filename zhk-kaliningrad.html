@@ -2557,7 +2557,6 @@ ul { list-style: none; }
   <script src="data.js"></script>
   <script src="properties-data.js"></script>
   <script src="menu.js"></script>
-  <script src="https://api-maps.yandex.ru/2.1/?apikey=a2dacfa0-5027-4d77-8085-92e462c8017a&lang=ru_RU" type="text/javascript"></script>
 </head>
 <body id="page-zhk-kaliningrad">
 
@@ -2649,8 +2648,6 @@ ul { list-style: none; }
       <div class="bn-marketing-label">Реклама. ООО «СЗ „Рыбная Деревня“», ИНН 3906987654, erid: 2VtzqxKldCity</div>
     </section>
 
-
-
     <!-- ══ FILTER BAR ══════════════════════════════════════════ -->
   <nav class="filter-bar" aria-label="Сортировка">
     <div class="filter-bar-inner">
@@ -2669,35 +2666,6 @@ ul { list-style: none; }
       <div>
         <h1 class="feed-title">ЖК в Калининграде</h1>
         <p class="feed-count" id="feed-count" aria-live="polite">Загрузка...</p>
-      </div>
-      <div class="view-toggle-group" role="group" aria-label="Вид отображения">
-        <button class="view-toggle-btn active" id="view-toggle-list" data-view="list" aria-pressed="true" onclick="window.switchCatalogView && window.switchCatalogView('list')">
-          <span class="view-toggle-icon">📋</span>
-          <span class="view-toggle-text">Список</span>
-        </button>
-        <button class="view-toggle-btn" id="view-toggle-map" data-view="map" aria-pressed="false" onclick="window.switchCatalogView && window.switchCatalogView('map')">
-          <span class="view-toggle-icon">🗺</span>
-          <span class="view-toggle-text">На карте</span>
-        </button>
-      </div>
-    </div>
-
-        <!-- Map Container -->
-        <!-- Interactive Regional Map Modal (Popup on top of all windows) -->
-    <div class="zhk-map-container-wrapper" id="zhk-map-container-wrapper" style="display: none;">
-      <div class="zhk-map-modal-dialog">
-        <div class="zhk-map-toolbar">
-          <div class="zhk-map-stats" id="zhk-map-stats">
-            <span class="zhk-map-stat-badge">Объектов на карте: <strong id="zhk-map-count">0</strong></span>
-            <span class="zhk-map-stat-badge partner-badge">Партнёров: <strong id="zhk-map-partner-count">0</strong></span>
-          </div>
-          <div class="zhk-map-legend">
-            <span class="legend-item partner"><span class="legend-dot gold"></span> ★ Оплаченные партнёры</span>
-            <span class="legend-item basic"><span class="legend-dot navy"></span> ● Базовые ЖК</span>
-          </div>
-          <button class="zhk-map-close-btn" id="zhk-map-close-btn" type="button" aria-label="Закрыть карту">✕ Закрыть карту</button>
-        </div>
-        <div class="zhk-map-view" id="zhk-interactive-map"></div>
       </div>
     </div>
 
@@ -2887,9 +2855,6 @@ ul { list-style: none; }
       <button class="drawer-cta" onclick="document.getElementById('burger-btn').click(); showToast('Заявка отправлена!');">💬 Задать вопрос эксперту</button>
     </div>
   </aside>
-
-
-
 
   <script>
 'use strict';
@@ -3710,8 +3675,6 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'ArrowRight') galleryNav(1);
   if (e.key === 'ArrowLeft') galleryNav(-1);
 });
-
-
 
 // ── Card Nav Scroll Logic ────────────────────────────────────
 function scrollCardNav(btn, dir) {
@@ -4886,9 +4849,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   renderFeed();
 
-
-
-
   // ── Динамическая высота sticky-блока ───────────────────────────────
   function updateStickyTop() {
     const wrapper = document.querySelector('.site-header-wrapper');
@@ -5094,6 +5054,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script src="conversion-boosters.js"></script>
-<script src="zhk-map.js?v=2"></script>
 </body>
 </html>
