@@ -159,6 +159,11 @@
       padding: 0;
     }
 
+    html {
+      overflow-x: clip;
+      max-width: 100vw;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--hub-bg);
@@ -272,7 +277,7 @@
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
-        overflow-y: visible;
+        overflow-y: hidden;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         gap: 12px;
@@ -430,7 +435,7 @@
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
-        overflow-y: visible;
+        overflow-y: hidden;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         gap: 12px;
@@ -583,7 +588,7 @@
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
-        overflow-y: visible;
+        overflow-y: hidden;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         gap: 12px;
@@ -968,7 +973,7 @@
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
-        overflow-y: visible;
+        overflow-y: hidden;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         gap: 12px;
@@ -1129,7 +1134,7 @@
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
-        overflow-y: visible;
+        overflow-y: hidden;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         gap: 12px;
@@ -1579,7 +1584,7 @@
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
-        overflow-y: visible;
+        overflow-y: hidden;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         gap: 12px;
@@ -2210,6 +2215,7 @@
         padding-left: 16px !important;
         padding-right: 16px !important;
         margin-bottom: 40px;
+        overflow-x: clip;
       }
 
       /* Direction block: collapse side-by-side panels */
