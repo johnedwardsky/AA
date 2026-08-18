@@ -1076,6 +1076,16 @@
       padding: 40px 36px;
       margin-bottom: 64px;
       box-shadow: var(--hub-shadow-sm);
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    @media (max-width: 640px) {
+      .hub-offers-section {
+        padding: 24px 16px;
+        margin-bottom: 32px;
+        border-radius: 16px;
+      }
     }
 
     .hub-offers-filter-bar {
@@ -1112,6 +1122,29 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
+    }
+
+    @media (max-width: 640px) {
+      .hub-offers-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: visible;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        padding-bottom: 12px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        overscroll-behavior-x: contain;
+        touch-action: pan-x;
+      }
+      .hub-offers-grid::-webkit-scrollbar { display: none; }
+      .hub-offers-grid .hub-offer-card {
+        flex: 0 0 82vw;
+        max-width: 320px;
+        scroll-snap-align: start;
+      }
     }
 
     .hub-offer-card {
@@ -1541,6 +1574,30 @@
       margin-bottom: 64px;
     }
 
+    @media (max-width: 640px) {
+      .hub-news-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: visible;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        padding-bottom: 12px;
+        margin-bottom: 32px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        overscroll-behavior-x: contain;
+        touch-action: pan-x;
+      }
+      .hub-news-grid::-webkit-scrollbar { display: none; }
+      .hub-news-grid .hub-news-card {
+        flex: 0 0 78vw;
+        max-width: 300px;
+        scroll-snap-align: start;
+      }
+    }
+
     .hub-news-card {
       background: var(--hub-surface);
       border-radius: var(--hub-radius-md);
@@ -1634,6 +1691,22 @@
       overflow: hidden;
       margin-bottom: 64px;
       box-shadow: var(--hub-shadow-lg);
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    @media (max-width: 640px) {
+      .hub-quiz-box {
+        padding: 28px 16px;
+        margin-bottom: 32px;
+        border-radius: 16px;
+      }
+      .hub-quiz-content {
+        padding: 20px 14px;
+      }
+      .hub-quiz-title {
+        font-size: 20px;
+      }
     }
 
     .hub-quiz-header {
@@ -1781,6 +1854,17 @@
       .hub-lead-banner {
         grid-template-columns: 1fr;
         padding: 32px 24px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hub-lead-banner {
+        padding: 24px 16px;
+        border-radius: 16px;
+        margin-bottom: 32px;
+      }
+      .hub-lead-title {
+        font-size: 20px;
       }
     }
 
@@ -2094,6 +2178,111 @@
   font-size: 9px; color: var(--color-muted);
 }
 
+
+
+    /* ══════════════════════════════════════════════════════════════
+       GLOBAL MOBILE GRID FIX — strict 16px gutters, no overflow
+       ══════════════════════════════════════════════════════════════ */
+    @media (max-width: 640px) {
+
+      /* Prevent any element from exceeding viewport width */
+      .hub-page-wrap,
+      .hub-section,
+      .hub-inner,
+      .hub-directions-grid,
+      .hub-direction-block,
+      .hub-dir-top,
+      .hub-dir-info,
+      .hub-dir-visual,
+      .hub-dir-cards-wrap,
+      .hub-ad-grid,
+      .hub-ad-banner-bank,
+      .hub-ad-card-partner,
+      .hub-offers-subscribe-box,
+      .hub-footer {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden;
+      }
+
+      /* Section containers — strict 16px side padding */
+      .hub-section {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        margin-bottom: 40px;
+      }
+
+      /* Direction block: collapse side-by-side panels */
+      .hub-dir-top {
+        grid-template-columns: 1fr !important;
+      }
+      .hub-dir-visual {
+        min-height: 200px;
+      }
+      .hub-dir-info {
+        padding: 20px 16px !important;
+      }
+      .hub-dir-stats-row {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 10px;
+      }
+
+      /* Ad grid: single column */
+      .hub-ad-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+        margin-bottom: 32px;
+      }
+      .hub-ad-banner-bank,
+      .hub-ad-card-partner {
+        padding: 24px 16px !important;
+        border-radius: 16px !important;
+      }
+
+      /* Subscribe box: single column */
+      .hub-offers-subscribe-box {
+        grid-template-columns: 1fr !important;
+        padding: 24px 16px !important;
+        gap: 20px;
+        border-radius: 16px !important;
+      }
+
+      /* Section headings — reduce to fit viewport */
+      .hub-section-title,
+      .hub-dir-section-title {
+        font-size: 18px !important;
+        line-height: 1.3;
+      }
+      .hub-section-sub {
+        font-size: 13px !important;
+      }
+
+      /* Large titles inside direction cards */
+      .hub-dir-visual-title { font-size: 20px !important; }
+      .hub-lead-title { font-size: 19px !important; }
+      .hub-quiz-title { font-size: 20px !important; }
+
+      /* Quiz content full width */
+      .hub-quiz-box {
+        padding: 28px 16px !important;
+        border-radius: 16px !important;
+      }
+      .hub-quiz-content {
+        max-width: 100% !important;
+        padding: 20px 14px !important;
+      }
+      .hub-quiz-options-grid {
+        grid-template-columns: 1fr 1fr !important;
+      }
+
+      /* Footer: single column */
+      .hub-footer {
+        padding: 32px 16px !important;
+      }
+      .hub-footer-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
 
   </style>
 </head>
