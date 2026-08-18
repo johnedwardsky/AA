@@ -2031,7 +2031,7 @@ ul { list-style: none; }
 .welcome-section {
   background: url("baltic_sea_welcome.png") no-repeat center center;
   background-size: cover;
-  padding: 0 0 520px 0;
+  padding: 0 0 680px 0; /* 2× taller photo area */
   position: relative;
   overflow: hidden;
 }
@@ -2042,11 +2042,11 @@ ul { list-style: none; }
   top: 0;
   left: 0;
   right: 0;
-  height: 120px;
+  height: 160px;
   background: linear-gradient(
     to bottom,
     #15305B 0%,
-    rgba(21, 48, 91, 0.4) 60%,
+    rgba(21, 48, 91, 0.72) 55%,
     rgba(21, 48, 91, 0) 100%
   );
   display: flex;
@@ -2085,13 +2085,32 @@ ul { list-style: none; }
 .main-content-overlay {
   background: #FFFFFF;
   max-width: 960px;
-  margin: -485px auto 0 auto; /* banner sits 35px below header */
+  margin: -160px auto 0 auto; /* original default layout */
   border-radius: 24px;
   position: relative;
   z-index: 5;
   padding-top: 0;
   box-shadow: 0 15px 45px rgba(21,48,91,0.06);
   border: 1px solid rgba(21,48,91,0.05);
+}
+
+/* ── Only when target ZHK is selected via search: shift banner up to reveal card ── */
+@media (min-width: 1025px) {
+  body.has-target-zhk .welcome-section {
+    padding: 0 0 520px 0;
+  }
+  body.has-target-zhk .welcome-gradient-strip {
+    height: 120px;
+    background: linear-gradient(
+      to bottom,
+      #15305B 0%,
+      rgba(21, 48, 91, 0.4) 60%,
+      rgba(21, 48, 91, 0) 100%
+    );
+  }
+  body.has-target-zhk .main-content-overlay {
+    margin: -485px auto 0 auto;
+  }
 }
 
 /* ── Hero Banner ── */
@@ -4009,6 +4028,7 @@ function getPageTitleForProp(prop) {
 
 window.resetTargetZhkFilter = function() {
   window.targetZhkId = null;
+  document.body.classList.remove('has-target-zhk');
   const devSelect = document.getElementById('filter-developer-zhk-umory') || document.getElementById('filter-developer');
   if (devSelect) devSelect.value = '';
   currentDeveloper = '';
@@ -4158,6 +4178,12 @@ function updateWelcomeSection(filter) {
 function renderFeed(appendOnly = false) {
   const feed = document.querySelector('#page-zhk-umory #listing-feed') || document.getElementById('listing-feed');
   if (!feed) return;
+
+  if (window.targetZhkId) {
+    document.body.classList.add('has-target-zhk');
+  } else {
+    document.body.classList.remove('has-target-zhk');
+  }
 
   // Dynamically update regional elements if page is page-zhk-umory
   if (typeof updateWelcomeSection === 'function') {
