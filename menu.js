@@ -1872,7 +1872,17 @@
             const targetPageName = targetUrl.replace('.html', '').replace('zhk-', '');
             location.hash = '#' + targetPageName;
           } else {
-            window.location.href = `${targetUrl}?id=${item.id}`;
+            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+            if (currentPath === targetUrl || (currentPath === '' && targetUrl === 'index.html')) {
+              window.targetZhkId = item.id;
+              window.history.pushState({}, '', `${targetUrl}?id=${item.id}`);
+              if (typeof renderFeed === 'function') {
+                renderFeed();
+              }
+              window.scrollTo({ top: 0, behavior: 'instant' });
+            } else {
+              window.location.href = `${targetUrl}?id=${item.id}`;
+            }
           }
         } else if (item.type === 'developer') {
           // Перейти на страницу застройщика
@@ -1975,7 +1985,17 @@
             const targetPageName = targetUrl.replace('.html', '').replace('zhk-', '');
             location.hash = '#' + targetPageName;
           } else {
-            window.location.href = `${targetUrl}?id=${exactZhk.id}`;
+            const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+            if (currentPath === targetUrl || (currentPath === '' && targetUrl === 'index.html')) {
+              window.targetZhkId = exactZhk.id;
+              window.history.pushState({}, '', `${targetUrl}?id=${exactZhk.id}`);
+              if (typeof renderFeed === 'function') {
+                renderFeed();
+              }
+              window.scrollTo({ top: 0, behavior: 'instant' });
+            } else {
+              window.location.href = `${targetUrl}?id=${exactZhk.id}`;
+            }
           }
           return;
         }
