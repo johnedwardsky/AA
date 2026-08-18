@@ -207,6 +207,15 @@
       .logo-tagline, .aa-logo-tag { display: none !important; }
       .logo-text, .aa-logo-tx { display: none !important; }
       .header-inner, .aa-hdr-in { gap: 8px !important; padding: 0 12px !important; }
+      .mb-hdr { padding: 0 12px !important; }
+      .mb-srch { padding: 10px 12px !important; }
+      .mb-ni { padding: 13px 12px !important; }
+      .mb-sub-l { padding: 11px 12px 11px 52px !important; }
+      .mb-sec-lbl { padding: 12px 12px 6px !important; }
+      .mb-use-tg { padding: 12px 12px !important; }
+      .mb-use-cnt .mb-sub-l { padding-left: 12px !important; padding-right: 12px !important; }
+      .mb-ct-row { padding: 10px 12px !important; }
+      .mb-cta { margin: 14px 12px 0 !important; padding: 12px 14px !important; }
     }
 
     /* ── MEGA MENU PANEL ────────────────────────────────── */
@@ -454,14 +463,19 @@
       /* Hidden by default — shown ONLY when JS adds class .open */
       display: none;
       position: fixed;
-      top: 0; left: 0; right: 0;
-      width: 100%;
-      max-height: 100vh;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100% !important;
+      max-width: 100% !important;
+      max-width: 100vw !important;
+      height: 100% !important;
+      height: 100dvh !important;
+      max-height: 100dvh !important;
       z-index: 210;
       background: #FFFFFF;
       flex-direction: column;
-      overflow-y: auto;
+      overflow: hidden !important;
       box-shadow: 0 16px 32px rgba(0,0,0,0.15);
+      box-sizing: border-box !important;
       /* Slide-in animation */
       transform: translateY(-8px);
       opacity: 0;
@@ -477,31 +491,32 @@
     .mb-hdr {
       display: flex; align-items: center; gap: 10px;
       padding: 0 16px; height: 60px; background: #1B3C6E; flex-shrink: 0;
+      box-sizing: border-box !important; width: 100% !important; max-width: 100% !important;
     }
-    .mb-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; flex: 1; }
+    .mb-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; flex: 1; min-width: 0; }
     .mb-logo-ic {
       width: 32px; height: 32px; background: #F5A623;
       border-radius: 7px; display: flex; align-items: center;
       justify-content: center; overflow: hidden; flex-shrink: 0;
     }
     .mb-logo-ic img { width: 100% !important; height: 100% !important; object-fit: contain !important; }
-    .mb-logo-nm { font-size: 14px; font-weight: 700; color: #fff; }
-    .mb-logo-tg { font-size: 8px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.06em; }
+    .mb-logo-nm { font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mb-logo-tg { font-size: 8px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
     .mb-cls {
       width: 34px; height: 34px; display: flex; align-items: center;
       justify-content: center; border-radius: 8px;
       color: rgba(255,255,255,0.75); font-size: 16px; transition: 0.22s; flex-shrink: 0;
-      border: none; background: transparent;
+      border: none; background: transparent; cursor: pointer;
     }
     .mb-cls:hover { background: rgba(255,255,255,0.12); color: #fff; }
 
-    .mb-srch { padding: 10px 16px; background: #122a52; flex-shrink: 0; }
-    .mb-srch-w { position: relative; }
+    .mb-srch { padding: 10px 16px; background: #122a52; flex-shrink: 0; box-sizing: border-box !important; width: 100% !important; }
+    .mb-srch-w { position: relative; width: 100% !important; box-sizing: border-box !important; }
     .mb-srch-w input {
-      width: 100%; height: 38px;
+      width: 100% !important; max-width: 100% !important; height: 38px;
       background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18);
       border-radius: 8px; padding: 0 14px 0 38px;
-      color: #fff; font-family: inherit; font-size: 13px; outline: none;
+      color: #fff; font-family: inherit; font-size: 13px; outline: none; box-sizing: border-box !important;
     }
     .mb-srch-w input::placeholder { color: rgba(255,255,255,0.45); }
     .mb-srch-ic {
@@ -509,13 +524,24 @@
       color: rgba(255,255,255,0.45); pointer-events: none;
     }
 
-    .mb-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0 0 16px; }
+    .mb-body {
+      flex: 1;
+      min-height: 0;
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 0 calc(140px + env(safe-area-inset-bottom, 24px)) !important;
+    }
 
     .mb-ni {
       display: flex; align-items: center; gap: 12px;
       padding: 14px 16px; font-size: 14px; font-weight: 500; color: #1A1A2E;
       border-bottom: 1px solid #F3F4F6; cursor: pointer;
       text-decoration: none; transition: background 0.15s;
+      box-sizing: border-box !important; width: 100% !important; max-width: 100% !important;
     }
     .mb-ni:hover { background: #EEF3FB; }
     .mb-ni-ic {
@@ -523,35 +549,38 @@
       background: #EEF3FB; display: flex; align-items: center;
       justify-content: center; font-size: 15px; flex-shrink: 0;
     }
-    .mb-ni-lb { flex: 1; }
-    .mb-ni-ch { color: #9CA3AF; font-size: 12px; transition: transform 0.22s; }
+    .mb-ni-lb { flex: 1; min-width: 0; }
+    .mb-ni-ch { color: #9CA3AF; font-size: 12px; transition: transform 0.22s; flex-shrink: 0; }
     .mb-ni.exp .mb-ni-ch { transform: rotate(90deg); }
 
-    .mb-sub { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; background: #F8FAFD; }
+    .mb-sub { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; background: #F8FAFD; box-sizing: border-box !important; width: 100% !important; }
     .mb-sub.exp { max-height: 300px; }
     .mb-sub-l {
       display: block; padding: 12px 16px 12px 60px;
       font-size: 14px; color: #4B5563;
       text-decoration: none; transition: color 0.15s;
+      box-sizing: border-box !important; width: 100% !important;
     }
     .mb-sub-l:hover { color: #1B3C6E; }
 
     .mb-sec-lbl {
       padding: 14px 16px 6px; font-size: 9px; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.1em; color: #9CA3AF;
+      box-sizing: border-box !important; width: 100% !important;
     }
-    .mb-div { height: 1px; background: #F3F4F6; margin: 8px 0 0; }
+    .mb-div { height: 1px; background: #F3F4F6; margin: 8px 0 0; width: 100% !important; box-sizing: border-box !important; }
 
     .mb-use-tg {
       display: flex; align-items: center; justify-content: space-between;
       padding: 12px 16px; border-bottom: 1px solid #F3F4F6;
       cursor: pointer; background: #FFFFFF; transition: background 0.15s;
+      box-sizing: border-box !important; width: 100% !important;
     }
     .mb-use-tg:hover { background: #EEF3FB; }
     .mb-use-t { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #9CA3AF; }
-    .mb-use-ch { font-size: 12px; color: #9CA3AF; transition: transform 0.22s; }
+    .mb-use-ch { font-size: 12px; color: #9CA3AF; transition: transform 0.22s; flex-shrink: 0; }
     .mb-use-tg.exp .mb-use-ch { transform: rotate(180deg); }
-    .mb-use-cnt { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; background: #F8FAFD; }
+    .mb-use-cnt { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; background: #F8FAFD; box-sizing: border-box !important; width: 100% !important; }
     .mb-use-cnt.exp { max-height: 500px; }
 
     .mb-ct-row {
@@ -559,9 +588,10 @@
       padding: 10px 16px; border-bottom: 1px solid #F3F4F6;
       font-size: 13px; color: #1A1A2E;
       text-decoration: none; transition: background 0.15s;
+      box-sizing: border-box !important; width: 100% !important;
     }
     .mb-ct-row:hover { background: #EEF3FB; }
-    .mb-ct-ic { color: #1B3C6E; font-size: 14px; }
+    .mb-ct-ic { color: #1B3C6E; font-size: 14px; flex-shrink: 0; }
     .mb-ct-ph { font-weight: 700; font-size: 14px; }
 
     /* CTA Consultation Mobile */
@@ -571,6 +601,7 @@
       border-radius: 12px; display: flex; align-items: center;
       justify-content: space-between; gap: 10px;
       cursor: pointer; text-decoration: none; transition: box-shadow 0.2s;
+      box-sizing: border-box !important;
     }
     .mb-cta:hover { box-shadow: 0 8px 24px rgba(27,60,110,0.25); }
     .mb-cta-t { font-size: 13px; font-weight: 700; color: #fff; line-height: 1.3; }
