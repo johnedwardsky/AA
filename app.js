@@ -122,9 +122,29 @@ function mortgageContentHTML() {
   </div>`;
 }
 
+function isCardPaid(propertyId, developerId) {
+  // Admin sets payment status in localStorage via placements section
+  try {
+    var allPlacements = JSON.parse(localStorage.getItem('amber_placements') || '{}');
+    // Check if any type-6 (paid cards) booking exists for this developer
+    for (var key in allPlacements) {
+      if (key.startsWith('6_') && allPlacements[key] === String(developerId)) return true;
+    }
+    // Check premium package (type 8)
+    for (var key2 in allPlacements) {
+      if (key2.startsWith('8_') && allPlacements[key2] === String(developerId)) return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
 function locationContentHTML(p) {
   const addr = encodeURIComponent(p.address);
-  return `<div class="map-services-panel">
+  const devId = p.developerId || p.developer_id || '';
+  const paid = isCardPaid(p.id, devId);
+
+  if (paid) {
+    return `<div class="map-services-panel">
     <div class="map-services-list">
       <a class="map-service-link" href="https://yandex.ru/maps/?text=${addr}" target="_blank" rel="noopener">
         <div class="map-service-icon" style="background:#FFF3DC">📍</div>
@@ -140,6 +160,14 @@ function locationContentHTML(p) {
       </a>
     </div>
   </div>`;
+  } else {
+    return `<div class="map-services-panel">
+    <div style="padding:12px 16px;color:#334155;">
+      <div style="font-weight:600;margin-bottom:4px;">📍 Адрес:</div>
+      <div>${p.address || 'Адрес уточняется'}</div>
+    </div>
+  </div>`;
+  }
 }
 
 function infraContentHTML(p) {
@@ -657,6 +685,7 @@ function renderFeed() {
 
     // Chip filter
     if (currentFilter === 'all') return true;
+    if (currentFilter === 'recommended') return Boolean(p.recommended || p.isRecommended || p.partner || (p.tags && (p.tags.includes('рекомендованный') || p.tags.includes('рекомендовано') || p.tags.includes('рекомендуем'))));
     if (currentFilter === 'partner') return p.partner;
     if (currentFilter === 'budget') return parseFloat(p.priceFrom.replace(/[^\d.]/g, '')) <= 5.0;
     if (currentFilter === 'sea') return p.direction === 'sea';
@@ -876,7 +905,9 @@ function submitAvailability(name) {
     name: nameVal,
     phone: phone,
     email: email || '',
-    details: 'Узнать наличие квартир в ' + (name || 'ЖК') + (city ? ' (Город клиента: ' + city + ')' : '')
+    details: 'Узнать наличие квартир в ' + (name || 'ЖК') + (city ? ' (Город клиента: ' + city + ')' : ''),
+    ownedBy: isCardPaid(null, '') ? 'developer' : 'admin',
+    timestamp: new Date().toISOString()
   };
 
   if (typeof window.saveAmberLead === 'function') {

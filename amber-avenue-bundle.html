@@ -11178,20 +11178,20 @@ html,body{scroll-behavior:auto!important}/* === b2b-promo custom styles === */
         <!-- Countdown Timer -->
         <div class="countdown-container">
           <div class="countdown-item">
-            <span class="countdown-value" id="cd-days">20</span>
-            <span class="countdown-label">дней</span>
+            <span class="countdown-value" id="cd-days">--</span>
+            <span class="countdown-label" id="cd-days-label">дней</span>
           </div>
           <div class="countdown-item">
-            <span class="countdown-value" id="cd-hours">00</span>
-            <span class="countdown-label">часов</span>
+            <span class="countdown-value" id="cd-hours">--</span>
+            <span class="countdown-label" id="cd-hours-label">часов</span>
           </div>
           <div class="countdown-item">
-            <span class="countdown-value" id="cd-minutes">00</span>
-            <span class="countdown-label">минут</span>
+            <span class="countdown-value" id="cd-minutes">--</span>
+            <span class="countdown-label" id="cd-minutes-label">минут</span>
           </div>
           <div class="countdown-item">
-            <span class="countdown-value" id="cd-seconds">00</span>
-            <span class="countdown-label">секунд</span>
+            <span class="countdown-value" id="cd-seconds">--</span>
+            <span class="countdown-label" id="cd-seconds-label">секунд</span>
           </div>
         </div>
 
@@ -11512,9 +11512,11 @@ html,body{scroll-behavior:auto!important}/* === b2b-promo custom styles === */
     </section>
 
     <!-- ══ FILTER BAR ══════════════════════════════════════════ -->
-  <nav class="filter-bar" aria-label="Сортировка">
+  <nav class="filter-bar" aria-label="Фильтры и сортировка">
     <div class="filter-bar-inner">
-      <button class="filter-chip active" data-sort="rating">По рейтингу Amber</button>
+      <button class="filter-chip active" data-filter="all">Все</button>
+      <button class="filter-chip" data-filter="recommended">Рекомендованные</button>
+      <button class="filter-chip" data-sort="rating">Amber Index</button>
       <button class="filter-chip" data-sort="price-asc">По цене (возр.)</button>
       <button class="filter-chip" data-sort="price-desc">По цене (убыв.)</button>
       <button class="filter-chip" data-sort="delivery">По дате сдачи</button>

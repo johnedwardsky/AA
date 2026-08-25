@@ -741,20 +741,20 @@
         <!-- Countdown Timer -->
         <div class="countdown-container">
           <div class="countdown-item">
-            <span class="countdown-value" id="cd-days">20</span>
-            <span class="countdown-label">дней</span>
+            <span class="countdown-value" id="cd-days">--</span>
+            <span class="countdown-label" id="cd-days-label">дней</span>
           </div>
           <div class="countdown-item">
-            <span class="countdown-value" id="cd-hours">00</span>
-            <span class="countdown-label">часов</span>
+            <span class="countdown-value" id="cd-hours">--</span>
+            <span class="countdown-label" id="cd-hours-label">часов</span>
           </div>
           <div class="countdown-item">
-            <span class="countdown-value" id="cd-minutes">00</span>
-            <span class="countdown-label">минут</span>
+            <span class="countdown-value" id="cd-minutes">--</span>
+            <span class="countdown-label" id="cd-minutes-label">минут</span>
           </div>
           <div class="countdown-item">
-            <span class="countdown-value" id="cd-seconds">00</span>
-            <span class="countdown-label">секунд</span>
+            <span class="countdown-value" id="cd-seconds">--</span>
+            <span class="countdown-label" id="cd-seconds-label">секунд</span>
           </div>
         </div>
 
@@ -959,18 +959,31 @@
     const backThanks    = document.getElementById('contact-thanks');
 
     /* ── Countdown Timer Logic ── */
-    // Set target date to exactly 20 days in the future from current context
-    const targetDate = new Date("2026-08-04T12:00:00").getTime();
+    // Target date: September 10, 2026
+    const targetDate = new Date("2026-09-10T00:00:00").getTime();
+
+    function getDeclension(number, titles) {
+      const cases = [2, 0, 1, 1, 1, 2];
+      return titles[
+        (number % 100 > 4 && number % 100 < 20)
+          ? 2
+          : cases[(number % 10 < 5) ? number % 10 : 5]
+      ];
+    }
 
     function updateCountdown() {
       const now = new Date().getTime();
       const distance = targetDate - now;
 
-      if (distance < 0) {
-        document.getElementById("cd-days").innerText = "00";
-        document.getElementById("cd-hours").innerText = "00";
-        document.getElementById("cd-minutes").innerText = "00";
-        document.getElementById("cd-seconds").innerText = "00";
+      if (distance <= 0) {
+        const daysEl = document.getElementById("cd-days");
+        const hoursEl = document.getElementById("cd-hours");
+        const minutesEl = document.getElementById("cd-minutes");
+        const secondsEl = document.getElementById("cd-seconds");
+        if (daysEl) daysEl.innerText = "00";
+        if (hoursEl) hoursEl.innerText = "00";
+        if (minutesEl) minutesEl.innerText = "00";
+        if (secondsEl) secondsEl.innerText = "00";
         return;
       }
 
@@ -979,10 +992,25 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      document.getElementById("cd-days").innerText = String(days).padStart(2, '0');
-      document.getElementById("cd-hours").innerText = String(hours).padStart(2, '0');
-      document.getElementById("cd-minutes").innerText = String(minutes).padStart(2, '0');
-      document.getElementById("cd-seconds").innerText = String(seconds).padStart(2, '0');
+      const daysEl = document.getElementById("cd-days");
+      const hoursEl = document.getElementById("cd-hours");
+      const minutesEl = document.getElementById("cd-minutes");
+      const secondsEl = document.getElementById("cd-seconds");
+
+      if (daysEl) daysEl.innerText = String(days).padStart(2, '0');
+      if (hoursEl) hoursEl.innerText = String(hours).padStart(2, '0');
+      if (minutesEl) minutesEl.innerText = String(minutes).padStart(2, '0');
+      if (secondsEl) secondsEl.innerText = String(seconds).padStart(2, '0');
+
+      const daysLabel = document.getElementById("cd-days-label");
+      const hoursLabel = document.getElementById("cd-hours-label");
+      const minLabel = document.getElementById("cd-minutes-label");
+      const secLabel = document.getElementById("cd-seconds-label");
+
+      if (daysLabel) daysLabel.innerText = getDeclension(days, ['день', 'дня', 'дней']);
+      if (hoursLabel) hoursLabel.innerText = getDeclension(hours, ['час', 'часа', 'часов']);
+      if (minLabel) minLabel.innerText = getDeclension(minutes, ['минута', 'минуты', 'минут']);
+      if (secLabel) secLabel.innerText = getDeclension(seconds, ['секунда', 'секунды', 'секунд']);
     }
     
     setInterval(updateCountdown, 1000);
@@ -1176,7 +1204,8 @@
           localStorage.removeItem('auth_user_name');
           localStorage.setItem('auth_developer_id', dev.id);
           localStorage.setItem('auth_developer_name', dev.name);
-          window.location.href = 'hub.html';
+          localStorage.setItem('auth_developer_code', dev.code);
+          window.location.href = 'cabinet.html';
           return;
         }
       }
@@ -1184,9 +1213,10 @@
       if (code === '123456') {
         localStorage.removeItem('auth_user_role');
         localStorage.removeItem('auth_user_name');
-        localStorage.setItem('auth_developer_id', 'demo');
-        localStorage.setItem('auth_developer_name', 'Тестовый застройщик');
-        window.location.href = 'hub.html';
+        localStorage.setItem('auth_developer_id', '3');
+        localStorage.setItem('auth_developer_name', 'ГК «Расцвет»');
+        localStorage.setItem('auth_developer_code', '123456');
+        window.location.href = 'cabinet.html';
         return;
       }
 

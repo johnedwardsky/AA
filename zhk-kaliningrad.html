@@ -2572,9 +2572,11 @@ ul { list-style: none; }
     </section>
 
     <!-- ══ FILTER BAR ══════════════════════════════════════════ -->
-  <nav class="filter-bar" aria-label="Сортировка">
+  <nav class="filter-bar" aria-label="Фильтры и сортировка">
     <div class="filter-bar-inner">
-      <button class="filter-chip active" data-sort="rating">По рейтингу Amber</button>
+      <button class="filter-chip active" data-filter="all">Все</button>
+      <button class="filter-chip" data-filter="recommended">Рекомендованные</button>
+      <button class="filter-chip" data-sort="rating">Amber Index</button>
       <button class="filter-chip" data-sort="price-asc">По цене (возр.)</button>
       <button class="filter-chip" data-sort="price-desc">По цене (убыв.)</button>
       <button class="filter-chip" data-sort="delivery">По дате сдачи</button>
@@ -4140,6 +4142,10 @@ function renderFeed(appendOnly = false) {
 
       // Chip filter
       if (currentFilter === 'all') return true;
+      if (currentFilter === 'recommended') return Boolean(p.recommended || p.isRecommended || p.partner || (p.tags && (p.tags.includes('рекомендованный') || p.tags.includes('рекомендовано') || p.tags.includes('рекомендуем'))));
+      if (currentFilter === 'partner') return !!p.partner;
+      if (currentFilter === 'budget') { const n = parseFloat((p.priceFrom || '').replace(/[^\d.]/g, '')); return !isNaN(n) && n <= 5.0; }
+      if (currentFilter === '2025') return (p.delivery || '').includes('2025');
 
       // District filter (city only)
       if (currentFilter === 'district-len') return p.district === 'Ленинградский';
@@ -4761,16 +4767,19 @@ document.addEventListener('DOMContentLoaded', function() {
   // Пересчитываем при изменении размеров окна
   window.addEventListener('resize', updateStickyTop);
 
-    // Sort Chips in Sticky Bar
+    // Filter & Sort Chips in Sticky Bar
   document.querySelectorAll('.filter-chip').forEach(chip => {
     chip.addEventListener('click', function() {
-      if (this.dataset.sort) {
-        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-        this.classList.add('active');
-        currentSort = this.dataset.sort;
-        visibleCount = 8; // Reset count
-        renderFeed();
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      if (this.dataset.filter) {
+        currentFilter = this.dataset.filter;
       }
+      if (this.dataset.sort) {
+        currentSort = this.dataset.sort;
+      }
+      visibleCount = 8; // Reset count
+      renderFeed();
     });
   });
 

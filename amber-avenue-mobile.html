@@ -1793,6 +1793,8 @@ ul { list-style: none; }
     <div class="filter-bar-inner">
       <span class="filter-label">Фильтр:</span>
       <button class="filter-chip active" data-filter="all">Все <span class="chip-count">8</span></button>
+      <button class="filter-chip" data-filter="recommended">Рекомендованные</button>
+      <button class="filter-chip" data-sort="rating">Amber Index</button>
       <button class="filter-chip" data-filter="sea">У моря</button>
       <button class="filter-chip" data-filter="comfort">Комфорт</button>
       <button class="filter-chip" data-filter="business">Бизнес</button>
@@ -3029,6 +3031,7 @@ function renderFeed() {
 
     // Chip filter
     if (currentFilter === 'all') return true;
+    if (currentFilter === 'recommended') return Boolean(p.recommended || p.isRecommended || p.partner || (p.tags && (p.tags.includes('рекомендованный') || p.tags.includes('рекомендовано') || p.tags.includes('рекомендуем'))));
     if (currentFilter === 'partner') return p.partner;
     if (currentFilter === 'budget') return parseFloat(p.priceFrom.replace(/[^\d.]/g, '')) <= 5.0;
     if (currentFilter === 'sea') return p.location === 'Зеленоградск' || p.location === 'Светлогорск' || p.location === 'Пионерский';

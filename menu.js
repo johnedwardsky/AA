@@ -1728,14 +1728,10 @@
 
     if (btnConsult) {
       if (devId && devName) {
-        btnConsult.textContent = 'Панель управления';
+        btnConsult.textContent = 'Личный кабинет';
         btnConsult.addEventListener('click', (e) => {
           e.preventDefault();
-          if (typeof navigateToPage === 'function') {
-            location.hash = '#developer-form';
-          } else {
-            window.location.href = 'developer-form.html';
-          }
+          window.location.href = 'cabinet.html';
         });
       } else {
         btnConsult.addEventListener('click', (e) => {
@@ -1751,18 +1747,14 @@
         const mbCtaTitle = mbCta.querySelector('.mb-cta-t');
         const mbCtaSub = mbCta.querySelector('.mb-cta-s');
         const mbCtaBtn = mbCta.querySelector('.mb-cta-b');
-        if (mbCtaTitle) mbCtaTitle.textContent = 'Панель управления';
+        if (mbCtaTitle) mbCtaTitle.textContent = 'Личный кабинет';
         if (mbCtaSub) mbCtaSub.textContent = 'Кабинет застройщика';
         if (mbCtaBtn) mbCtaBtn.textContent = 'Перейти';
         
         mbCta.addEventListener('click', e => {
           e.preventDefault();
           closeMb();
-          if (typeof navigateToPage === 'function') {
-            location.hash = '#developer-form';
-          } else {
-            window.location.href = 'developer-form.html';
-          }
+          window.location.href = 'cabinet.html';
         });
       } else {
         mbCta.addEventListener('click', e => {

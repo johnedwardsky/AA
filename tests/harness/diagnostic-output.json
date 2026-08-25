@@ -1,0 +1,101 @@
+{
+  "timestamp": "2026-08-19T14:46:59.241Z",
+  "grandTotal": 197,
+  "grandPassed": 189,
+  "grandFailed": 8,
+  "suites": {
+    "Tier 1: Feature Coverage": {
+      "total": 109,
+      "passed": 108,
+      "failed": 1,
+      "durationMs": 22893,
+      "heapDiffMB": "95.11",
+      "failures": [
+        {
+          "name": "Audit F15.2: Developer filter dropdown population",
+          "error": "All devs + 2 options populated\n\n55 !== 3\n",
+          "stack": "AssertionError [ERR_ASSERTION]: All devs + 2 options populated\n\n55 !== 3\n\n    at /Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier1-feature-coverage.test.js:733:14\n    at test (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier1-feature-coverage.test.js:18:13)\n    at Object.runTier1Tests [as runner] (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier1-feature-coverage.test.js:721:9)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async main (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/harness/run-diagnostic.js:43:23)"
+        }
+      ]
+    },
+    "Tier 2: Boundary & Corner": {
+      "total": 31,
+      "passed": 31,
+      "failed": 0,
+      "durationMs": 4887,
+      "heapDiffMB": "-53.15",
+      "failures": []
+    },
+    "Tier 3: Cross-Feature": {
+      "total": 16,
+      "passed": 15,
+      "failed": 1,
+      "durationMs": 4064,
+      "heapDiffMB": "48.02",
+      "failures": [
+        {
+          "name": "CrossFeature T3.8: Unsaved changes banner state machine lifecycle",
+          "error": "sandbox.window.saveChangesToDisk is not a function",
+          "stack": "TypeError: sandbox.window.saveChangesToDisk is not a function\n    at /Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier3-cross-feature.test.js:156:20\n    at test (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier3-cross-feature.test.js:17:13)\n    at Object.runTier3Tests [as runner] (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier3-cross-feature.test.js:145:9)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async main (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/harness/run-diagnostic.js:43:23)"
+        }
+      ]
+    },
+    "Tier 4: Application Scenarios": {
+      "total": 11,
+      "passed": 10,
+      "failed": 1,
+      "durationMs": 2395,
+      "heapDiffMB": "29.49",
+      "failures": [
+        {
+          "name": "Scenario T4.6: End-to-End Database Sync and State Persistence Workflow",
+          "error": "sandbox.window.saveChangesToDisk is not a function",
+          "stack": "TypeError: sandbox.window.saveChangesToDisk is not a function\n    at /Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier4-application-scenarios.test.js:158:20\n    at test (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier4-application-scenarios.test.js:18:13)\n    at Object.runTier4Tests [as runner] (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier4-application-scenarios.test.js:149:9)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async main (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/harness/run-diagnostic.js:43:23)"
+        }
+      ]
+    },
+    "Tier 5: Adversarial Hardening": {
+      "total": 20,
+      "passed": 16,
+      "failed": 4,
+      "durationMs": 21248,
+      "heapDiffMB": "-4.41",
+      "failures": [
+        {
+          "name": "Tier5_Adv_RapidCabinetTabSwitch_100Cycles: 100 continuous cabinet tab switches",
+          "error": "Expected values to be strictly equal:\n\n1 !== 0\n",
+          "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n1 !== 0\n\n    at /Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier5-adversarial-hardening.test.js:47:12\n    at test (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier5-adversarial-hardening.test.js:18:13)\n    at Object.runTier5Tests [as runner] (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier5-adversarial-hardening.test.js:39:9)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async main (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/harness/run-diagnostic.js:43:23)"
+        },
+        {
+          "name": "Tier5_Adv_MalformedArrayInStorage: Primitive string/number in array storage coerced safely",
+          "error": "list.map is not a function",
+          "stack": "TypeError: list.map is not a function\n    at renderAmberLeadsTable (evalmachine.<anonymous>:284:30)\n    at evalmachine.<anonymous>:807:9\n    at /Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/harness/dom-sandbox.js:972:30\n    at Array.forEach (<anonymous>)\n    at Object.dispatchEvent (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/harness/dom-sandbox.js:972:17)\n    at createAdminSandbox (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/harness/dom-sandbox.js:1168:12)\n    at /Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier5-adversarial-hardening.test.js:86:21\n    at test (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier5-adversarial-hardening.test.js:18:13)\n    at Object.runTier5Tests [as runner] (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier5-adversarial-hardening.test.js:85:9)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)"
+        },
+        {
+          "name": "Tier5_Adv_XSS_DeveloperName: HTML script injection in developer name sanitized safely",
+          "error": "The expression evaluated to a falsy value:\n\n  assert.ok(tbody.innerHTML.includes('&lt;script&gt;') || tbody.textContent.includes('ООО \"Строй\"'))\n",
+          "stack": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(tbody.innerHTML.includes('&lt;script&gt;') || tbody.textContent.includes('ООО \"Строй\"'))\n\n    at /Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier5-adversarial-hardening.test.js:131:12\n    at test (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier5-adversarial-hardening.test.js:18:13)\n    at Object.runTier5Tests [as runner] (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier5-adversarial-hardening.test.js:120:9)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async main (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/harness/run-diagnostic.js:43:23)"
+        },
+        {
+          "name": "Tier5_Adv_ZeroErrors_CabinetAllTabs: Zero errors across all cabinet views",
+          "error": "Expected values to be strictly equal:\n\n1 !== 0\n",
+          "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n1 !== 0\n\n    at /Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier5-adversarial-hardening.test.js:247:12\n    at test (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier5-adversarial-hardening.test.js:18:13)\n    at Object.runTier5Tests [as runner] (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/tier5-adversarial-hardening.test.js:245:9)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async main (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/harness/run-diagnostic.js:43:23)"
+        }
+      ]
+    },
+    "Responsive & Runtime": {
+      "total": 10,
+      "passed": 9,
+      "failed": 1,
+      "durationMs": 3482,
+      "heapDiffMB": "22.05",
+      "failures": [
+        {
+          "name": "Runtime R10: Zero JavaScript console errors on initial Developer Cabinet load",
+          "error": "Expected 0 console errors in Cabinet, got: [\"Cabinet script error: window.addEventListener is not a function\"]\n\n1 !== 0\n",
+          "stack": "AssertionError [ERR_ASSERTION]: Expected 0 console errors in Cabinet, got: [\"Cabinet script error: window.addEventListener is not a function\"]\n\n1 !== 0\n\n    at /Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/responsiveness-and-runtime.test.js:106:12\n    at test (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/responsiveness-and-runtime.test.js:17:13)\n    at Object.runResponsiveAndRuntimeTests [as runner] (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/responsiveness-and-runtime.test.js:103:9)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async main (/Users/johnsky/Documents/Amber Avenue/Amber Avenue Site/tests/harness/run-diagnostic.js:43:23)"
+        }
+      ]
+    }
+  }
+}

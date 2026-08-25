@@ -1,0 +1,49 @@
+Starting Test Diagnostic Run...
+
+=== RUNNING Tier 1: Feature Coverage ===
+Tier 1: Feature Coverage: 108/109 passed in 22893ms
+  FAILURES in Tier 1: Feature Coverage:
+    - Audit F15.2: Developer filter dropdown population -> All devs + 2 options populated
+
+55 !== 3
+
+
+=== RUNNING Tier 2: Boundary & Corner ===
+Tier 2: Boundary & Corner: 31/31 passed in 4887ms
+
+=== RUNNING Tier 3: Cross-Feature ===
+Tier 3: Cross-Feature: 15/16 passed in 4064ms
+  FAILURES in Tier 3: Cross-Feature:
+    - CrossFeature T3.8: Unsaved changes banner state machine lifecycle -> sandbox.window.saveChangesToDisk is not a function
+
+=== RUNNING Tier 4: Application Scenarios ===
+Tier 4: Application Scenarios: 10/11 passed in 2395ms
+  FAILURES in Tier 4: Application Scenarios:
+    - Scenario T4.6: End-to-End Database Sync and State Persistence Workflow -> sandbox.window.saveChangesToDisk is not a function
+
+=== RUNNING Tier 5: Adversarial Hardening ===
+Tier 5: Adversarial Hardening: 16/20 passed in 21248ms
+  FAILURES in Tier 5: Adversarial Hardening:
+    - Tier5_Adv_RapidCabinetTabSwitch_100Cycles: 100 continuous cabinet tab switches -> Expected values to be strictly equal:
+
+1 !== 0
+
+    - Tier5_Adv_MalformedArrayInStorage: Primitive string/number in array storage coerced safely -> list.map is not a function
+    - Tier5_Adv_XSS_DeveloperName: HTML script injection in developer name sanitized safely -> The expression evaluated to a falsy value:
+
+  assert.ok(tbody.innerHTML.includes('&lt;script&gt;') || tbody.textContent.includes('ООО "Строй"'))
+
+    - Tier5_Adv_ZeroErrors_CabinetAllTabs: Zero errors across all cabinet views -> Expected values to be strictly equal:
+
+1 !== 0
+
+
+=== RUNNING Responsive & Runtime ===
+Responsive & Runtime: 9/10 passed in 3482ms
+  FAILURES in Responsive & Runtime:
+    - Runtime R10: Zero JavaScript console errors on initial Developer Cabinet load -> Expected 0 console errors in Cabinet, got: ["Cabinet script error: window.addEventListener is not a function"]
+
+1 !== 0
+
+
+=== COMPLETED: 189/197 passed, 8 failed ===
