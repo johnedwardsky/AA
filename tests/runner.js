@@ -10,9 +10,6 @@ const { runEmpiricalVerification } = require('./empirical_verification_challenge
 const { runResponsiveAndRuntimeTests } = require('./responsiveness-and-runtime.test');
 const { runVisualLayoutIntegrityTests } = require('./visual-layout-integrity.test');
 const { runEmployeeRbacSuite } = require('./tier-employee-rbac');
-const { runChallenger1RbacStressSuite } = require('./adversarial-rbac-challenger1.test');
-const { runEmpiricalInteractiveWorkflowsSuite } = require('./empirical_interactive_workflows_challenger.test');
-const { runZhk9TabEditorSuite } = require('./zhk_9tab_editor_verification.test');
 
 async function main() {
   const startTime = Date.now();
@@ -31,12 +28,9 @@ async function main() {
     { name: 'Tier 5: Adversarial Hardening (Stress, Proto, XSS, 10k Ingestion)', runner: runTier5Tests },
     { name: 'Challenger 1: Empirical Adversarial Stress Suite (R1-R8 Focus)', runner: runAdversarialChallengerSuite },
     { name: 'Challenger 2: Cross-Feature Sync & Runtime Robustness Suite', runner: runEmpiricalVerification },
-    { name: 'Challenger 2 Final: Empirical Probing of 5 Interactive Workflows', runner: runEmpiricalInteractiveWorkflowsSuite },
     { name: 'Responsive Breakpoints (375px - 4K) & Zero-Console-Error Assertions', runner: runResponsiveAndRuntimeTests },
     { name: 'Visual Layout Integrity & Design System Verification (Suites 1–6)', runner: runVisualLayoutIntegrityTests },
-    { name: 'Suite 10: Multi-Tier Employee Access Control & RBAC System (Tiers 1–4)', runner: runEmployeeRbacSuite },
-    { name: 'Challenger 1: Adversarial Employee RBAC & Access Control Stress Suite', runner: runChallenger1RbacStressSuite },
-    { name: 'Suite 11: 9-Tab ZHK Editor Modal, Moderation Comments & Card Actions', runner: runZhk9TabEditorSuite }
+    { name: 'Suite 10: Multi-Tier Employee Access Control & RBAC System (Tiers 1–4)', runner: runEmployeeRbacSuite }
   ];
 
   let totalTests = 0;

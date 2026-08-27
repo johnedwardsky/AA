@@ -1,0 +1,100 @@
+[
+  {
+    "id": "ADV-RUNNER-01",
+    "title": "Multi-Run Determinism (10 Consecutive Iterations)",
+    "status": "PASS",
+    "details": {
+      "durations": [
+        642,
+        487,
+        417,
+        431,
+        361,
+        475,
+        459,
+        442,
+        439,
+        476
+      ],
+      "avgDurationMs": "462.9"
+    }
+  },
+  {
+    "id": "ADV-RUNNER-02",
+    "title": "Memory Stability across 100 Sandboxes",
+    "status": "PASS",
+    "details": {
+      "snapshots": [
+        {
+          "iteration": 0,
+          "heapUsedMB": "275.02"
+        },
+        {
+          "iteration": 20,
+          "heapUsedMB": "108.63"
+        },
+        {
+          "iteration": 40,
+          "heapUsedMB": "159.92"
+        },
+        {
+          "iteration": 60,
+          "heapUsedMB": "265.10"
+        },
+        {
+          "iteration": 80,
+          "heapUsedMB": "324.09"
+        }
+      ],
+      "finalHeapMB": "354.80"
+    }
+  },
+  {
+    "id": "ADV-RUNNER-03",
+    "title": "Storage Isolation Between Sandboxes",
+    "status": "PASS",
+    "details": {
+      "isolated": true
+    }
+  },
+  {
+    "id": "ADV-RUNNER-04",
+    "title": "Global Scope & Object Mutation Isolation",
+    "status": "PASS",
+    "details": {
+      "isolated": true
+    }
+  },
+  {
+    "id": "ADV-RUNNER-05",
+    "title": "Event Listener Isolation & Teardown",
+    "status": "PASS",
+    "details": {
+      "handlersLeaked": false
+    }
+  },
+  {
+    "id": "ADV-RUNNER-06",
+    "title": "Cabinet Sandbox Window Interface Support",
+    "status": "PASS",
+    "details": {
+      "errors": []
+    }
+  },
+  {
+    "id": "ADV-RUNNER-07",
+    "title": "DOM Parser HTML Robustness",
+    "status": "PASS",
+    "details": {
+      "testCasesCount": 5
+    }
+  },
+  {
+    "id": "ADV-RUNNER-08",
+    "title": "Timer Operations in Sandbox Context",
+    "status": "PASS",
+    "details": {
+      "timeoutWorking": true
+    }
+  }
+]

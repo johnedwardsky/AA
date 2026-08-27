@@ -288,6 +288,333 @@ async function runTier4Tests() {
     assert.strictEqual(adminOnlyLeads.length, 0, 'Not marked as unassigned platform lead');
   });
 
+  // ════════════════════════════════════════════════════════════════════════════
+  // ITERATION 2 APPLICATION SCENARIOS (Scenarios 2.1 - 2.5)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  await test('Scenario 2.1: Developer Onboarding via Admin Invitation & Security Setup', () => {
+    // 1. Admin generates invite in Section 3.7
+    const adminSandbox = createAdminSandbox();
+    const token = 'inv_baltic_shore_2026';
+    const invite = {
+      token,
+      developerId: 25,
+      developerName: 'ООО «Балтийский Берег»',
+      email: 'sales@baltic-shore.ru',
+      tariffPlanId: 'pro',
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 7 * 86400000).toISOString(),
+      used: false
+    };
+    const tokens = adminSandbox.localStorage.getInviteTokens();
+    tokens.push(invite);
+    adminSandbox.localStorage.setInviteTokens(tokens);
+
+    // 2. Developer opens invite link in Cabinet
+    const cabinetSandbox = createCabinetSandbox({
+      url: `http://localhost/cabinet.html?invite=${token}`,
+      initialLocalStorage: {
+        amber_invite_tokens: adminSandbox.localStorage.getInviteTokens()
+      }
+    });
+    assert.strictEqual(cabinetSandbox.window.location.search, `?invite=${token}`);
+
+    // 3. Developer registers master password & accepts invite
+    const crypto = require('node:crypto');
+    const masterPassword = 'BalticSecurePassword2026!';
+    const passwordHash = crypto.createHash('sha256').update(masterPassword).digest('hex');
+
+    const devTokens = cabinetSandbox.localStorage.getInviteTokens();
+    const currentInvite = devTokens.find(t => t.token === token);
+    assert.ok(currentInvite, 'Invite token exists');
+    assert.strictEqual(currentInvite.used, false);
+
+    currentInvite.used = true;
+    currentInvite.usedAt = new Date().toISOString();
+    cabinetSandbox.localStorage.setInviteTokens(devTokens);
+
+    cabinetSandbox.localStorage.setAuth(25, {
+      developerId: 25,
+      developerName: 'ООО «Балтийский Берег»',
+      email: 'sales@baltic-shore.ru',
+      passwordHash,
+      role: 'admin',
+      sessionExpiresAt: new Date(Date.now() + 30 * 86400000).toISOString()
+    });
+
+    cabinetSandbox.localStorage.setTariff(25, {
+      planId: 'pro',
+      planName: 'Про',
+      price: '150 000 ₽ / мес',
+      modules: ['analytics-basic', 'analytics-traffic', 'analytics-reports'],
+      status: 'active'
+    });
+
+    // 4. Verification: Token is marked used, auth record exists, tariff is Pro
+    const verifiedTokens = cabinetSandbox.localStorage.getInviteTokens();
+    assert.strictEqual(verifiedTokens.find(t => t.token === token).used, true);
+
+    const auth = cabinetSandbox.localStorage.getAuth(25);
+    assert.strictEqual(auth.email, 'sales@baltic-shore.ru');
+    assert.strictEqual(auth.passwordHash, passwordHash);
+
+    const tariff = cabinetSandbox.localStorage.getTariff(25);
+    assert.strictEqual(tariff.planId, 'pro');
+    assert.ok(tariff.modules.includes('analytics-traffic'));
+  });
+
+  await test('Scenario 2.2: Lead CRM Masking, Unlock Request & Advance Approval Journey', () => {
+    // 1. Initial state: Unpaid lead arrives in CRM
+    const initialLead = createMockLead({
+      id: 'lead-scen-2',
+      developerId: 3,
+      developerName: 'ГК «Расцвет»',
+      isPaidCard: false,
+      isUnlocked: false,
+      name: 'Елена Кузнецова',
+      phone: '+7 (911) 555-44-33',
+      phoneMasked: '+7 (9**) ***-**-33',
+      email: 'elena.kuznetsova@mail.ru',
+      estimatedDealValue: 50000
+    });
+
+    const cabinetSandbox = createCabinetSandbox({
+      developerId: 3,
+      initialLocalStorage: {
+        amber_leads: [initialLead]
+      }
+    });
+
+    // 2. Developer inspects CRM: phone masked, missed opportunity calculated
+    const leads = cabinetSandbox.localStorage.getLeads();
+    const devLead = leads.find(l => l.id === 'lead-scen-2');
+    assert.strictEqual(devLead.isPaidCard, false);
+    assert.strictEqual(devLead.isUnlocked, false);
+    assert.ok(devLead.phoneMasked.includes('**'));
+
+    const unpaidCount = leads.filter(l => !l.isPaidCard).length;
+    const potentialLoss = unpaidCount * 50000;
+    assert.strictEqual(potentialLoss, 50000);
+
+    // 3. Developer clicks Unlock -> creates pending request
+    const unlockRequest = {
+      id: 'unl-scen-2',
+      leadId: 'lead-scen-2',
+      developerId: 3,
+      developerName: 'ГК «Расцвет»',
+      clientName: 'Елена Кузнецова',
+      status: 'pending',
+      requestedAt: new Date().toISOString()
+    };
+    cabinetSandbox.localStorage.setUnlockRequests([unlockRequest]);
+
+    // 4. Admin reviews and approves unlock request in Section 3.8
+    const adminSandbox = createAdminSandbox({
+      initialLocalStorage: {
+        amber_unlock_requests: cabinetSandbox.localStorage.getUnlockRequests(),
+        amber_leads: cabinetSandbox.localStorage.getLeads()
+      }
+    });
+    const adminRequests = adminSandbox.localStorage.getUnlockRequests();
+    assert.strictEqual(adminRequests.length, 1);
+    assert.strictEqual(adminRequests[0].status, 'pending');
+
+    adminRequests[0].status = 'approved';
+    adminSandbox.localStorage.setUnlockRequests(adminRequests);
+
+    // Unlock lead
+    const globalLeads = adminSandbox.localStorage.getLeads();
+    const targetLead = globalLeads.find(l => l.id === 'lead-scen-2');
+    targetLead.isPaidCard = true;
+    targetLead.isUnlocked = true;
+    adminSandbox.localStorage.setLeads(globalLeads);
+
+    // 5. Developer refreshes CRM: Lead is now unlocked, full contacts visible, loss = 0
+    const refreshedCabinet = createCabinetSandbox({
+      developerId: 3,
+      initialLocalStorage: {
+        amber_leads: adminSandbox.localStorage.getLeads(),
+        amber_unlock_requests: adminSandbox.localStorage.getUnlockRequests()
+      }
+    });
+    const unlockedLead = refreshedCabinet.localStorage.getLeads().find(l => l.id === 'lead-scen-2');
+    assert.strictEqual(unlockedLead.isPaidCard, true);
+    assert.strictEqual(unlockedLead.isUnlocked, true);
+    assert.strictEqual(unlockedLead.phone, '+7 (911) 555-44-33');
+    assert.strictEqual(unlockedLead.email, 'elena.kuznetsova@mail.ru');
+
+    const newLoss = refreshedCabinet.localStorage.getLeads().filter(l => !l.isPaidCard).length * 50000;
+    assert.strictEqual(newLoss, 0);
+  });
+
+  await test('Scenario 2.3: Commercial Tariff Monetization & Dynamic Dashboard Layout', () => {
+    // 1. Developer on Basic tariff (69 000 ₽)
+    const cabinetBasic = createCabinetSandbox({
+      developerId: 1,
+      initialLocalStorage: {
+        amber_tariff_1: {
+          planId: 'basic',
+          planName: 'Базовый',
+          price: '69 000 ₽ / мес',
+          modules: ['analytics-basic'],
+          status: 'active',
+          endDate: '31.12.2026'
+        }
+      }
+    });
+    const basicTariff = cabinetBasic.localStorage.getTariff(1);
+    assert.strictEqual(basicTariff.planId, 'basic');
+    assert.strictEqual(basicTariff.modules.includes('analytics-competitors'), false);
+
+    // 2. Admin upgrades developer to Premium (210 000 ₽)
+    const adminSandbox = createAdminSandbox({
+      initialLocalStorage: {
+        amber_tariff_1: basicTariff
+      }
+    });
+    const premiumTariff = {
+      planId: 'premium',
+      planName: 'Премиум',
+      price: '210 000 ₽ / мес',
+      modules: ['analytics-basic', 'analytics-traffic', 'analytics-competitors', 'analytics-reports', 'promo-ads', 'promo-premium'],
+      status: 'active',
+      startDate: '2026-08-25',
+      endDate: '2027-08-25'
+    };
+    adminSandbox.localStorage.setTariff(1, premiumTariff);
+
+    // 3. Cabinet unblocks all Premium modules
+    const cabinetPremium = createCabinetSandbox({
+      developerId: 1,
+      initialLocalStorage: {
+        amber_tariff_1: adminSandbox.localStorage.getTariff(1)
+      }
+    });
+    const devPremium = cabinetPremium.localStorage.getTariff(1);
+    assert.strictEqual(devPremium.planId, 'premium');
+    assert.strictEqual(devPremium.price, '210 000 ₽ / мес');
+    assert.ok(devPremium.modules.includes('analytics-competitors'));
+    assert.ok(devPremium.modules.includes('promo-ads'));
+    assert.ok(devPremium.modules.includes('promo-premium'));
+  });
+
+  await test('Scenario 2.4: Advertising Campaign Management & Interactive Calendar', () => {
+    // 1. Developer submits placement request in Cabinet
+    const cabinetSandbox = createCabinetSandbox({ developerId: 1 });
+    const newReq = {
+      id: 'req-adv-1',
+      developerId: 1,
+      developerName: 'ГК «КСК»',
+      typeId: 4,
+      typeName: 'Рекомендованные ЖК (7 дней)',
+      zhkId: 1,
+      zhkName: 'ЖК «Нордберг»',
+      requestedMonths: ['2026-09'],
+      monthlyCost: 35000,
+      status: 'pending',
+      submittedAt: new Date().toISOString()
+    };
+    cabinetSandbox.localStorage.setPlacementRequests([newReq]);
+
+    // 2. Admin reviews request and activates placement
+    const adminSandbox = createAdminSandbox({
+      initialLocalStorage: {
+        amber_placement_requests: cabinetSandbox.localStorage.getPlacementRequests()
+      }
+    });
+    const reqs = adminSandbox.localStorage.getPlacementRequests();
+    assert.strictEqual(reqs.length, 1);
+    reqs[0].status = 'approved';
+    adminSandbox.localStorage.setPlacementRequests(reqs);
+
+    const activePlacement = {
+      id: 'plc-active-1',
+      developerId: 1,
+      typeName: 'Рекомендованные ЖК (7 дней)',
+      zhkName: 'ЖК «Нордберг»',
+      slot: 'featured_feed',
+      startDate: '2026-09-01',
+      endDate: '2026-09-08',
+      monthlyPrice: 35000,
+      impressions: 12400,
+      clicks: 430,
+      ctr: 3.47,
+      status: 'active'
+    };
+    adminSandbox.localStorage.setPlacements(1, [activePlacement]);
+
+    // 3. Cabinet Advertising tab displays active campaign
+    const refreshedCabinet = createCabinetSandbox({
+      developerId: 1,
+      initialLocalStorage: {
+        amber_placements_1: adminSandbox.localStorage.getPlacements(1),
+        amber_placement_requests: adminSandbox.localStorage.getPlacementRequests()
+      }
+    });
+
+    const placements = refreshedCabinet.localStorage.getPlacements(1);
+    assert.strictEqual(placements.length, 1);
+    assert.strictEqual(placements[0].typeName, 'Рекомендованные ЖК (7 дней)');
+    assert.strictEqual(placements[0].impressions, 12400);
+    assert.strictEqual(placements[0].ctr, 3.47);
+  });
+
+  await test('Scenario 2.5: Complex Quality Audit, Advice Implementation & Compliance', () => {
+    // 1. Initial incomplete complex state
+    function evaluateZhk(prop, daysSincePrice) {
+      let score = 0;
+      const advice = [];
+      if (prop.title && prop.title.trim()) score += 20;
+      if (prop.address && prop.address.trim()) score += 20;
+      if (prop.price && prop.price.trim()) score += 20;
+      else advice.push('Укажите актуальные цены');
+
+      if (prop.images && prop.images.length > 0) score += 20;
+      else advice.push('Добавьте фотографии и планировки');
+
+      if (prop.infrastructure && prop.infrastructure.trim()) score += 20;
+      else advice.push('Заполните все характеристики объекта');
+
+      if (daysSincePrice > 30) advice.push('Обновите цены — последнее обновление 30+ дней назад');
+      advice.push('Работайте с отзывами на Яндекс Картах, Авито, Mail.ru');
+
+      return {
+        score,
+        color: score >= 80 ? 'status-green' : (score >= 50 ? 'status-yellow' : 'status-red'),
+        advice
+      };
+    }
+
+    const draftProp = {
+      title: 'ЖК «Янтарный Бриз»',
+      address: 'г. Светлогорск, ул. Ленина, 15',
+      price: '',
+      images: [],
+      infrastructure: ''
+    };
+
+    const initialAudit = evaluateZhk(draftProp, 45);
+    assert.strictEqual(initialAudit.score, 40);
+    assert.strictEqual(initialAudit.color, 'status-red');
+    assert.ok(initialAudit.advice.includes('Укажите актуальные цены'));
+    assert.ok(initialAudit.advice.includes('Добавьте фотографии и планировки'));
+    assert.ok(initialAudit.advice.includes('Обновите цены — последнее обновление 30+ дней назад'));
+
+    // 2. Developer updates all complex details
+    const completedProp = {
+      title: 'ЖК «Янтарный Бриз»',
+      address: 'г. Светлогорск, ул. Ленина, 15',
+      price: 'от 6.8 млн ₽',
+      images: ['hero.jpg', 'layout1.jpg', 'layout2.jpg'],
+      infrastructure: 'Собственный спа-комплекс, подземный паркинг, консьерж-сервис'
+    };
+
+    const updatedAudit = evaluateZhk(completedProp, 2);
+    assert.strictEqual(updatedAudit.score, 100);
+    assert.strictEqual(updatedAudit.color, 'status-green');
+    assert.strictEqual(updatedAudit.advice.filter(a => a !== 'Работайте с отзывами на Яндекс Картах, Авито, Mail.ru').length, 0);
+  });
+
   return results;
 }
 

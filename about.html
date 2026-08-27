@@ -561,6 +561,136 @@
     .b2b-right-content p:last-child {
       margin-bottom: 0;
     }
+
+    /* ── SECTION 3.5: EXPERTS ── */
+    .about-experts-section {
+      background: #F8FAFC;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 48px 36px;
+      margin-bottom: 60px;
+    }
+    .about-experts-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 36px;
+    }
+    .about-experts-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--color-primary);
+      margin-bottom: 12px;
+    }
+    .about-experts-desc {
+      font-size: 14.5px;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+    .about-experts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .expert-card {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 8px rgba(27,60,110,0.04);
+    }
+    .expert-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(27,60,110,0.08);
+      border-color: var(--color-accent);
+    }
+    .expert-header-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .expert-avatar-wrap {
+      width: 54px;
+      height: 54px;
+      border-radius: 12px;
+      background: #EFF6FF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .expert-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .expert-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+    .expert-role {
+      font-size: 12.5px;
+      color: var(--color-text-secondary);
+      margin-top: 2px;
+    }
+    .expert-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .expert-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .expert-badge-rating {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+    .expert-badge-deals {
+      background: #EFF6FF;
+      color: #1E40AF;
+    }
+    .expert-bio {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      line-height: 1.55;
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+    .expert-cta-btn {
+      width: 100%;
+      padding: 10px;
+      background: #FFFFFF;
+      color: var(--color-primary);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .expert-card:hover .expert-cta-btn {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      border-color: var(--color-primary);
+    }
   </style>
 </head>
 <body>
@@ -772,6 +902,21 @@
       </div>
     </section>
 
+    <!-- ── SECTION 3.5: EXPERTS & ADVISORY ── -->
+    <section class="about-experts-section" id="about-experts">
+      <div class="about-experts-header">
+        <span class="section-tag-gold">Экспертный совет</span>
+        <h2 class="about-experts-title">Команда независимых экспертов</h2>
+        <p class="about-experts-desc">
+          Ведущие юристы, аналитики и ипотечные консультанты, которые обеспечивают объективную оценку строящихся объектов и защиту интересов покупателей.
+        </p>
+      </div>
+
+      <div class="about-experts-grid" id="about-experts-grid">
+        <!-- Dynamically rendered via renderAboutExperts() -->
+      </div>
+    </section>
+
     <!-- ── SECTION 4: B2B ── -->
     <section class="b2b-section-wrapper">
       <div class="b2b-left">
@@ -980,6 +1125,69 @@
       // Start slideshow on load
       startAutoSlide();
     })();
+
+    // ── Experts Rendering ──
+    function getAboutExperts() {
+      const data = window.AMBER_DATA || {};
+      let experts = (data.experts || []).slice();
+      if (typeof localStorage !== 'undefined') {
+        try {
+          const raw = localStorage.getItem('amber_experts_admin');
+          if (raw) {
+            const adminExperts = JSON.parse(raw);
+            if (Array.isArray(adminExperts) && adminExperts.length > 0) {
+              experts = adminExperts;
+            }
+          }
+        } catch(e) {}
+      }
+      return experts;
+    }
+
+    function renderAboutExperts() {
+      const grid = document.getElementById('about-experts-grid');
+      if (!grid) return;
+      const list = getAboutExperts();
+
+      if (list.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:#64748B;">Список экспертов формируется</div>';
+        return;
+      }
+
+      grid.innerHTML = list.map(exp => {
+        const isEmoji = !exp.avatar || exp.avatar.length <= 4;
+        const avatarHTML = isEmoji
+          ? `<span>${exp.avatar || '👨‍💼'}</span>`
+          : `<img src="${exp.avatar}" alt="${exp.name}" class="expert-avatar-img">`;
+
+        return `
+          <div class="expert-card" data-track="card_click" data-track-id="expert-${exp.name}">
+            <div>
+              <div class="expert-header-row">
+                <div class="expert-avatar-wrap">${avatarHTML}</div>
+                <div>
+                  <div class="expert-name">${exp.name}</div>
+                  <div class="expert-role">${exp.role || 'Эксперт Amber Avenue'}</div>
+                </div>
+              </div>
+              <div class="expert-badge-row">
+                <span class="expert-badge expert-badge-rating">★ ${exp.rating || '4.9'}</span>
+                <span class="expert-badge expert-badge-deals">💼 ${exp.deals ? (typeof exp.deals === 'number' ? exp.deals + ' сделок' : exp.deals) : (exp.experience || '8 лет')}</span>
+              </div>
+              <p class="expert-bio">${exp.bio || 'Профессиональная экспертиза и консультации по первичной недвижимости региона.'}</p>
+            </div>
+            <a href="hub.html#hub-experts" class="expert-cta-btn">
+              <span>Задать вопрос</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderAboutExperts();
+    });
   </script>
 </body>
 </html>

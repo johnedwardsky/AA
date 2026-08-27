@@ -1,0 +1,82 @@
+[
+  {
+    "id": "CHAL-01",
+    "name": "Multi-Run Determinism",
+    "stats": [
+      {
+        "run": 1,
+        "passed": 37,
+        "total": 37,
+        "durMs": 770
+      },
+      {
+        "run": 2,
+        "passed": 37,
+        "total": 37,
+        "durMs": 572
+      },
+      {
+        "run": 3,
+        "passed": 37,
+        "total": 37,
+        "durMs": 465
+      }
+    ],
+    "status": "PASS"
+  },
+  {
+    "id": "CHAL-02",
+    "name": "Memory & Heap Stability",
+    "snapshots": [
+      {
+        "iteration": 0,
+        "heapUsedMB": "184.32"
+      },
+      {
+        "iteration": 5,
+        "heapUsedMB": "231.37"
+      },
+      {
+        "iteration": 10,
+        "heapUsedMB": "224.22"
+      },
+      {
+        "iteration": 15,
+        "heapUsedMB": "216.53"
+      }
+    ],
+    "status": "PASS"
+  },
+  {
+    "id": "CHAL-03",
+    "name": "Storage Isolation",
+    "isolated": true,
+    "status": "PASS"
+  },
+  {
+    "id": "CHAL-04",
+    "name": "Global Scope Isolation",
+    "isolated": true,
+    "status": "PASS"
+  },
+  {
+    "id": "CHAL-05",
+    "name": "Event Listener Isolation",
+    "isolated": true,
+    "status": "PASS"
+  },
+  {
+    "id": "CHAL-06",
+    "name": "Cabinet Sandbox Window Interface Support",
+    "status": "PASS",
+    "details": {
+      "errors": [],
+      "hasWindowAddEventListener": true
+    }
+  },
+  {
+    "id": "CHAL-07",
+    "name": "Runner Error Boundary",
+    "status": "PASS"
+  }
+]

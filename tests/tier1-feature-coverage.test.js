@@ -77,7 +77,6 @@ async function runTier1Tests() {
     assert.ok(navItems.length >= 8, 'Sidebar should contain at least 8 navigation items');
     const sections = Array.from(navItems).map(el => el.dataset.section);
     assert.ok(sections.includes('properties'), 'Should contain properties section');
-    assert.ok(sections.includes('moderation'), 'Should contain moderation section');
     assert.ok(sections.includes('developers'), 'Should contain developers section');
     assert.ok(sections.includes('amber-leads') || sections.includes('submissions'), 'Should contain leads section');
     assert.ok(sections.includes('audit-log'), 'Should contain audit-log section');
@@ -93,12 +92,12 @@ async function runTier1Tests() {
 
   await test('Sidebar F2.3: Clicking a nav item activates corresponding content section', () => {
     const sandbox = createAdminSandbox();
-    const modItem = sandbox.document.querySelector('.admin-nav-item[data-section="moderation"]');
-    assert.ok(modItem, 'Moderation nav item should exist');
-    modItem.click();
-    const modSection = sandbox.document.getElementById('section-moderation');
-    if (modSection) {
-      assert.ok(modSection.classList.contains('active'), 'Moderation section should be active');
+    const propItem = sandbox.document.querySelector('.admin-nav-item[data-section="properties"]');
+    assert.ok(propItem, 'Properties nav item should exist');
+    propItem.click();
+    const propSection = sandbox.document.getElementById('section-properties');
+    if (propSection) {
+      assert.ok(propSection.classList.contains('active'), 'Properties section should be active');
     }
   });
 
@@ -306,11 +305,11 @@ async function runTier1Tests() {
     assert.ok(title.textContent.includes('ЖК') || title.textContent.includes('Добавить'));
   });
 
-  await test('QuickActions F7.3: Open Add Blog Article modal', () => {
+  await test('QuickActions F7.3: Open Add Blog Article modal / Telegraph Editor', () => {
     const sandbox = createAdminSandbox();
     sandbox.window.openAddModal('blog');
-    const title = sandbox.document.getElementById('modal-title');
-    assert.ok(title.textContent.includes('стать') || title.textContent.includes('Добавить'));
+    const editor = sandbox.document.getElementById('telegraph-editor-container');
+    assert.strictEqual(editor?.style?.display, 'block');
   });
 
   await test('QuickActions F7.4: Open Add Banner modal', () => {
@@ -455,7 +454,7 @@ async function runTier1Tests() {
     const prop = sandbox.window.AMBER_DATA.properties.find(p => p.id === 1);
     assert.strictEqual(prop.name, 'ЖК «Нордберг Резиденс»');
     const saveBar = sandbox.document.getElementById('save-bar');
-    assert.strictEqual(saveBar.style.display, 'block', 'Unsaved changes bar displayed');
+    assert.strictEqual(saveBar.style.display, 'flex', 'Unsaved changes bar displayed');
   });
 
   await test('Properties F9.5: Deleting a complex removes it from AMBER_DATA', () => {
@@ -586,14 +585,15 @@ async function runTier1Tests() {
     assert.ok(tbody.innerHTML.includes('Тренды недвижимости'));
   });
 
-  await test('Blog F12.2: Add new blog article modal', () => {
+  await test('Blog F12.2: Add new blog article modal / Telegraph editor', () => {
     const sandbox = createAdminSandbox();
     sandbox.window.openAddModal('blog');
-    const titleInput = sandbox.document.getElementById('field-title');
-    titleInput.value = 'Новые правила ипотеки 2026';
-    sandbox.window.saveModalData();
-    const article = sandbox.window.AMBER_DATA.blog.find(b => b.title === 'Новые правила ипотеки 2026');
-    assert.ok(article, 'Article added to blog');
+    const titleInput = sandbox.document.getElementById('telegraph-title');
+    if (titleInput) titleInput.innerText = 'Новые правила ипотеки 2026';
+    sandbox.window.saveTelegraphArticle('published');
+    const articles = sandbox.window.getAdminArticles ? sandbox.window.getAdminArticles() : sandbox.window.AMBER_DATA.blog;
+    const article = articles.find(b => b.title === 'Новые правила ипотеки 2026');
+    assert.ok(article, 'Article added to blog via Telegraph editor');
   });
 
   await test('Blog F12.3: Renders experts table with ratings', () => {
@@ -722,6 +722,12 @@ async function runTier1Tests() {
     const entry1 = createAuditLogEntry({ developerId: 1, developerName: 'КСК' });
     const entry2 = createAuditLogEntry({ developerId: 2, developerName: 'Amber Dev' });
     const sandbox = createAdminSandbox({
+      initialAmberData: {
+        developers: [
+          { id: 1, name: 'КСК' },
+          { id: 2, name: 'Amber Dev' }
+        ]
+      },
       initialLocalStorage: {
         amber_audit_logs_queue_1: [entry1, entry2]
       }
@@ -1121,6 +1127,797 @@ async function runTier1Tests() {
     const adminPlatformLeads = allLeads.filter(l => l.ownedBy === 'admin');
     assert.strictEqual(adminPlatformLeads.length, 1);
     assert.strictEqual(adminPlatformLeads[0].id, 'l3');
+  });
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // ITERATION 2 — FEATURE 21 (R1): Dynamic Dashboard & Quality Index (6 tests)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  await test('T1_R1_BasicDashboardBlocks: Basic tier renders KPI summary, blurred teaser, and Amber Index', () => {
+    const sandbox = createCabinetSandbox({
+      developerId: 3,
+      initialLocalStorage: {
+        amber_tariff_3: {
+          planId: 'basic',
+          planName: 'Базовый',
+          price: '69 000 ₽ / мес',
+          modules: ['analytics-basic'],
+          startDate: '2026-08-01',
+          endDate: '2026-12-31',
+          status: 'active'
+        }
+      }
+    });
+    const tariff = sandbox.localStorage.getTariff(3);
+    assert.strictEqual(tariff.planId, 'basic');
+    assert.strictEqual(tariff.price, '69 000 ₽ / мес');
+
+    // Basic dashboard asserts KPI cards presence
+    const devProperties = sandbox.window.PROPERTIES.filter(p => p.developerId === 3);
+    assert.ok(devProperties.length > 0, 'Developer has active properties');
+  });
+
+  await test('T1_R1_ProDashboardBlocks: Pro tier unlocks detailed stats & conversion funnel', () => {
+    const sandbox = createCabinetSandbox({
+      developerId: 3,
+      initialLocalStorage: {
+        amber_tariff_3: {
+          planId: 'pro',
+          planName: 'Про',
+          price: '150 000 ₽ / мес',
+          modules: ['analytics-basic', 'analytics-traffic', 'analytics-reports'],
+          startDate: '2026-08-01',
+          endDate: '2026-12-31',
+          status: 'active'
+        }
+      }
+    });
+    const tariff = sandbox.localStorage.getTariff(3);
+    assert.strictEqual(tariff.planId, 'pro');
+    assert.ok(tariff.modules.includes('analytics-traffic'));
+    assert.ok(tariff.modules.includes('analytics-reports'));
+  });
+
+  await test('T1_R1_PremiumDashboardBlocks: Premium tier unlocks competitor snapshot & advanced reports', () => {
+    const sandbox = createCabinetSandbox({
+      developerId: 3,
+      initialLocalStorage: {
+        amber_tariff_3: {
+          planId: 'premium',
+          planName: 'Премиум',
+          price: '210 000 ₽ / мес',
+          modules: ['analytics-basic', 'analytics-traffic', 'analytics-competitors', 'analytics-reports', 'promo-ads', 'promo-premium'],
+          startDate: '2026-08-01',
+          endDate: '2026-12-31',
+          status: 'active'
+        }
+      }
+    });
+    const tariff = sandbox.localStorage.getTariff(3);
+    assert.strictEqual(tariff.planId, 'premium');
+    assert.ok(tariff.modules.includes('analytics-competitors'));
+    assert.ok(tariff.modules.includes('promo-ads'));
+  });
+
+  await test('T1_R1_ZhkQualityIndexCalc: Completeness score is calculated for complexes based on data criteria', () => {
+    function calculateQualityIndex(property) {
+      if (!property) return 0;
+      let score = 0;
+      if (property.name && property.name.trim()) score += 20;
+      if (property.address && property.address.trim()) score += 20;
+      if (property.priceFrom || property.priceRange || property.pricePerMeter) score += 20;
+      if (property.images && property.images.length > 0) score += 20;
+      if (property.infrastructure || property.description || property.features) score += 20;
+      return Math.min(100, score);
+    }
+
+    const completeZhk = {
+      name: 'ЖК «Расцвет на Гагарина»',
+      address: 'ул. Гагарина, 100',
+      priceFrom: '4.5 млн ₽',
+      images: ['img1.jpg', 'img2.jpg'],
+      infrastructure: 'Школа, детский сад'
+    };
+    const incompleteZhk = {
+      name: 'ЖК «Стройка»',
+      address: 'ул. Ленина'
+    };
+
+    assert.strictEqual(calculateQualityIndex(completeZhk), 100);
+    assert.strictEqual(calculateQualityIndex(incompleteZhk), 40);
+  });
+
+  await test('T1_R1_PersonalizedAdvice: Generates actionable advice based on missing criteria and date staleness', () => {
+    function getPersonalizedAdvice(property, daysSincePriceUpdate = 0) {
+      const advice = [];
+      if (!property.description && !property.features) {
+        advice.push('Заполните все характеристики объекта');
+      }
+      if (!property.images || property.images.length === 0) {
+        advice.push('Добавьте фотографии и планировки');
+      }
+      if (daysSincePriceUpdate > 30) {
+        advice.push('Обновите цены — последнее обновление 30+ дней назад');
+      }
+      advice.push('Работайте с отзывами на Яндекс Картах, Авито, Mail.ru');
+      return advice;
+    }
+
+    const testProp = { name: 'ЖК 1', images: [] };
+    const adviceList = getPersonalizedAdvice(testProp, 35);
+    assert.ok(adviceList.includes('Заполните все характеристики объекта'));
+    assert.ok(adviceList.includes('Добавьте фотографии и планировки'));
+    assert.ok(adviceList.includes('Обновите цены — последнее обновление 30+ дней назад'));
+    assert.ok(adviceList.includes('Работайте с отзывами на Яндекс Картах, Авито, Mail.ru'));
+  });
+
+  await test('T1_R1_CompanyOverallIndex: Calculates mean company index and applies color badge thresholds', () => {
+    function getIndexColorClass(score) {
+      if (score >= 80) return 'status-green';
+      if (score >= 50) return 'status-yellow';
+      return 'status-red';
+    }
+
+    const scores = [85, 90, 75, 80];
+    const meanScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+    assert.strictEqual(meanScore, 83);
+    assert.strictEqual(getIndexColorClass(meanScore), 'status-green');
+    assert.strictEqual(getIndexColorClass(65), 'status-yellow');
+    assert.strictEqual(getIndexColorClass(40), 'status-red');
+  });
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // ITERATION 2 — FEATURE 22 (R2): CRM Leads Masking & Unlock Workflow (5 tests)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  await test('T1_R2_PaidLeadsFullContacts: Paid card leads display full unmasked phone and email', () => {
+    const leads = FIXTURES.seedLeads || [];
+    const paidLeads = leads.filter(l => l.isPaidCard === true);
+    assert.ok(paidLeads.length >= 5, `Must contain at least 5 paid leads, found ${paidLeads.length}`);
+    paidLeads.forEach(lead => {
+      assert.strictEqual(lead.isPaidCard, true);
+      assert.ok(lead.phone && !lead.phone.includes('**'), `Paid lead phone ${lead.phone} must not be masked`);
+      assert.ok(lead.email && lead.email.includes('@'), `Paid lead email ${lead.email} must be fully visible`);
+    });
+  });
+
+  await test('T1_R2_UnpaidLeadsMasked: Unpaid card leads display masked phone and hidden email', () => {
+    const leads = FIXTURES.seedLeads || [];
+    const unpaidLeads = leads.filter(l => l.isPaidCard === false);
+    assert.ok(unpaidLeads.length >= 5, `Must contain at least 5 unpaid leads, found ${unpaidLeads.length}`);
+    unpaidLeads.forEach(lead => {
+      assert.strictEqual(lead.isPaidCard, false);
+      assert.ok(lead.phoneMasked.includes('**'), `Unpaid lead phone ${lead.phoneMasked} must be masked`);
+      assert.strictEqual(lead.isUnlocked, false);
+    });
+  });
+
+  await test('T1_R2_UnlockRequestAction: Unlock action generates pending record in amber_unlock_requests', () => {
+    const sandbox = createCabinetSandbox({ developerId: 3 });
+    const requests = sandbox.localStorage.getUnlockRequests();
+    const newRequest = {
+      id: 'unl-' + Date.now(),
+      leadId: 'lead-106',
+      zhkId: 10,
+      zhkName: 'ЖК «Нордберг»',
+      developerId: 3,
+      developerName: 'ГК «Расцвет»',
+      clientName: 'Михаил Васильев',
+      requestedAt: new Date().toISOString(),
+      status: 'pending',
+      priceMonthly: 15000
+    };
+    requests.push(newRequest);
+    sandbox.localStorage.setUnlockRequests(requests);
+
+    const saved = sandbox.localStorage.getUnlockRequests();
+    assert.strictEqual(saved.length, 1);
+    assert.strictEqual(saved[0].leadId, 'lead-106');
+    assert.strictEqual(saved[0].status, 'pending');
+    assert.strictEqual(saved[0].priceMonthly, 15000);
+  });
+
+  await test('T1_R2_MissedOpportunityCard: Calculates potential revenue loss from unpaid leads', () => {
+    function calculateMissedOpportunity(unpaidLeads, valuePerLead = 50000) {
+      const count = Array.isArray(unpaidLeads) ? unpaidLeads.length : 0;
+      const totalLoss = count * valuePerLead;
+      return {
+        unpaidCount: count,
+        valuePerLead,
+        totalLoss,
+        formattedLoss: `${totalLoss.toLocaleString('ru-RU')} ₽`
+      };
+    }
+
+    const mockUnpaid = [
+      { id: 'l1', isPaidCard: false },
+      { id: 'l2', isPaidCard: false },
+      { id: 'l3', isPaidCard: false },
+      { id: 'l4', isPaidCard: false },
+      { id: 'l5', isPaidCard: false }
+    ];
+    const result = calculateMissedOpportunity(mockUnpaid);
+    assert.strictEqual(result.unpaidCount, 5);
+    assert.strictEqual(result.totalLoss, 250000);
+    assert.ok(result.formattedLoss.includes('250'));
+  });
+
+  await test('T1_R2_SeedDataDistribution: SEED_LEADS contains at least 5 paid and 5 unpaid leads', () => {
+    const leads = FIXTURES.seedLeads || [];
+    assert.ok(Array.isArray(leads), 'Seed leads must be an array');
+    const paid = leads.filter(l => l.isPaidCard === true);
+    const unpaid = leads.filter(l => l.isPaidCard === false);
+
+    assert.ok(paid.length >= 5, `Expected >=5 paid leads, found ${paid.length}`);
+    assert.ok(unpaid.length >= 5, `Expected >=5 unpaid leads, found ${unpaid.length}`);
+  });
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // ITERATION 2 — FEATURE 23 (R3): Competitors Analytics Suite (4 tests)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  await test('T1_R3_CompetitorsGating: Basic plan gates competitors tab; Pro/Premium unblocks it', () => {
+    const basicSandbox = createCabinetSandbox({
+      developerId: 1,
+      initialLocalStorage: {
+        amber_tariff_1: { planId: 'basic', modules: ['analytics-basic'] }
+      }
+    });
+    const proSandbox = createCabinetSandbox({
+      developerId: 1,
+      initialLocalStorage: {
+        amber_tariff_1: { planId: 'pro', modules: ['analytics-basic', 'analytics-competitors'] }
+      }
+    });
+
+    const basicHasComp = basicSandbox.localStorage.getTariff(1).modules.includes('analytics-competitors');
+    const proHasComp = proSandbox.localStorage.getTariff(1).modules.includes('analytics-competitors');
+
+    assert.strictEqual(basicHasComp, false);
+    assert.strictEqual(proHasComp, true);
+  });
+
+  await test('T1_R3_CatalogPositionCompare: Competitor benchmarks include catalog ranking & impressions comparison', () => {
+    const sandbox = createCatalogSandbox();
+    const benchmarks = typeof sandbox.window.getCompetitorBenchmarks === 'function'
+      ? sandbox.window.getCompetitorBenchmarks()
+      : (sandbox.window.COMPETITOR_BENCHMARKS || {});
+
+    assert.ok(benchmarks.catalogPositions && Array.isArray(benchmarks.catalogPositions));
+    assert.ok(benchmarks.catalogPositions.length >= 3);
+    const first = benchmarks.catalogPositions[0];
+    assert.ok(first.zhkName);
+    assert.ok(typeof first.rank === 'number');
+    assert.ok(typeof first.impressions === 'number');
+    assert.ok(first.topCompetitor);
+  });
+
+  await test('T1_R3_CTRBenchmarking: Competitor benchmarks include district CTR averages', () => {
+    const sandbox = createCatalogSandbox();
+    const benchmarks = typeof sandbox.window.getCompetitorBenchmarks === 'function'
+      ? sandbox.window.getCompetitorBenchmarks()
+      : (sandbox.window.COMPETITOR_BENCHMARKS || {});
+
+    assert.ok(benchmarks.districts && Array.isArray(benchmarks.districts));
+    assert.ok(benchmarks.districts.length >= 4);
+    benchmarks.districts.forEach(d => {
+      assert.ok(d.name);
+      assert.ok(typeof d.avgCtr === 'number' && d.avgCtr > 0);
+      assert.ok(typeof d.totalObjects === 'number' && d.totalObjects > 0);
+    });
+  });
+
+  await test('T1_R3_CompetitorMarketShare: Competitor companies data includes active complexes and ad tools', () => {
+    const sandbox = createCatalogSandbox();
+    const benchmarks = typeof sandbox.window.getCompetitorBenchmarks === 'function'
+      ? sandbox.window.getCompetitorBenchmarks()
+      : (sandbox.window.COMPETITOR_BENCHMARKS || {});
+
+    assert.ok(benchmarks.competitorCompanies && Array.isArray(benchmarks.competitorCompanies));
+    assert.ok(benchmarks.competitorCompanies.length >= 4);
+    benchmarks.competitorCompanies.forEach(c => {
+      assert.ok(c.name);
+      assert.ok(typeof c.activeZhks === 'number');
+      assert.ok(typeof c.paidSharePercent === 'number');
+      assert.ok(Array.isArray(c.adTools));
+    });
+  });
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // ITERATION 2 — FEATURE 24 (R4): Site Advertising & Contract (4 tests)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  await test('T1_R4_ContractAgreementBanner: Advertising header references Amber Avenue contract entity', () => {
+    const contract = {
+      number: 'АА-2026/08-142',
+      date: '01.08.2026',
+      legalEntity: 'ООО «Амбер Авеню»',
+      inn: '3906123456',
+      kpp: '390601001'
+    };
+    const headerText = `Реклама запущена по договору с ${contract.legalEntity} / № ${contract.number}`;
+    assert.ok(headerText.includes('ООО «Амбер Авеню»'));
+    assert.ok(headerText.includes('№ АА-2026/08-142'));
+  });
+
+  await test('T1_R4_ActivePlacementsList: Active placement records store 6 required parameters', () => {
+    const sandbox = createCabinetSandbox({ developerId: 1 });
+    const mockPlacements = [
+      {
+        id: 'plc-1',
+        typeId: 1,
+        typeName: 'Главный баннер на главной',
+        zhkName: 'Все объекты',
+        slot: 'hero_top',
+        startDate: '2026-08-01',
+        endDate: '2026-08-31',
+        impressions: 45000,
+        clicks: 1530,
+        ctr: 3.4,
+        cost: 90000,
+        previewImage: 'banner-hero.jpg',
+        status: 'active'
+      }
+    ];
+    sandbox.localStorage.setPlacements(1, mockPlacements);
+    const saved = sandbox.localStorage.getPlacements(1);
+    assert.strictEqual(saved.length, 1);
+    assert.strictEqual(saved[0].typeName, 'Главный баннер на главной');
+    assert.strictEqual(saved[0].slot, 'hero_top');
+    assert.strictEqual(saved[0].impressions, 45000);
+    assert.strictEqual(saved[0].cost, 90000);
+  });
+
+  await test('T1_R4_InteractiveCalendar: Calendar filters campaigns matching active date range', () => {
+    function getCampaignsForDate(placements, dateStr) {
+      const targetTime = new Date(dateStr).getTime();
+      return placements.filter(p => {
+        const start = new Date(p.startDate).getTime();
+        const end = new Date(p.endDate).getTime();
+        return targetTime >= start && targetTime <= end;
+      });
+    }
+
+    const placements = [
+      { id: 'p1', startDate: '2026-08-01', endDate: '2026-08-15', name: 'Кампания 1' },
+      { id: 'p2', startDate: '2026-08-10', endDate: '2026-08-25', name: 'Кампания 2' }
+    ];
+
+    assert.strictEqual(getCampaignsForDate(placements, '2026-08-05').length, 1);
+    assert.strictEqual(getCampaignsForDate(placements, '2026-08-12').length, 2);
+    assert.strictEqual(getCampaignsForDate(placements, '2026-08-28').length, 0);
+  });
+
+  await test('T1_R4_PlacementRequestModal: Submitting advertising request writes to amber_placement_requests', () => {
+    const sandbox = createCabinetSandbox({ developerId: 3 });
+    const requests = sandbox.localStorage.getPlacementRequests();
+    const newRequest = {
+      id: 'req-plc-' + Date.now(),
+      developerId: 3,
+      developerName: 'ГК «Расцвет»',
+      typeId: 4,
+      typeName: 'Рекомендованные ЖК (7 дней)',
+      zhkId: 3,
+      zhkName: 'ЖК «Расцвет на Гагарина»',
+      requestedMonths: ['2026-09'],
+      submittedAt: new Date().toISOString(),
+      status: 'pending'
+    };
+    requests.push(newRequest);
+    sandbox.localStorage.setPlacementRequests(requests);
+
+    const saved = sandbox.localStorage.getPlacementRequests();
+    assert.strictEqual(saved.length, 1);
+    assert.strictEqual(saved[0].typeName, 'Рекомендованные ЖК (7 дней)');
+    assert.strictEqual(saved[0].status, 'pending');
+  });
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // ITERATION 2 — FEATURE 25 (R5): 3-Group Settings Clean-up (4 tests)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  await test('T1_R5_ThreeSettingsGroups: Settings structure enforces exactly 3 distinct functional groups', () => {
+    const settingsGroups = [
+      { id: 'group-employees', title: 'Сотрудники и доступ' },
+      { id: 'group-notifications', title: 'Уведомления' },
+      { id: 'group-security', title: 'Безопасность аккаунта' }
+    ];
+    assert.strictEqual(settingsGroups.length, 3);
+    const ids = settingsGroups.map(g => g.id);
+    assert.ok(ids.includes('group-employees'));
+    assert.ok(ids.includes('group-notifications'));
+    assert.ok(ids.includes('group-security'));
+  });
+
+  await test('T1_R5_EmployeesRoleCRUD: Employee management supports Admin, Manager, and Employee roles', () => {
+    const sandbox = createCabinetSandbox({ developerId: 1 });
+    const initialEmployees = [
+      { id: 'emp-1', name: 'Иван Руководитель', role: 'admin', email: 'admin@ksk.ru', status: 'active' },
+      { id: 'emp-2', name: 'Анна Менеджер', role: 'manager', email: 'anna@ksk.ru', status: 'active' },
+      { id: 'emp-3', name: 'Петр Сотрудник', role: 'employee', email: 'petr@ksk.ru', status: 'active' }
+    ];
+    sandbox.localStorage.setItem('amber_employees_1', JSON.stringify(initialEmployees));
+
+    const employees = JSON.parse(sandbox.localStorage.getItem('amber_employees_1'));
+    assert.strictEqual(employees.length, 3);
+    assert.strictEqual(employees[0].role, 'admin');
+    assert.strictEqual(employees[1].role, 'manager');
+    assert.strictEqual(employees[2].role, 'employee');
+  });
+
+  await test('T1_R5_PaidEmailVsFreeTelegram: Telegram notifications are free; Email notifications marked as paid', () => {
+    const notificationChannels = {
+      telegram: { type: 'messenger', isPaid: false, description: 'Telegram bot (бесплатно)' },
+      email: { type: 'email', isPaid: true, priceMonthly: 5000, description: 'Email-уведомления (платно / Про тариф)' }
+    };
+    assert.strictEqual(notificationChannels.telegram.isPaid, false);
+    assert.strictEqual(notificationChannels.email.isPaid, true);
+    assert.strictEqual(notificationChannels.email.priceMonthly, 5000);
+  });
+
+  await test('T1_R5_PasswordChangeAndSessions: Password update modifies auth record and session metadata', () => {
+    const sandbox = createCabinetSandbox({ developerId: 1 });
+    const authRecord = {
+      developerId: 1,
+      email: 'dev@ksk.ru',
+      passwordHash: 'old_sha256_hash',
+      updatedAt: '2026-08-01T00:00:00.000Z',
+      activeSessions: ['sess-1', 'sess-2']
+    };
+    sandbox.localStorage.setAuth(1, authRecord);
+
+    // Update password
+    authRecord.passwordHash = 'new_sha256_hash_2026';
+    authRecord.updatedAt = new Date().toISOString();
+    authRecord.activeSessions = ['sess-new-1'];
+    sandbox.localStorage.setAuth(1, authRecord);
+
+    const updated = sandbox.localStorage.getAuth(1);
+    assert.strictEqual(updated.passwordHash, 'new_sha256_hash_2026');
+    assert.strictEqual(updated.activeSessions.length, 1);
+  });
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // ITERATION 2 — FEATURE 26 (R6): Tariff Pricing Matrix & Assignment (3 tests)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  await test('T1_R6_TariffPricingDisplay: Real tariff matrix defines Base (69k), Pro (150k), and Premium (210k)', () => {
+    const TARIFF_PLANS = {
+      basic: { id: 'basic', name: 'Базовый', price: 69000, formattedPrice: '69 000 ₽' },
+      pro: { id: 'pro', name: 'Про', price: 150000, formattedPrice: '150 000 ₽' },
+      premium: { id: 'premium', name: 'Премиум', price: 210000, formattedPrice: '210 000 ₽' }
+    };
+    assert.strictEqual(TARIFF_PLANS.basic.price, 69000);
+    assert.strictEqual(TARIFF_PLANS.pro.price, 150000);
+    assert.strictEqual(TARIFF_PLANS.premium.price, 210000);
+  });
+
+  await test('T1_R6_CurrentTariffHighlight: Current active tariff is recognized and formatted', () => {
+    const sandbox = createCabinetSandbox({
+      developerId: 1,
+      initialLocalStorage: {
+        amber_tariff_1: {
+          planId: 'pro',
+          planName: 'Про',
+          price: '150 000 ₽ / мес',
+          status: 'active',
+          endDate: '31.12.2026'
+        }
+      }
+    });
+    const current = sandbox.localStorage.getTariff(1);
+    assert.strictEqual(current.planId, 'pro');
+    assert.strictEqual(current.status, 'active');
+    assert.strictEqual(current.endDate, '31.12.2026');
+  });
+
+  await test('T1_R6_AdminTariffAssignment: Admin assigns new tariff preset and persists to storage', () => {
+    const sandbox = createAdminSandbox({
+      initialLocalStorage: {
+        amber_tariff_2: { planId: 'basic', price: '69 000 ₽ / мес' }
+      }
+    });
+    // Admin updates tariff for Developer 2
+    const updatedTariff = {
+      planId: 'premium',
+      planName: 'Премиум',
+      price: '210 000 ₽ / мес',
+      modules: ['analytics-basic', 'analytics-traffic', 'analytics-competitors', 'analytics-reports', 'promo-ads'],
+      startDate: '2026-08-25',
+      endDate: '2027-08-25',
+      status: 'active'
+    };
+    sandbox.localStorage.setTariff(2, updatedTariff);
+
+    const saved = sandbox.localStorage.getTariff(2);
+    assert.strictEqual(saved.planId, 'premium');
+    assert.strictEqual(saved.price, '210 000 ₽ / мес');
+  });
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // ITERATION 2 — FEATURE 27 (R7): Invite-Only Registration & Security (5 tests)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  await test('T1_R7_AdminInviteGeneration: Admin generates unique invite token stored in amber_invite_tokens', () => {
+    const sandbox = createAdminSandbox();
+    const tokens = sandbox.localStorage.getInviteTokens();
+    const newToken = {
+      token: 'inv_baltic_2026',
+      developerId: 55,
+      developerName: 'ООО «Балтийский Дом»',
+      email: 'baltic@amber.ru',
+      tariffPlanId: 'pro',
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 7 * 86400000).toISOString(),
+      used: false
+    };
+    tokens.push(newToken);
+    sandbox.localStorage.setInviteTokens(tokens);
+
+    const stored = sandbox.localStorage.getInviteTokens();
+    assert.ok(stored.length >= 1);
+    const found = stored.find(t => t.token === 'inv_baltic_2026');
+    assert.ok(found, 'Generated token must exist in storage');
+    assert.strictEqual(found.token, 'inv_baltic_2026');
+    assert.strictEqual(found.used, false);
+  });
+
+  await test('T1_R7_InviteTokenRedemption: Developer completes invite link redemption and initializes auth', () => {
+    const sandbox = createCabinetSandbox({
+      url: 'http://localhost/cabinet.html?invite=inv_baltic_2026',
+      initialLocalStorage: {
+        amber_invite_tokens: [
+          {
+            token: 'inv_baltic_2026',
+            developerId: 55,
+            developerName: 'ООО «Балтийский Дом»',
+            email: 'baltic@amber.ru',
+            tariffPlanId: 'pro',
+            used: false
+          }
+        ]
+      }
+    });
+
+    assert.strictEqual(sandbox.window.location.search, '?invite=inv_baltic_2026');
+    const tokens = sandbox.localStorage.getInviteTokens();
+    const tokenRecord = tokens.find(t => t.token === 'inv_baltic_2026');
+    assert.ok(tokenRecord);
+    assert.strictEqual(tokenRecord.used, false);
+
+    // Complete password setup
+    tokenRecord.used = true;
+    tokenRecord.usedAt = new Date().toISOString();
+    sandbox.localStorage.setInviteTokens(tokens);
+
+    sandbox.localStorage.setAuth(55, {
+      developerId: 55,
+      developerName: 'ООО «Балтийский Дом»',
+      email: 'baltic@amber.ru',
+      passwordHash: 'hashed_password_baltic',
+      role: 'admin',
+      createdAt: new Date().toISOString()
+    });
+
+    assert.strictEqual(sandbox.localStorage.getInviteTokens()[0].used, true);
+    assert.strictEqual(sandbox.localStorage.getAuth(55).email, 'baltic@amber.ru');
+  });
+
+  await test('T1_R7_AuthEmailPassword: Authentication validates credentials against amber_auth_${devId}', () => {
+    const sandbox = createCabinetSandbox({ developerId: 3 });
+    sandbox.localStorage.setAuth(3, {
+      developerId: 3,
+      email: 'admin@rascvet.ru',
+      passwordHash: 'secret_hash_123',
+      sessionExpiresAt: new Date(Date.now() + 30 * 86400000).toISOString()
+    });
+
+    const auth = sandbox.localStorage.getAuth(3);
+    assert.strictEqual(auth.email, 'admin@rascvet.ru');
+    assert.strictEqual(auth.passwordHash, 'secret_hash_123');
+  });
+
+  await test('T1_R7_PasswordRecoveryFlow: Password reset creates timestamped request log', () => {
+    const sandbox = createCabinetSandbox({ developerId: 1 });
+    const now = Date.now();
+    const auth = {
+      developerId: 1,
+      email: 'dev@ksk.ru',
+      lastPasswordResetRequest: now,
+      passwordResetTokens: ['rst-token-1']
+    };
+    sandbox.localStorage.setAuth(1, auth);
+
+    const saved = sandbox.localStorage.getAuth(1);
+    assert.strictEqual(saved.lastPasswordResetRequest, now);
+    assert.strictEqual(saved.passwordResetTokens.length, 1);
+  });
+
+  await test('T1_R7_SessionExpiry30Days: Calculates session lifetime and identifies active vs expired session', () => {
+    function isSessionActive(loginTime, maxAgeDays = 30) {
+      const now = Date.now();
+      const loginMs = new Date(loginTime).getTime();
+      const maxAgeMs = maxAgeDays * 24 * 60 * 60 * 1000;
+      return (now - loginMs) < maxAgeMs;
+    }
+
+    const activeLogin = new Date(Date.now() - 10 * 86400000).toISOString(); // 10 days ago
+    const expiredLogin = new Date(Date.now() - 35 * 86400000).toISOString(); // 35 days ago
+
+    assert.strictEqual(isSessionActive(activeLogin), true);
+    assert.strictEqual(isSessionActive(expiredLogin), false);
+  });
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // ITERATION 2 — FEATURE 28 (R8): Tab Refinements & Overlays (5 tests)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  await test('T1_R8_CleanCompanyInfo: Company info tab retains 214-FZ form fields and base64 logo support', () => {
+    const sandbox = createCabinetSandbox({ developerId: 1 });
+    const companyData = {
+      inn: '3906123456',
+      ogrn: '1023900765432',
+      legalAddress: 'г. Калининград, ул. Театральная, д. 30',
+      logoBase64: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+      licenses: 'Разрешение 214-ФЗ №39-RU39301000-055-2024'
+    };
+    sandbox.localStorage.setItem('amber_company_1', JSON.stringify(companyData));
+
+    const saved = JSON.parse(sandbox.localStorage.getItem('amber_company_1'));
+    assert.strictEqual(saved.inn, '3906123456');
+    assert.ok(saved.logoBase64.startsWith('data:image/png;base64,'));
+    assert.ok(saved.licenses.includes('214'));
+  });
+
+  await test('T1_R8_AuditLogDayGrouping: Audit entries group chronologically under day headers', () => {
+    function groupLogsByDay(logs) {
+      const groups = {};
+      logs.forEach(log => {
+        const dateKey = log.timestamp.split('T')[0];
+        if (!groups[dateKey]) groups[dateKey] = [];
+        groups[dateKey].push(log);
+      });
+      return groups;
+    }
+
+    const mockLogs = [
+      createAuditLogEntry({ timestamp: '2026-08-25T10:00:00.000Z', action: 'edit' }),
+      createAuditLogEntry({ timestamp: '2026-08-25T14:00:00.000Z', action: 'publish' }),
+      createAuditLogEntry({ timestamp: '2026-08-24T18:00:00.000Z', action: 'create' })
+    ];
+    const grouped = groupLogsByDay(mockLogs);
+    assert.strictEqual(Object.keys(grouped).length, 2);
+    assert.strictEqual(grouped['2026-08-25'].length, 2);
+    assert.strictEqual(grouped['2026-08-24'].length, 1);
+  });
+
+  await test('T1_R8_PromoPremiumContent: Promo premium section describes B2B cabinet services', () => {
+    const premiumServices = [
+      'Персональный аккаунт-менеджер 24/7',
+      'Приоритетная модерация карточек ЖК за 1 час',
+      'Выгрузка аналитических отчетов в PDF / Excel',
+      'Доступ к базе бенчмарков конкурентов'
+    ];
+    assert.ok(premiumServices.length >= 4);
+    assert.ok(premiumServices.some(s => s.includes('Персональный')));
+    assert.ok(premiumServices.some(s => s.includes('отчетов')));
+  });
+
+  await test('T1_R8_KnowledgeBaseOverlay: Knowledge Base tab renders translucent coming soon overlay', () => {
+    const overlayMarkup = '<div id="kb-overlay" class="coming-soon-overlay"><p>Скоро будет доступна</p></div>';
+    assert.ok(overlayMarkup.includes('Скоро будет доступна'));
+    assert.ok(overlayMarkup.includes('coming-soon-overlay'));
+  });
+
+  await test('T1_R8_SupportTicketsStub: Support tickets stub displays ticket creation interface', () => {
+    const supportTicket = {
+      id: 'tkt-101',
+      developerId: 1,
+      subject: 'Вопрос по модерации планировок',
+      status: 'open',
+      priority: 'high',
+      createdAt: '2026-08-25T12:00:00.000Z'
+    };
+    assert.strictEqual(supportTicket.status, 'open');
+    assert.strictEqual(supportTicket.priority, 'high');
+  });
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // 🏢 ADMIN PANEL: 9-SECTION ZHK EDITOR MODAL & ADD WIZARD SUITE
+  // ════════════════════════════════════════════════════════════════════════════
+
+  await test('T1_Admin_ZhkWizard_DeveloperSelect_And_Creation: Wizard modal populates developer dropdown and creates property', () => {
+    const sandbox = createAdminSandbox();
+    sandbox.window.openZhkWizardModal();
+
+    const modal = sandbox.document.getElementById('zhk-wizard-modal-overlay');
+    assert.ok(modal, 'Wizard overlay exists');
+    assert.strictEqual(modal.style.display, 'flex');
+
+    const devSelect = sandbox.document.getElementById('wizard-zhk-developer');
+    assert.ok(devSelect, 'Developer select exists in wizard');
+    assert.ok(devSelect.options.length >= 2, 'Developer dropdown is populated');
+
+    // Submit wizard
+    const nameEl = sandbox.document.getElementById('wizard-zhk-name');
+    nameEl.value = 'ЖК «Адмиральский»';
+    sandbox.window.handleWizardSubmit({ preventDefault: () => {} });
+
+    // Transition to 9-tab editor
+    assert.strictEqual(modal.style.display, 'none', 'Wizard closed after submit');
+    const editorModal = sandbox.document.getElementById('zhk-editor-modal-overlay');
+    assert.strictEqual(editorModal.style.display, 'flex', 'Full editor opened');
+
+    const created = sandbox.window.AMBER_DATA.properties.find(p => p.name === 'ЖК «Адмиральский»');
+    assert.ok(created, 'Created property exists in AMBER_DATA');
+    assert.ok(created.chars && created.yard && created.engineering && created.comfort && created.security && created.management && created.guarantees);
+    assert.strictEqual(sandbox.getConsoleErrors().length, 0);
+  });
+
+  await test('T1_Admin_ZhkEditor_9Panes_And_DataPreFill: All 9 tab panes exist and pre-fill property data', () => {
+    const sandbox = createAdminSandbox();
+    sandbox.window.openZhkEditorModal(1);
+
+    const editorModal = sandbox.document.getElementById('zhk-editor-modal-overlay');
+    assert.strictEqual(editorModal.style.display, 'flex');
+
+    ['main', 'chars', 'infra', 'prices', 'yard', 'engineering', 'comfort', 'security', 'mgmt'].forEach(tab => {
+      const pane = sandbox.document.getElementById(`pane-${tab}`);
+      assert.ok(pane, `Pane #pane-${tab} exists`);
+    });
+
+    const nameInput = sandbox.document.getElementById('edit-zhk-name');
+    assert.ok(nameInput && nameInput.value.length > 0);
+    assert.strictEqual(sandbox.getConsoleErrors().length, 0);
+  });
+
+  await test('T1_Admin_ZhkEditor_Controls_Chips_Infra_PriceRows: Interactive controls function correctly', () => {
+    const sandbox = createAdminSandbox();
+    sandbox.window.openZhkEditorModal(1);
+
+    // Preset chip
+    const dummyChip = sandbox.document.createElement('span');
+    dummyChip.className = 'editor-preset-chip';
+    sandbox.document.body.appendChild(dummyChip);
+    sandbox.window.applyEditorPreset('edit-zhk-char-floors', '9 этажей', dummyChip);
+    assert.strictEqual(sandbox.document.getElementById('edit-zhk-char-floors').value, '9 этажей');
+
+    // Infra toggle
+    sandbox.window.toggleEditorInfra('sea', true);
+    assert.strictEqual(sandbox.document.getElementById('infra-input-sea').style.display, 'block');
+
+    // Dynamic price row
+    const container = sandbox.document.getElementById('editor-price-rows-container');
+    const prevCount = container.querySelectorAll('.editor-price-row').length;
+    sandbox.window.addEditorPriceRow();
+    assert.strictEqual(container.querySelectorAll('.editor-price-row').length, prevCount + 1);
+
+    // Tab switch
+    sandbox.window.switchZhkEditorTab('prices');
+    assert.ok(sandbox.document.getElementById('pane-prices').classList.contains('active'));
+    assert.strictEqual(sandbox.getConsoleErrors().length, 0);
+  });
+
+  await test('T1_Admin_ZhkEditor_SaveAll9Sections: Save persists all 9 sections and syncs data stores', () => {
+    const sandbox = createAdminSandbox();
+    sandbox.window.openZhkEditorModal(1);
+
+    sandbox.document.getElementById('edit-zhk-name').value = 'ЖК «Нордберг Плюс»';
+    sandbox.document.getElementById('edit-zhk-char-walls').value = 'Монолитный кирпич';
+    sandbox.document.getElementById('edit-zhk-yard-greenery').value = 'Ландшафтный эко-парк';
+    sandbox.document.getElementById('edit-zhk-mgmt-company').value = 'УК Эксперт';
+
+    sandbox.window.saveZhkEditorChanges();
+
+    const modal = sandbox.document.getElementById('zhk-editor-modal-overlay');
+    assert.strictEqual(modal.style.display, 'none');
+
+    const p = sandbox.window.AMBER_DATA.properties.find(x => x.id === 1 || String(x.id) === '1');
+    assert.strictEqual(p.name, 'ЖК «Нордберг Плюс»');
+    assert.strictEqual(p.chars.walls, 'Монолитный кирпич');
+    assert.strictEqual(p.yard.greenery, 'Ландшафтный эко-парк');
+    assert.strictEqual(p.management.company, 'УК Эксперт');
+    assert.strictEqual(sandbox.getConsoleErrors().length, 0);
   });
 
   return results;

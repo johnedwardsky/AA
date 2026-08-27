@@ -123,6 +123,7 @@
   <script src="data.js" defer></script>
   <script src="properties-data.js" defer></script>
   <script src="menu.js" defer></script>
+  <script src="analytics.js" defer></script>
 
   <style>
     /* ══════════════════════════════════════════════════════════════
@@ -2284,6 +2285,144 @@
       }
     }
 
+    /* ── EXPERTS SECTION ── */
+    .hub-experts-section {
+      background: #FFFFFF;
+      border: 1px solid var(--hub-border);
+      border-radius: var(--hub-radius-xl);
+      padding: 44px 32px;
+      margin-bottom: 48px;
+      box-shadow: var(--hub-shadow-sm);
+    }
+    .hub-experts-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 36px;
+    }
+    .hub-experts-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--hub-primary);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .hub-experts-title span {
+      color: var(--hub-accent);
+    }
+    .hub-experts-desc {
+      font-size: 13.5px;
+      color: var(--hub-text-muted);
+      line-height: 1.5;
+    }
+    .hub-experts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .expert-card {
+      background: var(--hub-bg);
+      border: 1px solid var(--hub-border);
+      border-radius: var(--hub-radius-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--hub-transition);
+      cursor: pointer;
+    }
+    .expert-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--hub-shadow-md);
+      border-color: var(--hub-accent);
+    }
+    .expert-header-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .expert-avatar-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: #E2E8F0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .expert-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .expert-name-wrap {
+      flex: 1;
+    }
+    .expert-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--hub-primary);
+      line-height: 1.2;
+    }
+    .expert-role {
+      font-size: 12px;
+      color: var(--hub-text-muted);
+      margin-top: 2px;
+    }
+    .expert-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .expert-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .expert-badge-rating {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+    .expert-badge-deals {
+      background: #EFF6FF;
+      color: #1E40AF;
+    }
+    .expert-bio {
+      font-size: 12.5px;
+      color: #4B5563;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+    .expert-cta-btn {
+      width: 100%;
+      padding: 10px;
+      background: #FFFFFF;
+      color: var(--hub-primary);
+      border: 1px solid var(--hub-border);
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: var(--hub-transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .expert-card:hover .expert-cta-btn {
+      background: var(--hub-primary);
+      color: #FFFFFF;
+      border-color: var(--hub-primary);
+    }
   </style>
 </head>
 <body>
@@ -3218,6 +3357,21 @@
           </div>
         </div>
       </div>
+    <!-- ══════════════════════════════════════════════════════════════
+         SECTION 5.5: REAL ESTATE EXPERTS & ADVISORY
+         ══════════════════════════════════════════════════════════════ -->
+    <section class="hub-experts-section" id="hub-experts">
+      <div class="hub-experts-header">
+        <span class="hub-section-tag">Независимая экспертиза</span>
+        <h2 class="hub-experts-title">Эксперты рынка <span>недвижимости</span></h2>
+        <p class="hub-experts-desc">
+          Проверенные юристы, ипотечные брокеры и аналитики региона. Персональная проверка застройщиков, расчет окупаемости и помощь в одобрении ипотеки.
+        </p>
+      </div>
+
+      <div class="hub-experts-grid" id="hub-experts-grid">
+        <!-- Dynamically rendered via renderHubExperts() -->
+      </div>
     </section>
 
 
@@ -3488,6 +3642,65 @@
       document.getElementById('quiz-step-3').style.display = 'none';
     }
 
+    // ── Experts Rendering ──
+    function getHubExperts() {
+      const data = window.AMBER_DATA || {};
+      let experts = (data.experts || []).slice();
+      if (typeof localStorage !== 'undefined') {
+        try {
+          const raw = localStorage.getItem('amber_experts_admin');
+          if (raw) {
+            const adminExperts = JSON.parse(raw);
+            if (Array.isArray(adminExperts) && adminExperts.length > 0) {
+              experts = adminExperts;
+            }
+          }
+        } catch(e) {}
+      }
+      return experts;
+    }
+
+    function renderHubExperts() {
+      const grid = document.getElementById('hub-experts-grid');
+      if (!grid) return;
+      const list = getHubExperts();
+
+      if (list.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:#64748B;">Список экспертов обновляется</div>';
+        return;
+      }
+
+      grid.innerHTML = list.map(exp => {
+        const isEmoji = !exp.avatar || exp.avatar.length <= 4;
+        const avatarHTML = isEmoji
+          ? `<span>${exp.avatar || '👨‍💼'}</span>`
+          : `<img src="${exp.avatar}" alt="${exp.name}" class="expert-avatar-img">`;
+
+        return `
+          <div class="expert-card" onclick="openOfferModal('Консультация эксперта: ${exp.name}')">
+            <div>
+              <div class="expert-header-row">
+                <div class="expert-avatar-wrap">${avatarHTML}</div>
+                <div class="expert-name-wrap">
+                  <div class="expert-name">${exp.name}</div>
+                  <div class="expert-role">${exp.role || 'Эксперт по недвижимости'}</div>
+                </div>
+              </div>
+              <div class="expert-badge-row">
+                <span class="expert-badge expert-badge-rating">★ ${exp.rating || '4.9'}</span>
+                <span class="expert-badge expert-badge-deals">💼 ${exp.deals ? (typeof exp.deals === 'number' ? exp.deals + ' сделок' : exp.deals) : (exp.experience || '8 лет')}</span>
+              </div>
+              <p class="expert-bio">${exp.bio || 'Персональный подбор новостроек, юридическое сопровождение сделки и помощь в одобрении ипотеки.'}</p>
+            </div>
+            <button type="button" class="expert-cta-btn">
+              <span>Задать вопрос</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
     // ── Modal Logic ──
     function openOfferModal(title) {
       document.getElementById('modal-offer-title').textContent = title || 'Бронирование предложения';
@@ -3502,13 +3715,68 @@
 
     function handleModalSubmit(e) {
       e.preventDefault();
+      const title = document.getElementById('modal-offer-title').textContent || 'Спецпредложение';
+      const name = document.getElementById('modal-name') ? document.getElementById('modal-name').value.trim() : 'Пользователь';
+      const phone = document.getElementById('modal-phone') ? document.getElementById('modal-phone').value.trim() : '';
+
+      const lead = {
+        id: 'lead-' + Date.now(),
+        timestamp: new Date().toISOString(),
+        name: name,
+        phone: phone,
+        zhk: 'Хаб спецпредложений',
+        dev: 'Amber Avenue',
+        developerId: null,
+        type: 'consultation',
+        status: 'new',
+        ownedBy: 'admin',
+        source: 'Хаб: ' + title
+      };
+
+      try {
+        const leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
+        leads.push(lead);
+        localStorage.setItem('amber_leads', JSON.stringify(leads));
+      } catch(err) {}
+
+      if (typeof window.trackEvent === 'function') {
+        window.trackEvent('lead_submit', title, 'hub_modal');
+      }
+
       alert('Спасибо! Ваша заявка успешно принята. Эксперт Amber Avenue свяжется с вами в течение 10 минут.');
       closeOfferModal();
     }
 
     function handleLeadSubmit(e) {
       e.preventDefault();
-      const name = document.getElementById('lead-name').value;
+      const name = document.getElementById('lead-name') ? document.getElementById('lead-name').value.trim() : 'Пользователь';
+      const phone = document.getElementById('lead-phone') ? document.getElementById('lead-phone').value.trim() : '';
+      const direction = document.getElementById('lead-direction') ? document.getElementById('lead-direction').value : 'all';
+
+      const lead = {
+        id: 'lead-' + Date.now(),
+        timestamp: new Date().toISOString(),
+        name: name,
+        phone: phone,
+        zhk: 'Консультация по направлению: ' + direction,
+        dev: 'Amber Avenue',
+        developerId: null,
+        type: 'consultation',
+        status: 'new',
+        ownedBy: 'admin',
+        source: 'Хаб: Персональный подбор'
+      };
+
+      try {
+        const leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
+        leads.push(lead);
+        localStorage.setItem('amber_leads', JSON.stringify(leads));
+      } catch(err) {}
+
+      if (typeof window.trackEvent === 'function') {
+        window.trackEvent('lead_submit', 'Консультация (' + direction + ')', 'hub_lead_form');
+      }
+
       alert(`Спасибо, ${name}! Мы сформировали персональную подборку по выбранному направлению и свяжемся с вами.`);
       e.target.reset();
     }
@@ -3519,6 +3787,11 @@
       alert(`Вы успешно подписаны на горячие предложения и скидки! Свежие спецпредложения будут приходить на: ${contact}`);
       e.target.reset();
     }
+
+    // Init on DOM load
+    document.addEventListener('DOMContentLoaded', () => {
+      renderHubExperts();
+    });
   </script>
 
 </body>

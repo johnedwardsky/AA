@@ -75,6 +75,32 @@ class DOMTokenList {
 /**
  * High-Fidelity DOMElement supporting full modern multi-page operations
  */
+/**
+ * Lightweight DOMTextNode
+ */
+class DOMTextNode {
+  constructor(text = "") {
+    this.nodeType = 3;
+    this.nodeName = "#text";
+    this.nodeValue = String(text ?? "");
+    this.parentNode = null;
+    this.parentElement = null;
+    this._ownerDocument = null;
+  }
+
+  get textContent() {
+    return this.nodeValue;
+  }
+
+  set textContent(val) {
+    this.nodeValue = String(val ?? "");
+  }
+
+  cloneNode() {
+    return new DOMTextNode(this.nodeValue);
+  }
+}
+
 class DOMElement {
   constructor(tagName = 'div') {
     this.tagName = tagName.toUpperCase();
@@ -86,7 +112,7 @@ class DOMElement {
     this.dataset = {};
     this.attributes = new Map();
     this.children = [];
-    this.childNodes = this.children;
+    this.childNodes = [];
     this.parentNode = null;
     this.parentElement = null;
     this._styleProps = {};
@@ -112,10 +138,27 @@ class DOMElement {
 
   get value() {
     if (this.tagName === 'SELECT') {
+      if (this._value !== undefined && this._value !== '') {
+        return this._value;
+      }
       if (this.options.length > 0 && this.selectedIndex >= 0 && this.selectedIndex < this.options.length) {
         return this.options[this.selectedIndex].value;
       }
       return this._value || '';
+    }
+    if (this.tagName === 'TEXTAREA') {
+      if (this._value !== undefined && this._value !== '') {
+        return this._value;
+      }
+      const raw = this._textContent || this.textContent || '';
+      if (!raw || !raw.includes('&')) return raw;
+      return raw
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&#x27;/g, "'");
     }
     return this._value;
   }
@@ -191,7 +234,7 @@ class DOMElement {
     if (this.children.length === 0) {
       return this._textContent;
     }
-    return this.children.map(c => c.textContent).join('');
+    return (this._textContent || '') + this.children.map(c => c.textContent).join('');
   }
 
   set textContent(val) {
@@ -314,6 +357,27 @@ class DOMElement {
       this.children.forEach(c => clone.appendChild(c.cloneNode(true)));
     }
     return clone;
+  }
+
+  reset() {
+    const inputs = this.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+      if (input.tagName === 'INPUT') {
+        const type = (input.getAttribute('type') || '').toLowerCase();
+        if (type === 'checkbox' || type === 'radio') {
+          input.checked = input.hasAttribute('checked');
+        } else {
+          input.value = input.getAttribute('value') || '';
+        }
+      } else if (input.tagName === 'TEXTAREA') {
+        input.value = input.getAttribute('value') || input.textContent || '';
+      } else if (input.tagName === 'SELECT') {
+        input.selectedIndex = 0;
+        if (input.options && input.options.length > 0) {
+          input.value = input.options[0].value;
+        }
+      }
+    });
   }
 
   remove(index) {
@@ -516,7 +580,7 @@ class DOMElement {
     if (this.children.length === 0) {
       return this._textContent;
     }
-    return this.children.map(c => {
+    const childrenHtml = this.children.map(c => {
       const tag = c.tagName.toLowerCase();
       let attrs = '';
       if (c.id) attrs += ` id="${c.id}"`;
@@ -530,6 +594,7 @@ class DOMElement {
       }
       return `<${tag}${attrs}>${c._renderHTML()}</${tag}>`;
     }).join('');
+    return (this._textContent || '') + childrenHtml;
   }
 }
 
@@ -584,7 +649,8 @@ function matchesSelector(element, selector) {
   }
 
   if (selector.startsWith('.') && !selector.includes('#') && !selector.includes('[') && !selector.includes(':')) {
-    return element.classList.contains(selector.slice(1));
+    const classes = selector.split('.').filter(Boolean);
+    return classes.every(cls => element.classList.contains(cls));
   }
 
   if (selector.startsWith('[') && selector.endsWith(']') && !selector.includes('.') && !selector.includes('#')) {
@@ -783,7 +849,17 @@ function parseAttributesString(attrStr, element) {
       }
     }
 
-    element.setAttribute(name, val);
+    function decodeAttr(str) {
+      if (!str || !str.includes('&')) return str;
+      return str
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&#x27;/g, "'");
+    }
+    element.setAttribute(name, decodeAttr(val));
   }
 }
 
@@ -818,6 +894,64 @@ class MockLocalStorage {
 
   get length() {
     return this._store.size;
+  }
+
+  getInviteTokens() {
+    try {
+      const raw = JSON.parse(this.getItem('amber_invite_tokens') || '[]');
+      if (Array.isArray(raw)) return raw;
+      if (typeof raw === 'object' && raw !== null) return Object.values(raw);
+      return [];
+    } catch {
+      return [];
+    }
+  }
+  setInviteTokens(tokens) {
+    this.setItem('amber_invite_tokens', JSON.stringify(tokens));
+  }
+  getAuth(devId) {
+    try { return JSON.parse(this.getItem('amber_auth_' + devId) || 'null'); } catch { return null; }
+  }
+  setAuth(devId, data) {
+    this.setItem('amber_auth_' + devId, JSON.stringify(data));
+  }
+  getUnlockRequests() {
+    try { return JSON.parse(this.getItem('amber_unlock_requests') || '[]'); } catch { return []; }
+  }
+  setUnlockRequests(requests) {
+    this.setItem('amber_unlock_requests', JSON.stringify(requests));
+  }
+  getTariff(devId) {
+    try { return JSON.parse(this.getItem('amber_tariff_' + devId) || 'null'); } catch { return null; }
+  }
+  setTariff(devId, tariff) {
+    this.setItem('amber_tariff_' + devId, JSON.stringify(tariff));
+  }
+  getLeads() {
+    try { return JSON.parse(this.getItem('amber_leads') || '[]'); } catch { return []; }
+  }
+  setLeads(leads) {
+    this.setItem('amber_leads', JSON.stringify(leads));
+  }
+  getPlacements(devId) {
+    try {
+      const raw = this.getItem('amber_placements_dev_' + devId) ||
+                  this.getItem('amber_placements_' + devId) ||
+                  this.getItem('amber_placements_config_' + devId) || '[]';
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+  setPlacements(devId, placements) {
+    this.setItem('amber_placements_dev_' + devId, JSON.stringify(placements));
+    this.setItem('amber_placements_' + devId, JSON.stringify(placements));
+  }
+  getPlacementRequests() {
+    try { return JSON.parse(this.getItem('amber_placement_requests') || '[]'); } catch { return []; }
+  }
+  setPlacementRequests(reqs) {
+    this.setItem('amber_placement_requests', JSON.stringify(reqs));
   }
 }
 
@@ -916,6 +1050,9 @@ class MockBlob {
  */
 function createAdminSandbox({
   htmlPath = path.resolve(__dirname, '../../admin.html'),
+  url = 'http://localhost/admin.html',
+  search = '',
+  currentTime = null,
   initialLocalStorage = {},
   viewportWidth = 1440,
   viewportHeight = 900,
@@ -926,6 +1063,40 @@ function createAdminSandbox({
   const consoleLogs = [];
   const consoleErrors = [];
   const consoleWarns = [];
+
+  let locHref = url || 'http://localhost/admin.html';
+  let locSearch = search || '';
+  if (locHref.includes('?')) {
+    locSearch = locHref.slice(locHref.indexOf('?'));
+  } else if (locSearch) {
+    if (!locSearch.startsWith('?')) locSearch = '?' + locSearch;
+    locHref += locSearch;
+  }
+
+  let currentTimeOffset = 0;
+  let mockedTime = currentTime !== null ? (typeof currentTime === 'number' ? currentTime : new Date(currentTime).getTime()) : null;
+
+  class MockDate extends Date {
+    constructor(...args) {
+      if (args.length === 0) {
+        if (mockedTime !== null) {
+          super(mockedTime + currentTimeOffset);
+        } else if (currentTimeOffset !== 0) {
+          super(Date.now() + currentTimeOffset);
+        } else {
+          super();
+        }
+      } else {
+        super(...args);
+      }
+    }
+    static now() {
+      if (mockedTime !== null) {
+        return mockedTime + currentTimeOffset;
+      }
+      return Date.now() + currentTimeOffset;
+    }
+  }
 
   const localStorage = new MockLocalStorage();
   const sessionStorage = new MockLocalStorage();
@@ -945,6 +1116,7 @@ function createAdminSandbox({
     body,
     title: 'Панель администратора — Amber Avenue',
     readyState: 'complete',
+    createTextNode: (text) => { const t = new DOMTextNode(text); t._ownerDocument = document; return t; },
     createElement: (tag) => {
       const el = new DOMElement(tag);
       el._ownerDocument = document;
@@ -1003,6 +1175,30 @@ function createAdminSandbox({
   let lastAlert = null;
   let confirmResponse = true;
 
+  const MockURLSearchParams = class {
+    constructor(init = '') {
+      this._params = new Map();
+      if (typeof init === 'string') {
+        const clean = init.startsWith('?') ? init.slice(1) : init;
+        clean.split('&').filter(Boolean).forEach(part => {
+          const eq = part.indexOf('=');
+          if (eq === -1) {
+            this.set(decodeURIComponent(part), '');
+          } else {
+            this.set(decodeURIComponent(part.slice(0, eq)), decodeURIComponent(part.slice(eq + 1)));
+          }
+        });
+      }
+    }
+    get(k) { return this._params.has(k) ? this._params.get(k) : null; }
+    set(k, v) { this._params.set(k, String(v)); }
+    has(k) { return this._params.has(k); }
+    delete(k) { this._params.delete(k); }
+    toString() {
+      return Array.from(this._params.entries()).map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
+    }
+  };
+
   const window = {
     document,
     localStorage,
@@ -1010,13 +1206,15 @@ function createAdminSandbox({
     innerWidth: viewportWidth,
     innerHeight: viewportHeight,
     location: {
-      href: 'http://localhost/admin.html',
-      pathname: '/admin.html',
-      search: '',
+      href: locHref,
+      pathname: locHref.split('?')[0].replace(/^https?:\/\/[^\/]+/, '') || '/admin.html',
+      search: locSearch,
       hash: '',
       origin: 'http://localhost',
       reload: () => {}
     },
+    URLSearchParams: globalThis.URLSearchParams || MockURLSearchParams,
+    Date: MockDate,
     AMBER_DATA: JSON.parse(JSON.stringify(initialAmberData)),
     PROPERTIES: JSON.parse(JSON.stringify(initialAmberData.properties || [])),
     DEFAULT_DEV_SUBMISSIONS: JSON.parse(JSON.stringify(initialAmberData.developers || [])),
@@ -1093,7 +1291,28 @@ function createAdminSandbox({
     setInterval: (fn, delay = 0) => setInterval(fn, delay),
     clearInterval: (id) => clearInterval(id),
     HTMLCanvasElement: DOMElement,
-    dispatchEvent: (ev) => document.dispatchEvent(ev)
+    _eventListeners: new Map(),
+    addEventListener: function(type, listener) {
+      if (!this._eventListeners.has(type)) this._eventListeners.set(type, []);
+      this._eventListeners.get(type).push(listener);
+    },
+    removeEventListener: function(type, listener) {
+      if (this._eventListeners.has(type)) {
+        const list = this._eventListeners.get(type);
+        const idx = list.indexOf(listener);
+        if (idx !== -1) list.splice(idx, 1);
+      }
+    },
+    scrollTo: () => {},
+    scroll: () => {},
+    dispatchEvent: function(ev) {
+      const list = this._eventListeners.get(ev.type) || [];
+      list.forEach(l => {
+        if (typeof l === "function") l.call(this, ev);
+        else if (l && typeof l.handleEvent === "function") l.handleEvent(ev);
+      });
+      document.dispatchEvent(ev);
+    }
   };
 
   document._window = window;
@@ -1122,6 +1341,8 @@ function createAdminSandbox({
     document,
     localStorage,
     sessionStorage,
+    Date: MockDate,
+    URLSearchParams: globalThis.URLSearchParams || MockURLSearchParams,
     crypto: window.crypto,
     TextEncoder,
     TextDecoder,
@@ -1140,10 +1361,10 @@ function createAdminSandbox({
     getComputedStyle: window.getComputedStyle,
     navigator: window.navigator,
     console: window.console,
-    alert: window.alert,
-    confirm: window.confirm,
-    prompt: window.prompt,
-    fetch: window.fetch,
+    alert: (...args) => (window.alert ? window.alert(...args) : undefined),
+    confirm: (...args) => (window.confirm ? window.confirm(...args) : undefined),
+    prompt: (...args) => (window.prompt ? window.prompt(...args) : undefined),
+    fetch: (...args) => (window.fetch ? window.fetch(...args) : undefined),
     setTimeout: window.setTimeout,
     clearTimeout: window.clearTimeout,
     setInterval: window.setInterval,
@@ -1156,6 +1377,8 @@ function createAdminSandbox({
 
   sandboxContext.globalThis = sandboxContext;
   sandboxContext.self = sandboxContext;
+  sandboxContext.window = sandboxContext;
+  document._window = sandboxContext;
 
   for (const code of scriptBlocks) {
     try {
@@ -1178,6 +1401,9 @@ function createAdminSandbox({
     getClipboardContent: () => clipboardContent,
     getLastAlert: () => lastAlert,
     setConfirmResponse: (val) => { confirmResponse = val; },
+    setTime: (time) => { mockedTime = typeof time === 'number' ? time : new Date(time).getTime(); currentTimeOffset = 0; },
+    advanceTime: (ms) => { currentTimeOffset += ms; },
+    resetTime: () => { mockedTime = null; currentTimeOffset = 0; },
     setViewportWidth: (w) => {
       sandboxContext.innerWidth = w;
     },
@@ -1210,6 +1436,9 @@ function createCabinetSandbox({
   developerId = 1,
   developerName = 'ГК «Калининградский строительный концерн»',
   developerCode = 'KSK-2026',
+  url = 'http://localhost/cabinet.html',
+  search = '',
+  currentTime = null,
   initialLocalStorage = {},
   viewportWidth = 1440,
   viewportHeight = 900,
@@ -1227,6 +1456,40 @@ function createCabinetSandbox({
   const consoleLogs = [];
   const consoleErrors = [];
   const consoleWarns = [];
+
+  let locHref = url || 'http://localhost/cabinet.html';
+  let locSearch = search || '';
+  if (locHref.includes('?')) {
+    locSearch = locHref.slice(locHref.indexOf('?'));
+  } else if (locSearch) {
+    if (!locSearch.startsWith('?')) locSearch = '?' + locSearch;
+    locHref += locSearch;
+  }
+
+  let currentTimeOffset = 0;
+  let mockedTime = currentTime !== null ? (typeof currentTime === 'number' ? currentTime : new Date(currentTime).getTime()) : null;
+
+  class MockDate extends Date {
+    constructor(...args) {
+      if (args.length === 0) {
+        if (mockedTime !== null) {
+          super(mockedTime + currentTimeOffset);
+        } else if (currentTimeOffset !== 0) {
+          super(Date.now() + currentTimeOffset);
+        } else {
+          super();
+        }
+      } else {
+        super(...args);
+      }
+    }
+    static now() {
+      if (mockedTime !== null) {
+        return mockedTime + currentTimeOffset;
+      }
+      return Date.now() + currentTimeOffset;
+    }
+  }
 
   const localStorage = new MockLocalStorage();
   const sessionStorage = new MockLocalStorage();
@@ -1246,6 +1509,7 @@ function createCabinetSandbox({
     body,
     title: 'Личный кабинет застройщика — Янтарный проспект',
     readyState: 'complete',
+    createTextNode: (text) => { const t = new DOMTextNode(text); t._ownerDocument = document; return t; },
     createElement: (tag) => {
       const el = new DOMElement(tag);
       el._ownerDocument = document;
@@ -1302,6 +1566,30 @@ function createCabinetSandbox({
   let lastAlert = null;
   let confirmResponse = true;
 
+  const MockURLSearchParams = class {
+    constructor(init = '') {
+      this._params = new Map();
+      if (typeof init === 'string') {
+        const clean = init.startsWith('?') ? init.slice(1) : init;
+        clean.split('&').filter(Boolean).forEach(part => {
+          const eq = part.indexOf('=');
+          if (eq === -1) {
+            this.set(decodeURIComponent(part), '');
+          } else {
+            this.set(decodeURIComponent(part.slice(0, eq)), decodeURIComponent(part.slice(eq + 1)));
+          }
+        });
+      }
+    }
+    get(k) { return this._params.has(k) ? this._params.get(k) : null; }
+    set(k, v) { this._params.set(k, String(v)); }
+    has(k) { return this._params.has(k); }
+    delete(k) { this._params.delete(k); }
+    toString() {
+      return Array.from(this._params.entries()).map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
+    }
+  };
+
   const window = {
     document,
     localStorage,
@@ -1309,13 +1597,15 @@ function createCabinetSandbox({
     innerWidth: viewportWidth,
     innerHeight: viewportHeight,
     location: {
-      href: 'http://localhost/cabinet.html',
-      pathname: '/cabinet.html',
-      search: '',
+      href: locHref,
+      pathname: locHref.split('?')[0].replace(/^https?:\/\/[^\/]+/, '') || '/cabinet.html',
+      search: locSearch,
       hash: '',
       origin: 'http://localhost',
       reload: () => {}
     },
+    Date: MockDate,
+    URLSearchParams: globalThis.URLSearchParams || MockURLSearchParams,
     AMBER_DATA: JSON.parse(JSON.stringify(initialAmberData)),
     PROPERTIES: JSON.parse(JSON.stringify(initialAmberData.properties || [])),
     crypto: {
@@ -1377,7 +1667,28 @@ function createCabinetSandbox({
     setInterval: (fn, delay = 0) => setInterval(fn, delay),
     clearInterval: (id) => clearInterval(id),
     HTMLCanvasElement: DOMElement,
-    dispatchEvent: (ev) => document.dispatchEvent(ev)
+    _eventListeners: new Map(),
+    addEventListener: function(type, listener) {
+      if (!this._eventListeners.has(type)) this._eventListeners.set(type, []);
+      this._eventListeners.get(type).push(listener);
+    },
+    removeEventListener: function(type, listener) {
+      if (this._eventListeners.has(type)) {
+        const list = this._eventListeners.get(type);
+        const idx = list.indexOf(listener);
+        if (idx !== -1) list.splice(idx, 1);
+      }
+    },
+    scrollTo: () => {},
+    scroll: () => {},
+    dispatchEvent: function(ev) {
+      const list = this._eventListeners.get(ev.type) || [];
+      list.forEach(l => {
+        if (typeof l === "function") l.call(this, ev);
+        else if (l && typeof l.handleEvent === "function") l.handleEvent(ev);
+      });
+      document.dispatchEvent(ev);
+    }
   };
 
   document._window = window;
@@ -1405,6 +1716,8 @@ function createCabinetSandbox({
     document,
     localStorage,
     sessionStorage,
+    Date: MockDate,
+    URLSearchParams: globalThis.URLSearchParams || MockURLSearchParams,
     crypto: window.crypto,
     TextEncoder,
     TextDecoder,
@@ -1423,10 +1736,10 @@ function createCabinetSandbox({
     getComputedStyle: window.getComputedStyle,
     navigator: window.navigator,
     console: window.console,
-    alert: window.alert,
-    confirm: window.confirm,
-    prompt: window.prompt,
-    fetch: window.fetch,
+    alert: (...args) => (window.alert ? window.alert(...args) : undefined),
+    confirm: (...args) => (window.confirm ? window.confirm(...args) : undefined),
+    prompt: (...args) => (window.prompt ? window.prompt(...args) : undefined),
+    fetch: (...args) => (window.fetch ? window.fetch(...args) : undefined),
     setTimeout: window.setTimeout,
     clearTimeout: window.clearTimeout,
     setInterval: window.setInterval,
@@ -1438,6 +1751,8 @@ function createCabinetSandbox({
 
   sandboxContext.globalThis = sandboxContext;
   sandboxContext.self = sandboxContext;
+  sandboxContext.window = sandboxContext;
+  document._window = sandboxContext;
 
   for (const code of scriptBlocks) {
     try {
@@ -1447,7 +1762,18 @@ function createCabinetSandbox({
     }
   }
 
+  if (sandboxContext.window) {
+    Object.keys(sandboxContext.window).forEach(k => {
+      if (!(k in sandboxContext) || sandboxContext[k] === undefined) {
+        sandboxContext[k] = sandboxContext.window[k];
+      }
+    });
+  }
+
   document.dispatchEvent({ type: 'DOMContentLoaded' });
+  if (sandboxContext.dispatchEvent) {
+    sandboxContext.dispatchEvent({ type: 'DOMContentLoaded' });
+  }
 
   return {
     window: sandboxContext,
@@ -1460,6 +1786,9 @@ function createCabinetSandbox({
     getClipboardContent: () => clipboardContent,
     getLastAlert: () => lastAlert,
     setConfirmResponse: (val) => { confirmResponse = val; },
+    setTime: (time) => { mockedTime = typeof time === 'number' ? time : new Date(time).getTime(); currentTimeOffset = 0; },
+    advanceTime: (ms) => { currentTimeOffset += ms; },
+    resetTime: () => { mockedTime = null; currentTimeOffset = 0; },
     click: (selectorOrEl) => {
       const el = typeof selectorOrEl === 'string' ? document.querySelector(selectorOrEl) : selectorOrEl;
       if (!el) throw new Error('Element not found: ' + selectorOrEl);
@@ -1505,6 +1834,7 @@ function createCatalogSandbox({
     body,
     title: 'Каталог новостроек — Янтарный проспект',
     readyState: 'complete',
+    createTextNode: (text) => { const t = new DOMTextNode(text); t._ownerDocument = document; return t; },
     createElement: (tag) => {
       const el = new DOMElement(tag);
       el._ownerDocument = document;
@@ -1608,6 +1938,8 @@ function createCatalogSandbox({
 
   sandboxContext.globalThis = sandboxContext;
   sandboxContext.self = sandboxContext;
+  sandboxContext.window = sandboxContext;
+  document._window = sandboxContext;
 
   // Load analytics.js
   const analyticsPath = path.resolve(__dirname, '../../analytics.js');
@@ -1645,6 +1977,7 @@ function createCatalogSandbox({
 }
 
 module.exports = {
+  DOMTextNode,
   createAdminSandbox,
   createCabinetSandbox,
   createCatalogSandbox,

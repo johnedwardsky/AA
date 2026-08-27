@@ -11,6 +11,7 @@
   <script src="data.js" defer></script>
   <script src="properties-data.js" defer></script>
   <script src="menu.js" defer></script>
+  <script src="analytics.js" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -842,7 +843,7 @@
   .btn-expert { flex: 1 1 100%; }
 
   /* Inline panel full width */
-  .chars-grid { grid-template-columns: 1fr 1fr; }
+  .chars-grid { grid-template-columns: 1fr; }
   .location-grid { grid-template-columns: 1fr; }
   .infra-grid { grid-template-columns: 1fr; }
 
@@ -1262,8 +1263,36 @@
   document.addEventListener('DOMContentLoaded', () => {
     const data = window.AMBER_DATA || {};
     const props = data.properties || [];
-    const blog = data.blog || [];
-    const slides = data.heroSlides || [];
+
+    // Merged published blog articles
+    let blog = (data.blog || []).slice();
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const raw = localStorage.getItem('amber_articles');
+        if (raw) {
+          const stored = JSON.parse(raw);
+          if (Array.isArray(stored) && stored.length > 0) {
+            blog = stored;
+          }
+        }
+      } catch(e) {}
+    }
+    blog = blog.filter(a => a.status !== 'draft');
+
+    // Merged hero slides
+    let slides = (data.heroSlides || []).slice();
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const raw = localStorage.getItem('amber_header_slider');
+        if (raw) {
+          const stored = JSON.parse(raw);
+          if (Array.isArray(stored) && stored.length > 0) {
+            slides = stored.filter(s => s.active !== false);
+          }
+        }
+      } catch(e) {}
+    }
+
     const devs = data.developers || [];
 
     // ── 1. Hero Slider ──

@@ -4,9 +4,43 @@
    ============================================================ */
 
 'use strict';
-// ── Sample Data (Loaded from window.AMBER_DATA) ─────────────────────────────
-const PROPERTIES = window.AMBER_DATA ? window.AMBER_DATA.properties : [];
-const BANNERS = window.AMBER_DATA ? window.AMBER_DATA.banners : [];
+// ── Sample Data (Loaded from window.AMBER_DATA with localStorage overlays) ──
+function getInitialProperties() {
+  let list = window.AMBER_DATA ? window.AMBER_DATA.properties : [];
+  if (typeof localStorage !== 'undefined') {
+    try {
+      list = list.map(p => {
+        const modKey = 'amber_moderation_' + p.id;
+        const modRaw = localStorage.getItem(modKey) || localStorage.getItem('amber_moderation_zhk-' + p.id) || localStorage.getItem('amber_moderation_zhk_' + p.id);
+        if (modRaw) {
+          const mod = JSON.parse(modRaw);
+          if (mod && mod.status === 'approved' && mod.submittedData) {
+            return Object.assign({}, p, mod.submittedData);
+          }
+        }
+        return p;
+      });
+    } catch(e) {}
+  }
+  return list;
+}
+
+function getInitialBanners() {
+  let list = [];
+  if (typeof localStorage !== 'undefined') {
+    try {
+      const raw = localStorage.getItem('amber_banners_admin') || localStorage.getItem('amber_banners');
+      if (raw) list = JSON.parse(raw);
+    } catch(e) {}
+  }
+  if (!Array.isArray(list) || list.length === 0) {
+    list = (window.AMBER_DATA && window.AMBER_DATA.banners) || [];
+  }
+  return list;
+}
+
+const PROPERTIES = getInitialProperties();
+const BANNERS = getInitialBanners();
 
 // Banners config
 const BANNER_EVERY = 5; // Insert banner after every N cards
@@ -82,15 +116,21 @@ function navItemsHTML() {
 
 // ── NAV CONFIG (updated) ─────────────────────────────────────
 const INLINE_NAV = [
-  { key: 'prices',   label: 'Цены',           icon: '₽'  },
-  { key: 'mortgage', label: 'Ипотека',         icon: '🏦' },
-  { key: 'location', label: 'Локация',         icon: '📍' },
-  { key: 'infra',    label: 'Инфраструктура',  icon: '🏪' },
-  { key: 'chars',    label: 'Характеристики',  icon: '📋' },
-  { key: 'docs',     label: 'Документы',       icon: '📄' },
-  { key: 'dev',      label: 'Застройщик',      icon: '🏗'  },
-  { key: 'pros',     label: 'Плюсы/минусы',    icon: '⚖'  },
-  { key: 'whom',     label: 'Кому подходит',   icon: '👥' },
+  { key: 'prices',      label: 'Цены',             icon: '₽'  },
+  { key: 'mortgage',    label: 'Ипотека',           icon: '🏦' },
+  { key: 'location',    label: 'Локация',           icon: '📍' },
+  { key: 'infra',       label: 'Инфраструктура',    icon: '🏪' },
+  { key: 'yard',        label: 'Благоустройство',   icon: '🌿' },
+  { key: 'chars',       label: 'Характеристики',    icon: '📋' },
+  { key: 'engineering', label: 'Инженерия',         icon: '⚙️' },
+  { key: 'comfort',     label: 'Комфорт и окна',    icon: '🪟' },
+  { key: 'security',    label: 'Безопасность',      icon: '🔒' },
+  { key: 'management',  label: 'Управление/УК',     icon: '🏢' },
+  { key: 'warranty',    label: 'Гарантии',          icon: '🛡️' },
+  { key: 'docs',        label: 'Документы',         icon: '📄' },
+  { key: 'dev',         label: 'Застройщик',        icon: '🏗'  },
+  { key: 'pros',        label: 'Плюсы/минусы',      icon: '⚖'  },
+  { key: 'whom',        label: 'Кому подходит',     icon: '👥' },
 ];
 
 function inlineNavHTML() {
@@ -123,16 +163,36 @@ function mortgageContentHTML() {
 }
 
 function isCardPaid(propertyId, developerId) {
-  // Admin sets payment status in localStorage via placements section
   try {
-    var allPlacements = JSON.parse(localStorage.getItem('amber_placements') || '{}');
-    // Check if any type-6 (paid cards) booking exists for this developer
-    for (var key in allPlacements) {
-      if (key.startsWith('6_') && allPlacements[key] === String(developerId)) return true;
+    if (typeof localStorage === 'undefined') return false;
+    var paidCards = JSON.parse(localStorage.getItem('amber_paid_cards') || '[]');
+    if (Array.isArray(paidCards)) {
+      if (propertyId !== undefined && propertyId !== null && (paidCards.includes(Number(propertyId)) || paidCards.includes(String(propertyId)))) {
+        return true;
+      }
+      if (developerId && paidCards.length >= 5) {
+        return true;
+      }
     }
-    // Check premium package (type 8)
+    if (developerId) {
+      var devPlacementRaw = localStorage.getItem('amber_placements_dev_' + developerId);
+      if (devPlacementRaw) {
+        var devPl = JSON.parse(devPlacementRaw);
+        if (devPl && devPl.type6_paid_cards && devPl.type6_paid_cards.active) {
+          var selected = devPl.type6_paid_cards.selectedZhkIds || [];
+          if (propertyId !== undefined && (selected.includes(Number(propertyId)) || selected.includes(String(propertyId)))) {
+            return true;
+          }
+          if (selected.length >= 5) return true;
+        }
+      }
+    }
+    var allPlacements = JSON.parse(localStorage.getItem('amber_placements') || '{}');
+    for (var key in allPlacements) {
+      if (key.startsWith('6_') && (allPlacements[key] === String(developerId) || allPlacements[key] === Number(developerId))) return true;
+    }
     for (var key2 in allPlacements) {
-      if (key2.startsWith('8_') && allPlacements[key2] === String(developerId)) return true;
+      if (key2.startsWith('8_') && (allPlacements[key2] === String(developerId) || allPlacements[key2] === Number(developerId))) return true;
     }
   } catch(e) {}
   return false;
@@ -197,16 +257,139 @@ function infraContentHTML(p) {
 }
 
 function charsContentHTML(chars) {
-  const items = [
-    ['Класс', chars.class], ['Тип дома', chars.type], ['Этажность', chars.floors],
-    ['Корпуса', chars.corpus], ['Квартир', chars.apartments], ['Потолки', chars.ceiling],
-    ['Площади', chars.apArea], ['Кухня', chars.kitArea], ['Отделка', chars.finishing],
-    ['Тип отделки', chars.finishType], ['Стены', chars.walls], ['Отопление', chars.heating],
-    ['Срок эксплуатации', chars.lifespan || '50 лет'],
-  ];
-  return `<div class="chars-grid">${items.map(([l,v]) =>
-    `<div class="char-item"><div class="char-label">${l}</div><div class="char-value">${v}</div></div>`
-  ).join('')}</div>`;
+  const c = (chars && chars.chars) ? chars.chars : (chars || {});
+  function charRow(icon, label, value, fallback, bg) {
+    const hasVal = value !== undefined && value !== null && String(value).trim() !== '';
+    const val = (value === true) ? 'Да' : (value === false) ? 'Нет' : (hasVal ? value : (fallback || 'Уточняется у застройщика'));
+    const isMissing = !hasVal && !fallback;
+    return `<div class="char-item" style="${isMissing ? 'opacity: 0.6;' : ''}"><div class="char-icon" style="background:${bg}">${icon}</div><div><div class="char-label">${label}</div><div class="char-value">${val}</div></div></div>`;
+  }
+  return `<div class="chars-grid">
+    ${charRow('🏷️', 'Класс', c.class, null, '#E0F2F1')}
+    ${charRow('🏛️', 'Тип дома', c.type, null, '#FFF3DC')}
+    ${charRow('🏢', 'Этажность', c.floors, null, '#E8F5E9')}
+    ${charRow('🏘️', 'Корпуса', c.corpus, null, '#E3F2FD')}
+    ${charRow('🚪', 'Квартир', c.apartments, null, '#F3E8FF')}
+    ${charRow('📏', 'Потолки', c.ceiling, null, '#FFF8E1')}
+    ${charRow('📐', 'Площади', c.apArea, null, '#E0F7FA')}
+    ${charRow('🍳', 'Кухня', c.kitArea, null, '#FBE9E7')}
+    ${charRow('🖌️', 'Отделка', c.finishing, null, '#FCE4EC')}
+    ${charRow('🛋️', 'Тип отделки', c.finishType, null, '#FFF3DC')}
+    ${charRow('🧱', 'Стены', c.walls, null, '#E8F5E9')}
+    ${charRow('🔥', 'Отопление', c.heating, null, '#FBE9E7')}
+    ${charRow('⏳', 'Срок эксплуатации', c.lifespan || '50 лет', '50 лет', '#E0F2F1')}
+  </div>`;
+}
+
+// ── Yard / Landscaping ───────────────────────────────────────
+function yardContentHTML(p) {
+  const y = (p && p.yard) ? p.yard : (p || {});
+  function yardRow(icon, label, value, fallback, bg) {
+    const hasVal = value !== undefined && value !== null && String(value).trim() !== '';
+    const val = (value === true) ? 'Да' : (value === false) ? 'Нет' : (hasVal ? value : (fallback || 'Уточняется у застройщика'));
+    const isMissing = !hasVal && !fallback;
+    return `<div class="char-item" style="${isMissing ? 'opacity: 0.6;' : ''}"><div class="char-icon" style="background:${bg}">${icon}</div><div><div class="char-label">${label}</div><div class="char-value">${val}</div></div></div>`;
+  }
+  return `<div class="chars-grid">
+    ${yardRow('🚗', 'Двор без машин',    y.carFree,        null, '#E0F7FA')}
+    ${yardRow('🛝', 'Детская площадка',  y.playground,     null, '#FFF3DC')}
+    ${yardRow('⚽', 'Спортивная зона',   y.sportZone,      null, '#E8F5E9')}
+    ${yardRow('🌳', 'Озеленение',        y.greenery,       null, '#E0F2F1')}
+    ${yardRow('🅿️', 'Паркинг',          y.parking,        null, '#E3F2FD')}
+    ${yardRow('🚘', 'Машиномест',        y.parkingSpots,   null, '#FFF8E1')}
+    ${yardRow('👤', 'Гостевая парковка', y.guestParking,   null, '#F3E8FF')}
+    ${yardRow('🚲', 'Велопарковка',      y.bikeParking,    null, '#E8F5E9')}
+    ${yardRow('🏞️', 'Прогулочные зоны', y.walkZones,      null, '#E0F7FA')}
+    ${yardRow('🌐', 'Территория',        y.territory,      null, '#FCE4EC')}
+  </div>`;
+}
+
+// ── Engineering ──────────────────────────────────────────────
+function engineeringContentHTML(p) {
+  const e = (p && (p.engineering || p.chars)) ? (p.engineering || p.chars) : (p || {});
+  function engRow(icon, label, value, fallback, bg) {
+    const hasVal = value !== undefined && value !== null && String(value).trim() !== '';
+    const val = (value === true) ? 'Да' : (value === false) ? 'Нет' : (hasVal ? value : (fallback || 'Уточняется у застройщика'));
+    const isMissing = !hasVal && !fallback;
+    return `<div class="char-item" style="${isMissing ? 'opacity: 0.6;' : ''}"><div class="char-icon" style="background:${bg}">${icon}</div><div><div class="char-label">${label}</div><div class="char-value">${val}</div></div></div>`;
+  }
+  return `<div class="chars-grid">
+    ${engRow('🔥', 'Отопление',          e.heating || e.heatingType,   null, '#FBE9E7')}
+    ${engRow('💧', 'Горячая вода',        e.hotWater,                   null, '#E0F7FA')}
+    ${engRow('🍳', 'Газ / плита',         e.gas || e.stoveType,         null, '#FFF3DC')}
+    ${engRow('🌬️', 'Вентиляция',         e.ventilation,                null, '#E0F2F1')}
+    ${engRow('❄️', 'Кондиционирование',  e.airConditioning,            null, '#E3F2FD')}
+    ${engRow('📊', 'Счётчики',            e.meters,                     null, '#F3E8FF')}
+    ${engRow('⚡', 'Электрика кВт/кв.',  e.electricPower,              null, '#FFF8E1')}
+    ${engRow('🏗️', 'Котёл / бренд',      e.boilerBrand,                null, '#E8F5E9')}
+  </div>`;
+}
+
+// ── Comfort & Windows ────────────────────────────────────────
+function comfortContentHTML(p) {
+  const c = (p && p.comfort) ? p.comfort : (p || {});
+  const chars = (p && p.chars) ? p.chars : {};
+  function comRow(icon, label, value, fallback, bg) {
+    const hasVal = value !== undefined && value !== null && String(value).trim() !== '';
+    const val = (value === true) ? 'Да' : (value === false) ? 'Нет' : (hasVal ? value : (fallback || 'Уточняется у застройщика'));
+    const isMissing = !hasVal && !fallback;
+    return `<div class="char-item" style="${isMissing ? 'opacity: 0.6;' : ''}"><div class="char-icon" style="background:${bg}">${icon}</div><div><div class="char-label">${label}</div><div class="char-value">${val}</div></div></div>`;
+  }
+  return `<div class="chars-grid">
+    ${comRow('🪟', 'Окна',               c.windowType,                          null, '#E0F7FA')}
+    ${comRow('🔲', 'Стеклопакеты',       c.glazing,                             null, '#E8F5E9')}
+    ${comRow('🌅', 'Панорамные окна',    c.panoramic,                           null, '#FFF3DC')}
+    ${comRow('👀', 'Виды из окон',       c.views,                               null, '#E3F2FD')}
+    ${comRow('📏', 'Потолки',            c.ceiling || chars.ceiling,             null, '#FFF8E1')}
+    ${comRow('🏠', 'Балкон / лоджия',    c.balcony || chars.balcony,             null, '#F3E8FF')}
+    ${comRow('🔇', 'Шумоизоляция',       c.soundproofing,                        null, '#E0F2F1')}
+    ${comRow('📐', 'Воздушный шум Rw',   c.soundRw ? (String(c.soundRw).includes('дБ') ? c.soundRw : c.soundRw + ' дБ') : null,   null, '#FCE4EC')}
+    ${comRow('📐', 'Ударный шум Ln,w',   c.soundLn ? (String(c.soundLn).includes('дБ') ? c.soundLn : c.soundLn + ' дБ') : null,   null, '#FBE9E7')}
+    ${comRow('☀️', 'Солнечная сторона',  c.sunSide,                              null, '#FFF3DC')}
+  </div>`;
+}
+
+// ── Security ─────────────────────────────────────────────────
+function securityContentHTML(p) {
+  const s = (p && p.security) ? p.security : (p || {});
+  function secRow(icon, label, value, fallback, bg) {
+    const hasVal = value !== undefined && value !== null && String(value).trim() !== '';
+    const val = (value === true) ? 'Да' : (value === false) ? 'Нет' : (hasVal ? value : (fallback || 'Уточняется у застройщика'));
+    const isMissing = !hasVal && !fallback;
+    return `<div class="char-item" style="${isMissing ? 'opacity: 0.6;' : ''}"><div class="char-icon" style="background:${bg}">${icon}</div><div><div class="char-label">${label}</div><div class="char-value">${val}</div></div></div>`;
+  }
+  return `<div class="chars-grid">
+    ${secRow('🛗', 'Лифты',              s.lifts,            null, '#E3F2FD')}
+    ${secRow('🏷️', 'Марка лифтов',      s.liftBrand,        null, '#FFF3DC')}
+    ${secRow('🔢', 'Количество лифтов',  s.liftCount,        null, '#E8F5E9')}
+    ${secRow('📹', 'Видеонаблюдение',    s.cctv,             null, '#E0F7FA')}
+    ${secRow('👮', 'Охрана / консьерж',  s.guard,            null, '#F3E8FF')}
+    ${secRow('🔑', 'Контроль доступа',   s.accessControl,    null, '#FFF8E1')}
+    ${secRow('♿', 'Доступная среда',    s.accessibility,    null, '#E0F2F1')}
+    ${secRow('🍼', 'Колясочные',         s.strollerRoom,     null, '#FCE4EC')}
+    ${secRow('📦', 'Кладовые',           s.storageRooms,     null, '#FBE9E7')}
+  </div>`;
+}
+
+// ── Management / HOA ─────────────────────────────────────────
+function managementContentHTML(p) {
+  const m = (p && p.management) ? p.management : (p || {});
+  function mgRow(icon, label, value, fallback, bg) {
+    const hasVal = value !== undefined && value !== null && String(value).trim() !== '';
+    const val = (value === true) ? 'Да' : (value === false) ? 'Нет' : (hasVal ? value : (fallback || 'Уточняется у застройщика'));
+    const isMissing = !hasVal && !fallback;
+    return `<div class="char-item" style="${isMissing ? 'opacity: 0.6;' : ''}"><div class="char-icon" style="background:${bg}">${icon}</div><div><div class="char-label">${label}</div><div class="char-value">${val}</div></div></div>`;
+  }
+  return `<div class="chars-grid">
+    ${mgRow('🏢', 'Управляющая компания',      m.company,             null, '#E3F2FD')}
+    ${mgRow('💰', 'Ком. платежи (ориентир)',   m.utilities,           null, '#E8F5E9')}
+    ${mgRow('📋', 'Обслуживание',              m.maintenance,         null, '#FFF3DC')}
+    ${mgRow('🅿️', 'Оплата паркинга',          m.parkingFee,          null, '#E0F7FA')}
+    ${mgRow('👮', 'Оплата охраны',             m.securityFee,         null, '#F3E8FF')}
+    ${mgRow('🌐', 'Интернет-провайдеры',       m.internetProviders,   null, '#FFF8E1')}
+    ${mgRow('🛍️', 'Коммерция на 1-м этаже',  m.groundFloorCommerce, null, '#FCE4EC')}
+    ${mgRow('🚲', 'Места для велосипедов',     m.bikeStorage,         null, '#E0F2F1')}
+  </div>`;
 }
 
 function docsContentHTML(p) {
@@ -393,7 +576,12 @@ function buildAllInlineSections(p) {
       ${wrapWithBannerHTML(locationContentHTML(p), 'location', p)}
     </div>
     <div class="inline-section" data-section="infra">${infraContentHTML(p)}</div>
+    <div class="inline-section" data-section="yard">${yardContentHTML(p)}</div>
     <div class="inline-section" data-section="chars">${charsContentHTML(p.chars)}</div>
+    <div class="inline-section" data-section="engineering">${engineeringContentHTML(p)}</div>
+    <div class="inline-section" data-section="comfort">${comfortContentHTML(p)}</div>
+    <div class="inline-section" data-section="security">${securityContentHTML(p)}</div>
+    <div class="inline-section" data-section="management">${managementContentHTML(p)}</div>
     <div class="inline-section" data-section="warranty">
       ${wrapWithBannerHTML(warrantyContentHTML(p), 'warranty', p)}
     </div>
@@ -892,33 +1080,60 @@ function closeModal() {
 }
 
 function submitAvailability(name) {
-  const nameVal = document.getElementById('modal-name').value.trim();
-  const phone = document.getElementById('modal-phone').value.trim();
-  const email = document.getElementById('modal-email').value.trim();
+  const nameVal = document.getElementById('modal-name') ? document.getElementById('modal-name').value.trim() : '';
+  const phone = document.getElementById('modal-phone') ? document.getElementById('modal-phone').value.trim() : '';
+  const email = document.getElementById('modal-email') ? document.getElementById('modal-email').value.trim() : '';
   const city = document.getElementById('modal-city') ? document.getElementById('modal-city').value : '';
 
-  if (!nameVal) { document.getElementById('modal-name').focus(); return; }
-  if (!phone) { document.getElementById('modal-phone').focus(); return; }
+  if (!nameVal && document.getElementById('modal-name')) { document.getElementById('modal-name').focus(); return; }
+  if (!phone && document.getElementById('modal-phone')) { document.getElementById('modal-phone').focus(); return; }
+
+  const prop = PROPERTIES.find(p => p.name === name || p.name.includes(name) || (name && name.includes(p.name)));
+  const propId = prop ? prop.id : null;
+  const devId = prop ? (prop.developerId || prop.developer_id || null) : null;
+  const devName = prop ? (prop.developer || prop.dev || '') : '';
+  const paid = prop ? isCardPaid(prop.id, devId) : false;
 
   const leadData = {
+    id: 'lead-' + Date.now(),
     source: 'Карточка ЖК: ' + (name || 'Запрос на сайте'),
-    name: nameVal,
-    phone: phone,
+    name: nameVal || 'Пользователь',
+    phone: phone || '',
     email: email || '',
+    zhk: name || (prop ? prop.name : ''),
+    zhkId: propId,
+    dev: devName,
+    developerId: devId,
     details: 'Узнать наличие квартир в ' + (name || 'ЖК') + (city ? ' (Город клиента: ' + city + ')' : ''),
-    ownedBy: isCardPaid(null, '') ? 'developer' : 'admin',
+    type: 'consultation',
+    status: 'new',
+    ownedBy: paid ? 'developer' : 'admin',
+    isPaidLead: paid,
     timestamp: new Date().toISOString()
   };
 
-  if (typeof window.saveAmberLead === 'function') {
+  try {
+    const leads = JSON.parse(localStorage.getItem('amber_leads') || '[]');
+    leads.push(leadData);
+    localStorage.setItem('amber_leads', JSON.stringify(leads));
+  } catch(e) {}
+
+  if (typeof window !== 'undefined' && typeof window.trackEvent === 'function') {
+    window.trackEvent('lead_submit', propId || name, 'property', { developerId: devId });
+  } else if (typeof window !== 'undefined' && typeof window.AmberAnalytics !== 'undefined' && typeof window.AmberAnalytics.trackEvent === 'function') {
+    window.AmberAnalytics.trackEvent('lead_submit', propId || name, 'property', { developerId: devId });
+  }
+
+  if (typeof window !== 'undefined' && typeof window.saveAmberLead === 'function') {
     window.saveAmberLead(leadData);
-  } else if (typeof window.submitLeadToGoogleSheets === 'function') {
+  } else if (typeof window !== 'undefined' && typeof window.submitLeadToGoogleSheets === 'function') {
     window.submitLeadToGoogleSheets(leadData);
   }
 
   closeModal();
   showToast('Заявка на «' + name + '» отправлена! Свяжемся с вами в ближайшее время.');
 }
+
 function showToast(msg) {
   let c = document.querySelector('.toast-container');
   if (!c) { c = document.createElement('div'); c.className = 'toast-container'; document.body.appendChild(c); }
@@ -1023,6 +1238,35 @@ const REGIONAL_CUSTOMIZATIONS = {
 let defaultWelcomeState = null;
 let defaultHeroHTML = null;
 
+function getActiveRegionalCustomizations() {
+  const result = Object.assign({}, REGIONAL_CUSTOMIZATIONS);
+  if (typeof localStorage !== 'undefined') {
+    try {
+      const raw = localStorage.getItem('amber_category_backgrounds');
+      if (raw) {
+        const stored = JSON.parse(raw);
+        const map = {
+          city: stored.city || stored.kaliningrad,
+          sea: stored.sea || stored.umory,
+          prigorod: stored.prigorod,
+          oblast: stored.oblast
+        };
+        Object.keys(map).forEach(k => {
+          if (map[k] && result[k]) {
+            const item = map[k];
+            result[k] = Object.assign({}, result[k], {
+              bgImage: typeof item === 'string' ? item : (item.bgImage || result[k].bgImage),
+              slogan: typeof item === 'object' && item.slogan ? item.slogan : result[k].slogan,
+              subtitle: typeof item === 'object' && item.subtitle ? item.subtitle : result[k].subtitle
+            });
+          }
+        });
+      }
+    } catch(e) {}
+  }
+  return result;
+}
+
 function updateWelcomeSection(filter) {
   // If we are not on the main zhk page (e.g. static sub-pages zhk-umory.html),
   // they are statically configured, so we shouldn't dynamically overwrite their specific layout.
@@ -1039,7 +1283,7 @@ function updateWelcomeSection(filter) {
 
   // Capture default states on first run
   if (!defaultWelcomeState) {
-    let bg = welcomeSection.style.backgroundImage || window.getComputedStyle(welcomeSection).backgroundImage;
+    let bg = welcomeSection.style.backgroundImage || (typeof window !== 'undefined' && window.getComputedStyle ? window.getComputedStyle(welcomeSection).backgroundImage : '');
     defaultWelcomeState = {
       bg: bg,
       slogan: sloganEl ? sloganEl.textContent : '',
@@ -1050,15 +1294,31 @@ function updateWelcomeSection(filter) {
     defaultHeroHTML = heroBanner.innerHTML;
   }
 
-  const cust = REGIONAL_CUSTOMIZATIONS[filter];
+  const customs = getActiveRegionalCustomizations();
+  const cust = customs[filter];
   if (cust) {
     welcomeSection.style.backgroundImage = `url("${cust.bgImage}")`;
     if (sloganEl) sloganEl.textContent = cust.slogan;
     if (subtitleEl) subtitleEl.textContent = cust.subtitle;
-    if (heroBanner) heroBanner.innerHTML = cust.heroHTML;
+    if (heroBanner && cust.heroHTML) heroBanner.innerHTML = cust.heroHTML;
   } else {
-    // Restore defaults
-    if (defaultWelcomeState) {
+    // Restore defaults or check amber_zhk_header_bg
+    let customZhkBg = null;
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const rawZhkBg = localStorage.getItem('amber_zhk_header_bg');
+        if (rawZhkBg) {
+          const zhkBgs = JSON.parse(rawZhkBg);
+          if (zhkBgs['zhk-all']) customZhkBg = zhkBgs['zhk-all'];
+        }
+      } catch(e) {}
+    }
+
+    if (customZhkBg && customZhkBg.bgImage) {
+      welcomeSection.style.backgroundImage = `url("${customZhkBg.bgImage}")`;
+      if (sloganEl && customZhkBg.slogan) sloganEl.textContent = customZhkBg.slogan;
+      if (subtitleEl && customZhkBg.subtitle) subtitleEl.textContent = customZhkBg.subtitle;
+    } else if (defaultWelcomeState) {
       welcomeSection.style.backgroundImage = defaultWelcomeState.bg;
       if (sloganEl) sloganEl.textContent = defaultWelcomeState.slogan;
       if (subtitleEl) subtitleEl.textContent = defaultWelcomeState.subtitle;
@@ -1072,6 +1332,11 @@ function updateWelcomeSection(filter) {
 // ── Init ─────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
   renderFeed();
+
+  // Apply custom category / page background if configured
+  if (typeof updateWelcomeSection === 'function') {
+    updateWelcomeSection('all');
+  }
 
   // Filter Chips — real filtering
   document.querySelectorAll('.filter-chip').forEach(chip => {
