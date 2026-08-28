@@ -1039,6 +1039,11 @@ ul { list-style: none; }
   gap: 10px;
   box-shadow: var(--shadow-md);
   align-self: stretch;
+  transition: all 0.3s ease;
+}
+.card-promo-rich {
+  background: linear-gradient(145deg, #0e2040 0%, #15305B 50%, #1b3d73 100%) !important;
+  border: 1px solid rgba(245, 166, 35, 0.25);
 }
 .promo-badge {
   display: inline-flex; align-items: center; gap: 4px;
@@ -1070,6 +1075,182 @@ ul { list-style: none; }
 .promo-discount {
   font-size: 28px; font-weight: 800; line-height: 1;
   color: var(--color-accent);
+}
+
+/* ── Expandable Vertical Promo Reveal ──────────────────────── */
+.promo-reveal {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease, margin 0.35s ease;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.card-row:has(.card-inline-panel.open) .card-promo-rich .promo-reveal,
+.property-card-wrapper.expanded .card-promo-rich .promo-reveal {
+  max-height: 440px;
+  opacity: 1;
+  pointer-events: auto;
+  margin-top: 6px;
+  margin-bottom: 8px;
+}
+.promo-reveal-img-wrap,
+.promo-reveal-slider-wrap {
+  position: relative;
+  width: 100%;
+  height: 170px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.18);
+  background: #0e2040;
+}
+.promo-reveal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.card-promo:hover .promo-reveal-img {
+  transform: scale(1.03);
+}
+.promo-photo-slider {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+.promo-photo-slider::-webkit-scrollbar {
+  display: none;
+}
+.promo-photo-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+}
+.promo-photo-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.promo-slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  background: rgba(14, 31, 61, 0.8);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  cursor: pointer;
+  z-index: 6;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  line-height: 1;
+  padding: 0;
+}
+.promo-reveal-slider-wrap:hover .promo-slider-btn {
+  opacity: 1;
+}
+.promo-slider-btn:hover {
+  background: var(--color-accent);
+  color: var(--color-primary-dark);
+  border-color: var(--color-accent);
+  transform: translateY(-50%) scale(1.08);
+}
+.promo-slider-btn.prev { left: 6px; }
+.promo-slider-btn.next { right: 6px; }
+
+.promo-photo-dots {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  background: rgba(14, 31, 61, 0.75);
+  backdrop-filter: blur(4px);
+  border-radius: 10px;
+  z-index: 5;
+}
+.promo-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.promo-dot.active {
+  width: 12px;
+  border-radius: 3px;
+  background: var(--color-accent);
+}
+
+.promo-reveal-img-badge {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  background: rgba(14, 31, 61, 0.88);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.25);
+  letter-spacing: 0.02em;
+  z-index: 5;
+}
+.promo-perks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.promo-perk-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.92);
+  line-height: 1.35;
+}
+.promo-perk-icon {
+  font-size: 12px;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ── Gallery Popup (Full Screen) ───────────────────────────── */
@@ -1466,7 +1647,8 @@ ul { list-style: none; }
   .card-promo .promo-discount { font-size: 22px; }
   .card-promo .promo-title { font-size: 13px; flex: 1; min-width: 120px; }
   .card-promo .promo-text { display: none; }
-  .card-promo .promo-btn { flex: 0 0 auto; }
+  .card-promo .promo-btn { flex: 0 0 auto; margin-top: 0 !important; }
+  .promo-reveal { display: none !important; }
   .property-card { position: relative; z-index: 1; }
 
   /* Stack card image on top */
@@ -1850,10 +2032,10 @@ ul { list-style: none; }
   width: 100%;
   padding: 8px 12px;
   font-size: 11px;
-  font-weight: 700;
-  color: #FFFFFF;
-  background: var(--color-primary);
-  border: none;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: var(--color-navy-light);
+  border: 1px solid rgba(27, 60, 110, 0.22);
   border-radius: 6px;
   cursor: pointer;
   text-align: center;
@@ -1866,7 +2048,17 @@ ul { list-style: none; }
 }
 
 .inline-side-banner .banner-btn:hover {
+  background: var(--color-primary);
+  color: #FFFFFF;
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(27, 60, 110, 0.22);
+  transform: translateY(-1px);
+}
+
+.inline-side-banner .banner-btn:active {
   background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  transform: translateY(0);
 }
 
 .inline-side-banner .banner-legal-disclosure,
@@ -3374,16 +3566,70 @@ function buildPromoCard(p, cardIndex) {
       <div class="promo-discount" style="color: var(--color-accent); font-size: 24px; font-weight: 900; margin: 4px 0 8px 0;">Индекс ${p.rating}</div>
       <div class="promo-title" style="font-size: 14px; margin-bottom: 6px;">Независимая оценка ЖК</div>
       <div class="promo-text" style="font-size: 11px; opacity: 0.85; margin-bottom: 12px;">Индекс рассчитывается автоматически на основе 10 параметров: от документов до качества материалов.</div>
-      <a class="promo-btn" href="methodology.html" style="text-align: center; text-decoration: none; display: block; width: 100%; box-sizing: border-box;">Методология →</a>
+      <a class="promo-btn" href="methodology.html" style="text-align: center; text-decoration: none; display: block; width: 100%; box-sizing: border-box; margin-top: auto;">Методология →</a>
     </div>`;
   }
   if (cardIndex === 3) {
-    return `<div class="card-promo" style="background: linear-gradient(135deg, #15305B 0%, #1e4682 100%);">
-      <div class="promo-badge" style="background: rgba(245, 166, 35, 0.2); border-color: rgba(245, 166, 35, 0.4); color: var(--color-accent);">★ Свободный слот</div>
-      <div class="promo-discount" style="color: var(--color-accent); font-size: 24px; font-weight: 900; margin: 4px 0 8px 0;">8 500 ₽ / мес</div>
-      <div class="promo-title" style="font-size: 14px; margin-bottom: 6px;">Промо-баннер ЖК</div>
-      <div class="promo-text" style="font-size: 11px; opacity: 0.85; margin-bottom: 12px;">Разместите спецпредложение вашего проекта. Цена до запуска — 8 500 руб/мес с сохранением цены на 3 месяца.</div>
-      <a class="promo-btn" href="partners-promo.html" style="text-align: center; text-decoration: none; display: block; width: 100%; box-sizing: border-box;">Подробнее →</a>
+    return `<div class="card-promo card-promo-rich">
+      <div class="promo-badge" style="background: rgba(245, 166, 35, 0.2); border-color: rgba(245, 166, 35, 0.4); color: var(--color-accent);">✈️ Тур на Балтику</div>
+      <div class="promo-discount" style="color: var(--color-accent); font-size: 22px; font-weight: 900; margin: 4px 0 6px 0;">Перелёт + Отель</div>
+      <div class="promo-title" style="font-size: 13px; margin-bottom: 4px; line-height: 1.3;">Уикенд на море и просмотр ЖК</div>
+      <div class="promo-text" style="font-size: 11px; opacity: 0.85; margin-bottom: 4px;">Совместите отдых в спа-отеле у моря с персональной экскурсией по новостройкам.</div>
+      
+      <!-- Скрыто в свернутом виде, плавно раскрывается при клике на любую вкладку карточки ЖК (только на десктопе) -->
+      <div class="promo-reveal">
+        <div class="promo-reveal-slider-wrap">
+          <div class="promo-photo-slider" onscroll="handlePromoPhotoScroll(this)">
+            <div class="promo-photo-slide">
+              <img src="baltic_hotel_1.jpg" alt="Спа-отель на Балтике — Терраса" loading="lazy">
+            </div>
+            <div class="promo-photo-slide">
+              <img src="baltic_hotel_2.jpg" alt="Спа-отель на Балтике — Бассейн и спа" loading="lazy">
+            </div>
+            <div class="promo-photo-slide">
+              <img src="baltic_hotel_3.png" alt="Спа-отель на Балтике — Вид на море" loading="lazy">
+            </div>
+          </div>
+          <button class="promo-slider-btn prev" onclick="event.stopPropagation(); scrollPromoSlider(this, -1)" aria-label="Предыдущее фото">‹</button>
+          <button class="promo-slider-btn next" onclick="event.stopPropagation(); scrollPromoSlider(this, 1)" aria-label="Следующее фото">›</button>
+          <div class="promo-photo-dots">
+            <span class="promo-dot active" onclick="event.stopPropagation(); gotoPromoSlide(this, 0)"></span>
+            <span class="promo-dot" onclick="event.stopPropagation(); gotoPromoSlide(this, 1)"></span>
+            <span class="promo-dot" onclick="event.stopPropagation(); gotoPromoSlide(this, 2)"></span>
+          </div>
+          <span class="promo-reveal-img-badge">🏨 1 / 3 фото · Светлогорск</span>
+        </div>
+        <div class="promo-perks">
+          <div class="promo-perk-item"><span class="promo-perk-icon">🛫</span><span>Спецтариф на авиабилеты</span></div>
+          <div class="promo-perk-item"><span class="promo-perk-icon">🌊</span><span>Спа-отель у моря со скидкой 25%</span></div>
+          <div class="promo-perk-item"><span class="promo-perk-icon">🚗</span><span>Трансфер и индивидуальный тур</span></div>
+        </div>
+      </div>
+
+      <a class="promo-btn" href="b2b-promo.html" style="text-align: center; text-decoration: none; display: block; width: 100%; box-sizing: border-box; margin-top: auto;">Выбрать даты тура →</a>
+    </div>`;
+  }
+  if (cardIndex === 5) {
+    return `<div class="card-promo card-promo-rich">
+      <div class="promo-badge" style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #10B981;">💳 Банк-партнёр</div>
+      <div class="promo-discount" style="color: var(--color-accent); font-size: 22px; font-weight: 900; margin: 4px 0 6px 0;">Ипотека от 4.8%</div>
+      <div class="promo-title" style="font-size: 13px; margin-bottom: 4px; line-height: 1.3;">Пакет новосёла & Кэшбэк</div>
+      <div class="promo-text" style="font-size: 11px; opacity: 0.85; margin-bottom: 4px;">Специальные условия кредитования и кэшбэк на обустройство новой квартиры.</div>
+      
+      <!-- Скрыто в свернутом виде, плавно раскрывается при клике на любую вкладку карточки ЖК (только на десктопе) -->
+      <div class="promo-reveal">
+        <div class="promo-reveal-img-wrap">
+          <img src="bank_promo_vertical.jpg" alt="Пакет новосёла от Банка" class="promo-reveal-img" loading="lazy">
+          <span class="promo-reveal-img-badge" style="background: rgba(16, 185, 129, 0.88);">💰 Кэшбэк до 300 000 ₽</span>
+        </div>
+        <div class="promo-perks">
+          <div class="promo-perk-item"><span class="promo-perk-icon">⚡</span><span>Одобрение за 2 минуты онлайн</span></div>
+          <div class="promo-perk-item"><span class="promo-perk-icon">🎁</span><span>5% кэшбэк на ремонт и мебель</span></div>
+          <div class="promo-perk-item"><span class="promo-perk-icon">🛡️</span><span>Страховка жилья на 1 год в подарок</span></div>
+        </div>
+      </div>
+
+      <a class="promo-btn" href="partners-promo.html" style="text-align: center; text-decoration: none; display: block; width: 100%; box-sizing: border-box; margin-top: auto;">Рассчитать лимит →</a>
     </div>`;
   }
   const discount = (p.specialOffer && p.specialOffer.discount) || '−15%';
@@ -3393,7 +3639,7 @@ function buildPromoCard(p, cardIndex) {
     <div class="promo-discount">${discount}</div>
     <div class="promo-title">Скидка на квартиры в ${p.name}</div>
     <div class="promo-text">${text}</div>
-    <button class="promo-btn" onclick="showAvailability('${p.name.replace(/'/g,"\'")}')">Подробнее →</button>
+    <button class="promo-btn" onclick="showAvailability('${p.name.replace(/'/g,"\'")}')" style="margin-top: auto;">Подробнее →</button>
   </div>`;
 }
 
@@ -3647,6 +3893,7 @@ function bindNavItems() {
       const card = this.closest('.property-card');
       const panel = card.querySelector('.card-inline-panel');
       const nav = card.querySelector('.card-nav');
+      const wrapper = this.closest('.property-card-wrapper');
       const wasActive = this.classList.contains('active');
 
       // Deactivate all
@@ -3655,16 +3902,56 @@ function bindNavItems() {
 
       if (wasActive) {
         panel.classList.remove('open');
+        if (wrapper) wrapper.classList.remove('expanded');
       } else {
         this.classList.add('active');
         const section = panel.querySelector('[data-section="' + key + '"]');
         if (section) {
           section.classList.add('active');
           panel.classList.add('open');
+          if (wrapper) wrapper.classList.add('expanded');
         }
       }
     });
   });
+}
+
+// ── Promo Card Photo Slider Logic ───────────────────────────
+function handlePromoPhotoScroll(sliderEl) {
+  if (!sliderEl) return;
+  const scrollLeft = sliderEl.scrollLeft;
+  const width = sliderEl.clientWidth || 1;
+  const activeIndex = Math.round(scrollLeft / width);
+  const wrap = sliderEl.closest('.promo-reveal-slider-wrap');
+  if (!wrap) return;
+
+  const dots = wrap.querySelectorAll('.promo-dot');
+  dots.forEach((dot, idx) => {
+    dot.classList.toggle('active', idx === activeIndex);
+  });
+
+  const badge = wrap.querySelector('.promo-reveal-img-badge');
+  if (badge) {
+    badge.textContent = `🏨 ${activeIndex + 1} / ${dots.length} фото · Светлогорск`;
+  }
+}
+
+function scrollPromoSlider(btn, dir) {
+  const wrap = btn.closest('.promo-reveal-slider-wrap');
+  if (!wrap) return;
+  const slider = wrap.querySelector('.promo-photo-slider');
+  if (!slider) return;
+  const width = slider.clientWidth;
+  slider.scrollBy({ left: dir * width, behavior: 'smooth' });
+}
+
+function gotoPromoSlide(dot, index) {
+  const wrap = dot.closest('.promo-reveal-slider-wrap');
+  if (!wrap) return;
+  const slider = wrap.querySelector('.promo-photo-slider');
+  if (!slider) return;
+  const width = slider.clientWidth;
+  slider.scrollTo({ left: index * width, behavior: 'smooth' });
 }
 
 // ── State & Filtering ──────────────────────────────────────────

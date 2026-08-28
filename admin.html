@@ -3089,11 +3089,13 @@
                 <input type="tel" id="invite-phone" class="form-input" placeholder="+7 (4012) 55-44-33" required>
               </div>
               <div>
-                <label class="form-label">Стартовый тариф:</label>
+                <label class="form-label">Стартовый пакет:</label>
                 <select id="invite-tariff" class="form-select">
-                  <option value="basic">Базовый (69 000 ₽/мес)</option>
-                  <option value="pro" selected>Про (150 000 ₽/мес)</option>
-                  <option value="premium">Премиум (210 000 ₽/мес)</option>
+                  <option value="partner_basic">Базовый партнёр (45 000 руб. / 69 000 руб.)</option>
+                  <option value="partner_business" selected>Бизнес партнёр (69 000 руб. / 90 000 руб.)</option>
+                  <option value="partner_main">Главный партнёр (90 000 руб. / 120 000 руб.)</option>
+                  <option value="card">Коммерческая карточка (15 000 руб. / 30 000 руб.)</option>
+                  <option value="free">Бесплатное базовое размещение (0 руб.)</option>
                 </select>
               </div>
               <div>
@@ -3655,7 +3657,7 @@
               <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="togglePlacementBlock(6)">
                 <label style="display:flex;align-items:center;gap:10px;font-weight:700;cursor:pointer;" onclick="event.stopPropagation();">
                   <input type="checkbox" id="pl-check-6" onchange="recalcPlacementCost()">
-                  6. Платные карточки ЖК (15 000 ₽/мес за карточку)
+                  6. Платные карточки ЖК (15 000 руб./мес за карточку)
                 </label>
                 <span id="pl-price-6" style="font-weight:700;color:#2563EB;">0 ₽</span>
               </div>
@@ -3668,7 +3670,7 @@
                     </select>
                   </div>
                   <div>
-                    <div class="pl-step-title">Шаг 2: Выбор ЖК для активации платной карточки (15 000 ₽/мес)</div>
+                    <div class="pl-step-title">Шаг 2: Выбор ЖК для активации платной карточки (15 000 руб./мес)</div>
                     <div id="pl-6-zhk-list" class="pl-step-zhk-list" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;"></div>
                   </div>
                   <div>
@@ -3784,9 +3786,9 @@
         <!-- 10. TARIFFS & MODULES (3.7) -->
         <section class="admin-section" id="section-monetization">
           <div class="section-title-bar">
-            <h2 class="section-title-text">Назначение тарифов и модулей девелоперам (amber_tariff_${devId})</h2>
+            <h2 class="section-title-text">Монетизация: Управление коммерческими продуктами и пакетами девелоперов</h2>
             <div class="section-actions-row">
-              <button class="btn-admin-primary" onclick="saveDeveloperTariff()">💾 Сохранить тариф девелопера</button>
+              <button class="btn-admin-primary" onclick="saveDeveloperTariff()">💾 Сохранить настройки монетизации</button>
             </div>
           </div>
 
@@ -3797,78 +3799,95 @@
                 <select id="tariff-dev-select" class="form-select" style="min-width:280px;" onchange="onTariffDevChange()"></select>
               </div>
               <div>
-                <label class="form-label">Текущий тариф:</label>
+                <label class="form-label">Период тарификации:</label>
+                <select id="admin-pricing-period-select" class="form-select" onchange="onAdminPeriodChange()">
+                  <option value="pre_launch" selected>🚀 До запуска (Скидки до 55%)</option>
+                  <option value="post_launch">🌟 После старта (Стандартные тарифы)</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Текущий статус:</label>
                 <span class="badge badge-blue" id="tariff-current-badge" style="font-size:13px;padding:6px 12px;">Базовый</span>
               </div>
             </div>
 
-            <!-- Tariff Presets -->
-            <label class="form-label" style="margin-bottom:8px;display:block;">Предустановленные тарифные планы:</label>
+            <!-- Commercial Packages -->
+            <label class="form-label" style="margin-bottom:8px;display:block;">Пакетные предложения для партнёров:</label>
             <div class="tariff-preset-cards">
-              <div class="tariff-preset-card active" id="tariff-preset-card-basic" onclick="applyTariffPreset('basic')">
-                <div class="tariff-preset-title">Базовый</div>
-                <div class="tariff-preset-price">69 000 ₽/мес</div>
-                <div class="tariff-preset-desc">Редактор ЖК, базовая статистика, маскированные лиды</div>
+              <div class="tariff-preset-card" id="tariff-preset-card-partner_basic" onclick="applyCommercialPackage('partner_basic')">
+                <div class="tariff-preset-title">Базовый партнёр</div>
+                <div class="tariff-preset-price" id="pkg-price-partner_basic">45 000 руб./мес</div>
+                <div class="tariff-preset-desc">Коммерческая карточка (15k) + Кнопка (20k) + Промо-баннер (8.5k)</div>
               </div>
-              <div class="tariff-preset-card" id="tariff-preset-card-pro" onclick="applyTariffPreset('pro')">
-                <div class="tariff-preset-title">Про</div>
-                <div class="tariff-preset-price">150 000 ₽/мес</div>
-                <div class="tariff-preset-desc">+ Детальная аналитика, трафик, отчеты, CRM экспорт</div>
+              <div class="tariff-preset-card active" id="tariff-preset-card-partner_business" onclick="applyCommercialPackage('partner_business')">
+                <div class="tariff-preset-title">Бизнес партнёр</div>
+                <div class="tariff-preset-price" id="pkg-price-partner_business">69 000 руб./мес</div>
+                <div class="tariff-preset-desc">Карточка + Кнопка + Промо + Эко-баннер (20k) + Безлимит лидов</div>
               </div>
-              <div class="tariff-preset-card" id="tariff-preset-card-premium" onclick="applyTariffPreset('premium')">
-                <div class="tariff-preset-title">Премиум (Партнёр)</div>
-                <div class="tariff-preset-price">210 000 ₽/мес</div>
-                <div class="tariff-preset-desc">+ Конкуренты, отчёты PDF/Excel, реклама, VIP поддержка</div>
+              <div class="tariff-preset-card" id="tariff-preset-card-partner_main" onclick="applyCommercialPackage('partner_main')">
+                <div class="tariff-preset-title">Главный партнёр</div>
+                <div class="tariff-preset-price" id="pkg-price-partner_main">90 000 руб./мес</div>
+                <div class="tariff-preset-desc">Полный комплект + Главный баннер (30k) + VIP-привилегии</div>
               </div>
-              <div class="tariff-preset-card" id="tariff-preset-card-custom" onclick="applyTariffPreset('custom')">
+              <div class="tariff-preset-card" id="tariff-preset-card-custom" onclick="applyCommercialPackage('custom')">
                 <div class="tariff-preset-title">Индивидуальный</div>
-                <div class="tariff-preset-price">Настраиваемый</div>
-                <div class="tariff-preset-desc">Произвольный выбор модулей</div>
+                <div class="tariff-preset-price">Поштучно</div>
+                <div class="tariff-preset-desc">Произвольный выбор продуктов</div>
               </div>
             </div>
 
-            <!-- Modules Checkbox Grid -->
-            <label class="form-label" style="margin-top:14px;display:block;">Состав модулей кабинета застройщика:</label>
+            <!-- Granular Commercial Products Control Grid -->
+            <label class="form-label" style="margin-top:16px;display:block;">Индивидуальное подключение коммерческих продуктов:</label>
             <div class="modules-checkbox-grid">
               <div class="module-check-card">
-                <input type="checkbox" id="mod-check-analytics-basic" checked style="margin-top:3px;">
-                <div><b>Базовая аналитика</b> <span class="badge badge-success">Free</span><div style="font-size:11.5px;color:#64748B;">Просмотры, показы карточек, базовая воронка</div></div>
+                <input type="checkbox" id="prod-check-card" checked style="margin-top:3px;" onchange="onAdminProductCheckboxChange('card')">
+                <div>
+                  <b>Коммерческая карточка ЖК</b> <span class="badge badge-success" id="badge-card-price">15 000 руб.</span>
+                  <div style="font-size:11.5px;color:#64748B;">Прямой телефон/сайт отдела продаж, официальный статус</div>
+                </div>
               </div>
               <div class="module-check-card">
-                <input type="checkbox" id="mod-check-analytics-traffic" style="margin-top:3px;">
-                <div><b>Источники трафика и гео</b> <span class="badge badge-blue">PRO</span><div style="font-size:11.5px;color:#64748B;">Яндекс, Google, города посетителей</div></div>
+                <input type="checkbox" id="prod-check-btn_availability" checked style="margin-top:3px;" onchange="onAdminProductCheckboxChange('btn_availability')">
+                <div>
+                  <b>Кнопка «Узнать наличие» (Лиды)</b> <span class="badge badge-success" id="badge-btn-price">20 000 ₽</span>
+                  <div style="font-size:11.5px;color:#64748B;">Лидогенерация • <b>Безлимит заявок</b> • <i>Требует активную карточку</i></div>
+                </div>
               </div>
               <div class="module-check-card">
-                <input type="checkbox" id="mod-check-analytics-competitors" style="margin-top:3px;">
-                <div><b>Анализ конкурентов</b> <span class="badge badge-blue">PRO</span><div style="font-size:11.5px;color:#64748B;">Сравнение с конкурентами и позиции в каталоге</div></div>
+                <input type="checkbox" id="prod-check-banner_small" style="margin-top:3px;" onchange="onAdminProductCheckboxChange('banner_small')">
+                <div>
+                  <b>Малый баннер в карточке</b> <span class="badge badge-blue" id="badge-banner_small-price">1 000 ₽</span>
+                  <div style="font-size:11.5px;color:#64748B;">Мини-баннер внутри карточки ЖК</div>
+                </div>
               </div>
               <div class="module-check-card">
-                <input type="checkbox" id="mod-check-analytics-reports" style="margin-top:3px;">
-                <div><b>PDF/Excel отчёты и теплокарта</b> <span class="badge badge-blue">PRO</span><div style="font-size:11.5px;color:#64748B;">Генерация отчетов и кликабельность табов</div></div>
+                <input type="checkbox" id="prod-check-banner_promo" checked style="margin-top:3px;" onchange="onAdminProductCheckboxChange('banner_promo')">
+                <div>
+                  <b>Промо-баннер у карточки</b> <span class="badge badge-blue" id="badge-banner_promo-price">8 500 ₽</span>
+                  <div style="font-size:11.5px;color:#64748B;">Широкий баннер в блоке застройщика</div>
+                </div>
               </div>
               <div class="module-check-card">
-                <input type="checkbox" id="mod-check-promo-premium" style="margin-top:3px;">
-                <div><b>Премиум-размещение</b> <span class="badge badge-blue">PRO</span><div style="font-size:11.5px;color:#64748B;">Управление ТОП-3 карточками и спецразмещениями</div></div>
+                <input type="checkbox" id="prod-check-banner_eco" style="margin-top:3px;" onchange="onAdminProductCheckboxChange('banner_eco')">
+                <div>
+                  <b>Эко-баннер (Раздел «Экология»)</b> <span class="badge badge-blue" id="badge-banner_eco-price">20 000 ₽</span>
+                  <div style="font-size:11.5px;color:#64748B;">Спонсорство экологического фильтра каталога</div>
+                </div>
               </div>
               <div class="module-check-card">
-                <input type="checkbox" id="mod-check-promo-ads" style="margin-top:3px;">
-                <div><b>Рекламные баннеры</b> <span class="badge badge-blue">PRO</span><div style="font-size:11.5px;color:#64748B;">Управление таргетированными баннерами девелопера</div></div>
-              </div>
-              <div class="module-check-card">
-                <input type="checkbox" id="mod-check-support-priority" style="margin-top:3px;">
-                <div><b>Приоритетная поддержка 24/7</b> <span class="badge badge-blue">PRO</span><div style="font-size:11.5px;color:#64748B;">Выделенный аккаунт-менеджер</div></div>
-              </div>
-              <div class="module-check-card">
-                <input type="checkbox" id="mod-check-crm-export" style="margin-top:3px;">
-                <div><b>Расширенная CRM и экспорт</b> <span class="badge badge-blue">PRO</span><div style="font-size:11.5px;color:#64748B;">Прямая выгрузка лидов и интеграция по API</div></div>
+                <input type="checkbox" id="prod-check-banner_top" style="margin-top:3px;" onchange="onAdminProductCheckboxChange('banner_top')">
+                <div>
+                  <b>Главный баннер на портале (ТОП)</b> <span class="badge badge-blue" id="badge-banner_top-price">30 000 ₽</span>
+                  <div style="font-size:11.5px;color:#64748B;">Сквозной баннер на главной и в каталоге</div>
+                </div>
               </div>
             </div>
 
             <!-- Parameters -->
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:14px;">
               <div>
-                <label class="form-label">Стоимость (₽/мес):</label>
-                <input type="number" id="tariff-price" class="form-input" value="0">
+                <label class="form-label">Итоговая стоимость (₽/мес):</label>
+                <input type="number" id="tariff-price" class="form-input" value="43500">
               </div>
               <div>
                 <label class="form-label">Дата начала:</label>
@@ -3893,7 +3912,7 @@
             <h3 style="font-size:14px;font-weight:800;margin-bottom:10px;">Симулятор монетизации портала</h3>
             <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
               <div>Активных застройщиков: <input type="number" id="sim-active-devs" class="form-input" value="65" style="width:90px;" oninput="updateSimulation()"></div>
-              <div>Прогноз выручки: <span id="sim-total-revenue" style="color:#16A34A;font-weight:800;font-size:20px;">1 625 000 ₽</span></div>
+              <div>Прогноз выручки: <span id="sim-total-revenue" style="color:#16A34A;font-weight:800;font-size:20px;">1 625 000 руб.</span></div>
             </div>
           </div>
 
@@ -7262,45 +7281,87 @@ function adminSendCorrections(zhkId, idx) {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   3.7 DEVELOPER TARIFFS & MODULES (amber_tariff_${devId})
+   3.7 COMMERCIAL PRODUCTS & PACKAGES MONETIZATION ENGINE (M1)
    ══════════════════════════════════════════════════════════════ */
-var ALL_CABINET_MODULES = [
-  { id: 'analytics-basic', name: 'Базовая аналитика', desc: 'Просмотры, показы, базовая воронка конверсии', isPro: false },
-  { id: 'analytics-traffic', name: 'Источники трафика и гео', desc: 'Яндекс, Google, прямые заходы, города посетителей', isPro: true },
-  { id: 'analytics-competitors', name: 'Анализ конкурентов', desc: 'Позиции в каталоге, сравнение со средними ценами района', isPro: true },
-  { id: 'analytics-reports', name: 'PDF/Excel отчеты и теплокарта', desc: 'Генерация отчетов для руководства и анализ взаимодействия с табами', isPro: true },
-  { id: 'promo-premium', name: 'Премиум-размещение', desc: 'Управление ТОП-3 карточками и спецразмещениями', isPro: true },
-  { id: 'promo-ads', name: 'Рекламные баннеры', desc: 'Управление таргетированными баннерами девелопера', isPro: true },
-  { id: 'support-priority', name: 'Приоритетная поддержка', desc: 'Персональный аккаунт-менеджер 24/7', isPro: true },
-  { id: 'crm-export', name: 'Расширенная CRM и экспорт', desc: 'Прямая интеграция лидов и автоматический экспорт в Excel/CRM', isPro: true }
-];
-
-var TARIFF_PRESETS = {
-  basic: {
-    planId: 'basic',
-    planName: 'Базовый',
-    price: 69000,
-    modules: ['analytics-basic']
+var COMMERCIAL_PRICING = {
+  pre_launch: {
+    card: 15000,
+    btn_availability: 20000,
+    banner_small: 1000,
+    banner_promo: 8500,
+    banner_eco: 20000,
+    banner_top: 30000,
+    lead_regular: 3000,
+    lead_hot: 5000,
+    partner_basic: 45000,
+    partner_business: 69000,
+    partner_main: 90000,
+    bundle_card_btn: 35000,
+    bundle_card_btn_promo: 43500
   },
-  pro: {
-    planId: 'pro',
-    planName: 'Про',
-    price: 150000,
-    modules: ['analytics-basic', 'analytics-traffic', 'analytics-reports', 'crm-export']
-  },
-  premium: {
-    planId: 'premium',
-    planName: 'Премиум',
-    price: 210000,
-    modules: ['analytics-basic', 'analytics-traffic', 'analytics-competitors', 'analytics-reports', 'promo-premium', 'promo-ads', 'support-priority', 'crm-export']
-  },
-  custom: {
-    planId: 'custom',
-    planName: 'Индивидуальный',
-    price: 0,
-    modules: []
+  post_launch: {
+    card: 30000,
+    btn_availability: 45000,
+    banner_small: 2000,
+    banner_promo: 12500,
+    banner_eco: 30000,
+    banner_top: 45000,
+    lead_regular: 3000,
+    lead_hot: 5000,
+    partner_basic: 69000,
+    partner_business: 90000,
+    partner_main: 120000,
+    bundle_card_btn: 75000,
+    bundle_card_btn_promo: 87500
   }
 };
+
+var COMMERCIAL_PACKAGES = {
+  partner_basic: {
+    id: 'partner_basic',
+    name: 'Базовый партнёр',
+    prePrice: 45000,
+    postPrice: 69000,
+    products: { card: true, btn_availability: true, banner_promo: true, banner_small: false, banner_eco: false, banner_top: false }
+  },
+  partner_business: {
+    id: 'partner_business',
+    name: 'Бизнес партнёр',
+    prePrice: 69000,
+    postPrice: 90000,
+    products: { card: true, btn_availability: true, banner_promo: true, banner_small: true, banner_eco: true, banner_top: false }
+  },
+  partner_main: {
+    id: 'partner_main',
+    name: 'Главный партнёр',
+    prePrice: 90000,
+    postPrice: 120000,
+    products: { card: true, btn_availability: true, banner_promo: true, banner_small: true, banner_eco: true, banner_top: true }
+  },
+  card: {
+    id: 'card',
+    name: 'Коммерческая карточка',
+    prePrice: 15000,
+    postPrice: 30000,
+    products: { card: true, btn_availability: false, banner_promo: false, banner_small: false, banner_eco: false, banner_top: false }
+  },
+  free: {
+    id: 'free',
+    name: 'Базовое (Бесплатное)',
+    prePrice: 0,
+    postPrice: 0,
+    products: { card: false, btn_availability: false, banner_promo: false, banner_small: false, banner_eco: false, banner_top: false }
+  },
+  custom: {
+    id: 'custom',
+    name: 'Индивидуальный',
+    prePrice: 0,
+    postPrice: 0,
+    products: {}
+  }
+};
+
+var adminPricingPeriod = 'pre_launch';
 
 function initTariffsSection() {
   if (typeof document === 'undefined') return;
@@ -7313,7 +7374,46 @@ function initTariffsSection() {
     sel.innerHTML += `<option value="${d.id}">${escapeHtml(d.name)}</option>`;
   });
 
+  updateAdminPeriodBadges();
   renderTariffsTable();
+}
+
+function onAdminPeriodChange() {
+  const periodSel = document.getElementById('admin-pricing-period-select');
+  if (periodSel) adminPricingPeriod = periodSel.value;
+  updateAdminPeriodBadges();
+  onTariffDevChange();
+}
+
+function updateAdminPeriodBadges() {
+  const pricing = COMMERCIAL_PRICING[adminPricingPeriod] || COMMERCIAL_PRICING.pre_launch;
+  
+  const bCard = document.getElementById('badge-card-price');
+  if (bCard) bCard.textContent = pricing.card.toLocaleString('ru-RU') + ' ₽';
+  
+  const bBtn = document.getElementById('badge-btn-price');
+  if (bBtn) bBtn.textContent = pricing.btn_availability.toLocaleString('ru-RU') + ' ₽';
+  
+  const bSmall = document.getElementById('badge-banner_small-price');
+  if (bSmall) bSmall.textContent = pricing.banner_small.toLocaleString('ru-RU') + ' ₽';
+  
+  const bPromo = document.getElementById('badge-banner_promo-price');
+  if (bPromo) bPromo.textContent = pricing.banner_promo.toLocaleString('ru-RU') + ' ₽';
+  
+  const bEco = document.getElementById('badge-banner_eco-price');
+  if (bEco) bEco.textContent = pricing.banner_eco.toLocaleString('ru-RU') + ' ₽';
+  
+  const bTop = document.getElementById('badge-banner_top-price');
+  if (bTop) bTop.textContent = pricing.banner_top.toLocaleString('ru-RU') + ' ₽';
+
+  const pBasic = document.getElementById('pkg-price-partner_basic');
+  if (pBasic) pBasic.textContent = pricing.partner_basic.toLocaleString('ru-RU') + ' ₽/мес';
+
+  const pBiz = document.getElementById('pkg-price-partner_business');
+  if (pBiz) pBiz.textContent = pricing.partner_business.toLocaleString('ru-RU') + ' ₽/мес';
+
+  const pMain = document.getElementById('pkg-price-partner_main');
+  if (pMain) pMain.textContent = pricing.partner_main.toLocaleString('ru-RU') + ' ₽/мес';
 }
 
 function onTariffDevChange() {
@@ -7323,7 +7423,7 @@ function onTariffDevChange() {
 
   const tariff = getAdminTariff(devId);
   const planEl = document.getElementById('tariff-current-badge');
-  if (planEl) planEl.textContent = tariff.planName || 'Базовый';
+  if (planEl) planEl.textContent = tariff.planName || 'Базовое (Бесплатное)';
 
   const startEl = document.getElementById('tariff-start-date');
   const endEl = document.getElementById('tariff-end-date');
@@ -7332,58 +7432,126 @@ function onTariffDevChange() {
 
   if (startEl) startEl.value = tariff.startDate ? tariff.startDate.slice(0,10) : '2026-08-01';
   if (endEl) endEl.value = tariff.endDate ? tariff.endDate.slice(0,10) : '2026-09-01';
-  if (priceEl) priceEl.value = tariff.price !== undefined ? tariff.price : 69000;
   if (statusEl) statusEl.value = tariff.status || 'active';
+
+  // Sync checkboxes
+  const prods = tariff.products || {};
+  const cbCard = document.getElementById('prod-check-card');
+  const cbBtn = document.getElementById('prod-check-btn_availability');
+  const cbSmall = document.getElementById('prod-check-banner_small');
+  const cbPromo = document.getElementById('prod-check-banner_promo');
+  const cbEco = document.getElementById('prod-check-banner_eco');
+  const cbTop = document.getElementById('prod-check-banner_top');
+
+  if (cbCard) cbCard.checked = !!prods.card;
+  if (cbBtn) cbBtn.checked = !!prods.btn_availability;
+  if (cbSmall) cbSmall.checked = !!prods.banner_small;
+  if (cbPromo) cbPromo.checked = !!prods.banner_promo;
+  if (cbEco) cbEco.checked = !!prods.banner_eco;
+  if (cbTop) cbTop.checked = !!prods.banner_top;
+
+  recalcAdminPrice();
 
   // Highlight active preset card
   document.querySelectorAll('.tariff-preset-card').forEach(c => c.classList.remove('active'));
-  const activeCard = document.getElementById('tariff-preset-card-' + (tariff.planId || 'basic'));
+  const activeCard = document.getElementById('tariff-preset-card-' + (tariff.planId || 'custom'));
   if (activeCard) activeCard.classList.add('active');
-
-  // Checkbox sync
-  ALL_CABINET_MODULES.forEach(m => {
-    const cb = document.getElementById('mod-check-' + m.id);
-    if (cb) cb.checked = (tariff.modules || []).includes(m.id);
-  });
 }
 
-function applyTariffPreset(presetKey) {
-  const preset = TARIFF_PRESETS[presetKey];
-  if (!preset) return;
+function onAdminProductCheckboxChange(prodKey) {
+  const cbCard = document.getElementById('prod-check-card');
+  const cbBtn = document.getElementById('prod-check-btn_availability');
+
+  // Enforce dependency rule: Button requires Card
+  if (prodKey === 'btn_availability' && cbBtn && cbBtn.checked && cbCard && !cbCard.checked) {
+    cbCard.checked = true;
+    showAdminToast('Коммерческая карточка активирована автоматически (требуется для кнопки)');
+  } else if (prodKey === 'card' && cbCard && !cbCard.checked && cbBtn && cbBtn.checked) {
+    cbBtn.checked = false;
+    showAdminToast('Кнопка «Узнать наличие» отключена, так как отключена коммерческая карточка');
+  }
+
+  recalcAdminPrice();
+}
+
+function recalcAdminPrice() {
+  const pricing = COMMERCIAL_PRICING[adminPricingPeriod] || COMMERCIAL_PRICING.pre_launch;
+  let total = 0;
+
+  const cbCard = document.getElementById('prod-check-card')?.checked;
+  const cbBtn = document.getElementById('prod-check-btn_availability')?.checked;
+  const cbSmall = document.getElementById('prod-check-banner_small')?.checked;
+  const cbPromo = document.getElementById('prod-check-banner_promo')?.checked;
+  const cbEco = document.getElementById('prod-check-banner_eco')?.checked;
+  const cbTop = document.getElementById('prod-check-banner_top')?.checked;
+
+  if (cbCard) total += pricing.card;
+  if (cbBtn) total += pricing.btn_availability;
+  if (cbSmall) total += pricing.banner_small;
+  if (cbPromo) total += pricing.banner_promo;
+  if (cbEco) total += pricing.banner_eco;
+  if (cbTop) total += pricing.banner_top;
 
   const priceEl = document.getElementById('tariff-price');
-  if (priceEl) priceEl.value = preset.price;
+  if (priceEl) priceEl.value = total;
+}
+
+function applyCommercialPackage(packageKey) {
+  const pkg = COMMERCIAL_PACKAGES[packageKey];
+  if (!pkg) return;
+
+  const pricing = COMMERCIAL_PRICING[adminPricingPeriod] || COMMERCIAL_PRICING.pre_launch;
+  const price = (adminPricingPeriod === 'pre_launch' ? pkg.prePrice : pkg.postPrice);
+
+  const priceEl = document.getElementById('tariff-price');
+  if (priceEl) priceEl.value = price;
 
   document.querySelectorAll('.tariff-preset-card').forEach(c => c.classList.remove('active'));
-  const card = document.getElementById('tariff-preset-card-' + presetKey);
+  const card = document.getElementById('tariff-preset-card-' + packageKey);
   if (card) card.classList.add('active');
 
-  ALL_CABINET_MODULES.forEach(m => {
-    const cb = document.getElementById('mod-check-' + m.id);
-    if (cb) cb.checked = preset.modules.includes(m.id);
-  });
+  const prods = pkg.products || {};
+  const cbCard = document.getElementById('prod-check-card');
+  const cbBtn = document.getElementById('prod-check-btn_availability');
+  const cbSmall = document.getElementById('prod-check-banner_small');
+  const cbPromo = document.getElementById('prod-check-banner_promo');
+  const cbEco = document.getElementById('prod-check-banner_eco');
+  const cbTop = document.getElementById('prod-check-banner_top');
+
+  if (cbCard) cbCard.checked = !!prods.card;
+  if (cbBtn) cbBtn.checked = !!prods.btn_availability;
+  if (cbSmall) cbSmall.checked = !!prods.banner_small;
+  if (cbPromo) cbPromo.checked = !!prods.banner_promo;
+  if (cbEco) cbEco.checked = !!prods.banner_eco;
+  if (cbTop) cbTop.checked = !!prods.banner_top;
 }
 
 function getAdminTariff(devId) {
   if (typeof localStorage !== 'undefined') {
     try {
       const raw = localStorage.getItem('amber_tariff_' + devId);
-      if (raw) return JSON.parse(raw);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed.products) return parsed;
+      }
     } catch(e) {}
   }
   const devs = (window.AMBER_DATA && window.AMBER_DATA.developers) || [];
   const dev = devs.find(d => String(d.id) === String(devId));
+  const pricing = COMMERCIAL_PRICING[adminPricingPeriod] || COMMERCIAL_PRICING.pre_launch;
   return {
     developerId: String(devId),
     developerName: dev ? dev.name : 'Застройщик #' + devId,
-    planId: 'basic',
-    planName: 'Базовый',
-    price: 69000,
+    planId: 'partner_business',
+    planName: 'Бизнес партнёр',
+    price: pricing.partner_business,
+    pricingPeriod: adminPricingPeriod,
     billingPeriod: 'monthly',
     startDate: '2026-08-01T00:00:00.000Z',
     endDate: '2026-09-01T00:00:00.000Z',
     status: 'active',
-    modules: ['analytics-basic'],
+    products: { card: true, btn_availability: true, banner_promo: true, banner_small: true, banner_eco: true, banner_top: false },
+    modules: ['editor', 'leads-crm', 'amber-index', 'analytics-traffic', 'analytics-competitors', 'analytics-reports'],
     assignedBy: 'admin',
     assignedAt: new Date().toISOString()
   };
@@ -7397,11 +7565,19 @@ function saveDeveloperTariff() {
   const devs = (window.AMBER_DATA && window.AMBER_DATA.developers) || [];
   const dev = devs.find(d => String(d.id) === String(devId));
 
-  const modules = [];
-  ALL_CABINET_MODULES.forEach(m => {
-    const cb = document.getElementById('mod-check-' + m.id);
-    if (cb && cb.checked) modules.push(m.id);
-  });
+  const prods = {
+    card: !!document.getElementById('prod-check-card')?.checked,
+    btn_availability: !!document.getElementById('prod-check-btn_availability')?.checked,
+    banner_small: !!document.getElementById('prod-check-banner_small')?.checked,
+    banner_promo: !!document.getElementById('prod-check-banner_promo')?.checked,
+    banner_eco: !!document.getElementById('prod-check-banner_eco')?.checked,
+    banner_top: !!document.getElementById('prod-check-banner_top')?.checked
+  };
+
+  // Enforce dependency rule
+  if (prods.btn_availability && !prods.card) {
+    prods.card = true;
+  }
 
   const price = parseInt(document.getElementById('tariff-price')?.value, 10) || 0;
   const startDate = document.getElementById('tariff-start-date')?.value || '2026-08-01';
@@ -7410,12 +7586,16 @@ function saveDeveloperTariff() {
 
   let planId = 'custom';
   let planName = 'Индивидуальный';
-  if (price === 69000 || (modules.length === 1 && modules[0] === 'analytics-basic')) {
-    planId = 'basic'; planName = 'Базовый';
-  } else if (price === 150000) {
-    planId = 'pro'; planName = 'Про';
-  } else if (price === 210000 || modules.length === 8) {
-    planId = 'premium'; planName = 'Премиум';
+  if (prods.banner_top) {
+    planId = 'partner_main'; planName = 'Главный партнёр';
+  } else if (prods.banner_eco) {
+    planId = 'partner_business'; planName = 'Бизнес партнёр';
+  } else if (prods.banner_promo && prods.btn_availability) {
+    planId = 'partner_basic'; planName = 'Базовый партнёр';
+  } else if (prods.card && !prods.btn_availability) {
+    planId = 'card'; planName = 'Коммерческая карточка';
+  } else if (!prods.card) {
+    planId = 'free'; planName = 'Базовое (Бесплатное)';
   }
 
   const tariffData = {
@@ -7424,11 +7604,13 @@ function saveDeveloperTariff() {
     planId: planId,
     planName: planName,
     price: price,
+    pricingPeriod: adminPricingPeriod,
     billingPeriod: 'monthly',
     startDate: startDate,
     endDate: endDate,
     status: status,
-    modules: modules,
+    products: prods,
+    modules: ['editor', 'leads-crm', 'amber-index', 'analytics-traffic', 'analytics-competitors', 'analytics-reports'],
     assignedBy: 'admin',
     assignedAt: new Date().toISOString()
   };
@@ -7436,11 +7618,18 @@ function saveDeveloperTariff() {
   if (typeof localStorage !== 'undefined') {
     try {
       localStorage.setItem('amber_tariff_' + devId, JSON.stringify(tariffData));
+      localStorage.setItem('amber_products_' + devId, JSON.stringify({
+        developerId: devId,
+        pricingPeriod: adminPricingPeriod,
+        activeProducts: prods,
+        leadsType: 'unlimited_in_paid_month',
+        updatedAt: new Date().toISOString()
+      }));
     } catch(e) {}
   }
 
   renderTariffsTable();
-  showAdminToast('Тариф застройщика успешно сохранен');
+  showAdminToast('Настройки монетизации девелопера успешно сохранены');
 }
 
 function renderTariffsTable() {
@@ -7453,7 +7642,14 @@ function renderTariffsTable() {
 
   tbody.innerHTML = devs.slice(0, 15).map(d => {
     const t = getAdminTariff(d.id);
-    const modBadges = (t.modules || []).map(m => `<span class="badge badge-neutral" style="font-size:10px;margin:1px;">${m}</span>`).join(' ');
+    const prodList = [];
+    if (t.products?.card) prodList.push('Карточка');
+    if (t.products?.btn_availability) prodList.push('Кнопка (Безлимит)');
+    if (t.products?.banner_promo) prodList.push('Промо-баннер');
+    if (t.products?.banner_eco) prodList.push('Эко-баннер');
+    if (t.products?.banner_top) prodList.push('ТОП-баннер');
+    if (prodList.length === 0) prodList.push('Бесплатное');
+    const prodBadges = prodList.map(m => `<span class="badge badge-neutral" style="font-size:10px;margin:1px;">${m}</span>`).join(' ');
     return `
       <tr>
         <td>#${d.id}</td>
@@ -7462,7 +7658,7 @@ function renderTariffsTable() {
         <td><b>${t.price ? t.price.toLocaleString('ru-RU') + ' ₽/мес' : '0 ₽'}</b></td>
         <td><small>${t.startDate ? t.startDate.slice(0,10) : '—'} – ${t.endDate ? t.endDate.slice(0,10) : '—'}</small></td>
         <td><span class="status-pill ${t.status === 'active' ? 'pill-active' : 'pill-pending'}">${t.status}</span></td>
-        <td><div style="max-width:240px;overflow:hidden;text-overflow:ellipsis;">${modBadges}</div></td>
+        <td><div style="max-width:240px;overflow:hidden;text-overflow:ellipsis;">${prodBadges}</div></td>
       </tr>
     `;
   }).join('');
@@ -10722,9 +10918,11 @@ function renderInviteTokensTable() {
     }
 
     const createdStr = t.createdAt ? new Date(t.createdAt).toLocaleDateString('ru-RU') : '—';
-    const tariffBadge = t.tariffPlanId === 'premium' ? '<span class="badge badge-blue">Премиум (210К)</span>' :
-                        (t.tariffPlanId === 'pro' ? '<span class="badge badge-blue">Про (150К)</span>' :
-                        '<span class="badge badge-neutral">Базовый (69К)</span>');
+    const tariffBadge = t.tariffPlanId === 'partner_main' || t.tariffPlanId === 'premium' ? '<span class="badge badge-blue">Главный партнёр (90К)</span>' :
+                        (t.tariffPlanId === 'partner_business' || t.tariffPlanId === 'pro' ? '<span class="badge badge-blue">Бизнес партнёр (69К)</span>' :
+                        (t.tariffPlanId === 'partner_basic' || t.tariffPlanId === 'basic' ? '<span class="badge badge-blue">Базовый партнёр (45К)</span>' :
+                        (t.tariffPlanId === 'card' ? '<span class="badge badge-success">Карточка (15К)</span>' :
+                        '<span class="badge badge-neutral">Бесплатное</span>')));
 
     return `
       <tr>
@@ -10953,7 +11151,7 @@ function renderDevAnalyticsDetail() {
       <div class="kpi-card"><div class="kpi-label">CTR</div><div class="kpi-value">6.6%</div></div>
       <div class="kpi-card"><div class="kpi-label">Лиды</div><div class="kpi-value">64</div></div>
       <div class="kpi-card"><div class="kpi-label">Ср. время</div><div class="kpi-value">3:42</div></div>
-      <div class="kpi-card"><div class="kpi-label">Расход</div><div class="kpi-value">125 000 ₽</div></div>
+      <div class="kpi-card"><div class="kpi-label">Расход</div><div class="kpi-value">125 000 руб.</div></div>
     </div>
     <h4 style="margin-bottom:8px;font-size:13px;font-weight:700;">Популярные табы карточек</h4>
     <div class="analytics-bar-row"><span class="analytics-bar-label">Цены</span><div class="analytics-bar-track"><div class="analytics-bar-fill" style="width:95%;background:#3B82F6;"></div></div><span class="analytics-bar-val">95%</span></div>
@@ -11665,6 +11863,9 @@ var exportsList = {
   initTariffsSection,
   onTariffDevChange,
   applyTariffPreset,
+  applyCommercialPackage,
+  onAdminProductCheckboxChange,
+  onAdminPeriodChange,
   getAdminTariff,
   saveDeveloperTariff,
   renderTariffsTable,
